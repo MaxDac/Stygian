@@ -14,7 +14,7 @@ jobs:
           service_principal: fbb83e90-95d8-4cb9-a001-3677d23852d4
           service_principal_password: ${{ secrets.service_principal_password }}
           tenant: b4a3e2d3-2d99-4b3e-a15e-5a85d655c544
-          registry: Stygian
+          registry: stygian
           repository: stygian-registry
           image: stygian
           git_access_token: ${{ secrets.GITHUB_TOKEN }}
