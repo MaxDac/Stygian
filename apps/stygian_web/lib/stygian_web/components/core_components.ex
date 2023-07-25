@@ -389,7 +389,10 @@ defmodule StygianWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="font-berolina block mb-2 text-lg font-medium text-gray-900 dark:text-brand">
+    <label
+      for={@for}
+      class="font-berolina block mb-2 text-lg font-medium text-gray-900 dark:text-brand"
+    >
       <%= render_slot(@inner_block) %>
     </label>
     """

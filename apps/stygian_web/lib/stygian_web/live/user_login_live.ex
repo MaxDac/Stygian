@@ -5,7 +5,13 @@ defmodule StygianWeb.UserLoginLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
-        <.input field={@form[:email]} type="email" label="Email" class="bg-black p-0 border border-brand" required />
+        <.input
+          field={@form[:email]}
+          type="email"
+          label="Email"
+          class="bg-black p-0 border border-brand"
+          required
+        />
         <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
