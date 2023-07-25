@@ -2,4 +2,30 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* This file is for your main application CSS */
+html {
+   margin: 0px;
+   padding: 0px;
+   height: 100%;
+   width: 100%;
+}
+
+@font-face {
+  font-family: "metropolitan";
+  src: url("/fonts/metropolitan.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "berolina";
+  src: url("/fonts/berolina.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "typewriter";
+  src: url("/fonts/typewriter.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "necrofonticon";
+  src: url("/fonts/necrofonticon.ttf") format("truetype");
+}
+

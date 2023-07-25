@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :stygian, Stygian.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "mysecretpassword",
   hostname: "localhost",
   database: "stygian_dev",
   stacktrace: true,

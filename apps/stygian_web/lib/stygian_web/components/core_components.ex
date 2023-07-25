@@ -196,7 +196,7 @@ defmodule StygianWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="mt-10 space-y-8">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -369,7 +369,7 @@ defmodule StygianWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "font-typewriter text-lg font-medium bg-zinc-900/50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-brand dark:focus:ring-brand-500 dark:focus:border-brand-500",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -389,7 +389,7 @@ defmodule StygianWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for} class="font-berolina block mb-2 text-lg font-medium text-gray-900 dark:text-brand">
       <%= render_slot(@inner_block) %>
     </label>
     """

@@ -9,17 +9,37 @@ module.exports = {
   content: [
     "./js/**/*.js",
     "../lib/*_web.ex",
-    "../lib/*_web/**/*.*ex"
+    "../lib/*_web/**/*.*ex",
+    "./node_modules/flowbite/**/*.js"
   ],
+  darkMode: "class",
   theme: {
     extend: {
+      screens: {
+        "tall": { "raw": "(min-height: 800px)" },
+      },
+      backgroundImage: {
+        "login": "url('/images/LoginFrameSH.webp')",
+        "main": "url('/images/HomeWallpaper.webp')",
+      },
       colors: {
-        brand: "#FD4F00",
+        brand: "#33a01b",
+      },
+      fontFamily: {
+        serif: ["berolina", "serif"],
+        typewriter: ["typewriter", "serif"],
+        metropolitan: ["metropolitan", "serif"],
+        berolina: ["berolina", "serif"],
+        necrofonticon: ["necrofonticon", "serif"],
+      },
+      boxShadow: {
+        "DEFAULT": "box-shadow: 0 0 10px #000",
       }
     },
   },
   plugins: [
     require("@tailwindcss/forms"),
+    require("flowbite/plugin"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
