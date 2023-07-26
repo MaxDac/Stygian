@@ -35,13 +35,22 @@ if config_env() == :prod do
       """
 
   config :stygian_web, StygianWeb.Endpoint,
+    url: [host: "stygian.eu", port: System.get_env("PORT") || 4000],
     http: [
-      # Enable IPv6 and bind on all interfaces.
-      # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
-      ip: {0, 0, 0, 0, 0, 0, 0, 0},
-      port: String.to_integer(System.get_env("PORT") || "4000")
+      port: String.to_integer(System.get_env("PORT") || "4000"),
+      transport_options: [socket_opts: [:inet6]],
+      # This adds gzip compression to all the JSON sent by service
+      compress: true
     ],
+    check_origin: [
+      "https://stygian.eu",
+      "https://test.stygian.eu",
+      "https://www.stygian.eu",
+      "https://www.test.stygian.eu"
+    ],
+    server: true,
     secret_key_base: secret_key_base
+
 
   # ## Using releases
   #
@@ -102,4 +111,13 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  # Email settings
+  config :stygian, Stygian.Mailer,
+    adapter: Swoosh.Adapters.SMTP,
+    relay: System.get_env("MAIL_HOST"),
+    port: System.get_env("MAIL_PORT"),
+    username: System.get_env("MAIL_USER"),
+    password: System.get_env("MAIL_PASS")
+
 end
