@@ -3,15 +3,14 @@ defmodule Stygian.Accounts.User do
   import Ecto.Changeset
 
   @type t() :: %__MODULE__{
-    email: String.t(),
-    username: String.t(),
-    password: String.t(),
-    hashed_password: String.t(),
-    confirmed_at: NaiveDateTime.t(),
-
-    inserted_at: NaiveDateTime.t(),
-    updated_at: NaiveDateTime.t()
-  }
+          email: String.t(),
+          username: String.t(),
+          password: String.t(),
+          hashed_password: String.t(),
+          confirmed_at: NaiveDateTime.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
 
   schema "users" do
     field :email, :string
