@@ -12,9 +12,14 @@
 
 alias Stygian.Accounts
 
-Accounts.register_user(${
+Accounts.register_user(%{
   email: "massimiliano.dacunzo@hotmail.com",
-
+  username: "ghostLayer",
+  password: "password1234",
 })
 
-
+Accounts.register_user(%{
+  email: "gabriele.dacunzo@outlook.com",
+  username: "Gahadiel",
+  password: "password1234",
+})
