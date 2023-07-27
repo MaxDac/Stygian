@@ -3,15 +3,14 @@ defmodule Stygian.Accounts.User do
   import Ecto.Changeset
 
   @type t() :: %__MODULE__{
-    email: String.t(),
-    username: String.t(),
-    password: String.t(),
-    hashed_password: String.t(),
-    confirmed_at: NaiveDateTime.t(),
-
-    inserted_at: NaiveDateTime.t(),
-    updated_at: NaiveDateTime.t()
-  }
+          email: String.t(),
+          username: String.t(),
+          password: String.t(),
+          hashed_password: String.t(),
+          confirmed_at: NaiveDateTime.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
 
   schema "users" do
     field :email, :string
@@ -73,7 +72,7 @@ defmodule Stygian.Accounts.User do
     |> maybe_hash_password(opts)
   end
 
-  defp validate_username(changeset, opts) do
+  defp validate_username(changeset, _opts) do
     changeset
     |> validate_required([:username])
     |> validate_length(:username, max: 12)

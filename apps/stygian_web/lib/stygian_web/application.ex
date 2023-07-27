@@ -4,6 +4,7 @@ defmodule StygianWeb.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   @impl true
   def start(_type, _args) do
@@ -19,6 +20,10 @@ defmodule StygianWeb.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: StygianWeb.Supervisor]
+
+    # Executing migrations and seeding the database
+    startup_task()
+
     Supervisor.start_link(children, opts)
   end
 
@@ -28,5 +33,20 @@ defmodule StygianWeb.Application do
   def config_change(changed, _new, removed) do
     StygianWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp startup_task do
+    is_prod? =
+      case Application.get_env(:real_football_web, :environment) do
+        nil -> System.get_env("MIX_ENV") == "prod"
+        value -> value == :prod
+      end
+
+    # Migrations should only run automatically in production
+    if is_prod? do
+      Logger.info("Executing automatic migrations.")
+      StygianWeb.Release.migrate()
+      StygianWeb.Release.seed()
+    end
   end
 end

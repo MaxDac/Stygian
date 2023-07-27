@@ -51,7 +51,6 @@ if config_env() == :prod do
     server: true,
     secret_key_base: secret_key_base
 
-
   # ## Using releases
   #
   # If you are doing OTP releases, you need to instruct Phoenix
@@ -119,5 +118,4 @@ if config_env() == :prod do
     port: System.get_env("MAIL_PORT"),
     username: System.get_env("MAIL_USER"),
     password: System.get_env("MAIL_PASS")
-
 end

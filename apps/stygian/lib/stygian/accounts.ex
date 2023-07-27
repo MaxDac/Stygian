@@ -77,6 +77,7 @@ defmodule Stygian.Accounts do
   def register_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
+    |> IO.inspect()
     |> Repo.insert()
   end
 
