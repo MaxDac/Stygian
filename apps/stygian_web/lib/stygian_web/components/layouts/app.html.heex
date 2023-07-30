@@ -2,53 +2,16 @@
   <div class="flex flex-row h-screen">
     <div class="bg-[url('/images/HomeWallpaper.webp')] bg-cover fixed top-0 left-0 w-screen h-screen opacity-5 -z-100" />
     <.flash_group flash={@flash} />
-    <!-- 
-      <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-        <%= if @current_user do %>
-          <li class="text-[0.8125rem] leading-6 text-zinc-900">
-            <%= @current_user.email %>
-          </li>
-          <li>
-            <.link
-              href={~p"/users/settings"}
-              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-            >
-              Settings
-            </.link>
-          </li>
-          <li>
-            <.link
-              href={~p"/users/log_out"}
-              method="delete"
-              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-            >
-              Log out
-            </.link>
-          </li>
-        <% else %>
-          <li>
-            <.link
-              href={~p"/users/register"}
-              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-            >
-              Register
-            </.link>
-          </li>
-          <li>
-            <.link
-              href={~p"/users/log_in"}
-              class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-            >
-              Log in
-            </.link>
-          </li>
-        <% end %>
-      </ul>
-      -->
-    <.drawer class="md:invisible" />
-    <.menu class="invisible md:visible" />
-    <div class="mx-auto w-full bg-[url('/images/Newspaper.webp')] bg-no-repeat">
-      <%= @inner_content %>
+    <.drawer class="lg:invisible" />
+    <.menu class="invisible lg:visible" />
+    <div class="ml-auto w-[calc(100vw_-_550px)] bg-[url('/images/Newspaper.webp')] bg-no-repeat bg-cover z-20">
+      <div class="relative top-[50px] left-[20px] mr-10">
+        <div class="bg-[url('/images/Internal.webp')] bg-cover bg-no-repeat overflow-hidden w-[1000px] h-[755px] p-4">
+          <div class="w-full h-full p-[100px] border border-brand">
+            <%= @inner_content %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>
