@@ -4,9 +4,11 @@
     <.flash_group flash={@flash} />
     <.drawer class="lg:invisible" />
     <.menu class="invisible lg:visible" />
-    <div class="w-full flex justify-center">
-      <div>
-        <%= @inner_content %>
+    <div class="bg-[url('/images/Internal.webp')] bg-cover bg-no-repeat overflow-hidden w-[1000px] h-[755px] p-4 z-20">
+      <div class="w-full h-full pl-[30px] pt-[50px] pr-[40px] pb-[80px]">
+        <div class="overflow-x-hidden max-h-[595px] overflow-y-auto">
+          <%= @inner_content %>
+        </div>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 defmodule StygianWeb.UserSettingsLive do
-  use StygianWeb, :live_view
+  use StygianWeb, :container_live_view
 
   alias Stygian.Accounts
 
