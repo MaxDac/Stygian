@@ -5,7 +5,7 @@ defmodule StygianWeb.PageController do
     # The home page is often custom made,
     # so skip the default app layout.
     conn
-    |> put_layout(html: {StygianWeb.Layouts, :login})
+    |> put_layout(html: {StygianWeb.Layouts, :app})
     |> render(:home)
   end
 end
