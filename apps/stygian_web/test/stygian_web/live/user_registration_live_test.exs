@@ -8,8 +8,8 @@ defmodule StygianWeb.UserRegistrationLiveTest do
     test "renders registration page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
-      assert html =~ "Register"
-      assert html =~ "Log in"
+      assert html =~ "Create an account"
+      assert html =~ "Sign in"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -41,7 +41,17 @@ defmodule StygianWeb.UserRegistrationLiveTest do
       {:ok, lv, _html} = live(conn, ~p"/users/register")
 
       email = unique_user_email()
-      form = form(lv, "#registration_form", user: valid_user_attributes(email: email))
+      username = unique_username()
+
+      form =
+        form(lv, "#registration_form",
+          user:
+            valid_user_attributes(
+              email: email,
+              username: username
+            )
+        )
+
       render_submit(form)
       conn = follow_trigger_action(form, conn)
 
@@ -50,7 +60,6 @@ defmodule StygianWeb.UserRegistrationLiveTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ email
       assert response =~ "Settings"
       assert response =~ "Log out"
     end
@@ -81,7 +90,7 @@ defmodule StygianWeb.UserRegistrationLiveTest do
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
-      assert login_html =~ "Log in"
+      assert login_html =~ "Sign in"
     end
   end
 end

@@ -1,0 +1,33 @@
+<div class={"#{@class} w-0 lg:w-[500px] h-[500px] mr-1 lg:mr-[-220px] xl:mr-[-90px] 2xl:mr-[100px]"}>
+  <div class="bg-[url('/images/Menu.webp')] text-black w-[500px] h-[500px] bg-contain z-10 drop-shadow-md">
+    <.link
+      href={~p"/"}
+      class="font-typewriter text-2xl relative top-[78px] left-[200px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer"
+    >
+      Mappa
+    </.link>
+    <span class="font-typewriter text-2xl relative top-[132px] left-[124px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer">
+      Forum
+    </span>
+    <span class="font-typewriter text-2xl relative top-[185px] left-[36px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer">
+      Online
+    </span>
+    <span class="font-typewriter text-2xl relative top-[232px] left-[-45px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer">
+      Scheda
+    </span>
+    <.link
+      href={~p"/users/settings"}
+      class="font-typewriter text-2xl relative top-[276px] left-[-181px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer"
+    >
+      Impostazioni
+    </.link>
+    <.link
+      class="relative top-[296px] left-[195px] font-typewriter text-2xl drop-shadow-md hover:drop-shadow-lg transition-all cursor-pointer"
+      href={~p"/users/log_out"}
+      method="delete"
+    >
+      Log out
+    </.link>
+  </div>
+  <div class="relative top-[-400px] left-[7rem] bg-[url('/images/Internal1.webp')] bg-contain w-[500px] h-[500px] bg-no-repeat -z-50" />
+</div>

@@ -58,6 +58,15 @@ defmodule StygianWeb do
     end
   end
 
+  def container_live_view do
+    quote do
+      use Phoenix.LiveView,
+        layout: {StygianWeb.Layouts, :app_container}
+
+      unquote(html_helpers())
+    end
+  end
+
   def login_live_view do
     quote do
       use Phoenix.LiveView,

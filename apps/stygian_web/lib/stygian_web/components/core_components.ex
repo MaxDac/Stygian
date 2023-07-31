@@ -196,7 +196,7 @@ defmodule StygianWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8">
+      <div class="mt-10 space-y-8 flex flex-col">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -300,8 +300,8 @@ defmodule StygianWeb.CoreComponents do
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
 
     ~H"""
-    <div phx-feedback-for={@name}>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+    <div phx-feedback-for={@name} class="flex flex-row items-center h-5">
+      <div>
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
@@ -309,11 +309,11 @@ defmodule StygianWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-brand dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-brand dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
           {@rest}
         />
-        <%= @label %>
-      </label>
+      </div>
+      <label for="terms" class="ml-2 text-sm font-medium text-brand"><%= @label %></label>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """

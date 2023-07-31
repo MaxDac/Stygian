@@ -16,7 +16,7 @@ defmodule StygianWeb.UserLoginLive do
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
-          <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
+          <.link href={~p"/users/reset_password"} class="text-sm font-semibold text-brand">
             Forgot your password?
           </.link>
         </:actions>
@@ -24,9 +24,13 @@ defmodule StygianWeb.UserLoginLive do
           <.button phx-disable-with="Signing in..." class="w-full">
             Sign in <span aria-hidden="true">→</span>
           </.button>
-          <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-            Sign up
-          </.link>
+        </:actions>
+        <:actions>
+          <div class="w-full text-center">
+            <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
+              Sign up
+            </.link>
+          </div>
         </:actions>
       </.simple_form>
     </div>

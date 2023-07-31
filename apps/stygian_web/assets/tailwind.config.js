@@ -24,6 +24,7 @@ module.exports = {
       },
       colors: {
         brand: "#33a01b",
+        internal: "#090b0a",
       },
       fontFamily: {
         serif: ["berolina", "serif"],
@@ -34,6 +35,10 @@ module.exports = {
       },
       boxShadow: {
         "DEFAULT": "box-shadow: 0 0 10px #000",
+      },
+      dropShadow: {
+        "md": "0 2px 2px rgba(0, 0, 0, 0.5)",
+        "lg": "0 3px 3px rgba(0, 0, 0, 0.95)",
       }
     },
   },

@@ -62,6 +62,14 @@ config :stygian_web, StygianWeb.Endpoint,
     ]
   ]
 
+# Email settings
+config :stygian, Stygian.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: System.get_env("MAIL_HOST"),
+  port: System.get_env("MAIL_PORT"),
+  username: System.get_env("MAIL_USER"),
+  password: System.get_env("MAIL_PASS")
+
 # Enable dev routes for dashboard and mailbox
 config :stygian_web, dev_routes: true
 
