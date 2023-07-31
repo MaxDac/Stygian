@@ -50,7 +50,8 @@ defmodule StygianWeb.MixProject do
       {:gettext, "~> 0.20"},
       {:stygian, in_umbrella: true},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:gen_smtp, "~> 1.2"}
     ]
   end
 

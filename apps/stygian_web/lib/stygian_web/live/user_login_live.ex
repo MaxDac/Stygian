@@ -38,7 +38,6 @@ defmodule StygianWeb.UserLoginLive do
   end
 
   def mount(_params, _session, socket) do
-    IO.inspect(socket)
     email = live_flash(socket.assigns.flash, :email)
     form = to_form(%{"email" => email}, as: "user")
     {:ok, assign(socket, form: form), temporary_assigns: [form: form]}

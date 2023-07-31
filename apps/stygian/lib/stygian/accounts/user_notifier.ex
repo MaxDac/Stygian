@@ -8,7 +8,7 @@ defmodule Stygian.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Stygian", "contact@example.com"})
+      |> from({"Stygian", "postmaster@stygian.eu"})
       |> subject(subject)
       |> text_body(body)
 
