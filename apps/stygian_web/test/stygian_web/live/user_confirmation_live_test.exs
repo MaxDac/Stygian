@@ -51,8 +51,8 @@ defmodule StygianWeb.UserConfirmationLiveTest do
 
       assert {:ok, conn} = result
 
+      # Login behaviour changed: the main page is now protected and the user must be logged on to access
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
-               # Login behaviour changed: the main page is now protected and the user must be logged on to access
                "You must log in to access this page."
 
       # when logged in
@@ -68,7 +68,9 @@ defmodule StygianWeb.UserConfirmationLiveTest do
         |> follow_redirect(conn, "/")
 
       assert {:ok, conn} = result
-      assert "You must log in to access this page." == Phoenix.Flash.get(conn.assigns.flash, :error)
+
+      assert "You must log in to access this page." ==
+               Phoenix.Flash.get(conn.assigns.flash, :error)
     end
 
     test "does not confirm email with invalid token", %{conn: conn, user: user} do
@@ -80,8 +82,8 @@ defmodule StygianWeb.UserConfirmationLiveTest do
         |> render_submit()
         |> follow_redirect(conn, ~p"/")
 
+      # Login behaviour changed: the main page is now protected and the user must be logged on to access
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
-               # Login behaviour changed: the main page is now protected and the user must be logged on to access
                "You must log in to access this page."
 
       refute Accounts.get_user!(user.id).confirmed_at
