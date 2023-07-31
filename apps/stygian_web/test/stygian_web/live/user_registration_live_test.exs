@@ -42,10 +42,16 @@ defmodule StygianWeb.UserRegistrationLiveTest do
 
       email = unique_user_email()
       username = unique_username()
-      form = form(lv, "#registration_form", user: valid_user_attributes(
-        email: email,
-        username: username
-      ))
+
+      form =
+        form(lv, "#registration_form",
+          user:
+            valid_user_attributes(
+              email: email,
+              username: username
+            )
+        )
+
       render_submit(form)
       conn = follow_trigger_action(form, conn)
 
