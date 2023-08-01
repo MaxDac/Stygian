@@ -91,6 +91,8 @@ defmodule StygianWeb.Router do
     live_session :character_sheet,
       on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
       live "/sheet", CharacterSheetLive, :index
+      live "/create", CharacterCreationLive, :create
+      live "/complete", CharacterCompletionLive, :complete
     end
   end
 end

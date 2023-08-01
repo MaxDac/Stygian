@@ -40,6 +40,34 @@ defmodule Stygian.Characters.Character do
     timestamps()
   end
 
+  def name_avatar_changeset(character, attrs) do
+    character
+    |> cast(attrs, [
+      :name,
+      :avatar,
+      :user_id,
+      :step
+    ])
+    |> validate_required([
+      :name,
+      :avatar,
+      :user_id
+    ])
+    |> validate_length(:name, min: 10, max: 50)
+    |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)
+    |> unique_constraint(:name)
+  end
+
+  def update_step_changeset(character, attrs) do
+    character
+    |> cast(attrs, [
+      :step
+    ])
+    |> validate_required([
+      :step
+    ])
+  end
+
   @doc false
   def changeset(character, attrs) do
     character

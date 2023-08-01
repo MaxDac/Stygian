@@ -8,6 +8,7 @@ defmodule Stygian.CharactersTest do
 
     import Stygian.CharactersFixtures
     import Stygian.AccountsFixtures
+    import Stygian.SkillsFixtures
 
     @invalid_attrs %{
       admin_notes: nil,
@@ -37,32 +38,57 @@ defmodule Stygian.CharactersTest do
       %{id: user_id} = user_fixture()
 
       valid_attrs = %{
-        admin_notes: "some admin_notes",
         avatar: "some avatar",
-        biography: "some biography",
-        cigs: 42,
-        description: "some description",
-        experience: 42,
-        health: 42,
-        name: "some name",
-        notes: "some notes",
-        sanity: 42,
-        step: 42,
+        name: "some very awful name",
         user_id: user_id
       }
 
       assert {:ok, %Character{} = character} = Characters.create_character(valid_attrs)
-      assert character.admin_notes == "some admin_notes"
       assert character.avatar == "some avatar"
-      assert character.biography == "some biography"
-      assert character.cigs == 42
-      assert character.description == "some description"
-      assert character.experience == 42
-      assert character.health == 42
-      assert character.name == "some name"
-      assert character.notes == "some notes"
-      assert character.sanity == 42
-      assert character.step == 42
+      assert character.name == "some very awful name"
+      assert character.user_id == user_id
+      assert character.step == 1
+    end
+
+    test "complete_character/2 completes the character with the correct set of skills" do
+      %{id: user_id} = user_fixture()
+
+      valid_attrs = %{
+        avatar: "some avatar",
+        name: "some very awful name",
+        user_id: user_id
+      }
+
+      assert {:ok, %Character{} = character} = Characters.create_character(valid_attrs)
+
+      skills = [
+        %{id: skill_id_1} = skill_fixture(%{name: "some skill 1"}),
+        %{id: skill_id_2} = skill_fixture(%{name: "some skill 2"}),
+        %{id: skill_id_3} = skill_fixture(%{name: "some skill 3"}),
+        %{id: skill_id_4} = skill_fixture(%{name: "some skill 4"}),
+      ]
+
+      skills = [
+        %{value: 4, character_id: character.id, skill_id: skill_id_1},
+        %{value: 3, character_id: character.id, skill_id: skill_id_2},
+        %{value: 2, character_id: character.id, skill_id: skill_id_3},
+        %{value: 1, character_id: character.id, skill_id: skill_id_4},
+      ]
+
+      assert {:ok, character} = Characters.complete_character(character, skills)
+      assert 2 == character.step
+
+      character_skills = Characters.list_character_skills(character)
+
+      assert length(character_skills) == 4
+      assert Enum.at(character_skills, 0).skill.name == "some skill 1"
+      assert Enum.at(character_skills, 0).value == 4
+      assert Enum.at(character_skills, 1).skill.name == "some skill 2"
+      assert Enum.at(character_skills, 1).value == 3
+      assert Enum.at(character_skills, 2).skill.name == "some skill 3"
+      assert Enum.at(character_skills, 2).value == 2
+      assert Enum.at(character_skills, 3).skill.name == "some skill 4"
+      assert Enum.at(character_skills, 3).value == 1
     end
 
     test "create_character/1 with invalid data returns error changeset" do
@@ -130,8 +156,11 @@ defmodule Stygian.CharactersTest do
     @invalid_attrs %{value: nil}
 
     test "list_character_skills/0 returns all character_skills" do
-      character_skill = character_skill_fixture()
-      assert Characters.list_character_skills() == [character_skill]
+      character_skill = %{character_id: character_id} = character_skill_fixture()
+      assert [got_character_skill] = Characters.list_character_skills(%{id: character_id})
+      assert character_skill.skill_id == got_character_skill.skill_id
+      assert character_skill.character_id == got_character_skill.character_id
+      assert character_skill.value == got_character_skill.value
     end
 
     test "get_character_skill!/1 returns the character_skill with given id" do
@@ -192,14 +221,14 @@ defmodule Stygian.CharactersTest do
       assert %Ecto.Changeset{} = Characters.change_character_skill(character_skill)
     end
 
-    test "user_has_character?/1 returns true if user has character" do
+    test "get_user_character?/1 returns the character if user has character" do
       character = character_fixture()
-      assert Characters.user_has_character?(%{id: character.user_id})
+      assert Characters.get_user_character?(%{id: character.user_id}) == character
     end
 
-    test "user_has_character?/1 returns false if user does not have character" do
+    test "get_user_character?/1 returns nil if user does not have character" do
       user = user_fixture()
-      assert !Characters.user_has_character?(user)
+      assert Characters.get_user_character?(user) == nil
     end
   end
 end

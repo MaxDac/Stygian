@@ -1,4 +1,4 @@
-<div class={"#{@class} w-0 lg:w-[500px] h-[500px] mr-1 lg:mr-[-220px] xl:mr-[-90px] 2xl:mr-[100px]"}>
+<div class={"#{@class} w-0 lg:w-[500px] h-[500px] mr-1 lg:mr-[-250px] xl:mr-[-200px] 2xl:mr-[-150px] 3xl:mr-0 4xl:mr-[100px]"}>
   <div class="bg-[url('/images/Menu.webp')] text-black w-[500px] h-[500px] bg-contain z-10 drop-shadow-md">
     <.link
       href={~p"/"}
@@ -12,9 +12,11 @@
     <span class="font-typewriter text-2xl relative top-[185px] left-[36px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer">
       Online
     </span>
-    <span class="font-typewriter text-2xl relative top-[232px] left-[-45px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer">
+    <.link 
+      href={~p"/character/sheet"}
+      class="font-typewriter text-2xl relative top-[232px] left-[-45px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer">
       Scheda
-    </span>
+    </.link>
     <.link
       href={~p"/users/settings"}
       class="font-typewriter text-2xl relative top-[276px] left-[-181px] hover:drop-shadow-lg drop-shadow-md transition-all cursor-pointer"

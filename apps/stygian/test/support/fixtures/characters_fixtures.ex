@@ -17,17 +17,17 @@ defmodule Stygian.CharactersFixtures do
     {:ok, character} =
       attrs
       |> Enum.into(%{
-        admin_notes: "some admin_notes",
+        # admin_notes: "some admin_notes",
         avatar: "some avatar",
-        biography: "some biography",
-        cigs: 42,
-        description: "some description",
-        experience: 42,
-        health: 42,
-        name: "some name",
-        notes: "some notes",
-        sanity: 42,
-        step: 42,
+        # biography: "some biography",
+        # cigs: 42,
+        # description: "some description",
+        # experience: 42,
+        # health: 42,
+        name: "some awful name",
+        # notes: "some notes",
+        # sanity: 42,
+        step: 1,
         user_id: user_id
       })
       |> Stygian.Characters.create_character()

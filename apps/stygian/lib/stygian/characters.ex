@@ -7,6 +7,7 @@ defmodule Stygian.Characters do
   alias Stygian.Repo
 
   alias Stygian.Characters.Character
+  alias Stygian.Characters.CharacterSkill
 
   @doc """
   Returns the list of characters.
@@ -50,9 +51,54 @@ defmodule Stygian.Characters do
 
   """
   def create_character(attrs \\ %{}) do
+    attrs = add_step_to_character_attrs(attrs, 1)
+
     %Character{}
-    |> Character.changeset(attrs)
+    |> Character.name_avatar_changeset(attrs)
     |> Repo.insert()
+  end
+
+  defp user_has_character?(user) do
+
+  end
+
+  @doc """
+  Completes the character creation by adding its attributes and updating the character step to 2.
+  """
+  @spec complete_character(Character.t(), [map()]) :: Character.t()
+  def complete_character(character, attributes) do
+    attrs = add_step_to_character_attrs(%{}, 2)
+
+    for attribute <- attributes do
+      character_skill = CharacterSkill.changeset(%CharacterSkill{}, attribute)
+      Repo.insert!(character_skill)
+    end
+
+    character
+    |> Character.update_step_changeset(attrs)
+    |> Repo.update()
+  end
+
+  defp add_step_to_character_attrs(attrs, step) do
+    case {Map.has_key?(attrs, :step), Map.has_key?(attrs, "step"), Map.keys(attrs)} do
+      {false, true, _} ->
+        attrs
+      {true, false, _} ->
+        attrs
+      {_, _, [k | _]} when is_atom(k) ->
+        Map.put(attrs, :step, step)
+      _ ->
+        Map.put(attrs, "step", step)
+    end
+  end
+
+  @doc """
+  Determines whether a user has already a completed character.
+  """
+  @spec user_has_complete_charater?(User.t()) :: boolean()
+  def user_has_complete_charater?(user) do
+    character = get_user_character?(user)
+    character.step == 2
   end
 
   @doc """
@@ -90,10 +136,14 @@ defmodule Stygian.Characters do
   end
 
   @doc """
-  Returns true if the user has a character.
+  Returns the user's character if existent, nil otherwise.
   """
-  def user_has_character?(user) do
-    Repo.exists?(from c in Character, where: c.user_id == ^user.id)
+  @spec get_user_character?(User.t()) :: Character.t() | nil
+  def get_user_character?(user) do
+    Character
+    |> from()
+    |> where([c], c.user_id == ^user.id)
+    |> Repo.one()
   end
 
   @doc """
@@ -109,6 +159,19 @@ defmodule Stygian.Characters do
     Character.changeset(character, attrs)
   end
 
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking the name and the avatar.
+
+  ## Examples
+
+      iex> change_character_name_and_avatar(character)
+      %Ecto.Changeset{data: %Character{}}
+
+  """
+  def change_character_name_and_avatar(%Character{} = character, attrs \\ %{}) do
+    Character.name_avatar_changeset(character, attrs)
+  end
+
   alias Stygian.Characters.CharacterSkill
 
   @doc """
@@ -120,8 +183,12 @@ defmodule Stygian.Characters do
       [%CharacterSkill{}, ...]
 
   """
-  def list_character_skills do
-    Repo.all(CharacterSkill)
+  def list_character_skills(character) do
+    CharacterSkill
+    |> from()
+    |> where([cs], cs.character_id == ^character.id)
+    |> preload(:skill)
+    |> Repo.all()
   end
 
   @doc """
