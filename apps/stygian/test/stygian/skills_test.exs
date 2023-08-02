@@ -142,5 +142,32 @@ defmodule Stygian.SkillsTest do
       skill_type = skill_type_fixture()
       assert !Skills.skill_has_type?(skill, skill_type)
     end
+
+    test "list_creational_skills/0 returns only creational skills" do
+      skill_type = skill_type_fixture(%{name: "Creational"})
+      non_creational_skill_type = skill_type_fixture(%{name: "Non creational"})
+      skill = skill_fixture(%{name: "Creational skill"})
+      non_creational_skill = skill_fixture(%{name: "Non creational skill"})
+
+      Skills.add_skill_type_to_skill(skill, skill_type)
+      Skills.add_skill_type_to_skill(non_creational_skill, non_creational_skill_type)
+
+      assert [skill] = Skills.list_creational_skills()
+    end
+
+    test "list_creational_skills/0 do not return duplicates" do
+      skill_type = skill_type_fixture(%{name: "Creational"})
+      other_skill_type = skill_type_fixture(%{name: "Whatever"})
+      non_creational_skill_type = skill_type_fixture(%{name: "Non creational"})
+
+      skill = skill_fixture(%{name: "Creational skill"})
+      non_creational_skill = skill_fixture(%{name: "Non creational skill"})
+
+      Skills.add_skill_type_to_skill(skill, skill_type)
+      Skills.add_skill_type_to_skill(skill, other_skill_type)
+      Skills.add_skill_type_to_skill(non_creational_skill, non_creational_skill_type)
+
+      assert [skill] = Skills.list_creational_skills()
+    end
   end
 end

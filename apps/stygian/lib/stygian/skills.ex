@@ -10,6 +10,8 @@ defmodule Stygian.Skills do
   alias Stygian.Skills.SkillType
   alias Stygian.Skills.SkillRelSkillType
 
+  @non_creational_skill_type_name "Non creational"
+
   @doc """
   Returns the list of skill_types.
 
@@ -135,7 +137,28 @@ defmodule Stygian.Skills do
   """
   def get_skill!(id), do: Repo.get!(Skill, id)
 
+  @doc """
+  Gets a single skill by name.
+  """
   def get_skill_by_name(name), do: Repo.get_by(Skill, name: name)
+
+  @doc """
+  Gets all the skills available on creation.
+  """
+  @spec list_creational_skills() :: [Skill.t()]
+  def list_creational_skills() do
+    Skill
+    |> distinct(true)
+    |> from()
+    |> join(:left, [s], sr in SkillRelSkillType, on: s.id == sr.skill_id)
+    |> join(:left, [_, sr], st in SkillType,
+      on: sr.skill_type_id == st.id and st.name != @non_creational_skill_type_name
+    )
+    |> order_by([s, _, _], asc: s.id)
+    |> select([s], s)
+    |> preload(:skill_types)
+    |> Repo.all()
+  end
 
   @doc """
   Creates a skill.

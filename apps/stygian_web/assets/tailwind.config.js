@@ -28,6 +28,7 @@ module.exports = {
       colors: {
         brand: "#33a01b",
         internal: "#090b0a",
+        "container-background": "#191919",
       },
       fontFamily: {
         serif: ["berolina", "serif"],

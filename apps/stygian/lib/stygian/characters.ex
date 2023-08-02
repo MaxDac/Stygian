@@ -104,10 +104,13 @@ defmodule Stygian.Characters do
     case {Map.has_key?(attrs, :step), Map.has_key?(attrs, "step"), Map.keys(attrs)} do
       {false, true, _} ->
         attrs
+
       {true, false, _} ->
         attrs
+
       {_, _, [k | _]} when is_atom(k) ->
         Map.put(attrs, :step, step)
+
       _ ->
         Map.put(attrs, "step", step)
     end

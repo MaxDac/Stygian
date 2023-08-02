@@ -72,6 +72,12 @@ Accounts.register_user(%{
     description: "Prohibited skill, its knowledge affects the sanity"
   })
 
+{:ok, %{id: non_creational_skill_id}} =
+  SkillHelpers.create_type?(%{
+    name: "Non creational",
+    description: "Can't be used in creation"
+  })
+
 #
 # Creating skills
 #

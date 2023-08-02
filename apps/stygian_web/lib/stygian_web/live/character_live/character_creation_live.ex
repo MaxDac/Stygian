@@ -14,22 +14,24 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
           |> to_form()
 
         {:ok,
-          socket
-          |> assign(form: form)
-        }
+         socket
+         |> assign(form: form)}
 
       # Character already created, redirecting to completion
       %{step: 1} ->
         {:ok,
-          socket
-          |> put_flash(:error, "Devi completare la creazione del personaggio prima di accedere alla sua scheda.")
-          |> push_navigate(to: ~p"/character/complete")}
+         socket
+         |> put_flash(
+           :error,
+           "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
+         )
+         |> push_navigate(to: ~p"/character/complete")}
 
       _ ->
         {:ok,
-          socket
-          |> put_flash(:error, "Hai gi&agrave; creato un personaggio.")
-          |> push_navigate(to: ~p"/character/sheet")}
+         socket
+         |> put_flash(:error, "Hai gi&agrave; creato un personaggio.")
+         |> push_navigate(to: ~p"/character/sheet")}
     end
   end
 
@@ -53,9 +55,9 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
     case Characters.create_character(character_params) do
       {:ok, _} ->
         {:noreply,
-          socket
-          |> put_flash(:info, "Personaggio creato con successo.")
-          |> push_navigate(to: ~p"/character/complete")}
+         socket
+         |> put_flash(:info, "Personaggio creato con successo.")
+         |> push_navigate(to: ~p"/character/complete")}
 
       {:error, changeset} ->
         form =

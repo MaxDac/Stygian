@@ -4,10 +4,12 @@
     <.flash_group flash={@flash} />
     <.drawer class="lg:invisible" />
     <.menu class="invisible lg:visible" />
-    <div class="bg-[url('/images/Internal.webp')] bg-cover bg-no-repeat overflow-hidden w-[800px] h-[604px] 3xl:w-[1000px] 3xl:h-[755px] 4xl:w-[1200px] 4xl:h-[906px] p-4 z-20">
-      <div class="w-full h-full pl-[30px] pt-[50px] pr-[40px] pb-[80px]">
-        <div class="overflow-x-hidden max-h-[595px] overflow-y-auto text-brand">
-          <%= @inner_content %>
+    <div class="absolute top-0 left-[-500px] md:left-[-300px] lg:left-0 xl:left-[200px] bg-[url('/images/Tentacles2.webp')] bg-no-repeat h-screen w-full xl:w-[calc(100%-200px)]">
+      <div class="ml-0 md:ml-[200px] lg:ml-[500px] bg-container-background w-full md:w-[calc(100%-200px)] lg:w-[calc(100%-500px)] h-full">
+        <div class="overflow-x-hidden w-full h-full overflow-y-auto text-brand p-10">
+          <article class="format-invert font-berolina lg:format-lg format-green">
+            <%= @inner_content %>
+          </article>
         </div>
       </div>
     </div>

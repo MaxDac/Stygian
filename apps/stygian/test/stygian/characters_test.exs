@@ -81,14 +81,14 @@ defmodule Stygian.CharactersTest do
         %{id: skill_id_1} = skill_fixture(%{name: "some skill 1"}),
         %{id: skill_id_2} = skill_fixture(%{name: "some skill 2"}),
         %{id: skill_id_3} = skill_fixture(%{name: "some skill 3"}),
-        %{id: skill_id_4} = skill_fixture(%{name: "some skill 4"}),
+        %{id: skill_id_4} = skill_fixture(%{name: "some skill 4"})
       ]
 
       skills = [
         %{value: 4, character_id: character.id, skill_id: skill_id_1},
         %{value: 3, character_id: character.id, skill_id: skill_id_2},
         %{value: 2, character_id: character.id, skill_id: skill_id_3},
-        %{value: 1, character_id: character.id, skill_id: skill_id_4},
+        %{value: 1, character_id: character.id, skill_id: skill_id_4}
       ]
 
       assert {:ok, character} = Characters.complete_character(character, skills)

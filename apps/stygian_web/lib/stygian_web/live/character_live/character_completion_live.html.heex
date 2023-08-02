@@ -1,1 +1,48 @@
-<div>Completion</div>
+<h1 class="text-center">Attributi del personaggio</h1>
+
+<p>
+  Dopo aver inserito le informazioni principali del personaggio, puoi determinarne le caratteristiche.
+</p>
+
+<p>
+  Gli attributi sono i tratti fisici e mentali del personaggio, che ne determinano le capacità e il potenziale. Ogni caratteristica ha un valore che va da 1 a 5, dove 1 è il valore minimo e 5 il valore massimo. Il valore 3 è il valore medio, e rappresenta il livello medio di una persona normale.
+</p>
+
+<p>Le altre caratteristiche sono le conoscenze, l'addestramento e le capacità del personaggio.</p>
+
+<p>Per maggiori informazioni, consulta la guida.</p>
+
+<div class={"text-center #{if @can_save do "visible" else "invisible" end}"}>
+  <.button phx-disable-with="Salvataggio in corso..." phx-click="save" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+    Salva
+  </.button>
+</div>
+
+<div class="w-full flex flex-row justify-evenly space-x-4">
+  <div class="w-2/5 flex flex-col space-y-4">
+    <span class="text-center"><%= @attribute_points %></span>
+    <%= for %{skill: attribute, value: value} <- @attributes do %>
+      <.attribute_selector
+        id={attribute.id}
+        skill={attribute}
+        value={value}
+        kind="attribute"
+        on_plus="plus"
+        on_minus="minus"
+      />
+    <% end %>
+  </div>
+  <div class="w-2/5 flex flex-col space-y-4">
+    <span class="text-center"><%= @ability_points %></span>
+    <%= for %{skill: ability, value: value} <- @abilities do %>
+      <.attribute_selector
+        id={ability.id}
+        skill={ability}
+        value={value}
+        kind="ability"
+        on_plus="plus"
+        on_minus="minus"
+      />
+    <% end %>
+  </div>
+</div>
