@@ -50,16 +50,37 @@ defmodule Stygian.Characters do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_character(attrs \\ %{}) do
-    attrs = add_step_to_character_attrs(attrs, 1)
-
-    %Character{}
-    |> Character.name_avatar_changeset(attrs)
-    |> Repo.insert()
+  def create_character(attrs = %{"user_id" => user_id}) do
+    create_character_internal(attrs, user_id)
   end
 
-  defp user_has_character?(user) do
+  def create_character(attrs = %{user_id: user_id}) do
+    create_character_internal(attrs, user_id)
+  end
 
+  def create_character(_) do
+    {:error, Ecto.Changeset.add_error(%Ecto.Changeset{}, :user_id, "is required")}
+  end
+
+  defp create_character_internal(attrs, user_id) do
+    case user_has_character?(user_id) do
+      false ->
+        attrs = add_step_to_character_attrs(attrs, 1)
+
+        %Character{}
+        |> Character.name_avatar_changeset(attrs)
+        |> Repo.insert()
+
+      _ ->
+        {:error, Ecto.Changeset.add_error(%Ecto.Changeset{}, :user_id, "already has a character")}
+    end
+  end
+
+  defp user_has_character?(user_id) do
+    Character
+    |> from()
+    |> where([c], c.user_id == ^user_id)
+    |> Repo.exists?()
   end
 
   @doc """

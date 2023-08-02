@@ -5,15 +5,18 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
   alias Stygian.Characters.Character
 
   @impl true
-  def mount(_params, _session, socket) do
-    case Characters.get_user_character?(socket.assigns.current_user) do
+  def mount(_params, _session, socket = %{assigns: %{current_user: current_user}}) do
+    case Characters.get_user_character?(current_user) do
       nil ->
         form =
           %Character{}
-          |> Characters.change_character_name_and_avatar()
+          |> Characters.change_character_name_and_avatar(%{user_id: current_user.id})
           |> to_form()
 
-        {:ok, assign(socket, form: form)}
+        {:ok,
+          socket
+          |> assign(form: form)
+        }
 
       # Character already created, redirecting to completion
       %{step: 1} ->
@@ -31,12 +34,8 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
   end
 
   @impl true
-  def handle_event("validate", params, socket = %{assigns: %{current_user: current_user}}) do
+  def handle_event("validate", params, socket) do
     %{"character" => character_params} = params
-
-    character_params =
-      character_params
-      |> add_user_to_attributes(current_user)
 
     form =
       %Character{}
@@ -48,16 +47,12 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
   end
 
   @impl true
-  def handle_event("create", params, socket = %{assigns: %{current_user: current_user}}) do
+  def handle_event("create", params, socket) do
     %{"character" => character_params} = params
-
-    character_params =
-      character_params
-      |> add_user_to_attributes(current_user)
 
     case Characters.create_character(character_params) do
       {:ok, _} ->
-        {:ok,
+        {:noreply,
           socket
           |> put_flash(:info, "Personaggio creato con successo.")
           |> push_navigate(to: ~p"/character/complete")}
@@ -65,14 +60,10 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
       {:error, changeset} ->
         form =
           changeset
-          |> Map.put(:action, :validate)
+          |> Map.put(:action, :create)
           |> to_form()
 
         {:noreply, assign(socket, form: form)}
     end
-  end
-
-  defp add_user_to_attributes(attrs, user) do
-    Map.put(attrs, "user", user.id)
   end
 end

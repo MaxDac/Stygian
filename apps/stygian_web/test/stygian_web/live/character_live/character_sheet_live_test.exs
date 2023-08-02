@@ -62,5 +62,26 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLiveTest do
       assert path == ~p"/character/complete"
       assert %{"error" => "Devi completare la creazione del personaggio prima di accedere alla sua scheda."} = flash
     end
+
+    # test "Correctly save the character", %{conn: conn} do
+    #   user = user_fixture()
+
+    #   assert {:ok, lv, _html} =
+    #     conn
+    #     |> log_in_user(user)
+    #     |> live(~p"/character/create")
+
+    #   result =
+    #     lv
+    #     |> form("#creation_1_form", %{
+    #       "character[name]" => "Some Awful Name",
+    #       "character[avatar]" => "https://some.awful.avatar",
+    #       "character[user_id]" => user.id
+    #     })
+    #     |> render_submit()
+    #     |> follow_redirect(conn)
+
+    #   assert result =~ "Completion"
+    # end
   end
 end

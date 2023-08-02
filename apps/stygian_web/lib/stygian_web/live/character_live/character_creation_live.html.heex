@@ -9,6 +9,7 @@
 
   <div>
     <.simple_form for={@form} id="creation_1_form" phx-submit="create" phx-change="validate">
+      <.input field={@form[:user_id]} type="hidden" />
       <.input
         field={@form[:name]}
         label="Nome"
@@ -17,7 +18,13 @@
         required
       />
 
-      <.input field={@form[:avatar]} label="Avatar (link, 270x400)" phx-debounce="blur" required />
+      <.input 
+        field={@form[:avatar]} 
+        label="Avatar (link, 270x400)" 
+        class="bg-black p-0 border border-brand"
+        phx-debounce="blur" 
+        required 
+      />
 
       <:actions>
         <.button phx-disable-with="Creando personaggio..." class="w-full">

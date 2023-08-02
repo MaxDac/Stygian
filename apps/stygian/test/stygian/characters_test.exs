@@ -50,6 +50,22 @@ defmodule Stygian.CharactersTest do
       assert character.step == 1
     end
 
+    test "create_character/1 with valid data in a string map creates a character" do
+      %{id: user_id} = user_fixture()
+
+      valid_attrs = %{
+        "avatar" => "some avatar",
+        "name" => "some very awful name",
+        "user_id" => user_id
+      }
+
+      assert {:ok, %Character{} = character} = Characters.create_character(valid_attrs)
+      assert character.avatar == "some avatar"
+      assert character.name == "some very awful name"
+      assert character.user_id == user_id
+      assert character.step == 1
+    end
+
     test "complete_character/2 completes the character with the correct set of skills" do
       %{id: user_id} = user_fixture()
 
