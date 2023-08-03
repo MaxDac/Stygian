@@ -310,7 +310,11 @@ defmodule Stygian.Characters do
       {attributes, skills} ->
         Enum.concat(attributes, skills)
         |> Enum.reduce(
-          Ecto.Multi.new() |> Ecto.Multi.delete_all(:delete_all, from(c in CharacterSkill, where: c.character_id == ^character_id)),
+          Ecto.Multi.new()
+          |> Ecto.Multi.delete_all(
+            :delete_all,
+            from(c in CharacterSkill, where: c.character_id == ^character_id)
+          ),
           fn skill = %{skill_id: skill_id, character_id: character_id, value: value}, multi ->
             multi
             |> Ecto.Multi.insert(
@@ -321,7 +325,8 @@ defmodule Stygian.Characters do
                 value: value
               })
             )
-          end)
+          end
+        )
         |> Repo.transaction()
     end
   end

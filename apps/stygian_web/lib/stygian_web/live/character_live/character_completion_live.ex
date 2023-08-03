@@ -25,7 +25,6 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   def mount(_params, _session, socket = %{assigns: %{current_user: current_user}}) do
     case Characters.get_user_character?(current_user) do
       character = %{step: 1} ->
-
         {:ok,
          socket
          |> assign(character: character)
@@ -108,8 +107,18 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
       |> Enum.split_with(&filter_attributes/1)
 
     socket
-    |> update_attributes(Enum.map(attributes, &%CharacterSkill{skill: &1, skill_id: &1.id, character_id: character_id, value: 4}))
-    |> update_abilities(Enum.map(abilities, &%CharacterSkill{skill: &1, skill_id: &1.id, character_id: character_id, value: 0}))
+    |> update_attributes(
+      Enum.map(
+        attributes,
+        &%CharacterSkill{skill: &1, skill_id: &1.id, character_id: character_id, value: 4}
+      )
+    )
+    |> update_abilities(
+      Enum.map(
+        abilities,
+        &%CharacterSkill{skill: &1, skill_id: &1.id, character_id: character_id, value: 0}
+      )
+    )
     |> assign(attribute_points: @max_attributes, ability_points: @max_abilities)
   end
 
