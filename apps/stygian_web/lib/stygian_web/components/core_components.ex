@@ -225,8 +225,9 @@ defmodule StygianWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 rounded-md font-typewriter bg-brand-inactive hover:bg-brand py-2 px-3",
+        "text-md font-semibold leading-6 text-brand hover:text-black active:text-brand/80",
+        "border border-brand hover:border-brand-inactive active:border-brand/80",
         @class
       ]}
       {@rest}

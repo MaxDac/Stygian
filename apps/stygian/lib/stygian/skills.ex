@@ -151,9 +151,8 @@ defmodule Stygian.Skills do
     |> distinct(true)
     |> from()
     |> join(:left, [s], sr in SkillRelSkillType, on: s.id == sr.skill_id)
-    |> join(:left, [_, sr], st in SkillType,
-      on: sr.skill_type_id == st.id and st.name != @non_creational_skill_type_name
-    )
+    |> join(:left, [_, sr], st in SkillType, on: sr.skill_type_id == st.id)
+    |> where([_, _, st], is_nil(st.id) or st.name != ^@non_creational_skill_type_name)
     |> order_by([s, _, _], asc: s.id)
     |> select([s], s)
     |> preload(:skill_types)

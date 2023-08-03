@@ -20,8 +20,28 @@ html {
 }
 
 @font-face {
+  font-family: "normal";
+  src: url("/fonts/normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "legrand";
+  src: url("/fonts/legrand.ttf") format("truetype");
+}
+
+@font-face {
   font-family: "typewriter";
   src: url("/fonts/typewriter.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "report";
+  src: url("/fonts/report.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "chat";
+  src: url("/fonts/chat.ttf") format("truetype");
 }
 
 @font-face {

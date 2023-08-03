@@ -5,7 +5,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionSelectorComponent do
 
   attr :skill, Skill, required: true
   attr :value, :integer, required: true
-  attr :kind, :atom, required: true
+  attr :kind, :string, required: true
   attr :on_plus, :string, required: true
   attr :on_minus, :string, required: true
 
@@ -19,10 +19,10 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionSelectorComponent do
           phx-click={@on_minus}
           phx-value-kind={@kind}
           phx-value-skill={@skill.id}
-          class="inline-flex items-center px-4 py-2 text-sm font-medium text-brand bg-transparent border border-brand rounded-l-lg hover:bg-brand hover:text-brand focus:z-10 focus:ring-2 focus:ring-brand focus:bg-brand focus:text-brand"
+          class="inline-flex items-center px-2 py-2 text-sm font-medium text-brand bg-transparent border border-brand rounded-xl hover:bg-brand hover:text-black focus:z-10 focus:ring-2 focus:ring-black focus:bg-brand focus:text-black"
         >
           <svg
-            class="w-[12px] h-[12px] text-brand"
+            class="w-[12px] h-[12px]"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -37,22 +37,22 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionSelectorComponent do
             />
           </svg>
         </button>
-        <button
+        <span
           type="button"
           disabled
-          class="font-typewriter text-lg inline-flex items-center px-4 py-2 font-medium text-brand bg-transparent border-t border-b border-brand hover:bg-brand hover:text-brand focus:z-10 focus:ring-2 focus:ring-brand focus:bg-brand focus:text-brand"
+          class="font-typewriter text-lg inline-flex items-center justify-center font-medium text-brand bg-transparent min-w-[50px]"
         >
           <%= @value %>
-        </button>
+        </span>
         <button
           type="button"
           phx-click={@on_plus}
           phx-value-kind={@kind}
           phx-value-skill={@skill.id}
-          class="inline-flex items-center px-4 py-2 text-sm font-medium text-brand bg-transparent border border-brand rounded-r-md hover:bg-brand hover:text-brand focus:z-10 focus:ring-2 focus:ring-brand focus:bg-brandh focus:text-brand"
+          class="inline-flex items-center px-2 py-2 text-sm font-medium text-brand bg-transparent border border-brand rounded-xl hover:bg-brand hover:text-black focus:z-10 focus:ring-2 focus:ring-black focus:bg-brand focus:text-black"
         >
           <svg
-            class="w-[12px] h-[12px] text-brand"
+            class="w-[12px] h-[12px]"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

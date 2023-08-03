@@ -1,4 +1,4 @@
-<h1 class="text-center">Attributi del personaggio</h1>
+<h1 class="text-center font-berolina ">Attributi del personaggio</h1>
 
 <p>
   Dopo aver inserito le informazioni principali del personaggio, puoi determinarne le caratteristiche.
@@ -13,17 +13,20 @@
 <p>Per maggiori informazioni, consulta la guida.</p>
 
 <div class={"text-center #{if @can_save do "visible" else "invisible" end}"}>
-  <.button phx-disable-with="Salvataggio in corso..." phx-click="save" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+  <.button
+    phx-disable-with="Salvataggio in corso..."
+    phx-click="save"
+    class="bg-transparent hover:bg-brand text-brand hover:text-black font-bold py-2 px-4 rounded"
+  >
     Salva
   </.button>
 </div>
 
 <div class="w-full flex flex-row justify-evenly space-x-4">
   <div class="w-2/5 flex flex-col space-y-4">
-    <span class="text-center"><%= @attribute_points %></span>
+    <span class="text-center font-typewriter text-3xl"><%= @attribute_points %></span>
     <%= for %{skill: attribute, value: value} <- @attributes do %>
       <.attribute_selector
-        id={attribute.id}
         skill={attribute}
         value={value}
         kind="attribute"
@@ -33,10 +36,9 @@
     <% end %>
   </div>
   <div class="w-2/5 flex flex-col space-y-4">
-    <span class="text-center"><%= @ability_points %></span>
+    <span class="text-center font-typewriter text-3xl"><%= @ability_points %></span>
     <%= for %{skill: ability, value: value} <- @abilities do %>
       <.attribute_selector
-        id={ability.id}
         skill={ability}
         value={value}
         kind="ability"

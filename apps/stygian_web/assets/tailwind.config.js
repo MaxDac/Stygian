@@ -27,14 +27,17 @@ module.exports = {
       },
       colors: {
         brand: "#33a01b",
+        "brand-inactive": "#13800b",
         internal: "#090b0a",
-        "container-background": "#191919",
+        "container-background": "#1a1919",
       },
       fontFamily: {
         serif: ["berolina", "serif"],
         typewriter: ["typewriter", "serif"],
         metropolitan: ["metropolitan", "serif"],
         berolina: ["berolina", "serif"],
+        legrand: ["legrand", "serif"],
+        normal: ["normal", "serif"],
         necrofonticon: ["necrofonticon", "serif"],
       },
       boxShadow: {

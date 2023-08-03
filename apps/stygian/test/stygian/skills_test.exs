@@ -152,7 +152,8 @@ defmodule Stygian.SkillsTest do
       Skills.add_skill_type_to_skill(skill, skill_type)
       Skills.add_skill_type_to_skill(non_creational_skill, non_creational_skill_type)
 
-      assert [skill] = Skills.list_creational_skills()
+      assert [listed_skill] = Skills.list_creational_skills()
+      assert skill.id == listed_skill.id
     end
 
     test "list_creational_skills/0 do not return duplicates" do
@@ -167,7 +168,8 @@ defmodule Stygian.SkillsTest do
       Skills.add_skill_type_to_skill(skill, other_skill_type)
       Skills.add_skill_type_to_skill(non_creational_skill, non_creational_skill_type)
 
-      assert [skill] = Skills.list_creational_skills()
+      assert [listed_skill] = Skills.list_creational_skills()
+      assert skill.id == listed_skill.id
     end
   end
 end
