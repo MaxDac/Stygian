@@ -13,9 +13,9 @@ RUN sudo apt-get update -y \
     # && apt-get install erlang -y \
     # && apt-get install elixir -y \
     && sudo apt-get install -y build-essential autoconf m4 libncurses5-dev libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev libssh-dev unixodbc-dev xsltproc fop libxml2-utils libncurses-dev \
-    && apt-get install inotify-tools -y \
+    && sudo apt-get install inotify-tools -y \
     && sudo rm -rf /var/lib/apt/lists/* \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+    && sudo apt-get clean && sudo rm -rf /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*
 
 # homebrew
 # ENV TRIGGER_BREW_REBUILD=2
@@ -40,7 +40,7 @@ RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
 RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
 
 ENV BUMP_TO_FORCE_GITPOD_UPDATE=4
-COPY .gitpod/install-asdf-plugins.sh $HOME/
+COPY install-asdf-plugins.sh $HOME/
 RUN ./install-asdf-plugins.sh
 
 # ZSH
@@ -48,7 +48,7 @@ ENV ZSH_THEME cloud
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 COPY zsh-template.sh $HOME/.zshrc
 
-ONBUILD COPY .gitpod/.tool-versions $HOME/
+ONBUILD COPY .tool-versions $HOME/
 ONBUILD RUN bash -c ". $HOME/.bashrc.d/asdf.sh && asdf install"
 
 CMD [ "zsh" ]
