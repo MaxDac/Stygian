@@ -331,7 +331,10 @@ defmodule Stygian.Characters do
     end
   end
 
-  @spec check_creation_skills(attributes :: list(CharacterSkill.t()), skills :: list(CharacterSkill.t())) ::
+  @spec check_creation_skills(
+          attributes :: list(CharacterSkill.t()),
+          skills :: list(CharacterSkill.t())
+        ) ::
           {:ok, {list(CharacterSkill.t()), list(CharacterSkill.t())}} | {:error, %Changeset{}}
   defp check_creation_skills(attributes, skills) do
     check_creation_skills_count({:ok, {attributes, skills}})
