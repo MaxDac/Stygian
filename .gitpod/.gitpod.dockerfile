@@ -12,7 +12,7 @@ RUN sudo apt-get update -y \
     # && apt-get install erlang -y \
     # && apt-get install elixir -y \
     && sudo apt-get install -y build-essential autoconf m4 libncurses5-dev libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev libssh-dev unixodbc-dev xsltproc fop libxml2-utils libncurses-dev \
-    && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v${asdf_ver} \
+    && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.12.0 \
     && echo ". $HOME/.asdf/asdf.sh" >> ~/.bashrc \
     && echo ". $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc \
     && apt-get install inotify-tools -y \
