@@ -307,7 +307,7 @@ defmodule Stygian.Characters do
       changeset = {:error, _} ->
         changeset
 
-      {attributes, skills} ->
+      {:ok, {attributes, skills}} ->
         Enum.concat(attributes, skills)
         |> Enum.reduce(
           Ecto.Multi.new()
@@ -331,26 +331,24 @@ defmodule Stygian.Characters do
     end
   end
 
-  @spec check_creation_skills(list(CharacterSkill.t()), list(CharacterSkill.t())) ::
-          :ok | {:error, %Changeset{}}
+  @spec check_creation_skills(attributes :: list(CharacterSkill.t()), skills :: list(CharacterSkill.t())) ::
+          {:ok, {list(CharacterSkill.t()), list(CharacterSkill.t())}} | {:error, %Changeset{}}
   defp check_creation_skills(attributes, skills) do
-    check_creation_skills_count({attributes, skills})
+    check_creation_skills_count({:ok, {attributes, skills}})
     |> check_creation_skills_sum()
     |> check_creation_skills_level()
   end
 
-  defp check_creation_skills_count(error = {:error, _}), do: error
-
-  defp check_creation_skills_count({attributes, _}) when length(attributes) != 6 do
+  defp check_creation_skills_count({:ok, {attributes, _}}) when length(attributes) != 6 do
     {:error,
      Changeset.add_error(%Changeset{}, :character_attributes, "wrong number of attributes")}
   end
 
-  defp check_creation_skills_count({attributes, skills}), do: {attributes, skills}
+  defp check_creation_skills_count(previous_result), do: previous_result
 
   defp check_creation_skills_sum(error = {:error, _}), do: error
 
-  defp check_creation_skills_sum({attributes, skills}) do
+  defp check_creation_skills_sum({:ok, {attributes, skills}}) do
     case {
       attributes
       |> Enum.map(& &1.value)
@@ -360,7 +358,7 @@ defmodule Stygian.Characters do
       |> Enum.sum()
     } do
       {@creation_max_attribute_sum, @creation_mas_skills_sum} ->
-        {attributes, skills}
+        {:ok, {attributes, skills}}
 
       {a, _} when a != @creation_max_attribute_sum ->
         {:error,
@@ -374,7 +372,7 @@ defmodule Stygian.Characters do
 
   defp check_creation_skills_level(error = {:error, _}), do: error
 
-  defp check_creation_skills_level({attributes, skills}) do
+  defp check_creation_skills_level({:ok, {attributes, skills}}) do
     {attribute_values, skill_values} = {
       attributes
       |> Enum.map(& &1.value),
@@ -407,7 +405,7 @@ defmodule Stygian.Characters do
         {:error, Changeset.add_error(%Changeset{}, :character_skills, "wrong level for skills")}
 
       _ ->
-        {attributes, skills}
+        {:ok, {attributes, skills}}
     end
   end
 
