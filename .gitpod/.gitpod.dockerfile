@@ -25,7 +25,3 @@ RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git \
     && asdf install elixir 1.15.4-otp-25 \
     && asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
     && asdf install nodejs 18.17.0 
-
-# RUN mix local.hex --force \
-#    && mix local.rebar --force \
-#    && mix archive.install hex phx_new
