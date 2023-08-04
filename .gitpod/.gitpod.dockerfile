@@ -1,11 +1,12 @@
 FROM gitpod/workspace-postgres
 
-ENV DEBIAN_FRONTEND noninteractive
-
-USER root
+# Maybe not needed
+# ENV DEBIAN_FRONTEND noninteractive
 
 RUN sudo apt-get update -y \
-    && apt-get install curl software-properties-common apt-transport-https lsb-release git -y \
+    && sudo apt-get install -y gnupg software-properties-common curl git dirmngr apt-transport-https lsb-release \
+    linux-headers-$(uname -r) build-essential  \
+    zsh \
     # && curl -fsSL https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/erlang.gpg \
     # && echo "deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib" | tee /etc/apt/sources.list.d/erlang.list \
     # && apt-get update -y \
@@ -13,20 +14,39 @@ RUN sudo apt-get update -y \
     # && apt-get install elixir -y \
     && sudo apt-get install -y build-essential autoconf m4 libncurses5-dev libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev libssh-dev unixodbc-dev xsltproc fop libxml2-utils libncurses-dev \
     && apt-get install inotify-tools -y \
+    && sudo rm -rf /var/lib/apt/lists/* \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
-USER gitpod
+# homebrew
+# ENV TRIGGER_BREW_REBUILD=2
+# RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# ENV PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/
+# ENV MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man"
+# ENV INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
+# ENV HOMEBREW_NO_AUTO_UPDATE=1
+# RUN sudo apt remove -y cmake \
+#     && brew install cmake
+# RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bashrc.d/homebrew.sh
 
-RUN brew install asdf
+# hygen
+# RUN bash -ic "brew tap jondot/tap"
+# RUN bash -ic "brew install hygen"
 
-RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git \
-    && asdf install erlang 25.3.2.5 \
-    && asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git \
-    && asdf install elixir 1.15.4-otp-25 \
-    && asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
-    && asdf install nodejs 18.17.0 
+RUN git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
 
-# Setting up asdf 
-RUN asdf global erlang 25.3.2.5 \
-    && asdf global elixir 1.15.4-otp-25 \
-    && asdf global nodejs 18.17.0
+RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
+RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
+
+ENV BUMP_TO_FORCE_GITPOD_UPDATE=4
+COPY install-asdf-plugins.sh $HOME/
+RUN ./install-asdf-plugins.sh
+
+# ZSH
+ENV ZSH_THEME cloud
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+COPY zsh-template.sh $HOME/.zshrc
+
+ONBUILD COPY .tool-versions $HOME/
+ONBUILD RUN bash -c ". $HOME/.bashrc.d/asdf.sh && asdf install"
+
+CMD [ "zsh" ]
