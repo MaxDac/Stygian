@@ -3,17 +3,6 @@ image:
 ports:
   - port: 4000
 tasks:
-  - name: initial-settings
-  - init: >
-      # Setting up asdf
-      asdf global erlang 25.3.2.5
-      asdf global elixir 1.15.4-otp-25
-      asdf global nodejs 18.17.0
-      
-      export PATH="$PATH:/home/gitpod/.asdf/shims"
-
-      gp sync-done settings
-
   - name: postgres
     init: >
       #init db
@@ -21,10 +10,7 @@ tasks:
       
   - name: Phx
     init: >
-      gp sync-await settings
-
       # Installing Phoenix packages
-      gp sync
       mix local.hex --force
       mix local.rebar --force
       mix archive.install hex phx_new
