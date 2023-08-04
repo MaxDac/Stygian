@@ -1,5 +1,5 @@
 defmodule StygianWeb.CharacterLive.CharacterSheetLive do
-  use StygianWeb, :container_live_view
+  use StygianWeb, :live_view
 
   alias Stygian.Characters
 
