@@ -315,7 +315,7 @@ defmodule Stygian.Characters do
             :delete_all,
             from(c in CharacterSkill, where: c.character_id == ^character_id)
           ),
-          fn skill = %{skill_id: skill_id, character_id: character_id, value: value}, multi ->
+          fn %{skill_id: skill_id, character_id: character_id, value: value}, multi ->
             multi
             |> Ecto.Multi.insert(
               skill_id,

@@ -5,7 +5,6 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   require Logger
 
   alias Stygian.Characters
-  alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
 
   alias Stygian.Skills
@@ -72,7 +71,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   @impl true
   def handle_event(
         "save",
-        unsigned_params,
+        _params,
         socket = %{
           assigns: %{
             character: character,
