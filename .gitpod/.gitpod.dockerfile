@@ -32,6 +32,8 @@ RUN sudo apt-get update -y \
 # RUN bash -ic "brew tap jondot/tap"
 # RUN bash -ic "brew install hygen"
 
+USER gitpod
+
 RUN git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
 
 RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
