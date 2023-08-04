@@ -17,6 +17,9 @@ module.exports = {
     extend: {
       screens: {
         "tall": { "raw": "(min-height: 800px)" },
+        "2xl": "1336px",
+        "3xl": { "raw": "(min-width: 1600px)" },
+        "4xl": { "raw": "(min-width: 1900px)" },
       },
       backgroundImage: {
         "login": "url('/images/LoginFrameSH.webp')",
@@ -24,13 +27,17 @@ module.exports = {
       },
       colors: {
         brand: "#33a01b",
+        "brand-inactive": "#13800b",
         internal: "#090b0a",
+        "container-background": "#1a1919",
       },
       fontFamily: {
         serif: ["berolina", "serif"],
         typewriter: ["typewriter", "serif"],
         metropolitan: ["metropolitan", "serif"],
         berolina: ["berolina", "serif"],
+        legrand: ["legrand", "serif"],
+        normal: ["normal", "serif"],
         necrofonticon: ["necrofonticon", "serif"],
       },
       boxShadow: {
@@ -39,12 +46,13 @@ module.exports = {
       dropShadow: {
         "md": "0 2px 2px rgba(0, 0, 0, 0.5)",
         "lg": "0 3px 3px rgba(0, 0, 0, 0.95)",
-      }
+      },
     },
   },
   plugins: [
     require("@tailwindcss/forms"),
     require("flowbite/plugin"),
+    require("flowbite-typography"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //

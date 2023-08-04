@@ -84,4 +84,15 @@ defmodule StygianWeb.Router do
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
+
+  scope "/character", StygianWeb.CharacterLive do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :character_sheet,
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
+      live "/sheet", CharacterSheetLive, :index
+      live "/create", CharacterCreationLive, :create
+      live "/complete", CharacterCompletionLive, :complete
+    end
+  end
 end

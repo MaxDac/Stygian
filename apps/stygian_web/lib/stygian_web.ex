@@ -49,28 +49,16 @@ defmodule StygianWeb do
     end
   end
 
-  def live_view do
+  def live_view, do: add_live_view(:app)
+
+  def container_live_view, do: add_live_view(:app_container)
+
+  def login_live_view, do: add_live_view(:login)
+
+  defp add_live_view(layout) when is_atom(layout) do
     quote do
       use Phoenix.LiveView,
-        layout: {StygianWeb.Layouts, :app}
-
-      unquote(html_helpers())
-    end
-  end
-
-  def container_live_view do
-    quote do
-      use Phoenix.LiveView,
-        layout: {StygianWeb.Layouts, :app_container}
-
-      unquote(html_helpers())
-    end
-  end
-
-  def login_live_view do
-    quote do
-      use Phoenix.LiveView,
-        layout: {StygianWeb.Layouts, :login}
+        layout: {StygianWeb.Layouts, unquote(layout)}
 
       unquote(html_helpers())
     end

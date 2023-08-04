@@ -1,0 +1,38 @@
+<h1 class="text-center font-berolina">Creazione del personaggio</h1>
+
+<p>Prima di accedere a tutti gli effetti al sito, è necessario craere un personaggio.</p>
+
+<p>
+  Ogni personaggio è unico e speciale, ed avrai modo di definire le sue caratteristiche con calma una volta entrato a tutti gli effetti nel gioco.
+</p>
+
+<p>
+  Prima di questo, è necessario determinarne alcune caratteristiche minime, in modo che il tuo personaggio possa essere in grado di cominciare il gioco.
+</p>
+
+<div>
+  <.simple_form for={@form} id="creation_1_form" phx-submit="create" phx-change="validate">
+    <.input field={@form[:user_id]} type="hidden" />
+    <.input
+      field={@form[:name]}
+      label="Nome"
+      class="bg-black p-0 border border-brand"
+      phx-debounce="blur"
+      required
+    />
+
+    <.input
+      field={@form[:avatar]}
+      label="Avatar (link, 270x400)"
+      class="bg-black p-0 border border-brand"
+      phx-debounce="blur"
+      required
+    />
+
+    <:actions>
+      <.button phx-disable-with="Creando personaggio..." class="w-full">
+        Crea
+      </.button>
+    </:actions>
+  </.simple_form>
+</div>
