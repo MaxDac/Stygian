@@ -3,6 +3,11 @@
 #init db
 psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
 
+# Installing Phoenix packages
+mix local.hex --force \
+mix local.rebar --force \
+mix archive.install hex phx_new
+
 # Installing Back End dependencies
 mix deps.get && mix deps.compile
 
