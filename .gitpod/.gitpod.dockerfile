@@ -18,10 +18,13 @@ RUN sudo apt-get update -y \
     && apt-get install inotify-tools -y \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
-COPY install_asdf_plugins.sh /home/gitpod/
-
-RUN bash -c ". $HOME/.asdf/asdf.sh && ~/install_asdf_plugins.sh" && \
-  rm -rf /home/gitpod/install_asdf_plugins.sh
+# Installing dependencies for Elixir and Node
+RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git \
+    && asdf install erlang 25.3.2.5 \
+    && asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git \
+    && asdf install elixir 1.15.4-otp-25 \
+    && asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
+    && asdf install nodejs 18.17.0 
 
 USER gitpod
 
