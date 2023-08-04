@@ -3,19 +3,28 @@ image:
 ports:
   - port: 4000
 tasks:
-  - name: Phx
-    init: >
-      #init db
-      psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
-      
+  - name: initial-settings
+  - init: >
       # Setting up asdf
       asdf global erlang 25.3.2.5
       asdf global elixir 1.15.4-otp-25
       asdf global nodejs 18.17.0
       
       export PATH="$PATH:/home/gitpod/.asdf/shims"
+
+      gp sync-done settings
+
+  - name: postgres
+    init: >
+      #init db
+      psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
       
+  - name: Phx
+    init: >
+      gp sync-await settings
+
       # Installing Phoenix packages
+      gp sync
       mix local.hex --force
       mix local.rebar --force
       mix archive.install hex phx_new
@@ -31,5 +40,4 @@ tasks:
       # Installing Front End dependencies
       npm install --prefix apps/stygian_web/assets
     command: >
-      mix phx.server &
-      yarn --cwd apps/vtm_web/assets podstart
+      mix phx.server
