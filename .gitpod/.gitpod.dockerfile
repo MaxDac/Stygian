@@ -40,7 +40,7 @@ RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
 RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
 
 ENV BUMP_TO_FORCE_GITPOD_UPDATE=4
-COPY install-asdf-plugins.sh $HOME/
+COPY .gitpod/install-asdf-plugins.sh $HOME/
 RUN ./install-asdf-plugins.sh
 
 # ZSH
@@ -48,7 +48,7 @@ ENV ZSH_THEME cloud
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 COPY zsh-template.sh $HOME/.zshrc
 
-ONBUILD COPY .tool-versions $HOME/
+ONBUILD COPY .gitpod/.tool-versions $HOME/
 ONBUILD RUN bash -c ". $HOME/.bashrc.d/asdf.sh && asdf install"
 
 CMD [ "zsh" ]
