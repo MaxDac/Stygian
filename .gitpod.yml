@@ -7,9 +7,15 @@ tasks:
     init: >
       #init db
       psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
+      gp sync-done DB
       
   - name: Phx
+    env: 
+      PATH: 
     init: >
+      # Setting up PATH
+      export PATH="$HOME/.asdf/shims:$PATH"
+
       # Installing Phoenix packages
       mix local.hex --force
       mix local.rebar --force
@@ -17,6 +23,9 @@ tasks:
       
       # Installing Back End dependencies
       mix deps.get && mix deps.compile
+
+      # Waiting for DB to be finished
+      gp sync-done DB
       
       # Creating and migrating database
       mix ecto.create && mix ecto.migrate
@@ -26,4 +35,7 @@ tasks:
       # Installing Front End dependencies
       npm install --prefix apps/stygian_web/assets
     command: >
+      # Setting up PATH
+      export PATH="$HOME/.asdf/shims:$PATH"
+
       mix phx.server
