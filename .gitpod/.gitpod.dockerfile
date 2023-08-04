@@ -12,13 +12,13 @@ RUN sudo apt-get update -y \
     # && apt-get install erlang -y \
     # && apt-get install elixir -y \
     && sudo apt-get install -y build-essential autoconf m4 libncurses5-dev libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev libssh-dev unixodbc-dev xsltproc fop libxml2-utils libncurses-dev \
-    && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.12.0 \
-    && echo ". $HOME/.asdf/asdf.sh" >> ~/.bashrc \
-    && echo ". $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc \
     && apt-get install inotify-tools -y \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
-# Installing dependencies for Elixir and Node
+USER gitpod
+
+RUN brew install asdf
+
 RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git \
     && asdf install erlang 25.3.2.5 \
     && asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git \
@@ -26,8 +26,6 @@ RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git \
     && asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
     && asdf install nodejs 18.17.0 
 
-USER gitpod
-
-RUN mix local.hex --force \
-    && mix local.rebar --force \
-    && mix archive.install hex phx_new
+# RUN mix local.hex --force \
+#    && mix local.rebar --force \
+#    && mix archive.install hex phx_new
