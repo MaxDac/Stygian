@@ -21,7 +21,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   @min_ability_value 0
 
   @impl true
-  def mount(_params, _session, socket = %{assigns: %{current_user: current_user}}) do
+  def mount(_params, _session, %{assigns: %{current_user: current_user}} = socket) do
     case Characters.get_user_character?(current_user) do
       character = %{step: 1} ->
         {:ok,
@@ -72,7 +72,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   def handle_event(
         "save",
         _params,
-        socket = %{
+        %{
           assigns: %{
             character: character,
             attribute_points: 0,
@@ -80,7 +80,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
             attributes: attributes,
             abilities: abilities
           }
-        }
+        } = socket
       ) do
     case complete_character(character, attributes, abilities) do
       {:ok, _} ->
@@ -231,7 +231,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
 
   defp replace_attribute(
          attributes,
-         new_attribute = %CharacterSkill{skill: %{id: new_attribute_id}}
+         %CharacterSkill{skill: %{id: new_attribute_id}} = new_attribute
        ) do
     attributes
     |> Enum.map(fn
@@ -243,7 +243,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end)
   end
 
-  defp assign_can_save(socket = %{assigns: %{attribute_points: 0, ability_points: 0}}) do
+  defp assign_can_save(%{assigns: %{attribute_points: 0, ability_points: 0}} = socket) do
     socket
     |> assign(can_save: true)
   end

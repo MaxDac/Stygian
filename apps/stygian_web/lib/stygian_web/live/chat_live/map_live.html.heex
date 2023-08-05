@@ -1,1 +1,9 @@
-<div>Map</div>
+<div class="w-full flex justify-center">
+  <img src={"/images/location/#{@map.image_name}.webp"} aria-label={@map.name} usemap="#local_map" class="w-[800px] h-[800px]" />
+</div>
+
+<map name="local_map">
+  <%= for child <- @map.children do %>
+    <area shape={child.coords_type} coords={child.coords} href={~p"/chat/#{child.id}"} alt={child.name} />
+  <% end %>
+</map>

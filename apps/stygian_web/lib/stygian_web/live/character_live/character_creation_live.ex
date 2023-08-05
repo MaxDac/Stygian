@@ -5,7 +5,7 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
   alias Stygian.Characters.Character
 
   @impl true
-  def mount(_params, _session, socket = %{assigns: %{current_user: current_user}}) do
+  def mount(_params, _session, %{assigns: %{current_user: current_user}} = socket) do
     case Characters.get_user_character?(current_user) do
       nil ->
         form =

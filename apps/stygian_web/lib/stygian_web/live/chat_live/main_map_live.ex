@@ -12,6 +12,6 @@ defmodule StygianWeb.ChatLive.MainMapLive do
   end
 
   defp get_parent_maps do
-    Maps.list_parent_maps() |> IO.inspect(label: "map")
+    Maps.list_parent_maps()
   end
 end

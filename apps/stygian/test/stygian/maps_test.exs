@@ -91,5 +91,13 @@ defmodule Stygian.MapsTest do
 
       assert [child_map_1, child_map_2] == Maps.list_child_maps(map)
     end
+
+    test "get_map_with_children/1 returns the map with the children" do
+      %{id: parent_id} = map = map_fixture()
+      child = map_fixture(%{name: "child", parent_id: parent_id})
+      parent_map = Maps.get_map_with_children(parent_id)
+      assert parent_id == parent_map.id
+      assert [child] == parent_map.children
+    end
   end
 end

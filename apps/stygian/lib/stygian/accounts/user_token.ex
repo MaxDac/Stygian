@@ -1,4 +1,8 @@
 defmodule Stygian.Accounts.UserToken do
+  @moduledoc """
+  User token helpers.
+  """
+
   use Ecto.Schema
   import Ecto.Query
   alias Stygian.Accounts.UserToken

@@ -5,7 +5,7 @@ defmodule Stygian.Repo.Migrations.CreateMaps do
     create table(:maps) do
       add :name, :string, null: false
       add :description, :text
-      add :image_name, :string, null: false
+      add :image_name, :string
       add :coords, :string
       add :coords_type, :string
       add :parent_id, references(:maps, on_delete: :delete_all)

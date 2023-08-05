@@ -70,6 +70,18 @@ defmodule Stygian.Maps do
   def get_map_by_name(name), do: Repo.get_by(Map, name: name)
 
   @doc """
+  Gets a map with the preloaded children.
+  """
+  @spec get_map_with_children(integer()) :: Map.t()
+  def get_map_with_children(map_id) do
+    Map
+    |> from()
+    |> where([p], p.id == ^map_id)
+    |> preload(:children)
+    |> Repo.one()
+  end
+
+  @doc """
   Creates a map.
 
   ## Examples

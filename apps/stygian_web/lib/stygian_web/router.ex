@@ -48,6 +48,7 @@ defmodule StygianWeb.Router do
       on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
       live "/", MainMapLive, :index
       live "/map/:map_id", MapLive, :show
+      live "/chat/:map_id", ChatLive, :index
     end
   end
 
