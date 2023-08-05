@@ -12,6 +12,7 @@
 
 alias Stygian.Accounts
 alias Stygian.Skills
+alias Stygian.Maps
 
 defmodule SkillHelpers do
   def create_type?(attrs = %{name: skill_type_name}) do
@@ -33,6 +34,15 @@ defmodule SkillHelpers do
            Skills.add_skill_type_to_skill(skill, skill_type) do
       {:ok, skill} -> true
       false -> false
+    end
+  end
+end
+
+defmodule MapHelpers do
+  def add_map(map = %{name: name}) do
+    case Maps.get_map_by_name(name) do
+      nil -> Maps.create_map(map)
+      map -> {:ok, map}
     end
   end
 end
@@ -235,3 +245,10 @@ SkillHelpers.add_skill_type_to_skill(%{id: subterfuge_id}, %{id: knowledge_skill
 SkillHelpers.add_skill_type_to_skill(%{id: survival_id}, %{id: knowledge_skill_id})
 
 SkillHelpers.add_skill_type_to_skill(%{id: occult_id}, %{id: occult_skill_id})
+
+{:ok, %{id: wastes_id}} = MapHelpers.add_map(%{name: "Wastes", description: "", image_name: "wastes", coords_type: "circle", coords: "150,361,22"})
+{:ok, %{id: fields_id}} = MapHelpers.add_map(%{name: "Fields", description: "", image_name: "fields", coords_type: "circle", coords: "582,161,23"})
+{:ok, %{id: old_eel_id}} = MapHelpers.add_map(%{name: "Old Eel", description: "", image_name: "old_eel", coords_type: "circle", coords: "305,170,15"})
+{:ok, %{id: university_id}} = MapHelpers.add_map(%{name: "Università", description: "", image_name: "university", coords_type: "poly", coords: "193,89,190,101,186,108,180,116,185,129,199,127,208,120,208,111,211,102,205,93"})
+{:ok, %{id: french_hill_id}} = MapHelpers.add_map(%{name: "French Hill", description: "", image_name: "french_hill", coords_type: "poly", coords: "225,225,219,235,220,248,217,254,223,264,234,266,245,259,247,250,239,243,237,235,234,229"})
+{:ok, %{id: east_end_id}} = MapHelpers.add_map(%{name: "East End", description: "", image_name: "east_end", coords_type: "poly", coords: "417,235,406,242,409,249,412,256,407,260,415,268,427,271,435,265,438,256,430,248,426,241,424,235"})
