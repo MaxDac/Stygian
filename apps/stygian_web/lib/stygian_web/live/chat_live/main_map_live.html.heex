@@ -4,6 +4,6 @@
 
 <map name="arkham">
   <%= for map <- @parent_maps do %>
-    <area shape={map.coords_type} coords={map.coords} href={~p"/map/#{map.id}"} alt={map.name} />
+    <.area shape={map.coords_type} coords={map.coords} navigate={~p"/map/#{map.id}"} alt={map.name} />
   <% end %>
 </map>
