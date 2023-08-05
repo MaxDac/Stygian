@@ -299,7 +299,7 @@ defmodule Stygian.Characters do
   The character id must already be contained in the `CharacterSkill` type.
   """
   @spec create_character_skills(list(CharacterSkill.t()), list(CharacterSkill.t())) ::
-          {:ok, any()} | {:error, %Changeset{}}
+          {:ok, any()} | {:error, Changeset.t()}
   def create_character_skills(character_attributes, character_skills) do
     [%{character_id: character_id} | _] = character_attributes
 
@@ -335,7 +335,7 @@ defmodule Stygian.Characters do
           attributes :: list(CharacterSkill.t()),
           skills :: list(CharacterSkill.t())
         ) ::
-          {:ok, {list(CharacterSkill.t()), list(CharacterSkill.t())}} | {:error, %Changeset{}}
+          {:ok, {list(CharacterSkill.t()), list(CharacterSkill.t())}} | {:error, Changeset.t()}
   defp check_creation_skills(attributes, skills) do
     check_creation_skills_count({:ok, {attributes, skills}})
     |> check_creation_skills_sum()

@@ -11,8 +11,6 @@ defmodule StygianWeb.CoreComponents do
   The default components use Tailwind CSS, a utility-first CSS framework.
   See the [Tailwind CSS documentation](https://tailwindcss.com) to learn
   how to customize them or feel free to swap in another framework altogether.
-
-  Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
   use Phoenix.Component
 
@@ -542,30 +540,6 @@ defmodule StygianWeb.CoreComponents do
   end
 
   @doc """
-  Renders a back navigation link.
-
-  ## Examples
-
-      <.back navigate={~p"/posts"}>Back to posts</.back>
-  """
-  attr :navigate, :any, required: true
-  slot :inner_block, required: true
-
-  def back(assigns) do
-    ~H"""
-    <div class="mt-16">
-      <.link
-        navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-      >
-        <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
-        <%= render_slot(@inner_block) %>
-      </.link>
-    </div>
-    """
-  end
-
-  @doc """
   Renders a [Heroicon](https://heroicons.com).
 
   Heroicons come in three styles – outline, solid, and mini.
@@ -665,5 +639,27 @@ defmodule StygianWeb.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+  @doc """
+  Renders an area link.
+
+  ## Examples
+
+      <.area shape="rect" coords="100,100,200,200" navigate={~p"/posts"} alt="LinkName" />
+  """
+  attr :navigate, :any, required: true
+  attr :coords, :string, required: true
+  attr :shape, :string, required: true
+  attr :rest, :global
+
+  def area(assigns) do
+    ~H"""
+    <area
+      href={@navigate}
+      data-phx-link="redirect"
+      data-phx-link-state="push"
+      {@rest} />
+    """
   end
 end

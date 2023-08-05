@@ -41,10 +41,15 @@ defmodule StygianWeb.Router do
 
   ## Home routes
 
-  scope "/", StygianWeb do
+  scope "/", StygianWeb.ChatLive do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/", PageController, :home
+    live_session :chat_live,
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
+      live "/", MainMapLive, :index
+      live "/map/:map_id", MapLive, :show
+      live "/chat/:map_id", ChatLive, :index
+    end
   end
 
   ## Authentication routes

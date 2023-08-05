@@ -1,4 +1,8 @@
 defmodule StygianWeb.UserAuth do
+  @moduledoc """
+  User authentication helpers.
+  """
+
   use StygianWeb, :verified_routes
 
   import Plug.Conn

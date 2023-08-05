@@ -1,0 +1,9 @@
+<div class="relative w-full flex justify-center">
+  <img src="/images/MapWithoutBackgroundResized.webp" aria-label="Map Image" usemap="#arkham" class="w-[800px] h-[517px]" />
+</div>
+
+<map name="arkham">
+  <%= for map <- @parent_maps do %>
+    <.area shape={map.coords_type} coords={map.coords} navigate={~p"/map/#{map.id}"} alt={map.name} />
+  <% end %>
+</map>
