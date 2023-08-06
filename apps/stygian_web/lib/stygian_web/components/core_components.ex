@@ -649,8 +649,6 @@ defmodule StygianWeb.CoreComponents do
       <.area shape="rect" coords="100,100,200,200" navigate={~p"/posts"} alt="LinkName" />
   """
   attr :navigate, :any, required: true
-  attr :coords, :string, required: true
-  attr :shape, :string, required: true
   attr :rest, :global
 
   def area(assigns) do

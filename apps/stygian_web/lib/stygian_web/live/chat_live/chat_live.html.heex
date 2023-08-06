@@ -1,1 +1,6 @@
-<div>Chat <%= @map.name %></div>
+<div>Chat</div>
+<.live_component 
+  module={ChatControlLive} 
+  id={@map.id} 
+  current_character={@current_character}
+  map={@map} />

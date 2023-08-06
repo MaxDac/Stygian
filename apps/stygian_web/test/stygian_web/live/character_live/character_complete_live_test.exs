@@ -3,7 +3,6 @@ defmodule StygianWeb.CharacterLive.CharacterCompleteLiveTest do
 
   import Phoenix.LiveViewTest
   import Stygian.AccountsFixtures
-  import Stygian.CharactersFixtures
 
   describe "Character complete page" do
     test "Redirects if not logged in", %{conn: conn} do

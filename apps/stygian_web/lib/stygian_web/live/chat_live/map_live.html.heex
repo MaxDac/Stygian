@@ -4,6 +4,6 @@
 
 <map name="localmap">
   <%= for child <- @map.children do %>
-    <.area shape={child.coords_type} coords={child.coords} navigate={~p"/chat/#{child.id}"} alt={child.name} />
+    <.area navigate={~p"/chat/#{child.id}"} coords={child.coords} shape={child.coords_type} alt={child.name} />
   <% end %>
 </map>

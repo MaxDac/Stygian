@@ -45,7 +45,7 @@ defmodule StygianWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :chat_live,
-      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
       live "/", MainMapLive, :index
       live "/map/:map_id", MapLive, :show
       live "/chat/:map_id", ChatLive, :index

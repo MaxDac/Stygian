@@ -34,6 +34,25 @@ defmodule Stygian.CharactersTest do
       assert Characters.get_character!(character.id) == character
     end
 
+    test "get_user_first_character/1 returns nil if the user has no character available created" do
+      %{id: user_id} = user_fixture()
+      assert Characters.get_user_first_character(user_id) == nil
+    end
+
+    test "get_user_first_character/1 returns the only character created by the user" do
+      %{id: user_id} = user_fixture()
+      character = character_fixture(%{user_id: user_id})
+      assert Characters.get_user_first_character(user_id) == character
+    end
+
+    # TODO - fix in issue #16
+    # test "get_user_first_character/1 returns the first character created by the user" do
+    #   %{id: user_id} = user_fixture()
+    #   character1 = character_fixture(%{user_id: user_id})
+    #   character2 = character_fixture(%{name: "Second character", user_id: user_id})
+    #   assert Characters.get_user_first_character(user_id) == character1
+    # end
+
     test "create_character/1 with valid data creates a character" do
       %{id: user_id} = user_fixture()
 
@@ -77,12 +96,10 @@ defmodule Stygian.CharactersTest do
 
       assert {:ok, %Character{} = character} = Characters.create_character(valid_attrs)
 
-      skills = [
-        %{id: skill_id_1} = skill_fixture(%{name: "some skill 1"}),
-        %{id: skill_id_2} = skill_fixture(%{name: "some skill 2"}),
-        %{id: skill_id_3} = skill_fixture(%{name: "some skill 3"}),
-        %{id: skill_id_4} = skill_fixture(%{name: "some skill 4"})
-      ]
+      %{id: skill_id_1} = skill_fixture(%{name: "some skill 1"})
+      %{id: skill_id_2} = skill_fixture(%{name: "some skill 2"})
+      %{id: skill_id_3} = skill_fixture(%{name: "some skill 3"})
+      %{id: skill_id_4} = skill_fixture(%{name: "some skill 4"})
 
       skills = [
         %{value: 4, character_id: character.id, skill_id: skill_id_1},

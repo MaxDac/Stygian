@@ -80,7 +80,7 @@ defmodule Stygian.MapsTest do
 
     test "list_parent_maps/0 returns all parent maps" do
       map = map_fixture()
-      child_map = map_fixture(%{name: "Child", parent_id: map.id})
+      _ = map_fixture(%{name: "Child", parent_id: map.id})
       assert Maps.list_parent_maps() == [map]
     end
 
@@ -93,11 +93,75 @@ defmodule Stygian.MapsTest do
     end
 
     test "get_map_with_children/1 returns the map with the children" do
-      %{id: parent_id} = map = map_fixture()
+      %{id: parent_id} = map_fixture()
       child = map_fixture(%{name: "child", parent_id: parent_id})
       parent_map = Maps.get_map_with_children(parent_id)
       assert parent_id == parent_map.id
       assert [child] == parent_map.children
+    end
+  end
+
+  describe "chats" do
+    alias Stygian.Maps.Chat
+
+    import Stygian.MapsFixtures
+    import Stygian.CharactersFixtures
+
+    @invalid_attrs %{text: nil, type: nil}
+
+    test "list_chats/0 returns all chats" do
+      chat = chat_fixture()
+      assert Maps.list_chats() == [chat]
+    end
+
+    test "get_chat!/1 returns the chat with given id" do
+      chat = chat_fixture()
+      assert Maps.get_chat!(chat.id) == chat
+    end
+
+    test "create_chat/1 with valid data creates a chat" do
+      %{id: character_id} = character_fixture()
+      %{id: map_id} = map_fixture()
+      valid_attrs = %{
+        text: "some text",
+        type: :master,
+        character_id: character_id,
+        map_id: map_id
+      }
+
+      assert {:ok, %Chat{} = chat} = Maps.create_chat(valid_attrs)
+      assert chat.text == "some text"
+      assert chat.type == :master
+    end
+
+    test "create_chat/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Maps.create_chat(@invalid_attrs)
+    end
+
+    test "update_chat/2 with valid data updates the chat" do
+      chat = chat_fixture()
+      update_attrs = %{text: "some updated text", type: :dices}
+
+      assert {:ok, %Chat{} = chat} = Maps.update_chat(chat, update_attrs)
+      assert chat.text == "some updated text"
+      assert chat.type == :dices
+    end
+
+    test "update_chat/2 with invalid data returns error changeset" do
+      chat = chat_fixture()
+      assert {:error, %Ecto.Changeset{}} = Maps.update_chat(chat, @invalid_attrs)
+      assert chat == Maps.get_chat!(chat.id)
+    end
+
+    test "delete_chat/1 deletes the chat" do
+      chat = chat_fixture()
+      assert {:ok, %Chat{}} = Maps.delete_chat(chat)
+      assert_raise Ecto.NoResultsError, fn -> Maps.get_chat!(chat.id) end
+    end
+
+    test "change_chat/1 returns a chat changeset" do
+      chat = chat_fixture()
+      assert %Ecto.Changeset{} = Maps.change_chat(chat)
     end
   end
 end

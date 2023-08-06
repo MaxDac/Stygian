@@ -9,6 +9,7 @@ defmodule StygianWeb.UserAuth do
   import Phoenix.Controller
 
   alias Stygian.Accounts
+  alias Stygian.Characters
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -32,10 +33,12 @@ defmodule StygianWeb.UserAuth do
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
+    character = Characters.get_user_first_character(user.id)
 
     conn
     |> renew_session()
     |> put_token_in_session(token)
+    |> put_selected_character_id_in_session(character)
     |> maybe_write_remember_me_cookie(token, params)
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
@@ -126,6 +129,12 @@ defmodule StygianWeb.UserAuth do
       on user_token.
       Redirects to login page if there's no logged user.
 
+    * `:ensure_character` - Authenticates the user as the previous clause,
+      but adds an assign for the character based on the selected_character_id.
+
+    * `:ensure_authenticated_and_mount_character` - Authenticates the user as the previous clause,
+      but adds a check for the character to be mounted.
+
     * `:redirect_if_user_is_authenticated` - Authenticates the user from the session.
       Redirects to signed_in_path if there's a logged user.
 
@@ -152,6 +161,34 @@ defmodule StygianWeb.UserAuth do
   end
 
   def on_mount(:ensure_authenticated, _params, session, socket) do
+    ensure_authenticated(session, socket)
+  end
+
+  def on_mount(:ensure_character, _params, session, socket) do
+    case ensure_authenticated(session, socket) do
+      {:halt, _} = redirect -> redirect
+      {:cont, socket} -> ensure_character(session, socket, true)
+    end
+  end
+
+  def on_mount(:ensure_authenticated_and_mount_character, _params, session, socket) do
+    case ensure_authenticated(session, socket) do
+      {:halt, _} = redirect -> redirect
+      {:cont, socket} -> ensure_character(session, socket)
+    end
+  end
+
+  def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user do
+      {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
+    else
+      {:cont, socket}
+    end
+  end
+
+  defp ensure_authenticated(session, socket) do
     socket = mount_current_user(socket, session)
 
     if socket.assigns.current_user do
@@ -166,13 +203,20 @@ defmodule StygianWeb.UserAuth do
     end
   end
 
-  def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
-    socket = mount_current_user(socket, session)
+  defp ensure_character(session, socket, redirect_if_not_present \\ false) do
+    socket = mount_current_character(socket, session)
 
-    if socket.assigns.current_user do
-      {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
-    else
-      {:cont, socket}
+    case {socket.assigns.current_character, redirect_if_not_present} do
+      {nil, true} ->
+        socket =
+          socket
+          |> Phoenix.LiveView.put_flash(:error, "You must create a character to access this page.")
+          |> Phoenix.LiveView.redirect(to: ~p"/character/sheet")
+
+        {:halt, socket}
+
+      _ ->
+        {:cont, socket}
     end
   end
 
@@ -180,6 +224,14 @@ defmodule StygianWeb.UserAuth do
     Phoenix.Component.assign_new(socket, :current_user, fn ->
       if user_token = session["user_token"] do
         Accounts.get_user_by_session_token(user_token)
+      end
+    end)
+  end
+
+  defp mount_current_character(socket, session) do
+    Phoenix.Component.assign_new(socket, :current_character, fn ->
+      if character_id = session["character_id"] do
+        Characters.get_character!(character_id)
       end
     end)
   end
@@ -220,6 +272,13 @@ defmodule StygianWeb.UserAuth do
     |> put_session(:user_token, token)
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
   end
+
+  defp put_selected_character_id_in_session(conn, %{id: character_id}) do
+    conn
+    |> put_session(:character_id, character_id)
+  end
+
+  defp put_selected_character_id_in_session(conn, _), do: conn
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))
