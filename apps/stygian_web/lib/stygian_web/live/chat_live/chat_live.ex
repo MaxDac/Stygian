@@ -76,7 +76,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
     map: map
   }} = socket) do
     if connected?(socket) do
-      Presence.track_user(self(), current_user, current_character, map)
+      Presence.track_user(self(), current_user, current_character, map, true)
     end
 
     socket

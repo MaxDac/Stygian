@@ -16,7 +16,7 @@ defmodule StygianWeb.Presence do
   @doc """
   Tracks the user around the map pages.
   """
-  def track_user(pid, user, character, map \\ nil) do
+  def track_user(pid, user, character, map \\ nil, is_chat \\ false) do
     %{id: character_id} = character = Map.put(character, :user, user)
 
     Presence.track(
@@ -25,7 +25,7 @@ defmodule StygianWeb.Presence do
       character_id,
       %{
         character: map_character(character),
-        map: map_map(map)
+        map: map_map(map, is_chat)
       })
   end
 
@@ -44,8 +44,8 @@ defmodule StygianWeb.Presence do
     {:ok, state}
   end
 
-  defp map_map(%{id: map_id, name: map_name}), do: %{id: map_id, name: map_name}
-  defp map_map(_), do: %{id: nil, name: "Mappa principale"}
+  defp map_map(%{id: map_id, name: map_name}, is_chat), do: %{id: map_id, name: map_name, is_chat: is_chat}
+  defp map_map(_), do: %{id: nil, name: "Mappa principale", is_chat: false}
 
   defp map_presences(presences) do
     presences

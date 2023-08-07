@@ -27,6 +27,14 @@ defmodule StygianWeb.ChatLive.OnlineLive do
     |> assign_users_list(payload)}
   end
 
+  defp get_map_link(online, location) do
+    case online[location] do
+      [%{map: %{id: map_id, is_chat: true}}] when not is_nil(map_id) -> ~p"/chat/#{map_id}"
+      [%{map: %{id: map_id}}] when not is_nil(map_id) -> ~p"/map/#{map_id}"
+      _ -> ~p"/"
+    end
+  end
+
   defp assign_users_list(socket, users_list) do
     IO.inspect users_list, label: "Users list"
     socket
