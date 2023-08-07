@@ -20,17 +20,22 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   @impl true
   def update(assigns, socket) do
     {:ok,
-      socket
-      |> assign(assigns)
-      |> assign_form()
-    }
+     socket
+     |> assign(assigns)
+     |> assign_form()}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div class={@class}>
-      <.simple_form class="p-0" for={@form} id="chat_input" phx-submit="send_chat_input" phx-target={@myself}>
+      <.simple_form
+        class="p-0"
+        for={@form}
+        id="chat_input"
+        phx-submit="send_chat_input"
+        phx-target={@myself}
+      >
         <.input type="hidden" field={@form[:map_id]} />
         <.input type="hidden" field={@form[:character_id]} />
         <.input type="hidden" field={@form[:type]} />
@@ -64,16 +69,14 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
     case create_chat_entry(params) do
       {:ok, chat_entry} ->
         {:noreply,
-          socket
-          |> ChatHelpers.handle_chat_created(chat_entry)
-          |> notify_parent_for_update()
-        }
+         socket
+         |> ChatHelpers.handle_chat_created(chat_entry)
+         |> notify_parent_for_update()}
 
       {:error, _} ->
         {:noreply,
-          socket
-          |> put_flash(:error, "Errore durante l'invio del messaggio.")
-        }
+         socket
+         |> put_flash(:error, "Errore durante l'invio del messaggio.")}
     end
   end
 
@@ -99,7 +102,7 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   # This function sends the update to the parent live view, that in turn will update this component.
   # Please refer to the module documentation for more information.
   defp notify_parent_for_update(socket) do
-    send self(), {:chat_input_sent, %{}}
+    send(self(), {:chat_input_sent, %{}})
     socket
   end
 end

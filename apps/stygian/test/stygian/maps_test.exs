@@ -37,7 +37,11 @@ defmodule Stygian.MapsTest do
     end
 
     test "create_map/1 with valid data creates a map" do
-      valid_attrs = %{description: "some description", image_name: "some image_name", name: "some name"}
+      valid_attrs = %{
+        description: "some description",
+        image_name: "some image_name",
+        name: "some name"
+      }
 
       assert {:ok, %Stygian.Maps.Map{} = map} = Maps.create_map(valid_attrs)
       assert map.description == "some description"
@@ -51,7 +55,12 @@ defmodule Stygian.MapsTest do
 
     test "update_map/2 with valid data updates the map" do
       map = map_fixture()
-      update_attrs = %{description: "some updated description", image_name: "some updated image_name", name: "some updated name"}
+
+      update_attrs = %{
+        description: "some updated description",
+        image_name: "some updated image_name",
+        name: "some updated name"
+      }
 
       assert {:ok, %Stygian.Maps.Map{} = map} = Maps.update_map(map, update_attrs)
       assert map.description == "some updated description"
@@ -124,9 +133,10 @@ defmodule Stygian.MapsTest do
 
     test "list_map_chats/2 returns the chat entry previously inserted" do
       chat = chat_fixture()
+
       assert [chat |> Map.delete(:character)] ==
-        Maps.list_map_chats(chat.map_id)
-        |> Enum.map(&Map.delete(&1, :character))
+               Maps.list_map_chats(chat.map_id)
+               |> Enum.map(&Map.delete(&1, :character))
     end
 
     test "list_map_chats/2 returns the chat entry with the character preloaded" do
@@ -149,6 +159,7 @@ defmodule Stygian.MapsTest do
     test "create_chat/1 with valid data creates a chat" do
       %{id: character_id} = character_fixture()
       %{id: map_id} = map_fixture()
+
       valid_attrs = %{
         text: "some text",
         type: :master,
@@ -168,6 +179,7 @@ defmodule Stygian.MapsTest do
     test "create_chat/1 with valid data creates a chat and preloads the character" do
       %{id: character_id, name: character_name} = character_fixture()
       %{id: map_id} = map_fixture()
+
       valid_attrs = %{
         text: "some text",
         type: :master,

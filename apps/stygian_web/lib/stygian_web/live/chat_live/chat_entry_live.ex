@@ -12,7 +12,7 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
     ~H"""
     <div id={"chat-screen-#{@map_id}"} class={@class} phx-hook="ChatScreen">
       <%= for chat <- @chat_entries do %>
-      <.chat_entry chat={chat} />
+        <.chat_entry chat={chat} />
       <% end %>
     </div>
     """
@@ -45,7 +45,8 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
       <img
         class="rounded-full h-10 w-10 align-middle"
         src={@chat.character.small_avatar || @chat.character.avatar}
-        alt="Avatar" />
+        alt="Avatar"
+      />
     </div>
     """
   end

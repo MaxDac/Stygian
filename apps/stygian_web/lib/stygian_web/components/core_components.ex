@@ -183,7 +183,11 @@ defmodule StygianWeb.CoreComponents do
   """
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
-  attr :class, :string, default: "", required: false, doc: "the custom class to apply to the form internal div tag"
+
+  attr :class, :string,
+    default: "",
+    required: false,
+    doc: "the custom class to apply to the form internal div tag"
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -662,15 +666,14 @@ defmodule StygianWeb.CoreComponents do
       <.area shape="rect" coords="100,100,200,200" navigate={~p"/posts"} alt="LinkName" />
   """
   attr :navigate, :any, required: true
-  attr :rest, :global, include: ~w(coords shape alt), doc: "the arbitrary HTML attributes to apply to the area tag"
+
+  attr :rest, :global,
+    include: ~w(coords shape alt),
+    doc: "the arbitrary HTML attributes to apply to the area tag"
 
   def area(assigns) do
     ~H"""
-    <area
-      href={@navigate}
-      data-phx-link="redirect"
-      data-phx-link-state="push"
-      {@rest} />
+    <area href={@navigate} data-phx-link="redirect" data-phx-link-state="push" {@rest} />
     """
   end
 end

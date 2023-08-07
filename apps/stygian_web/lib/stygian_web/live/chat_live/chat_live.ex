@@ -29,25 +29,23 @@ defmodule StygianWeb.ChatLive.ChatLive do
   @impl true
   def mount(%{"map_id" => map_id}, _session, socket) do
     {:ok,
-      socket
-      |> assign_map(map_id)
-      |> assign_chat_entries(Maps.list_map_chats(map_id))
-      |> ChatHelpers.subscribe_to_chat_events(map_id)
-      |> assign_textarea_id()
-    }
+     socket
+     |> assign_map(map_id)
+     |> assign_chat_entries(Maps.list_map_chats(map_id))
+     |> ChatHelpers.subscribe_to_chat_events(map_id)
+     |> assign_textarea_id()}
   end
 
   @impl true
   def handle_info(%{event: @event_name_chat_created, payload: chat_entry}, socket) do
     {:noreply,
-      socket
-      |> assign_new_chat_entry(chat_entry)
-    }
+     socket
+     |> assign_new_chat_entry(chat_entry)}
   end
 
   @impl true
   def handle_info({:chat_input_sent, _}, socket) do
-    send_update ChatControlLive, id: socket.assigns.map.id, textarea_id: new_textarea_id()
+    send_update(ChatControlLive, id: socket.assigns.map.id, textarea_id: new_textarea_id())
     {:noreply, socket}
   end
 

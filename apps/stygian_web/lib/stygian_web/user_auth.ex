@@ -210,7 +210,10 @@ defmodule StygianWeb.UserAuth do
       {nil, true} ->
         socket =
           socket
-          |> Phoenix.LiveView.put_flash(:error, "You must create a character to access this page.")
+          |> Phoenix.LiveView.put_flash(
+            :error,
+            "You must create a character to access this page."
+          )
           |> Phoenix.LiveView.redirect(to: ~p"/character/sheet")
 
         {:halt, socket}

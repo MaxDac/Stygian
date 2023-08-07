@@ -8,9 +8,8 @@ defmodule StygianWeb.ChatLive.MapLive do
     map = get_map(map_id)
 
     {:ok,
-      socket
-      |> assign(:map, map)
-    }
+     socket
+     |> assign(:map, map)}
   end
 
   defp get_map(map_id) do

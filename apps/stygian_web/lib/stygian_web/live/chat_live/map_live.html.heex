@@ -1,9 +1,19 @@
 <div class="relative w-full flex justify-center">
-  <img src={"/images/location/#{@map.image_name}.webp"} aria-label={@map.name} usemap="#localmap" class="w-[700px] h-[700px]" />
+  <img
+    src={"/images/location/#{@map.image_name}.webp"}
+    aria-label={@map.name}
+    usemap="#localmap"
+    class="w-[700px] h-[700px]"
+  />
 </div>
 
 <map name="localmap">
   <%= for child <- @map.children do %>
-    <.area navigate={~p"/chat/#{child.id}"} coords={child.coords} shape={child.coords_type} alt={child.name} />
+    <.area
+      navigate={~p"/chat/#{child.id}"}
+      coords={child.coords}
+      shape={child.coords_type}
+      alt={child.name}
+    />
   <% end %>
 </map>

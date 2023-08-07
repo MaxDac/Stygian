@@ -205,8 +205,13 @@ defmodule StygianWeb.UserAuthTest do
       Map.put(test_data, :character, character)
     end
 
-    test "authenticates current_user and associate its character", %{conn: conn, user: user, character: character} do
+    test "authenticates current_user and associate its character", %{
+      conn: conn,
+      user: user,
+      character: character
+    } do
       user_token = Accounts.generate_user_session_token(user)
+
       session =
         conn
         |> put_session(:user_token, user_token)

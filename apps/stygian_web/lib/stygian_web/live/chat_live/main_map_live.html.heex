@@ -1,9 +1,19 @@
 <div class="relative w-full flex justify-center z-30">
-  <img src="/images/MapWithoutBackgroundResized.webp" aria-label="Map Image" usemap="#arkham" class="w-[800px] h-[517px]" />
+  <img
+    src="/images/MapWithoutBackgroundResized.webp"
+    aria-label="Map Image"
+    usemap="#arkham"
+    class="w-[800px] h-[517px]"
+  />
 </div>
 
 <map name="arkham">
   <%= for map <- @parent_maps do %>
-    <.area navigate={~p"/map/#{map.id}"} shape={map.coords_type} coords={map.coords} alt={map.name} />
+    <.area
+      navigate={~p"/map/#{map.id}"}
+      shape={map.coords_type}
+      coords={map.coords}
+      alt={map.name}
+    />
   <% end %>
 </map>
