@@ -11,11 +11,12 @@ defmodule StygianWeb.Application do
     children = [
       # Start the Telemetry supervisor
       StygianWeb.Telemetry,
+      {Phoenix.PubSub, name: StygianWeb.PubSub},
+      StygianWeb.Presence,
       # Start the Endpoint (http/https)
-      StygianWeb.Endpoint,
+      StygianWeb.Endpoint
       # Start a worker by calling: StygianWeb.Worker.start_link(arg)
       # {StygianWeb.Worker, arg}
-      {Phoenix.PubSub, name: :my_pubsub}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

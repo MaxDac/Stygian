@@ -49,6 +49,7 @@ defmodule StygianWeb.Router do
       live "/", MainMapLive, :index
       live "/map/:map_id", MapLive, :show
       live "/chat/:map_id", ChatLive, :index
+      live "/online", OnlineLive, :index
     end
   end
 

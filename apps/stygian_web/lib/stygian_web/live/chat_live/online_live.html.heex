@@ -1,0 +1,13 @@
+<div class="text-center">
+  <h1 class="font-berolina">Online</h1>
+
+  <%= for location <- Map.keys(@online) do %>
+    <.link href={get_map_link(@online, location)}>
+      <h2 class="font-report"><%= location %></h2>
+    </.link>
+
+    <%= for online_info <- @online[location] do %>
+      <p class="font-typewriter"><%= online_info.character.name %></p>
+    <% end %>
+  <% end %>
+</div>

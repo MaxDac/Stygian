@@ -16,6 +16,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
   alias StygianWeb.ChatLive.ChatHelpers
   alias StygianWeb.ChatLive.ChatControlLive
   alias Stygian.Maps
+  alias StygianWeb.Presence
 
   import StygianWeb.ChatLive.ChatEntryLive
 
@@ -31,6 +32,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:ok,
      socket
      |> assign_map(map_id)
+     |> update_presence()
      |> assign_chat_entries(Maps.list_map_chats(map_id))
      |> ChatHelpers.subscribe_to_chat_events(map_id)
      |> assign_textarea_id()}
@@ -67,4 +69,20 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   defp new_textarea_id, do: "textarea-id-#{:rand.uniform(10)}"
+
+  defp update_presence(
+         %{
+           assigns: %{
+             current_user: current_user,
+             current_character: current_character,
+             map: map
+           }
+         } = socket
+       ) do
+    if connected?(socket) do
+      Presence.track_user(self(), current_user, current_character, map, true)
+    end
+
+    socket
+  end
 end
