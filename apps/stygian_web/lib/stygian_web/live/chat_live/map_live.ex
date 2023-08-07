@@ -12,18 +12,21 @@ defmodule StygianWeb.ChatLive.MapLive do
      socket
      |> assign(:map, map)
      |> update_presence()}
-
   end
 
   defp get_map(map_id) do
     Maps.get_map_with_children(map_id)
   end
 
-  defp update_presence(%{assigns: %{
-    current_user: current_user, 
-    current_character: current_character,
-    map: map
-  }} = socket) do
+  defp update_presence(
+         %{
+           assigns: %{
+             current_user: current_user,
+             current_character: current_character,
+             map: map
+           }
+         } = socket
+       ) do
     if connected?(socket) do
       Presence.track_user(self(), current_user, current_character, map)
     end

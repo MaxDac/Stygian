@@ -70,11 +70,15 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   defp new_textarea_id, do: "textarea-id-#{:rand.uniform(10)}"
 
-  defp update_presence(%{assigns: %{
-    current_user: current_user, 
-    current_character: current_character,
-    map: map
-  }} = socket) do
+  defp update_presence(
+         %{
+           assigns: %{
+             current_user: current_user,
+             current_character: current_character,
+             map: map
+           }
+         } = socket
+       ) do
     if connected?(socket) do
       Presence.track_user(self(), current_user, current_character, map, true)
     end

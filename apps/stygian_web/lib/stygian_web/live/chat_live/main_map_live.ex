@@ -16,10 +16,14 @@ defmodule StygianWeb.ChatLive.MainMapLive do
     Maps.list_parent_maps()
   end
 
-  defp update_presence(%{assigns: %{
-    current_user: current_user, 
-    current_character: current_character
-  }} = socket) do
+  defp update_presence(
+         %{
+           assigns: %{
+             current_user: current_user,
+             current_character: current_character
+           }
+         } = socket
+       ) do
     if connected?(socket) do
       Presence.track_user(self(), current_user, current_character)
     end

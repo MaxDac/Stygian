@@ -8,7 +8,7 @@ defmodule StygianWeb.Presence do
   @user_activity_topic "user_activity"
 
   def get_online_topic, do: @user_activity_topic
-  
+
   def init(_opts) do
     {:ok, %{}}
   end
@@ -20,13 +20,14 @@ defmodule StygianWeb.Presence do
     %{id: character_id} = character = Map.put(character, :user, user)
 
     Presence.track(
-      pid, 
-      @user_activity_topic, 
+      pid,
+      @user_activity_topic,
       character_id,
       %{
         character: map_character(character),
         map: map_map(map, is_chat)
-      })
+      }
+    )
   end
 
   def list_users do
@@ -36,7 +37,7 @@ defmodule StygianWeb.Presence do
 
   def handle_metas(topic, _diff, presences, state) do
     # Manually broadcasting the event, as it's not being broadcasted apparently.
-    presences = 
+    presences =
       presences
       |> map_presences()
 
@@ -44,8 +45,10 @@ defmodule StygianWeb.Presence do
     {:ok, state}
   end
 
-  defp map_map(%{id: map_id, name: map_name}, is_chat), do: %{id: map_id, name: map_name, is_chat: is_chat}
-  defp map_map(_), do: %{id: nil, name: "Mappa principale", is_chat: false}
+  defp map_map(%{id: map_id, name: map_name}, is_chat),
+    do: %{id: map_id, name: map_name, is_chat: is_chat}
+
+  defp map_map(_, _), do: %{id: nil, name: "Mappa principale", is_chat: false}
 
   defp map_presences(presences) do
     presences
@@ -62,17 +65,18 @@ defmodule StygianWeb.Presence do
   end
 
   defp map_character(%{
-    id: character_id,
-    name: character_name,
-    user: character_user,
-    avatar: character_avatar,
-    small_avatar: character_small_avatar
-  }), do: %{
-    id: character_id, 
-    name: character_name, 
-    user: map_user(character_user),
-    avatar: character_small_avatar || character_avatar
-  }
+         id: character_id,
+         name: character_name,
+         user: character_user,
+         avatar: character_avatar,
+         small_avatar: character_small_avatar
+       }),
+       do: %{
+         id: character_id,
+         name: character_name,
+         user: map_user(character_user),
+         avatar: character_small_avatar || character_avatar
+       }
 
   defp map_user(%{id: user_id, username: user_name}), do: %{id: user_id, name: user_name}
 

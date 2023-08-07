@@ -14,17 +14,17 @@ defmodule StygianWeb.ChatLive.OnlineLive do
       Endpoint.subscribe(Presence.get_online_topic())
       |> IO.inspect(label: "subscribing")
     end
-    
-    {:ok, 
-    socket
-    |> assign_users_list(Presence.list_users())}
+
+    {:ok,
+     socket
+     |> assign_users_list(Presence.list_users())}
   end
 
   @impl true
   def handle_info(%{event: "presence_diff", payload: payload}, socket) do
-    {:noreply, 
-    socket
-    |> assign_users_list(payload)}
+    {:noreply,
+     socket
+     |> assign_users_list(payload)}
   end
 
   defp get_map_link(online, location) do
@@ -36,7 +36,8 @@ defmodule StygianWeb.ChatLive.OnlineLive do
   end
 
   defp assign_users_list(socket, users_list) do
-    IO.inspect users_list, label: "Users list"
+    IO.inspect(users_list, label: "Users list")
+
     socket
     |> assign(:online, users_list)
   end
