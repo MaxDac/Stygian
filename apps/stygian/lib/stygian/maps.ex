@@ -8,6 +8,8 @@ defmodule Stygian.Maps do
 
   alias Stygian.Maps.Map
 
+  @default_limit_in_hour 2
+
   @doc """
   Returns the list of maps.
 
@@ -176,6 +178,28 @@ defmodule Stygian.Maps do
 
   """
   def get_chat!(id), do: Repo.get!(Chat, id)
+
+  @doc """
+  Lists all the chat entries belonging to a map after the given time.
+  """
+  @spec list_map_chats(non_neg_integer(), NaiveDateTime.t() | nil) :: list(Chat.t())
+  def list_map_chats(map_id, limit \\ nil)
+
+  def list_map_chats(map_id, nil) do
+    default_limit = 
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.add(-1 * @default_limit_in_hour, :hour)
+
+    list_map_chats(map_id, default_limit)
+  end
+
+  def list_map_chats(map_id, limit) do
+    Chat
+    |> from()
+    |> where([c], c.map_id == ^map_id and c.updated_at >= ^limit)
+    |> order_by([c], desc: c.updated_at)
+    |> Repo.all()
+  end
 
   @doc """
   Creates a chat.

@@ -28,7 +28,7 @@ defmodule StygianWeb.UserAuthTest do
     end
 
     test "stores the user token and the character in the session", %{conn: conn, user: user} do
-      character = character_fixture(%{user_id: user.id})
+      character_fixture(%{user_id: user.id})
       conn = UserAuth.log_in_user(conn, user)
       assert token = get_session(conn, :user_token)
       assert character_id = get_session(conn, :character_id)

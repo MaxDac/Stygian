@@ -119,6 +119,26 @@ defmodule Stygian.MapsTest do
       assert Maps.get_chat!(chat.id) == chat
     end
 
+    test "list_map_chats/2 returns an empty list if no chat exist for the given map" do
+      map = map_fixture()
+      assert [] == Maps.list_map_chats(map.id)
+    end
+
+    test "list_map_chats/2 returns the chat entry previously inserted" do
+      chat = chat_fixture()
+      assert [chat] == Maps.list_map_chats(chat.map_id)
+    end
+
+    test "list_map_chats/2 does not return the chat entry previously inserted if prior to the limit" do
+      # Setting the limit in the future, because Ecto make it difficult to modify inserted_at and updated_at fields
+      limit = 
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.add(100, :minute)
+
+      chat = chat_fixture()
+      assert [] == Maps.list_map_chats(chat.map_id, limit)
+    end
+
     test "create_chat/1 with valid data creates a chat" do
       %{id: character_id} = character_fixture()
       %{id: map_id} = map_fixture()
