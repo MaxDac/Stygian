@@ -19,19 +19,27 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   def render(assigns) do
     ~H"""
     <div class={@class}>
-      <.simple_form for={@form} id="chat_input" phx-submit="send_chat_input" phx-target={@myself}>
+      <.simple_form class="p-0" for={@form} id="chat_input" phx-submit="send_chat_input" phx-target={@myself}>
         <.input type="hidden" field={@form[:map_id]} />
         <.input type="hidden" field={@form[:character_id]} />
         <.input type="hidden" field={@form[:type]} />
-        <.input
-          field={@form[:text]}
-          type="textarea"
-          placeholder="Scrivi la tua azione qui..."
-          label="Chat" />
+        <div class="flex flex-row justify-between">
+          <div class="w-full p-5">
+            <.input
+              field={@form[:text]}
+              type="textarea"
+              placeholder="Scrivi la tua azione qui..." />
+          </div>
 
-        <.button phx-disable-with="Sending..." class="w-full">
-          Invia
-        </.button>
+          <div class="flex flex-col max-w-10 justify-evenly">
+            <.button phx-disable-with="Inviando..." class="w-full">
+              Invia
+            </.button>
+            <.button type="button" disabled="true" phx-disable-with="..." class="w-full">
+              Dadi
+            </.button>
+          </div>
+        </div>
       </.simple_form>
     </div>
     """
@@ -62,6 +70,7 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
       |> Maps.change_chat(%{
         map_id: map.id,
         character_id: current_character.id,
+        text: nil,
         type: :text
       })
       |> to_form()

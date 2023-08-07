@@ -7,6 +7,7 @@ defmodule Stygian.Characters.Character do
   @type t() :: %__MODULE__{
           admin_notes: String.t(),
           avatar: String.t(),
+          small_avatar: String.t(),
           biography: String.t(),
           cigs: integer(),
           description: String.t(),
@@ -25,6 +26,7 @@ defmodule Stygian.Characters.Character do
   schema "characters" do
     field :admin_notes, :string
     field :avatar, :string
+    field :small_avatar, :string
     field :biography, :string
     field :cigs, :integer
     field :description, :string

@@ -186,7 +186,7 @@ defmodule Stygian.Maps do
   def list_map_chats(map_id, limit \\ nil)
 
   def list_map_chats(map_id, nil) do
-    default_limit = 
+    default_limit =
       NaiveDateTime.utc_now()
       |> NaiveDateTime.add(-1 * @default_limit_in_hour, :hour)
 
@@ -197,7 +197,8 @@ defmodule Stygian.Maps do
     Chat
     |> from()
     |> where([c], c.map_id == ^map_id and c.updated_at >= ^limit)
-    |> order_by([c], desc: c.updated_at)
+    |> order_by([c], asc: c.updated_at)
+    |> preload(:character)
     |> Repo.all()
   end
 
@@ -214,9 +215,15 @@ defmodule Stygian.Maps do
 
   """
   def create_chat(attrs \\ %{}) do
-    %Chat{}
-    |> Chat.changeset(attrs)
-    |> Repo.insert()
+    chat =
+      %Chat{}
+      |> Chat.changeset(attrs)
+      |> Repo.insert()
+
+    case chat do
+      {:ok, chat} -> {:ok, Repo.preload(chat, :character)}
+      error -> error
+    end
   end
 
   @doc """

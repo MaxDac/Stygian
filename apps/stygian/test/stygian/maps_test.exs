@@ -4,8 +4,6 @@ defmodule Stygian.MapsTest do
   alias Stygian.Maps
 
   describe "maps" do
-    alias Stygian.Maps.Map
-
     import Stygian.MapsFixtures
 
     @invalid_attrs %{description: nil, image_name: nil, name: nil}
@@ -41,7 +39,7 @@ defmodule Stygian.MapsTest do
     test "create_map/1 with valid data creates a map" do
       valid_attrs = %{description: "some description", image_name: "some image_name", name: "some name"}
 
-      assert {:ok, %Map{} = map} = Maps.create_map(valid_attrs)
+      assert {:ok, %Stygian.Maps.Map{} = map} = Maps.create_map(valid_attrs)
       assert map.description == "some description"
       assert map.image_name == "some image_name"
       assert map.name == "some name"
@@ -55,7 +53,7 @@ defmodule Stygian.MapsTest do
       map = map_fixture()
       update_attrs = %{description: "some updated description", image_name: "some updated image_name", name: "some updated name"}
 
-      assert {:ok, %Map{} = map} = Maps.update_map(map, update_attrs)
+      assert {:ok, %Stygian.Maps.Map{} = map} = Maps.update_map(map, update_attrs)
       assert map.description == "some updated description"
       assert map.image_name == "some updated image_name"
       assert map.name == "some updated name"
@@ -69,7 +67,7 @@ defmodule Stygian.MapsTest do
 
     test "delete_map/1 deletes the map" do
       map = map_fixture()
-      assert {:ok, %Map{}} = Maps.delete_map(map)
+      assert {:ok, %Stygian.Maps.Map{}} = Maps.delete_map(map)
       assert_raise Ecto.NoResultsError, fn -> Maps.get_map!(map.id) end
     end
 
@@ -110,13 +108,13 @@ defmodule Stygian.MapsTest do
     @invalid_attrs %{text: nil, type: nil}
 
     test "list_chats/0 returns all chats" do
-      chat = chat_fixture()
-      assert Maps.list_chats() == [chat]
+      chat = chat_fixture() |> Map.delete(:character)
+      assert Maps.list_chats() |> Enum.map(&Map.delete(&1, :character)) == [chat]
     end
 
     test "get_chat!/1 returns the chat with given id" do
-      chat = chat_fixture()
-      assert Maps.get_chat!(chat.id) == chat
+      chat = chat_fixture() |> Map.delete(:character)
+      assert Maps.get_chat!(chat.id) |> Map.delete(:character) == chat
     end
 
     test "list_map_chats/2 returns an empty list if no chat exist for the given map" do
@@ -126,12 +124,21 @@ defmodule Stygian.MapsTest do
 
     test "list_map_chats/2 returns the chat entry previously inserted" do
       chat = chat_fixture()
-      assert [chat] == Maps.list_map_chats(chat.map_id)
+      assert [chat |> Map.delete(:character)] ==
+        Maps.list_map_chats(chat.map_id)
+        |> Enum.map(&Map.delete(&1, :character))
+    end
+
+    test "list_map_chats/2 returns the chat entry with the character preloaded" do
+      chat = chat_fixture()
+      assert [found] = Maps.list_map_chats(chat.map_id)
+      assert found.character.id == chat.character_id
+      assert not is_nil(found.character.name)
     end
 
     test "list_map_chats/2 does not return the chat entry previously inserted if prior to the limit" do
       # Setting the limit in the future, because Ecto make it difficult to modify inserted_at and updated_at fields
-      limit = 
+      limit =
         NaiveDateTime.utc_now()
         |> NaiveDateTime.add(100, :minute)
 
@@ -158,6 +165,23 @@ defmodule Stygian.MapsTest do
       assert {:error, %Ecto.Changeset{}} = Maps.create_chat(@invalid_attrs)
     end
 
+    test "create_chat/1 with valid data creates a chat and preloads the character" do
+      %{id: character_id, name: character_name} = character_fixture()
+      %{id: map_id} = map_fixture()
+      valid_attrs = %{
+        text: "some text",
+        type: :master,
+        character_id: character_id,
+        map_id: map_id
+      }
+
+      assert {:ok, %Chat{} = chat} = Maps.create_chat(valid_attrs)
+      assert chat.text == "some text"
+      assert chat.type == :master
+      assert chat.character.id == character_id
+      assert chat.character.name == character_name
+    end
+
     test "update_chat/2 with valid data updates the chat" do
       chat = chat_fixture()
       update_attrs = %{text: "some updated text", type: :dices}
@@ -168,9 +192,9 @@ defmodule Stygian.MapsTest do
     end
 
     test "update_chat/2 with invalid data returns error changeset" do
-      chat = chat_fixture()
+      chat = chat_fixture() |> Map.delete(:character)
       assert {:error, %Ecto.Changeset{}} = Maps.update_chat(chat, @invalid_attrs)
-      assert chat == Maps.get_chat!(chat.id)
+      assert chat == Maps.get_chat!(chat.id) |> Map.delete(:character)
     end
 
     test "delete_chat/1 deletes the chat" do

@@ -5,6 +5,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
   alias StygianWeb.ChatLive.ChatControlLive
   alias Stygian.Maps
 
+  import StygianWeb.ChatLive.ChatEntryLive
+
   @event_name_chat_created "chat_created"
 
   @doc """
@@ -31,8 +33,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   defp assign_new_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do
-    socket
-    |> assign_chat_entries([chat_entry | chat_entries])
+    assign_chat_entries(socket, chat_entries ++ [chat_entry])
   end
 
   defp assign_chat_entries(socket, chats) do

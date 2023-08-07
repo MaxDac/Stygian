@@ -183,6 +183,7 @@ defmodule StygianWeb.CoreComponents do
   """
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
+  attr :class, :string, default: "", required: false, doc: "the custom class to apply to the form internal div tag"
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -194,7 +195,7 @@ defmodule StygianWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 flex flex-col">
+      <div class={@class || "space-y-8 flex flex-col"}>
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -223,8 +224,8 @@ defmodule StygianWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-md font-typewriter bg-brand-inactive hover:bg-brand py-2 px-3",
-        "text-md font-semibold leading-6 text-brand hover:text-black active:text-brand/80",
+        "phx-submit-loading:opacity-75 rounded-md font-report bg-transparent active:bg-brand-inactive hover:bg-brand py-2 px-3",
+        "text-md font-semibold leading-6 text-brand hover:text-black active:text-black/80",
         "border border-brand hover:border-brand-inactive active:border-brand/80",
         @class
       ]}
@@ -345,15 +346,27 @@ defmodule StygianWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "mt-2 block w-full rounded-md font-typewriter text-brand focus:ring-0 sm:text-sm sm:leading-6",
+          "min-h-[6rem] phx-no-feedback:border-brand-inavtive phx-no-feedback:focus:border-brand-inactive",
+          "bg-black",
+          @errors == [] && "border-brand-inactive focus:border-brand",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
+    """
+  end
+
+  def input(%{type: "hidden"} = assigns) do
+    ~H"""
+    <input
+      type="hidden"
+      name={@name}
+      id={@id}
+      value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+    />
     """
   end
 
@@ -649,7 +662,7 @@ defmodule StygianWeb.CoreComponents do
       <.area shape="rect" coords="100,100,200,200" navigate={~p"/posts"} alt="LinkName" />
   """
   attr :navigate, :any, required: true
-  attr :rest, :global
+  attr :rest, :global, include: ~w(coords shape alt), doc: "the arbitrary HTML attributes to apply to the area tag"
 
   def area(assigns) do
     ~H"""

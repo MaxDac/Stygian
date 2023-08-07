@@ -1,11 +1,9 @@
-<div class="h-screen w-full flex flex-col justify-between">
-  <div class="overflow-x">
-    <%= for chat <- @chat_entries do %>
-    <div>
-      <%= chat.text %>
-    </div>
-    <% end %>
-  </div>
+<div class="h-[calc(100vh-2.5rem)] w-full flex flex-col justify-start">
+  <.chat_entries_screen 
+    class="overflow-y-auto min-h-[calc(100vh-150px-2.5rem)]"
+    map_id={@map.id}
+    chat_entries={@chat_entries} />
+
   <%= if @current_character do %>
     <.live_component 
       module={ChatControlLive} 
