@@ -6,10 +6,12 @@
     </div>
     <% end %>
   </div>
-  <.live_component 
-    module={ChatControlLive} 
-    id={@map.id} 
-    current_character={@current_character}
-    class="min-h-[150px]"
-    map={@map} />
+  <%= if @current_character do %>
+    <.live_component 
+      module={ChatControlLive} 
+      id={@map.id} 
+      current_character={@current_character}
+      class="min-h-[150px]"
+      map={@map} />
+  <% end %>
 </div>

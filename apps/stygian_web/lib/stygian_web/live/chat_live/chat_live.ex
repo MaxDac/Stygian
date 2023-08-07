@@ -24,7 +24,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   @impl true
   def handle_info(%{event: @event_name_chat_created, payload: chat_entry}, socket) do
-    {:noreply, 
+    {:noreply,
       socket
       |> assign_new_chat_entry(chat_entry)
     }
