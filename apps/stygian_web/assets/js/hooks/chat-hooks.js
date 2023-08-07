@@ -3,15 +3,25 @@
  * @param {Hooks} Hooks LiveView Hooks 
  */
 export function addChatHooks(Hooks) { 
-  console.debug("Mounting chat hooks...")
   Hooks.ChatScreen = {
     mounted() {
-      console.debug("Mounted")
-      this.el.scrollTop = this.el.scrollHeight;
+      this.el.scrollTop = this.el.scrollHeight
     },
     updated() {
-      console.debug("Updated")
-      this.el.scrollTop = this.el.scrollHeight;
+      this.el.scrollTop = this.el.scrollHeight
     },
-  };
-};
+  }
+
+  Hooks.ChatInput = {
+    mounted() {
+      this.el.focus()
+      this.el.onkeyup = (e) => {
+        if (e.key === "Enter") {
+          // Simulating pressing the button because submitting the form would result in 
+          // messing with liveview internal behaviour
+          this.el.form.querySelector("#chat-input-sender").click()
+        }
+      } 
+    }
+  }
+}

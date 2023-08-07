@@ -24,7 +24,7 @@ defmodule StygianWeb.ChatLive.ChatHelpers do
 
   The subscriber must also implement the `handle_info/2` callback to handle the messages being sent.
   """
-  @spec subscribe_to_chat_events(Socket.t(), integer()) :: Socket.t() 
+  @spec subscribe_to_chat_events(Socket.t(), integer()) :: Socket.t()
   def subscribe_to_chat_events(socket, map_id) do
     if connected?(socket) do
       Endpoint.subscribe(get_broatcast_topic(map_id))
