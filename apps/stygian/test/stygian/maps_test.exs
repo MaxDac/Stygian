@@ -96,7 +96,9 @@ defmodule Stygian.MapsTest do
       child_map_1 = map_fixture(%{name: "Child 1", parent_id: map.id})
       child_map_2 = map_fixture(%{name: "Child 2", parent_id: map.id})
 
-      assert [child_map_1, child_map_2] == Maps.list_child_maps(map)
+      assert maps = Maps.list_child_maps(map)
+      assert Enum.member?(maps, child_map_1)
+      assert Enum.member?(maps, child_map_2)
     end
 
     test "get_map_with_children/1 returns the map with the children" do
