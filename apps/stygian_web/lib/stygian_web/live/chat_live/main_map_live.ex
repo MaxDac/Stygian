@@ -6,9 +6,8 @@ defmodule StygianWeb.ChatLive.MainMapLive do
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
-      socket
-      |> assign(:parent_maps, get_parent_maps())
-    }
+     socket
+     |> assign(:parent_maps, get_parent_maps())}
   end
 
   defp get_parent_maps do

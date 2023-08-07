@@ -22,10 +22,14 @@ import { rlyeianAnimations } from "./rlyeian-text.js"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
+import {addChatHooks} from "./hooks/chat-hooks.js"
 import topbar from "../vendor/topbar"
 
+const Hooks = {}
+addChatHooks(Hooks)
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#296b1e"}, shadowColor: "rgba(0, 0, 0, .3)"})

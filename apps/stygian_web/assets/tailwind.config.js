@@ -36,9 +36,9 @@ module.exports = {
         typewriter: ["typewriter", "serif"],
         metropolitan: ["metropolitan", "serif"],
         berolina: ["berolina", "serif"],
-        legrand: ["legrand", "serif"],
         normal: ["normal", "serif"],
         necrofonticon: ["necrofonticon", "serif"],
+        report: ["report", "serif"],
       },
       boxShadow: {
         "DEFAULT": "box-shadow: 0 0 10px #000",

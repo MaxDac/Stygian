@@ -4,6 +4,8 @@ defmodule Stygian.MapsFixtures do
   entities via the `Stygian.Maps` context.
   """
 
+  alias Stygian.CharactersFixtures
+
   @doc """
   Generate a map.
   """
@@ -20,5 +22,25 @@ defmodule Stygian.MapsFixtures do
       |> Stygian.Maps.create_map()
 
     map
+  end
+
+  @doc """
+  Generate a chat.
+  """
+  def chat_fixture(attrs \\ %{}) do
+    map = map_fixture()
+    character = CharactersFixtures.character_fixture()
+
+    {:ok, chat} =
+      attrs
+      |> Enum.into(%{
+        text: "some text",
+        type: :text,
+        character_id: character.id,
+        map_id: map.id
+      })
+      |> Stygian.Maps.create_chat()
+
+    chat
   end
 end

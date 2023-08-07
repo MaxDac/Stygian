@@ -12,9 +12,10 @@ defmodule StygianWeb.Application do
       # Start the Telemetry supervisor
       StygianWeb.Telemetry,
       # Start the Endpoint (http/https)
-      StygianWeb.Endpoint
+      StygianWeb.Endpoint,
       # Start a worker by calling: StygianWeb.Worker.start_link(arg)
       # {StygianWeb.Worker, arg}
+      {Phoenix.PubSub, name: :my_pubsub}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

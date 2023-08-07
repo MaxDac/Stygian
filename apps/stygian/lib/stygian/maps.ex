@@ -8,6 +8,8 @@ defmodule Stygian.Maps do
 
   alias Stygian.Maps.Map
 
+  @default_limit_in_hour 2
+
   @doc """
   Returns the list of maps.
 
@@ -144,5 +146,130 @@ defmodule Stygian.Maps do
   """
   def change_map(%Map{} = map, attrs \\ %{}) do
     Map.changeset(map, attrs)
+  end
+
+  alias Stygian.Maps.Chat
+
+  @doc """
+  Returns the list of chats.
+
+  ## Examples
+
+      iex> list_chats()
+      [%Chat{}, ...]
+
+  """
+  def list_chats do
+    Repo.all(Chat)
+  end
+
+  @doc """
+  Gets a single chat.
+
+  Raises `Ecto.NoResultsError` if the Chat does not exist.
+
+  ## Examples
+
+      iex> get_chat!(123)
+      %Chat{}
+
+      iex> get_chat!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_chat!(id), do: Repo.get!(Chat, id)
+
+  @doc """
+  Lists all the chat entries belonging to a map after the given time.
+  """
+  @spec list_map_chats(non_neg_integer(), NaiveDateTime.t() | nil) :: list(Chat.t())
+  def list_map_chats(map_id, limit \\ nil)
+
+  def list_map_chats(map_id, nil) do
+    default_limit =
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.add(-1 * @default_limit_in_hour, :hour)
+
+    list_map_chats(map_id, default_limit)
+  end
+
+  def list_map_chats(map_id, limit) do
+    Chat
+    |> from()
+    |> where([c], c.map_id == ^map_id and c.updated_at >= ^limit)
+    |> order_by([c], asc: c.updated_at)
+    |> preload(:character)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a chat.
+
+  ## Examples
+
+      iex> create_chat(%{field: value})
+      {:ok, %Chat{}}
+
+      iex> create_chat(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_chat(attrs \\ %{}) do
+    chat =
+      %Chat{}
+      |> Chat.changeset(attrs)
+      |> Repo.insert()
+
+    case chat do
+      {:ok, chat} -> {:ok, Repo.preload(chat, :character)}
+      error -> error
+    end
+  end
+
+  @doc """
+  Updates a chat.
+
+  ## Examples
+
+      iex> update_chat(chat, %{field: new_value})
+      {:ok, %Chat{}}
+
+      iex> update_chat(chat, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_chat(%Chat{} = chat, attrs) do
+    chat
+    |> Chat.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a chat.
+
+  ## Examples
+
+      iex> delete_chat(chat)
+      {:ok, %Chat{}}
+
+      iex> delete_chat(chat)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_chat(%Chat{} = chat) do
+    Repo.delete(chat)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking chat changes.
+
+  ## Examples
+
+      iex> change_chat(chat)
+      %Ecto.Changeset{data: %Chat{}}
+
+  """
+  def change_chat(%Chat{} = chat, attrs \\ %{}) do
+    Chat.changeset(chat, attrs)
   end
 end

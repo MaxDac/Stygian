@@ -5,6 +5,7 @@ defmodule StygianWeb.UserAuthTest do
   alias Stygian.Accounts
   alias StygianWeb.UserAuth
   import Stygian.AccountsFixtures
+  import Stygian.CharactersFixtures
 
   @remember_me_cookie "_stygian_web_user_remember_me"
 
@@ -21,6 +22,17 @@ defmodule StygianWeb.UserAuthTest do
     test "stores the user token in the session", %{conn: conn, user: user} do
       conn = UserAuth.log_in_user(conn, user)
       assert token = get_session(conn, :user_token)
+      assert get_session(conn, :live_socket_id) == "users_sessions:#{Base.url_encode64(token)}"
+      assert redirected_to(conn) == ~p"/"
+      assert Accounts.get_user_by_session_token(token)
+    end
+
+    test "stores the user token and the character in the session", %{conn: conn, user: user} do
+      character_fixture(%{user_id: user.id})
+      conn = UserAuth.log_in_user(conn, user)
+      assert token = get_session(conn, :user_token)
+      assert character_id = get_session(conn, :character_id)
+      assert not is_nil(character_id)
       assert get_session(conn, :live_socket_id) == "users_sessions:#{Base.url_encode64(token)}"
       assert redirected_to(conn) == ~p"/"
       assert Accounts.get_user_by_session_token(token)
@@ -182,6 +194,35 @@ defmodule StygianWeb.UserAuthTest do
 
       {:halt, updated_socket} = UserAuth.on_mount(:ensure_authenticated, %{}, session, socket)
       assert updated_socket.assigns.current_user == nil
+    end
+  end
+
+  describe "on_mount: ensure_authenticated_and_mount_character" do
+    import Stygian.CharactersFixtures
+
+    setup %{user: user} = test_data do
+      character = character_fixture(user: user)
+      Map.put(test_data, :character, character)
+    end
+
+    test "authenticates current_user and associate its character", %{
+      conn: conn,
+      user: user,
+      character: character
+    } do
+      user_token = Accounts.generate_user_session_token(user)
+
+      session =
+        conn
+        |> put_session(:user_token, user_token)
+        |> put_session(:character_id, character.id)
+        |> get_session()
+
+      {:cont, updated_socket} =
+        UserAuth.on_mount(:ensure_character, %{}, session, %LiveView.Socket{})
+
+      assert updated_socket.assigns.current_user.id == user.id
+      assert updated_socket.assigns.current_character.id == character.id
     end
   end
 

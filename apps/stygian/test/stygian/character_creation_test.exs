@@ -4,10 +4,7 @@ defmodule Stygian.CharacterCreationTest do
   alias Stygian.Characters
 
   describe "character creation" do
-    alias Stygian.Characters.Character
-
     import Stygian.CharactersFixtures
-    import Stygian.AccountsFixtures
     import Stygian.SkillsFixtures
 
     setup do

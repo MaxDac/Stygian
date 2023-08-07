@@ -94,6 +94,17 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Returns the first character of a user.
+  TODO - fix in issue #16, the admin user can have more than one character, but only PNGs.
+  """
+  def get_user_first_character(user_id) do
+    Character
+    |> from()
+    |> where([c], c.user_id == ^user_id)
+    |> Repo.one()
+  end
+
+  @doc """
   Completes the character creation by adding its attributes and updating the character step to 2.
   """
   @spec complete_character(Character.t(), [map()]) :: Character.t()
