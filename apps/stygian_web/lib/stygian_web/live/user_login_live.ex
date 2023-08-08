@@ -12,23 +12,29 @@ defmodule StygianWeb.UserLoginLive do
           class="bg-black p-0 border border-brand"
           required
         />
-        <.input field={@form[:password]} type="password" label="Password" required />
+
+        <.input 
+          field={@form[:password]} 
+          type="password" 
+          label="Password" 
+          required 
+        />
 
         <:actions>
-          <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+          <.input field={@form[:remember_me]} type="checkbox" label="Mantieni sessione" />
           <.link href={~p"/users/reset_password"} class="text-sm font-semibold text-brand">
-            Forgot your password?
+            Recupera password
           </.link>
         </:actions>
         <:actions>
           <.button phx-disable-with="Signing in..." class="w-full">
-            Sign in <span aria-hidden="true">→</span>
+            Log in <span aria-hidden="true">→</span>
           </.button>
         </:actions>
         <:actions>
           <div class="w-full text-center">
             <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-              Sign up
+              Registrati
             </.link>
           </div>
         </:actions>

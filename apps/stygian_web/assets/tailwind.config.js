@@ -22,7 +22,7 @@ module.exports = {
         "4xl": { "raw": "(min-width: 1900px)" },
       },
       backgroundImage: {
-        "login": "url('/images/LoginFrameSH.webp')",
+        "login": "url('/images/LoginFrame.webp')",
         "main": "url('/images/HomeWallpaper.webp')",
       },
       colors: {

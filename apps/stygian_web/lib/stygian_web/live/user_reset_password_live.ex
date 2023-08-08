@@ -15,7 +15,7 @@ defmodule StygianWeb.UserResetPasswordLive do
         phx-change="validate"
       >
         <.error :if={@form.errors != []}>
-          Oops, something went wrong! Please check the errors below.
+          C'è stato un errore nel resettare la password, contatta un admin su Discord per maggiori informazioni.
         </.error>
 
         <.input field={@form[:password]} type="password" label="New password" required />
@@ -31,7 +31,7 @@ defmodule StygianWeb.UserResetPasswordLive do
       </.simple_form>
 
       <p class="text-center text-sm mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
+        <.link href={~p"/users/register"}>Registrati</.link>
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
     </div>

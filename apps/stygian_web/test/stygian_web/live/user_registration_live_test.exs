@@ -8,8 +8,8 @@ defmodule StygianWeb.UserRegistrationLiveTest do
     test "renders registration page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
-      assert html =~ "Create an account"
-      assert html =~ "Sign in"
+      assert html =~ "Registrazione"
+      assert html =~ "Log in"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -30,7 +30,7 @@ defmodule StygianWeb.UserRegistrationLiveTest do
         |> element("#registration_form")
         |> render_change(user: %{"email" => "with spaces", "password" => "too short"})
 
-      assert result =~ "Register"
+      assert result =~ "Registrazione"
       assert result =~ "must have the @ sign and no spaces"
       assert result =~ "should be at least 12 character"
     end
@@ -86,11 +86,11 @@ defmodule StygianWeb.UserRegistrationLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element("a", "Sign in")
+        |> element("a", "Log in")
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
-      assert login_html =~ "Sign in"
+      assert login_html =~ "Log in"
     end
   end
 end

@@ -8,13 +8,12 @@ defmodule StygianWeb.UserRegistrationLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Register for an account
+        Registrazione dell'utente
         <:subtitle>
-          Already registered?
+          Già registrato?
           <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
-            Sign in
+            Log in
           </.link>
-          to your account now.
         </:subtitle>
       </.header>
 
@@ -28,7 +27,7 @@ defmodule StygianWeb.UserRegistrationLive do
         method="post"
       >
         <.error :if={@check_errors}>
-          Oops, something went wrong! Please check the errors below.
+          C'è stato un errore in fase di registrazione, controlla gli errori o contatta un admin su Discord.
         </.error>
 
         <.input field={@form[:email]} type="email" label="Email" required />
@@ -36,7 +35,7 @@ defmodule StygianWeb.UserRegistrationLive do
         <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
-          <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
+          <.button phx-disable-with="Creating account..." class="w-full">Crea un account</.button>
         </:actions>
       </.simple_form>
     </div>

@@ -199,7 +199,7 @@ defmodule StygianWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class={@class || "space-y-8 flex flex-col"}>
+      <div class={if @class != "" do @class else "space-y-8 flex flex-col" end}>
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -313,7 +313,7 @@ defmodule StygianWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-brand dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-brand dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+          class="w-4 h-4 border border-brand rounded bg-gray-50 focus:ring-3 focus:ring-brand dark:bg-gray-700 dark:border-brand dark:focus:ring-brand dark:ring-offset-brand dark:focus:ring-offset-brand"
           {@rest}
         />
       </div>
@@ -385,7 +385,7 @@ defmodule StygianWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "font-typewriter text-lg font-medium bg-zinc-900/50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-brand dark:focus:ring-brand-500 dark:focus:border-brand-500",
+          "font-typewriter text-lg font-medium bg-zinc-900/50 border border-brand text-brand text-sm rounded-md focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:transparent dark:border-brand-600 dark:placeholder-brand dark:text-brand dark:focus:ring-brand-500 dark:focus:border-brand-500",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -441,10 +441,10 @@ defmodule StygianWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 font-berolina text-brand">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-brand-inactive">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
