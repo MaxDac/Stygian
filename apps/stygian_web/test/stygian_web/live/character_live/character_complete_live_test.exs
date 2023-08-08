@@ -10,7 +10,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompleteLiveTest do
 
       assert {:redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/log_in"
-      assert %{"error" => "You must log in to access this page."} = flash
+      assert %{"error" => "Devi effettuare il login per accedere a questa pagina."} = flash
     end
 
     test "Correctly redirects to the character creation page", %{conn: conn} do
