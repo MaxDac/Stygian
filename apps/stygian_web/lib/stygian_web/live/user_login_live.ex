@@ -13,12 +13,7 @@ defmodule StygianWeb.UserLoginLive do
           required
         />
 
-        <.input 
-          field={@form[:password]} 
-          type="password" 
-          label="Password" 
-          required 
-        />
+        <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Mantieni sessione" />
