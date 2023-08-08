@@ -100,5 +100,19 @@ defmodule StygianWeb.Router do
       live "/create", CharacterCreationLive, :create
       live "/complete", CharacterCompletionLive, :complete
     end
+
+    live_session :characters_list,
+      on_mount: [{StygianWeb.UserAuth, :ensure_admin_or_character}] do
+      live "/sheet/:id", CharacterSheetLive, :show
+    end
+  end
+
+  scope "/admin", StygianWeb.AdminLive do
+    pipe_through [:browser, :require_admin_user]
+
+    live_session :admin_dashboard,
+      on_mount: [{StygianWeb.UserAuth, :ensure_admin}] do
+      live "/", AdminDashboardLive, :index
+    end
   end
 end

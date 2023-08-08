@@ -676,4 +676,18 @@ defmodule StygianWeb.CoreComponents do
     <area href={@navigate} data-phx-link="redirect" data-phx-link-state="push" {@rest} />
     """
   end
+
+  @doc """
+  The default `h1` component.
+  """
+
+  slot :inner_block, doc: "the title to render"
+
+  def h1(assigns) do
+    ~H"""
+    <h1 class="text-center font-berolina">
+      <%= render_slot(@inner_block) %>
+    </h1>
+    """
+  end
 end

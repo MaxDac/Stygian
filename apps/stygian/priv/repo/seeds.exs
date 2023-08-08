@@ -14,6 +14,19 @@ alias Stygian.Accounts
 alias Stygian.Skills
 alias Stygian.Maps
 
+defmodule AccountsHelpers do
+  def create_user?(attrs = %{username: username}) do
+    case Accounts.get_user_by_username(username) do
+      nil ->
+        with {:ok, user} <- Accounts.register_user(attrs) do
+          Accounts.update_user(user, attrs)
+        end
+
+      user -> Accounts.update_user(user, attrs)
+    end
+  end
+end
+
 defmodule SkillHelpers do
   def create_type?(attrs = %{name: skill_type_name}) do
     case Skills.get_skill_type_by_name(skill_type_name) do
@@ -48,16 +61,34 @@ defmodule MapHelpers do
 end
 
 # Creating admin users
-Accounts.register_user(%{
-  email: "massimiliano.dacunzo@hotmail.com",
+AccountsHelpers.create_user?(%{
+  email: "postmaster@stygian.eu",
   username: "ghostLayer",
-  password: "password1234"
+  password: "password1234",
+  admin: true
 })
 
-Accounts.register_user(%{
+AccountsHelpers.create_user?(%{
   email: "gabriele.dacunzo@outlook.com",
   username: "Gahadiel",
-  password: "password1234"
+  password: "password1234",
+  admin: true
+})
+
+# Creating test user
+AccountsHelpers.create_user?(%{
+  email: "massimiliano.dacunzo@hotmail.com",
+  username: "Maz",
+  password: "password1234",
+  admin: false
+})
+
+# Creating user that could be used to demo the land
+AccountsHelpers.create_user?(%{
+  email: "user@stygian.eu",
+  username: "User",
+  password: "somepassword4321",
+  admin: false
 })
 
 #

@@ -129,6 +129,15 @@ defmodule Stygian.Accounts do
   end
 
   @doc """
+  Updates the user with the given information.
+  """
+  def update_user(user, attrs \\ %{}) do
+    user
+    |> User.seeds_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Updates the user email using the given token.
 
   If the token matches, the user email is updated and the token is deleted.
@@ -232,6 +241,14 @@ defmodule Stygian.Accounts do
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
     Repo.one(query)
+  end
+
+  @doc """
+  Gets the user with the given username.
+  """
+  @spec get_user_by_username(String.t()) :: User.t() | nil
+  def get_user_by_username(username) do
+    Repo.get_by(User, username: username)
   end
 
   @doc """

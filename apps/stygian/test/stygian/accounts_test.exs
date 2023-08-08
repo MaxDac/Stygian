@@ -353,6 +353,17 @@ defmodule Stygian.AccountsTest do
     end
   end
 
+  describe "get user by username" do
+    test "get_user_by_username/1 returns the correct user" do
+      %{username: username} = user = user_fixture()
+      assert user == Accounts.get_user_by_username(username)
+    end
+
+    test "get_user_by_username/1 returns nil if no user were found" do
+      assert is_nil(Accounts.get_user_by_username("some username"))
+    end
+  end
+
   describe "delete_user_session_token/1" do
     test "deletes the token" do
       user = user_fixture()
