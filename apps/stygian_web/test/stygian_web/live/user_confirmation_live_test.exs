@@ -53,7 +53,7 @@ defmodule StygianWeb.UserConfirmationLiveTest do
 
       # Login behaviour changed: the main page is now protected and the user must be logged on to access
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
-               "You must log in to access this page."
+               "Devi effettuare il login per accedere a questa pagina."
 
       # when logged in
       {:ok, lv, _html} =
@@ -69,7 +69,7 @@ defmodule StygianWeb.UserConfirmationLiveTest do
 
       assert {:ok, conn} = result
 
-      assert "You must log in to access this page." ==
+      assert "Devi effettuare il login per accedere a questa pagina." ==
                Phoenix.Flash.get(conn.assigns.flash, :error)
     end
 
@@ -84,7 +84,7 @@ defmodule StygianWeb.UserConfirmationLiveTest do
 
       # Login behaviour changed: the main page is now protected and the user must be logged on to access
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
-               "You must log in to access this page."
+               "Devi effettuare il login per accedere a questa pagina."
 
       refute Accounts.get_user!(user.id).confirmed_at
     end

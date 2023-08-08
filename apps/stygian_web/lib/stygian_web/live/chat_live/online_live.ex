@@ -12,7 +12,6 @@ defmodule StygianWeb.ChatLive.OnlineLive do
   def mount(_params, _session, socket) do
     if connected?(socket) do
       Endpoint.subscribe(Presence.get_online_topic())
-      |> IO.inspect(label: "subscribing")
     end
 
     {:ok,
@@ -36,8 +35,6 @@ defmodule StygianWeb.ChatLive.OnlineLive do
   end
 
   defp assign_users_list(socket, users_list) do
-    IO.inspect(users_list, label: "Users list")
-
     socket
     |> assign(:online, users_list)
   end

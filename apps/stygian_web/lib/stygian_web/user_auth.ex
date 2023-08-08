@@ -138,6 +138,12 @@ defmodule StygianWeb.UserAuth do
     * `:redirect_if_user_is_authenticated` - Authenticates the user from the session.
       Redirects to signed_in_path if there's a logged user.
 
+    * `:ensure_admin` - mount the user in the socket only if it's an admin.
+
+    * `:ensure_admin_or_character` - mount the user if it's an admin, tries to mount the character
+      and check whether the character id from the parameters correspond ot the character ones owned by the user,
+      if not, it redirects to the main page.
+
   ## Examples
 
   Use the `on_mount` lifecycle macro in LiveViews to mount or authenticate
@@ -188,6 +194,26 @@ defmodule StygianWeb.UserAuth do
     end
   end
 
+  def on_mount(:ensure_admin, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user.admin do
+      {:cont, socket}
+    else
+      {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
+    end
+  end
+
+  def on_mount(:ensure_admin_or_character, params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user.admin do
+      {:cont, socket}
+    else
+      ensure_character_compatible_with_params(session, socket, params)
+    end
+  end
+
   defp ensure_authenticated(session, socket) do
     socket = mount_current_user(socket, session)
 
@@ -220,6 +246,24 @@ defmodule StygianWeb.UserAuth do
 
       _ ->
         {:cont, socket}
+    end
+  end
+
+  defp ensure_character_compatible_with_params(session, socket, %{"id" => character_id}) do
+    socket = mount_current_character(socket, session)
+
+    case socket.assigns.current_character do
+      %{id: ^character_id} ->
+        {:cont, socket}
+
+      _ ->
+        {:halt,
+         socket
+         |> Phoenix.LiveView.put_flash(
+           :error,
+           "Non hai accesso alle informazioni di questo personaggio."
+         )
+         |> Phoenix.LiveView.redirect(to: signed_in_path(socket))}
     end
   end
 
@@ -263,9 +307,24 @@ defmodule StygianWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, "Devi effettuare il login per accedere a questa pagina.")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
+  @doc """
+  Used for routes that requires admin priviledges.
+  """
+  def require_admin_user(conn, _opts) do
+    if conn.assigns[:current_user] && conn.assigns.current_user.admin do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Devi essere un admin per poter accedere a questa pagina.")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/")
       |> halt()
     end
   end

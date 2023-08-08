@@ -6,6 +6,7 @@ defmodule Stygian.Accounts.User do
           email: String.t(),
           username: String.t(),
           password: String.t(),
+          admin: boolean(),
           hashed_password: String.t(),
           confirmed_at: NaiveDateTime.t(),
           inserted_at: NaiveDateTime.t(),
@@ -15,11 +16,20 @@ defmodule Stygian.Accounts.User do
   schema "users" do
     field :email, :string
     field :username, :string
+    field :admin, :boolean, default: false
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
     timestamps()
+  end
+
+  @doc """
+  To be used only with seeds. It updates the user information directly without validation.
+  """
+  def seeds_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:admin, :email, :username, :confirmed_at])
   end
 
   @doc """
