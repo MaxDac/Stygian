@@ -22,7 +22,8 @@ defmodule AccountsHelpers do
           Accounts.update_user(user, attrs)
         end
 
-      user -> Accounts.update_user(user, attrs)
+      user ->
+        Accounts.update_user(user, attrs)
     end
   end
 end

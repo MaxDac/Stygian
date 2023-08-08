@@ -258,9 +258,12 @@ defmodule StygianWeb.UserAuth do
 
       _ ->
         {:halt,
-        socket
-        |> Phoenix.LiveView.put_flash(:error, "Non hai accesso alle informazioni di questo personaggio.")
-        |> Phoenix.LiveView.redirect(to: signed_in_path(socket))}
+         socket
+         |> Phoenix.LiveView.put_flash(
+           :error,
+           "Non hai accesso alle informazioni di questo personaggio."
+         )
+         |> Phoenix.LiveView.redirect(to: signed_in_path(socket))}
     end
   end
 
