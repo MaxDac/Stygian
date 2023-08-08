@@ -7,22 +7,28 @@ defmodule StygianWeb.UserForgotPasswordLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Forgot your password?
-        <:subtitle>We'll send a password reset link to your inbox</:subtitle>
+        Recupera password
+        <:subtitle>Ti sarà inviato un link al tuo indirizzo di posta.</:subtitle>
       </.header>
 
       <.simple_form for={@form} id="reset_password_form" phx-submit="send_email">
         <.input field={@form[:email]} type="email" placeholder="Email" required />
         <:actions>
           <.button phx-disable-with="Sending..." class="w-full">
-            Send password reset instructions
+            Invia
           </.button>
         </:actions>
+        <:actions>
+          <div class="w-full text-center flex justify-center space-x-5">
+            <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
+              Registrati
+            </.link>
+            <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
+              Log in
+            </.link>
+          </div>
+        </:actions>
       </.simple_form>
-      <p class="text-center text-sm mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
-        | <.link href={~p"/users/log_in"}>Log in</.link>
-      </p>
     </div>
     """
   end

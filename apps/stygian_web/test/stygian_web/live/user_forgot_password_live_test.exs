@@ -11,8 +11,8 @@ defmodule StygianWeb.UserForgotPasswordLiveTest do
     test "renders email page", %{conn: conn} do
       {:ok, lv, html} = live(conn, ~p"/users/reset_password")
 
-      assert html =~ "Forgot your password?"
-      assert has_element?(lv, ~s|a[href="#{~p"/users/register"}"]|, "Register")
+      assert html =~ "Recupera password"
+      assert has_element?(lv, ~s|a[href="#{~p"/users/register"}"]|, "Registrati")
       assert has_element?(lv, ~s|a[href="#{~p"/users/log_in"}"]|, "Log in")
     end
 
