@@ -27,11 +27,14 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
          socket
          |> assign(:character, character)
          |> assign_confidential_permissions()}
-
     end
   end
 
   defp assign_confidential_permissions(%{assigns: %{character: character}} = socket) do
-    assign(socket, :has_access, PermissionHelpers.can_access_to_character_confidentials?(socket, character))
+    assign(
+      socket,
+      :has_access,
+      PermissionHelpers.can_access_to_character_confidentials?(socket, character)
+    )
   end
 end

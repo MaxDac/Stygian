@@ -1,5 +1,5 @@
 <div class="bg-[url('/images/SheetBackground.webp')] w-[740px] h-[760px] relative top-1 left-[100px] bg-no-repeat bg-cover">
-  <.link 
+  <.link
     navigate={~p"/character/sheet"}
     class="absolute top-[50px] left-[540px] text-red-700 font-report text-xl rotate-2 z-30"
   >
@@ -10,12 +10,17 @@
     <h1 class="font-berolina text-3xl text-center">Arkham Police Department</h1>
 
     <p class="text-xl pt-4 pb-5">
-      Case File #<span class="font-bold"><%= @current_character.id %></span> 
+      Case File #<span class="font-bold"><%= @current_character.id %></span>
 
       <.link
         patch={~p"/character/stats?mode=#{if @mode == "stats", do: "notes", else: "stats"}"}
-        class="text-red-700 font-report text-xl">
-        <%= if @mode == "stats" do "Note" else "Statistiche" end %>
+        class="text-red-700 font-report text-xl"
+      >
+        <%= if @mode == "stats" do
+          "Note"
+        else
+          "Statistiche"
+        end %>
       </.link>
     </p>
 
@@ -24,7 +29,9 @@
         <p class="font-report text-lg">Attributi</p>
 
         <%= for attribute <- @attributes do %>
-          <p><%= attribute.skill.name %>: <span class="font-bold"><%= attribute.value %></span></p> 
+          <p>
+            <%= attribute.skill.name %>: <span class="font-bold"><%= attribute.value %></span>
+          </p>
         <% end %>
       </div>
 
@@ -32,7 +39,7 @@
         <p class="font-report text-lg">Skills</p>
 
         <%= for skill <- @skills do %>
-          <p><%= skill.skill.name %>: <span class="font-bold"><%= skill.value %></span></p> 
+          <p><%= skill.skill.name %>: <span class="font-bold"><%= skill.value %></span></p>
         <% end %>
       </div>
     </div>

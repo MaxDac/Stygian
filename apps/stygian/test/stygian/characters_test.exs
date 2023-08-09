@@ -176,7 +176,8 @@ defmodule Stygian.CharactersTest do
       Skills.add_skill_type_to_skill(skill1, skill_type1)
       Skills.add_skill_type_to_skill(skill1, skill_type2)
 
-      character_skill = %{character_id: character_id} = character_skill_fixture(%{skill_id: skill1.id})
+      character_skill =
+        %{character_id: character_id} = character_skill_fixture(%{skill_id: skill1.id})
 
       assert [got_character_skill] = Characters.list_character_skills(%{id: character_id})
       assert character_skill.skill_id == got_character_skill.skill_id
@@ -193,9 +194,13 @@ defmodule Stygian.CharactersTest do
 
     test "get_character_skill_by_skill_name/2 returns the correct skill value for the given character" do
       skill = skill_fixture(%{name: "some skill"})
-      %{character_id: character_id, value: value} = character_skill = character_skill_fixture(%{skill_id: skill.id})
 
-      character_skill = Characters.get_character_skill_by_skill_name(%{id: character_id}, "some skill")
+      %{character_id: character_id, value: value} =
+        character_skill = character_skill_fixture(%{skill_id: skill.id})
+
+      character_skill =
+        Characters.get_character_skill_by_skill_name(%{id: character_id}, "some skill")
+
       assert value == character_skill.value
       assert character_id == character_skill.character_id
       assert skill.id == character_skill.skill_id

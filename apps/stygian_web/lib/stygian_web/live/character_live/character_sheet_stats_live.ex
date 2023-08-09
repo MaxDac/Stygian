@@ -32,6 +32,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
 
   defp assign_character_stats(%{assigns: %{current_character: character}} = socket) do
     character_skills = Characters.list_character_skills(character)
+
     {attributes, skills} =
       Enum.split_with(character_skills, fn s ->
         Enum.any?(s.skill.skill_types, &(&1.name == "Attribute"))

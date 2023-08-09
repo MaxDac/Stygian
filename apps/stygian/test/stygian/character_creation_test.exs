@@ -206,7 +206,9 @@ defmodule Stygian.CharacterCreationTest do
       assert {:ok, %{step: 2}} = Characters.complete_character(character)
     end
 
-    test "complete_character/1 automatically puts the correct status for the character", %{character: character} do
+    test "complete_character/1 automatically puts the correct status for the character", %{
+      character: character
+    } do
       %{id: physique_id} = skill_fixture(%{name: "Fisico"})
       %{id: mind_id} = skill_fixture(%{name: "Mente"})
       %{id: will_id} = skill_fixture(%{name: "Volontà"})

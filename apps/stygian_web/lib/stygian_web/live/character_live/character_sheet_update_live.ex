@@ -20,32 +20,17 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
     <.h1>Modifica Scheda</.h1>
 
     <div class="text-center">
-      <.link
-        navigate={~p"/character/sheet"}
-        class="font-report text-lg text-brand"
-      >
+      <.link navigate={~p"/character/sheet"} class="font-report text-lg text-brand">
         Torna alla scheda
       </.link>
     </div>
 
     <.simple_form class="space-y-5" for={@form} phx-submit="update" phx-change="validate" class="mt-4">
-      <.input
-        type="textarea"
-        label="Biografia"
-        field={@form[:biography]}
-        phx-debounce="blur" />
+      <.input type="textarea" label="Biografia" field={@form[:biography]} phx-debounce="blur" />
 
-      <.input
-        type="textarea"
-        label="Descrizione"
-        field={@form[:description]}
-        phx-debounce="blur" />
+      <.input type="textarea" label="Descrizione" field={@form[:description]} phx-debounce="blur" />
 
-      <.input
-        type="textarea"
-        label="Note"
-        field={@form[:notes]}
-        phx-debounce="blur" />
+      <.input type="textarea" label="Note" field={@form[:notes]} phx-debounce="blur" />
 
       <.input field={@form[:avatar]} label="Avatar" phx-debounce="500" />
 
@@ -57,7 +42,11 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
   end
 
   @impl true
-  def handle_event("validate", %{"character" => character_params}, %{assigns: %{current_character: current_character}} = socket) do
+  def handle_event(
+        "validate",
+        %{"character" => character_params},
+        %{assigns: %{current_character: current_character}} = socket
+      ) do
     form =
       current_character
       |> Characters.change_character_notes(character_params)
@@ -68,7 +57,11 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
   end
 
   @impl true
-  def handle_event("update", %{"character" => character_params}, %{assigns: %{current_character: current_character}} = socket) do
+  def handle_event(
+        "update",
+        %{"character" => character_params},
+        %{assigns: %{current_character: current_character}} = socket
+      ) do
     case Characters.update_character_sheet(current_character, character_params) do
       {:ok, _} ->
         {:noreply,

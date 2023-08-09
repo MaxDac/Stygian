@@ -259,12 +259,13 @@ defmodule Stygian.Characters do
     |> Repo.update()
   end
 
-  @spec compute_health_and_sanity(character :: Character.t()) :: {non_neg_integer(), non_neg_integer()}
+  @spec compute_health_and_sanity(character :: Character.t()) ::
+          {non_neg_integer(), non_neg_integer()}
   defp compute_health_and_sanity(character) do
     {physique, mind, will} = {
       get_character_skill_value_by_skill_name(character, @physique_skill_name),
       get_character_skill_value_by_skill_name(character, @mind_skill_name),
-      get_character_skill_value_by_skill_name(character, @will_skill_name),
+      get_character_skill_value_by_skill_name(character, @will_skill_name)
     }
 
     health = physique * 8 + div(will, 2) * 4

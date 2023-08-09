@@ -10,16 +10,16 @@
     Arkham Police Department
   </div>
 
-  <.link 
-    :if={@has_access} 
+  <.link
+    :if={@has_access}
     navigate={~p"/character/sheet/modify"}
     class="absolute top-[50px] left-[280px] text-red-700 font-report text-xl -rotate-3"
   >
     Modifica
   </.link>
 
-  <.link 
-    :if={@has_access} 
+  <.link
+    :if={@has_access}
     navigate={~p"/character/stats"}
     class="absolute top-[50px] left-[470px] text-red-700 font-report text-xl"
   >

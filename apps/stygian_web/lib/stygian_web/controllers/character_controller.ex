@@ -30,7 +30,10 @@ defmodule StygianWeb.CharacterController do
       |> redirect(to: ~p"/character/sheet")
     else
       conn
-      |> put_flash(:error, "C'è stato qualche problema in fase di creazione, contatta un admin per ulteriori informazioni.")
+      |> put_flash(
+        :error,
+        "C'è stato qualche problema in fase di creazione, contatta un admin per ulteriori informazioni."
+      )
       |> redirect(to: ~p"/")
     end
   end
@@ -52,7 +55,10 @@ defmodule StygianWeb.CharacterController do
 
       _ ->
         conn
-        |> put_flash(:error, "C'è stato qualche problema in fase di creazione, contatta un admin per ulteriori informazioni.")
+        |> put_flash(
+          :error,
+          "C'è stato qualche problema in fase di creazione, contatta un admin per ulteriori informazioni."
+        )
         |> redirect(to: ~p"/")
     end
   end
