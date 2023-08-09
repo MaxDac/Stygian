@@ -11,6 +11,7 @@ defmodule Stygian.Characters.Character do
           biography: String.t(),
           cigs: integer(),
           description: String.t(),
+          custom_sheet: String.t(),
           experience: integer(),
           health: integer(),
           name: String.t(),
@@ -30,6 +31,7 @@ defmodule Stygian.Characters.Character do
     field :biography, :string
     field :cigs, :integer
     field :description, :string
+    field :custom_sheet, :string
     field :experience, :integer
     field :health, :integer
     field :name, :string
@@ -68,7 +70,7 @@ defmodule Stygian.Characters.Character do
 
   def modify_character_notes_changeset(character, attrs) do
     character
-    |> cast(attrs, [:avatar, :small_avatar, :biography, :description, :notes])
+    |> cast(attrs, [:avatar, :small_avatar, :biography, :description, :notes, :custom_sheet])
     |> validate_required([:avatar, :biography, :description])
   end
 
@@ -78,8 +80,10 @@ defmodule Stygian.Characters.Character do
     |> cast(attrs, [
       :name,
       :avatar,
+      :small_avatar,
       :biography,
       :description,
+      :custom_sheet,
       :cigs,
       :notes,
       :admin_notes,
