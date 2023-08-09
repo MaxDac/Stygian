@@ -385,9 +385,10 @@ defmodule StygianWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "font-typewriter text-lg font-medium bg-zinc-900/50 border border-brand text-brand text-sm rounded-md focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:transparent dark:border-brand-600 dark:placeholder-brand dark:text-brand dark:focus:ring-brand-500 dark:focus:border-brand-500",
-          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "font-typewriter text-md font-medium bg-zinc-900/50 border border-brand",
+          "text-brand rounded-md focus:ring-brand focus:border-brand",
+          "block w-full p-2.5 phx-no-feedback:border-brand phx-no-feedback:focus:border-brand",
+          @errors == [] && "border-brand focus:border-brand",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
