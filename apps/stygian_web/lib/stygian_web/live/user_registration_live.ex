@@ -30,9 +30,25 @@ defmodule StygianWeb.UserRegistrationLive do
           C'è stato un errore in fase di registrazione, controlla gli errori o contatta un admin su Discord.
         </.error>
 
-        <.input field={@form[:email]} type="email" label="Email" required />
-        <.input field={@form[:username]} label="Username" required />
-        <.input field={@form[:password]} type="password" label="Password" required />
+        <.input
+          field={@form[:email]}
+          type="email"
+          label="Email"
+          floating
+          required />
+
+        <.input
+          field={@form[:username]}
+          label="Username"
+          floating
+          required />
+
+        <.input
+          field={@form[:password]}
+          type="password"
+          label="Password"
+          floating
+          required />
 
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Crea un account</.button>

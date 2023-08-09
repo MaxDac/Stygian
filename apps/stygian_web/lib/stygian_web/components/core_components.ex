@@ -269,6 +269,8 @@ defmodule StygianWeb.CoreComponents do
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
+  attr :placeholder, :string, default: nil
+  attr :floating, :boolean, default: false, doc: "Implements the input with a floating label"
 
   attr :type, :string,
     default: "text",
@@ -350,7 +352,7 @@ defmodule StygianWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-md font-typewriter text-brand focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-md font-typewriter text-brand text-md focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-brand-inavtive phx-no-feedback:focus:border-brand-inactive",
           "bg-black",
           @errors == [] && "border-brand-inactive focus:border-brand",
@@ -371,6 +373,36 @@ defmodule StygianWeb.CoreComponents do
       id={@id}
       value={Phoenix.HTML.Form.normalize_value(@type, @value)}
     />
+    """
+  end
+
+  # This input implements the floating label design.
+  def input(%{floating: true} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name} class="relative mt-5">
+      <input
+        type={@type}
+        id={@id}
+        name={@name}
+        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        placeholder=" "
+        class={[
+          "block px-2.5 pb-2.5 pt-4 w-full font-typewriter text-md text-brand bg-transparent rounded-md",
+          "border-1 border-brand appearance-none focus:outline-none focus:ring-0 focus:border-brand peer",
+          @errors == [] && "border-brand focus:border-brand",
+          @errors != [] && "border-rose-400 focus:border-rose-400"
+        ]} />
+      <label
+        for={@id}
+        class={[
+          "absolute font-typewriter text-sm text-brand-inactive duration-300 transform",
+          "-translate-y-4 scale-75 top-2 z-10 origin-[0] bg-container-background px-2",
+          "peer-focus:px-2 peer-focus:text-brand peer-placeholder-shown:scale-100",
+          "peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2",
+          "peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+        ]}><%= @label %></label>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
     """
   end
 
