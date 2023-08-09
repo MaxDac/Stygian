@@ -19,12 +19,7 @@ defmodule StygianWeb.UserSettingsLive do
           phx-submit="update_email"
           phx-change="validate_email"
         >
-          <.input
-            field={@email_form[:email]}
-            type="email"
-            label="Email"
-            floating
-            required />
+          <.input field={@email_form[:email]} type="email" label="Email" floating required />
 
           <.input
             field={@email_form[:current_password]}

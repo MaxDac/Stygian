@@ -18,12 +18,7 @@ defmodule StygianWeb.UserResetPasswordLive do
           C'è stato un errore nel resettare la password, contatta un admin su Discord per maggiori informazioni.
         </.error>
 
-        <.input
-          field={@form[:password]}
-          type="password"
-          label="New password"
-          floating
-          required />
+        <.input field={@form[:password]} type="password" label="New password" floating required />
 
         <.input
           field={@form[:password_confirmation]}

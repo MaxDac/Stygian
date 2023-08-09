@@ -20,7 +20,8 @@ defmodule StygianWeb.UserLoginLive do
           type="password"
           label="Password"
           floating
-          required />
+          required
+        />
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Mantieni sessione" />

@@ -196,7 +196,7 @@ defmodule Stygian.CharactersTest do
       skill = skill_fixture(%{name: "some skill"})
 
       %{character_id: character_id, value: value} =
-        character_skill = character_skill_fixture(%{skill_id: skill.id})
+        _ = character_skill_fixture(%{skill_id: skill.id})
 
       character_skill =
         Characters.get_character_skill_by_skill_name(%{id: character_id}, "some skill")

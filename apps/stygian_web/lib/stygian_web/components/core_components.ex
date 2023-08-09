@@ -391,7 +391,8 @@ defmodule StygianWeb.CoreComponents do
           "border-1 border-brand appearance-none focus:outline-none focus:ring-0 focus:border-brand peer",
           @errors == [] && "border-brand focus:border-brand",
           @errors != [] && "border-rose-400 focus:border-rose-400"
-        ]} />
+        ]}
+      />
       <label
         for={@id}
         class={[
@@ -400,7 +401,10 @@ defmodule StygianWeb.CoreComponents do
           "peer-focus:px-2 peer-focus:text-brand peer-placeholder-shown:scale-100",
           "peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2",
           "peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-        ]}><%= @label %></label>
+        ]}
+      >
+        <%= @label %>
+      </label>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
