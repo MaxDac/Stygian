@@ -307,12 +307,17 @@ defmodule StygianWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "Devi effettuare il login per accedere a questa pagina.")
+      |> maybe_put_must_login_flash?()
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
       |> halt()
     end
   end
+
+  defp maybe_put_must_login_flash?(%{request_path: "/"} = conn), do: conn
+
+  defp maybe_put_must_login_flash?(conn),
+    do: put_flash(conn, :error, "Devi effettuare il login per accedere a questa pagina.")
 
   @doc """
   Used for routes that requires admin priviledges.

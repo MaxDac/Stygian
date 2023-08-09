@@ -32,9 +32,9 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
 
       <.input type="textarea" label="Note" field={@form[:notes]} phx-debounce="blur" />
 
-      <.input field={@form[:avatar]} label="Avatar" phx-debounce="500" />
+      <.input field={@form[:avatar]} label="Avatar" phx-debounce="500" floating />
 
-      <.input field={@form[:small_avatar]} label="Avatar per la Chat" phx-debounce="500" />
+      <.input field={@form[:small_avatar]} label="Avatar per la Chat" phx-debounce="500" floating />
 
       <.button>Salva</.button>
     </.simple_form>

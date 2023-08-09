@@ -7,13 +7,21 @@ defmodule StygianWeb.UserLoginLive do
       <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
         <.input
           field={@form[:email]}
+          placeholder="Email"
           type="email"
           label="Email"
-          class="bg-black p-0 border border-brand"
+          floating
           required
         />
 
-        <.input field={@form[:password]} type="password" label="Password" required />
+        <.input
+          field={@form[:password]}
+          placeholder="Password"
+          type="password"
+          label="Password"
+          floating
+          required
+        />
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Mantieni sessione" />

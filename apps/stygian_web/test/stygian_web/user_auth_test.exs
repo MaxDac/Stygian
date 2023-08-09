@@ -273,9 +273,6 @@ defmodule StygianWeb.UserAuthTest do
       assert conn.halted
 
       assert redirected_to(conn) == ~p"/users/log_in"
-
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "Devi effettuare il login per accedere a questa pagina."
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do
