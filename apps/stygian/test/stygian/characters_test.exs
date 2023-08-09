@@ -34,6 +34,23 @@ defmodule Stygian.CharactersTest do
       assert Characters.get_character!(character.id) == character
     end
 
+    test "character_belongs_to_user?/2 returns true when the character belongs to the user" do
+      %{id: character_id, user_id: user_id} = character_fixture()
+      assert Characters.character_belongs_to_user?(character_id, user_id) == true
+    end
+
+    test "character_belongs_to_user?/2 returns false when the character does not belong to the user" do
+      %{id: user_id} = user_fixture()
+      %{id: character_id} = character_fixture()
+
+      assert Characters.character_belongs_to_user?(character_id, user_id) == false
+    end
+
+    test "character_belongs_to_user?/2 returns false when the character does not exist" do
+      %{id: user_id} = user_fixture()
+      assert Characters.character_belongs_to_user?(40, user_id) == false
+    end
+
     test "get_user_first_character/1 returns nil if the user has no character available created" do
       %{id: user_id} = user_fixture()
       assert Characters.get_user_first_character(user_id) == nil
@@ -83,45 +100,6 @@ defmodule Stygian.CharactersTest do
       assert character.name == "some very awful name"
       assert character.user_id == user_id
       assert character.step == 1
-    end
-
-    test "complete_character/2 completes the character with the correct set of skills" do
-      %{id: user_id} = user_fixture()
-
-      valid_attrs = %{
-        avatar: "some avatar",
-        name: "some very awful name",
-        user_id: user_id
-      }
-
-      assert {:ok, %Character{} = character} = Characters.create_character(valid_attrs)
-
-      %{id: skill_id_1} = skill_fixture(%{name: "some skill 1"})
-      %{id: skill_id_2} = skill_fixture(%{name: "some skill 2"})
-      %{id: skill_id_3} = skill_fixture(%{name: "some skill 3"})
-      %{id: skill_id_4} = skill_fixture(%{name: "some skill 4"})
-
-      skills = [
-        %{value: 4, character_id: character.id, skill_id: skill_id_1},
-        %{value: 3, character_id: character.id, skill_id: skill_id_2},
-        %{value: 2, character_id: character.id, skill_id: skill_id_3},
-        %{value: 1, character_id: character.id, skill_id: skill_id_4}
-      ]
-
-      assert {:ok, character} = Characters.complete_character(character, skills)
-      assert 2 == character.step
-
-      character_skills = Characters.list_character_skills(character)
-
-      assert length(character_skills) == 4
-      assert Enum.at(character_skills, 0).skill.name == "some skill 1"
-      assert Enum.at(character_skills, 0).value == 4
-      assert Enum.at(character_skills, 1).skill.name == "some skill 2"
-      assert Enum.at(character_skills, 1).value == 3
-      assert Enum.at(character_skills, 2).skill.name == "some skill 3"
-      assert Enum.at(character_skills, 2).value == 2
-      assert Enum.at(character_skills, 3).skill.name == "some skill 4"
-      assert Enum.at(character_skills, 3).value == 1
     end
 
     test "create_character/1 with invalid data returns error changeset" do
@@ -181,6 +159,7 @@ defmodule Stygian.CharactersTest do
 
   describe "character_skills" do
     alias Stygian.Characters.CharacterSkill
+    alias Stygian.Skills
 
     import Stygian.CharactersFixtures
     import Stygian.AccountsFixtures
@@ -188,17 +167,48 @@ defmodule Stygian.CharactersTest do
 
     @invalid_attrs %{value: nil}
 
-    test "list_character_skills/0 returns all character_skills" do
-      character_skill = %{character_id: character_id} = character_skill_fixture()
+    test "list_character_skills/1 returns all character_skills" do
+      skill_type1 = skill_type_fixture(%{name: "Skill type 1"})
+      skill_type2 = skill_type_fixture(%{name: "Skill type 2"})
+
+      skill1 = skill_fixture(%{name: "skill1"})
+
+      Skills.add_skill_type_to_skill(skill1, skill_type1)
+      Skills.add_skill_type_to_skill(skill1, skill_type2)
+
+      character_skill =
+        %{character_id: character_id} = character_skill_fixture(%{skill_id: skill1.id})
+
       assert [got_character_skill] = Characters.list_character_skills(%{id: character_id})
       assert character_skill.skill_id == got_character_skill.skill_id
       assert character_skill.character_id == got_character_skill.character_id
       assert character_skill.value == got_character_skill.value
+      assert Enum.member?(got_character_skill.skill.skill_types, skill_type1)
+      assert Enum.member?(got_character_skill.skill.skill_types, skill_type2)
     end
 
     test "get_character_skill!/1 returns the character_skill with given id" do
       character_skill = character_skill_fixture()
       assert Characters.get_character_skill!(character_skill.id) == character_skill
+    end
+
+    test "get_character_skill_by_skill_name/2 returns the correct skill value for the given character" do
+      skill = skill_fixture(%{name: "some skill"})
+
+      %{character_id: character_id, value: value} =
+        character_skill = character_skill_fixture(%{skill_id: skill.id})
+
+      character_skill =
+        Characters.get_character_skill_by_skill_name(%{id: character_id}, "some skill")
+
+      assert value == character_skill.value
+      assert character_id == character_skill.character_id
+      assert skill.id == character_skill.skill_id
+    end
+
+    test "get_character_skill_by_skill_name/2 returns nil if the character does not have the skill" do
+      character = character_fixture()
+      assert nil == Characters.get_character_skill_by_skill_name(character, "some skill")
     end
 
     test "create_character_skill/1 with valid data creates a character_skill" do

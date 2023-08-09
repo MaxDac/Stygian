@@ -205,5 +205,25 @@ defmodule Stygian.CharacterCreationTest do
       character = character_fixture(%{name: "some other name", step: 2})
       assert {:ok, %{step: 2}} = Characters.complete_character(character)
     end
+
+    test "complete_character/1 automatically puts the correct status for the character", %{
+      character: character
+    } do
+      %{id: physique_id} = skill_fixture(%{name: "Fisico"})
+      %{id: mind_id} = skill_fixture(%{name: "Mente"})
+      %{id: will_id} = skill_fixture(%{name: "Volontà"})
+
+      character_skill_fixture(%{character_id: character.id, skill_id: physique_id, value: 3})
+      character_skill_fixture(%{character_id: character.id, skill_id: mind_id, value: 4})
+      character_skill_fixture(%{character_id: character.id, skill_id: will_id, value: 5})
+
+      assert {:ok, character} = Characters.complete_character(character)
+
+      assert 2 == character.step
+      assert 200 == character.cigs
+      assert 0 == character.experience
+      assert 32 == character.health
+      assert 45 == character.sanity
+    end
   end
 end

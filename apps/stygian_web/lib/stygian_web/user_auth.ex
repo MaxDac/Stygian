@@ -278,7 +278,7 @@ defmodule StygianWeb.UserAuth do
   defp mount_current_character(socket, session) do
     Phoenix.Component.assign_new(socket, :current_character, fn ->
       if character_id = session["character_id"] do
-        Characters.get_character!(character_id)
+        Characters.get_character(character_id)
       end
     end)
   end

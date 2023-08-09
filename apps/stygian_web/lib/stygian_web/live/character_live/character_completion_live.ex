@@ -87,7 +87,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
         {:noreply,
          socket
          |> put_flash(:info, "Personaggio completato con successo.")
-         |> push_navigate(to: ~p"/character/sheet")}
+         |> redirect(to: ~p"/character/redirect/#{character.id}")}
 
       {:error, changeset} ->
         Logger.error("Error while saving character: #{inspect(changeset)}")

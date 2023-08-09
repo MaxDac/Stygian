@@ -40,8 +40,17 @@ defmodule Stygian.CharactersFixtures do
   """
   def character_skill_fixture(attrs \\ %{}) do
     # Adding the character and skill for FK constraints.
-    %{id: character_id} = character_fixture()
-    %{id: skill_id} = skill_fixture()
+    character_id =
+      case attrs do
+        %{character_id: character_id} -> character_id
+        _ -> character_fixture() |> Map.get(:id)
+      end
+
+    skill_id =
+      case attrs do
+        %{skill_id: skill_id} -> skill_id
+        _ -> skill_fixture() |> Map.get(:id)
+      end
 
     {:ok, character_skill} =
       attrs
