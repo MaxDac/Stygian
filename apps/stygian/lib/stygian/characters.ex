@@ -9,6 +9,7 @@ defmodule Stygian.Characters do
 
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
+  alias Stygian.Skills.Skill
 
   @creation_max_attribute_sum 33
   @creation_mas_skills_sum 5
@@ -18,6 +19,13 @@ defmodule Stygian.Characters do
 
   @creation_max_skill 5
   @creation_min_skill 0
+
+  @physique_skill_name "Fisico"
+  @mind_skill_name "Mente"
+  @will_skill_name "Volontà"
+
+  @default_character_initial_cigs 200
+  @default_character_initial_experience 0
 
   @doc """
   Returns the list of characters.
@@ -47,6 +55,33 @@ defmodule Stygian.Characters do
 
   """
   def get_character!(id), do: Repo.get!(Character, id)
+
+  @doc """
+  This function behaves as the one above, only that it will return nil if the character does not exist.
+  """
+  def get_character(id), do: Repo.get(Character, id)
+
+  @doc """
+  Determines whether the character belongs to the user or not.
+  """
+  @spec character_belongs_to_user?(character_id :: integer(), user_id :: integer()) :: boolean()
+  def character_belongs_to_user?(character_id, user_id) do
+    Character
+    |> from()
+    |> where([c], c.user_id == ^user_id and c.id == ^character_id)
+    |> Repo.exists?()
+  end
+
+  @doc """
+  Returns the first character of a user.
+  TODO - fix in issue #16, the admin user can have more than one character, but only PNGs.
+  """
+  def get_user_first_character(user_id) do
+    Character
+    |> from()
+    |> where([c], c.user_id == ^user_id)
+    |> Repo.one()
+  end
 
   @doc """
   Creates a character.
@@ -93,34 +128,6 @@ defmodule Stygian.Characters do
     |> Repo.exists?()
   end
 
-  @doc """
-  Returns the first character of a user.
-  TODO - fix in issue #16, the admin user can have more than one character, but only PNGs.
-  """
-  def get_user_first_character(user_id) do
-    Character
-    |> from()
-    |> where([c], c.user_id == ^user_id)
-    |> Repo.one()
-  end
-
-  @doc """
-  Completes the character creation by adding its attributes and updating the character step to 2.
-  """
-  @spec complete_character(Character.t(), [map()]) :: Character.t()
-  def complete_character(character, attributes) do
-    attrs = add_step_to_character_attrs(%{}, 2)
-
-    for attribute <- attributes do
-      character_skill = CharacterSkill.changeset(%CharacterSkill{}, attribute)
-      Repo.insert!(character_skill)
-    end
-
-    character
-    |> Character.update_step_changeset(attrs)
-    |> Repo.update()
-  end
-
   defp add_step_to_character_attrs(attrs, step) do
     case {Map.has_key?(attrs, :step), Map.has_key?(attrs, "step"), Map.keys(attrs)} do
       {false, true, _} ->
@@ -161,6 +168,15 @@ defmodule Stygian.Characters do
   def update_character(%Character{} = character, attrs) do
     character
     |> Character.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates the sheet characteristics of the character.
+  """
+  def update_character_sheet(%Character{} = character, attrs) do
+    character
+    |> Character.modify_character_notes_changeset(attrs)
     |> Repo.update()
   end
 
@@ -218,12 +234,43 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Returns a changeset that will allow the user to modify the characteristics of their own character.
+  """
+  def change_character_notes(%Character{} = character, attrs \\ %{}) do
+    Character.modify_character_notes_changeset(character, attrs)
+  end
+
+  @doc """
   Updates the step of the character to 2, thus completing it.
   """
   def complete_character(character) do
+    {health, sanity} = compute_health_and_sanity(character)
+
+    attrs =
+      %{}
+      |> add_step_to_character_attrs(2)
+      |> Map.put("health", health)
+      |> Map.put("sanity", sanity)
+      |> Map.put("cigs", @default_character_initial_cigs)
+      |> Map.put("experience", @default_character_initial_experience)
+
     character
-    |> Character.update_step_changeset(%{step: 2})
+    |> Character.complete_character_changeset(attrs)
     |> Repo.update()
+  end
+
+  @spec compute_health_and_sanity(character :: Character.t()) :: {non_neg_integer(), non_neg_integer()}
+  defp compute_health_and_sanity(character) do
+    {physique, mind, will} = {
+      get_character_skill_value_by_skill_name(character, @physique_skill_name),
+      get_character_skill_value_by_skill_name(character, @mind_skill_name),
+      get_character_skill_value_by_skill_name(character, @will_skill_name),
+    }
+
+    health = physique * 8 + div(will, 2) * 4
+    sanity = (mind + will) * 5
+
+    {health, sanity}
   end
 
   alias Stygian.Characters.CharacterSkill
@@ -241,7 +288,7 @@ defmodule Stygian.Characters do
     CharacterSkill
     |> from()
     |> where([cs], cs.character_id == ^character.id)
-    |> preload(:skill)
+    |> preload(skill: [:skill_types])
     |> Repo.all()
   end
 
@@ -260,6 +307,30 @@ defmodule Stygian.Characters do
 
   """
   def get_character_skill!(id), do: Repo.get!(CharacterSkill, id)
+
+  @doc """
+  Gets a character skill and its value based on the skill name.
+  This function is needed at creation, for instance, to compute the automatic character values.
+  """
+  @spec get_character_skill_by_skill_name(Character.t(), String.t()) :: CharacterSkill.t() | nil
+  def get_character_skill_by_skill_name(%{id: character_id}, skill_name) do
+    CharacterSkill
+    |> from()
+    |> join(:inner, [cs], s in Skill, on: cs.skill_id == s.id and s.name == ^skill_name)
+    |> where([cs], cs.character_id == ^character_id)
+    |> preload(:skill)
+    |> Repo.one()
+  end
+
+  defp get_character_skill_value_by_skill_name(character, skill_name) do
+    case get_character_skill_by_skill_name(character, skill_name) do
+      %CharacterSkill{value: value} ->
+        value
+
+      nil ->
+        0
+    end
+  end
 
   @doc """
   Creates a character_skill.

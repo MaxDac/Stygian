@@ -60,14 +60,16 @@ defmodule Stygian.Characters.Character do
     |> unique_constraint(:name)
   end
 
-  def update_step_changeset(character, attrs) do
+  def complete_character_changeset(character, attrs) do
     character
-    |> cast(attrs, [
-      :step
-    ])
-    |> validate_required([
-      :step
-    ])
+    |> cast(attrs, [:step, :health, :sanity, :experience, :cigs])
+    |> validate_required([:step, :health, :sanity, :experience, :cigs])
+  end
+
+  def modify_character_notes_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:avatar, :small_avatar, :biography, :description, :notes])
+    |> validate_required([:avatar, :biography, :description])
   end
 
   @doc false

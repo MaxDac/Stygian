@@ -91,14 +91,27 @@ defmodule StygianWeb.Router do
     end
   end
 
+  scope "/character", StygianWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/redirect", CharacterController, :handle_create
+    get "/redirect/:character_id", CharacterController, :handle_create
+  end
+
   scope "/character", StygianWeb.CharacterLive do
     pipe_through [:browser, :require_authenticated_user]
 
-    live_session :character_sheet,
+    live_session :character_creation,
       on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
-      live "/sheet", CharacterSheetLive, :index
       live "/create", CharacterCreationLive, :create
       live "/complete", CharacterCompletionLive, :complete
+    end
+
+    live_session :character_sheet,
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
+      live "/sheet/modify", CharacterSheetUpdateLive, :edit
+      live "/sheet", CharacterSheetLive, :index
+      live "/stats", CharacterSheetStatsLive, :index
     end
 
     live_session :characters_list,

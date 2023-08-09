@@ -1,12 +1,31 @@
 <div class="bg-[url('/images/SheetBackground.webp')] w-[740px] h-[760px] relative top-1 left-[100px] bg-no-repeat bg-cover">
   <img src="/images/paperclip.png" class="absolute top-0 left-5 w-[100px] h-[150px] z-30" />
+
   <img
     src={@character.avatar}
     class="absolute top-[20px] left-[-50px] w-[270px] h-[400px] rotate-6 drop-shadow-lg border border-black z-20"
   />
+
   <div class="absolute -rotate-2 top-[100px] left-[210px] font-berolina text-3xl">
     Arkham Police Department
   </div>
+
+  <.link 
+    :if={@has_access} 
+    navigate={~p"/character/sheet/modify"}
+    class="absolute top-[50px] left-[280px] text-red-700 font-report text-xl -rotate-3"
+  >
+    Modifica
+  </.link>
+
+  <.link 
+    :if={@has_access} 
+    navigate={~p"/character/stats"}
+    class="absolute top-[50px] left-[470px] text-red-700 font-report text-xl"
+  >
+    Confidential
+  </.link>
+
   <div class="absolute top-[160px] left-[220px] -rotate-2 font-typewriter w-[440px] h-[510px] overflow-x-hidden overflow-y-auto">
     <p>Name: <%= @character.name %></p>
     <p>Age: Not provided</p>
