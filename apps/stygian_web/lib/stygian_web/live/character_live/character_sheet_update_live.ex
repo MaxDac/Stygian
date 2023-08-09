@@ -25,7 +25,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
       </.link>
     </div>
 
-    <.simple_form class="space-y-5" for={@form} phx-submit="update" phx-change="validate" class="mt-4">
+    <.simple_form class="space-y-5" for={@form} phx-submit="update" phx-change="validate">
       <.input type="textarea" label="Biografia" field={@form[:biography]} phx-debounce="blur" />
 
       <.input type="textarea" label="Descrizione" field={@form[:description]} phx-debounce="blur" />
