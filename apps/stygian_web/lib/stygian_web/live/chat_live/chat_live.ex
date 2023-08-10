@@ -8,7 +8,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
   To force the update, the component will send a message to the genserver, that is the same of this live view that
   renders it, in order for this live view to update the id of the textarea, forcing the update of the component.
 
-  This workaround prevented using JavaScript to update the state from the client. 
+  This workaround prevented using JavaScript to update the state from the client.
   """
 
   use StygianWeb, :container_live_view

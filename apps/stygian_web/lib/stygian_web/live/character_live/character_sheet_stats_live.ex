@@ -44,7 +44,6 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
   end
 
   defp assign_character_stats(socket) do
-    IO.inspect(socket.assigns, label: "assigns")
     assign(socket, :skills, [])
   end
 end
