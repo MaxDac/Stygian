@@ -1,5 +1,6 @@
 image:
   file: .gitpod/.gitpod.dockerfile
+  context: .gitpod/
 ports:
   - port: 4000
 tasks:
