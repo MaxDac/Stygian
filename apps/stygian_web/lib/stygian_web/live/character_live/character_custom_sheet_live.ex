@@ -8,7 +8,11 @@ defmodule StygianWeb.CharacterLive.CharacterCustomSheetLive do
   alias Stygian.Characters
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_character: %{custom_sheet: custom_sheet}}} = socket) do
+  def mount(
+        _params,
+        _session,
+        %{assigns: %{current_character: %{custom_sheet: custom_sheet}}} = socket
+      ) do
     {:ok,
      socket
      |> assign(:custom_sheet, custom_sheet)}
