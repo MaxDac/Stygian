@@ -1,41 +1,63 @@
 image:
   file: .gitpod/.gitpod.dockerfile
+  context: .gitpod/
 ports:
   - port: 4000
 tasks:
+  - name: zsh
+    init: |
+      # Cloning Power10k
+      git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+
   - name: postgres
-    init: >
-      #init db
+    init: |
+      # Initialising DB
       psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
       gp sync-done DB
+  
+  - name: asdf
+    init: |
+      # Declaring `asdf` dependencies
+      echo "erlang 25.3.2.5" >> $HOME/.tool-versions
+      echo "elixir 1.15.4-otp-25" >> $HOME/.tool-versions
+      echo "nodejs 18.17.0" >> $HOME/.tool-versions
+
+      # Exporting asdf shims to PATH
+      export PATH="$HOME/.asdf/shims:$PATH"
+
+      # Installing `asdf` dependencies
+      asdf install
+      gp sync-done ASDF
       
   - name: Phx
-    env: 
-      PATH: 
-    init: >
-      # Setting up PATH
-      export PATH="$HOME/.asdf/shims:$PATH"
+    init: |
+      # Waiting for ASDF to finish installing the dependencies
+      gp sync-await ASDF
 
-      # Installing Phoenix packages
+      # Installing Elixir global dependencies
       mix local.hex --force
       mix local.rebar --force
-      mix archive.install hex phx_new
-      
-      # Installing Back End dependencies
+      mix archive.install hex phx_new -y
+
+      # Installing Elixir local dependencies
       mix deps.get && mix deps.compile
 
-      # Waiting for DB to be finished
-      gp sync-done DB
-      
-      # Creating and migrating database
-      mix ecto.create && mix ecto.migrate
-      
-      mix run apps/stygian/priv/repo/seeds.exs
-      
-      # Installing Front End dependencies
-      npm install --prefix apps/stygian_web/assets
-    command: >
-      # Setting up PATH
-      export PATH="$HOME/.asdf/shims:$PATH"
+      # Waiting for the DB user to be created 
+      gp sync-await DB
 
+      # Migrating the tables to the DB
+      mix ecto.create && mix ecto.migrate
+
+      # Running seeds
+      mix run apps/stygian/priv/repo/seeds.exs
+
+      # Installing client packages
+      npm install --prefix apps/stygian_web/assets
+
+    command: |
+      # Starting zsh
+      zsh
+
+      # Starting Phoenix
+      export PATH="$HOME/.asdf/shims:$PATH"
       mix phx.server
