@@ -37,10 +37,6 @@ RUN git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
 RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
 RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
 
-ENV BUMP_TO_FORCE_GITPOD_UPDATE=4
-COPY install-asdf-plugins.sh $HOME/install-asdf-plugins.sh
-RUN chmod +x install-asdf-plugins.sh && ./install-asdf-plugins.sh
-
 # ZSH
 ENV ZSH_THEME cloud
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
