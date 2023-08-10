@@ -112,6 +112,8 @@ defmodule StygianWeb.Router do
       live "/sheet/modify", CharacterSheetUpdateLive, :edit
       live "/sheet", CharacterSheetLive, :index
       live "/stats", CharacterSheetStatsLive, :index
+      live "/custom_sheet", CharacterCustomSheetLive, :index
+      live "/custom_sheet/:character_id", CharacterCustomSheetLive, :index
     end
 
     live_session :characters_list,
