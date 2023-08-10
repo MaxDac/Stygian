@@ -1,6 +1,6 @@
-<div class="h-[calc(100vh-2.5rem)] w-full flex flex-col justify-start">
+<div class="h-[calc(100vh-2.5rem)] w-full flex flex-col justify-start overflow-y-hidden">
   <.chat_entries_screen
-    class="overflow-y-auto min-h-[calc(100vh-150px-2.5rem)]"
+    class="overflow-y-auto min-h-[calc(100vh-150px-3.5rem)]"
     map_id={@map.id}
     chat_entries={@chat_entries}
   />
@@ -10,6 +10,7 @@
       module={ChatControlLive}
       id={@map.id}
       current_character={@current_character}
+      current_user={@current_user}
       textarea_id={@textarea_id}
       class="min-h-[150px]"
       map={@map}

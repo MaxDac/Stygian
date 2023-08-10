@@ -6,9 +6,9 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   this component externally.
 
   To update the textarea in particular, having that the liveview only updates what's needed and nothing more,
-  the ID of the textarea is set from the assigns. This way, the parent live view can update the ID assigned to 
+  the ID of the textarea is set from the assigns. This way, the parent live view can update the ID assigned to
   the textarea, forcing it to re-render only in response to the update sent by this component, avoiding updates
-  when the chat screen will update in response of external events.  
+  when the chat screen will update in response of external events.
   """
   use StygianWeb, :live_component
 
@@ -38,9 +38,8 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
       >
         <.input type="hidden" field={@form[:map_id]} />
         <.input type="hidden" field={@form[:character_id]} />
-        <.input type="hidden" field={@form[:type]} />
         <div class="flex flex-row justify-between">
-          <div class="w-full p-5">
+          <div class="w-full p-3">
             <.input
               id={@textarea_id}
               field={@form[:text]}
@@ -65,8 +64,8 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   end
 
   @impl true
-  def handle_event("send_chat_input", params, socket) do
-    case create_chat_entry(params) do
+  def handle_event("send_chat_input", %{"chat" => chat_params}, socket) do
+    case chat_params |> parse_input(socket) |> create_chat_entry() do
       {:ok, chat_entry} ->
         {:noreply,
          socket
@@ -95,7 +94,7 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
     |> assign(:form, form)
   end
 
-  defp create_chat_entry(%{"chat" => chat_params} = _params) do
+  defp create_chat_entry(chat_params = _params) do
     Maps.create_chat(chat_params)
   end
 
@@ -105,4 +104,25 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
     send(self(), {:chat_input_sent, %{}})
     socket
   end
+
+  # Parses the input of the chat to determine which type of chat entry to create.
+  defp parse_input(
+         %{"text" => "***" <> chat_input} = attrs,
+         %{assigns: %{current_user: %{admin: true}}} = _socket
+       ),
+       do:
+         attrs
+         |> Map.put("text", chat_input)
+         |> Map.put("type", :master)
+
+  defp parse_input(%{"text" => "+ " <> chat_input} = attrs, _),
+    do:
+      attrs
+      |> Map.put("text", chat_input)
+      |> Map.put("type", :off)
+
+  defp parse_input(attrs, _),
+    do:
+      attrs
+      |> Map.put("type", :text)
 end
