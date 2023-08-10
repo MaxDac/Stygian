@@ -39,7 +39,8 @@ RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
 
 ENV BUMP_TO_FORCE_GITPOD_UPDATE=4
 COPY install-asdf-plugins.sh $HOME/install-asdf-plugins.sh
-RUN chmod +x install-asdf-plugins.sh && ./install-asdf-plugins.sh
+RUN sudo bash -ic "chmod +x install-asdf-plugins.sh"
+RUN ./install-asdf-plugins.sh
 
 # ZSH
 ENV ZSH_THEME cloud
