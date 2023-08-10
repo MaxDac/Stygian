@@ -7,16 +7,22 @@ tasks:
   - name: zsh
     init: |
       # Cloning Power10k
-      git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+      sudo git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+
+      gp sync-done ZSH
 
   - name: postgres
     init: |
+      gp sync-await ZSH
+
       # Initialising DB
       psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
       gp sync-done DB
   
   - name: asdf
     init: |
+      gp sync-await ZSH
+
       # Declaring `asdf` dependencies
       echo "erlang 25.3.2.5" >> $HOME/.tool-versions
       echo "elixir 1.15.4-otp-25" >> $HOME/.tool-versions
@@ -42,7 +48,7 @@ tasks:
       # Installing Elixir global dependencies
       mix local.hex --force
       mix local.rebar --force
-      mix archive.install hex phx_new -y
+      mix archive.install hex phx_new --force
 
       # Installing Elixir local dependencies
       mix deps.get && mix deps.compile
