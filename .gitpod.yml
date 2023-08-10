@@ -20,6 +20,8 @@ tasks:
       gp sync-done DB
   
   - name: asdf
+    env: 
+      KERL_BUILD_DOCS: yes
     init: |
       gp sync-await ZSH
 
