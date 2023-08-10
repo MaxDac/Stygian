@@ -33,7 +33,7 @@ defmodule StygianWeb.CharacterLive.CharacterCustomSheetLive do
     </div>
 
     <div class="space-y-5">
-      <%= @custom_sheet %>
+      <%= raw(Earmark.as_html!(@custom_sheet)) %>
     </div>
     """
   end
