@@ -4,15 +4,13 @@ FROM gitpod/workspace-postgres
 # ENV DEBIAN_FRONTEND noninteractive
 
 RUN sudo apt-get update -y \
-    && sudo apt-get install -y gnupg software-properties-common curl git dirmngr apt-transport-https lsb-release \
-    linux-headers-$(uname -r) build-essential  \
-    zsh \
+    && sudo apt-get install -y gnupg software-properties-common curl git apt-transport-https zsh \
     # && curl -fsSL https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/erlang.gpg \
     # && echo "deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib" | tee /etc/apt/sources.list.d/erlang.list \
     # && apt-get update -y \
     # && apt-get install erlang -y \
     # && apt-get install elixir -y \
-    && sudo apt-get install -y build-essential autoconf m4 libncurses5-dev libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev libssh-dev unixodbc-dev xsltproc fop libxml2-utils libncurses-dev \
+    && sudo apt-get install -y build-essential autoconf m4 libncurses5-dev libncurses-dev \
     && sudo apt-get install inotify-tools -y \
     && sudo rm -rf /var/lib/apt/lists/* \
     && sudo apt-get clean && sudo rm -rf /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*
@@ -40,15 +38,13 @@ RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
 RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
 
 ENV BUMP_TO_FORCE_GITPOD_UPDATE=4
-COPY install-asdf-plugins.sh $HOME/
+COPY install-asdf-plugins.sh $HOME/install-asdf-plugins.sh
 RUN ./install-asdf-plugins.sh
 
 # ZSH
 ENV ZSH_THEME cloud
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 COPY zsh-template.sh $HOME/.zshrc
-
-ONBUILD COPY .tool-versions $HOME/
-ONBUILD RUN bash -c ". $HOME/.bashrc.d/asdf.sh && asdf install"
+COPY .p10k.zsh $HOME/.p10k.zsh
 
 CMD [ "zsh" ]
