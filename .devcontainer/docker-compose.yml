@@ -28,7 +28,6 @@ services:
       POSTGRES_DB: stygian_dev
     volumes:
       - /postgres-data:/var/lib/postgresql/data
-    network_mode: host
 
 volumes:
   postgres-data:            
