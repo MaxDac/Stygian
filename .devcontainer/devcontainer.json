@@ -15,12 +15,53 @@
     "customizations": {
         "vscode": {
             "settings": {
-                "terminal.integrated.shell.linux": "/bin/bash"
+                "terminal.integrated.shell.linux": "/bin/bash",
+                "workbench.colorTheme": "Adwaita Dark & default syntax highlighting",
+                "workbench.iconTheme": "material-icon-theme",
+                "material-icon-theme.folders.theme": "specific",
+                "material-icon-theme.activeIconPack": "none",
+                "material-icon-theme.files.associations": {
+                    "*.html.heex": "ejs",
+                    "*test.exs": "test",
+                    "*.exs": "Liquid",
+                },
+                "material-icon-theme.folders.associations": {
+                    "live": "controller",
+                    "components": "layout",
+                    "priv": "public",
+                    ".gitpod": "config",
+                    ".elixir_ls": "config",
+                },
+                "editor.fontFamily": "FiraCode Nerd Font",
+                "terminal.integrated.fontFamily": "FiraCode Nerd Font",
+                "editor.fontSize": 12,
+                "scm.inputFontSize": 12,
+                "markdown.preview.fontSize": 12,
+                "debug.console.fontSize": 12,
+                "terminal.integrated.fontSize": 12,
+                "chat.editor.fontSize": 12,
+                "editor.fontLigatures": true,
+                "editor.rulers": [
+                    80,
+                    120
+                ],
+                "editor.lineNumbers": "relative"
             },
             "extensions": [
+                "piousdeer.vscode-adwaita",
                 "jakebecker.elixir-ls",
                 "vscodevim.Vim",
-                "adamzapasnik.vscode-elixir-test-explorer"
+                "adamzapasnik.vscode-elixir-test-explorer",
+                "pantajoe.vscode-elixir-credo",
+                "sertion.vscode-gitblame",
+                "mhutchie.vscode-git-graph",
+                "donjayamanne.githistoryvscode",
+                "github.github-copilot",
+                "microsoft.postgresql",
+                "tailwindlabs.tailwindcss-intellisense",
+                "microsoft.test-adapter-converter",
+                "pkief.vscode-material-icon-theme",
+                "phoenixframework.vscode-phoenix"
             ]
         }
     }
