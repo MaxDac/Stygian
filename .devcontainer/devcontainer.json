@@ -1,6 +1,6 @@
 {
     "workspaceFolder": "/workspace",
-    "name": "Phoenix + Postgres",
+    "name": "Stygian default environment",
     "dockerComposeFile": "docker-compose.yml",
     "service": "elixir",
     "postCreateCommand": "mix deps.get && mix deps.compile && mix ecto.create && mix ecto.migrate && mix run apps/stygian/priv/repo/seeds.exs && npm install --prefix apps/stygian_web/assets",
