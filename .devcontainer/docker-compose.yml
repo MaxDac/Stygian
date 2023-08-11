@@ -7,7 +7,7 @@ services:
       context: .
       args:
         # Elixir Version: 1.9, 1.10, 1.10.4, ...
-        VARIANT: "1.15.4"
+        VARIANT: "1.15.4-otp-25"
         # Node Version: 12, 14, ...
         NODE_VERSION: "18"
     volumes:
