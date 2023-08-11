@@ -3,7 +3,8 @@
     "name": "Phoenix + Postgres",
     "dockerComposeFile": "docker-compose.yml",
     "service": "web",
-    "postCreateCommand": "mix deps.get && mix deps.compile && mix ecto.create && mix ecto.migrate && mix phx.server",
+    "postCreateCommand": "mix deps.get && mix deps.compile && mix ecto.create && mix ecto.migrate && mix run apps/stygian/priv/repo/seeds.exs && npm install --prefix apps/stygian_web/assets",
+    "postStartCommand": "mix phx.server",
     "customizations": {
         "vscode": {
             "settings": {
