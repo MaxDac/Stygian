@@ -2,16 +2,20 @@
     "workspaceFolder": "/workspace",
     "name": "Phoenix + Postgres",
     "dockerComposeFile": "docker-compose.yml",
-    "service": "web",
+    "service": "elixir",
     "postCreateCommand": "mix deps.get && mix deps.compile && mix ecto.create && mix ecto.migrate && mix run apps/stygian/priv/repo/seeds.exs && npm install --prefix apps/stygian_web/assets",
     "postStartCommand": "mix phx.server",
+	"forwardPorts": [4000, 4001, 5432],
+    "remoteUser": "vscode",
     "customizations": {
         "vscode": {
             "settings": {
                 "terminal.integrated.shell.linux": "/bin/bash"
             },
             "extensions": [
-                "jakebecker.elixir-ls"
+                "jakebecker.elixir-ls",
+                "vscodevim.Vim",
+                "adamzapasnik.vscode-elixir-test-explorer"
             ]
         }
     }
