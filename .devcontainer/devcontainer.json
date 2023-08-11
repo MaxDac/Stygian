@@ -1,0 +1,15 @@
+{
+    "name": "Phoenix + Postgres",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "web",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash"
+            },
+            "extensions": [
+                "jakebecker.elixir-ls"
+            ]
+        }
+    },
+}

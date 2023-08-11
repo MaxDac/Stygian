@@ -27,3 +27,5 @@ erl_crash.dump
 .fleet
 
 **/.DS_Store
+
+.elixir_ls/
