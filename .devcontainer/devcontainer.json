@@ -61,7 +61,8 @@
                 "tailwindlabs.tailwindcss-intellisense",
                 "microsoft.test-adapter-converter",
                 "pkief.vscode-material-icon-theme",
-                "phoenixframework.vscode-phoenix"
+                "phoenixframework.vscode-phoenix",
+                "adamzapasnik.vscode-elixir-test-explorer"
             ]
         }
     }
