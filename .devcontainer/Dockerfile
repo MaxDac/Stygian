@@ -58,3 +58,6 @@ RUN su ${USERNAME} -c "mix local.hex --force \
 
 # [Optional] Uncomment this line to install additional package.
 # RUN  mix ...
+
+WORKDIR /app
+EXPOSE 4000
