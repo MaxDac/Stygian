@@ -49,20 +49,24 @@
                 "editor.lineNumbers": "relative"
             },
             "extensions": [
-                "piousdeer.vscode-adwaita",
-                "jakebecker.elixir-ls",
-                "vscodevim.Vim",
-                "adamzapasnik.vscode-elixir-test-explorer",
+                "bradlc.vscode-tailwindcss",
+                "donjayamanne.githistory",
+                "GitHub.codespaces",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "GitHub.github-vscode-theme",
+                "GitHub.vscode-pull-request-github",
+                "hbenl.vscode-test-explorer",
+                "JakeBecker.elixir-ls",
+                "mhutchie.git-graph",
+                "ms-ossdata.vscode-postgresql",
+                "ms-vscode.test-adapter-converter",
                 "pantajoe.vscode-elixir-credo",
-                "sertion.vscode-gitblame",
-                "mhutchie.vscode-git-graph",
-                "donjayamanne.githistoryvscode",
-                "github.github-copilot",
-                "microsoft.postgresql",
-                "tailwindlabs.tailwindcss-intellisense",
-                "microsoft.test-adapter-converter",
-                "pkief.vscode-material-icon-theme",
-                "phoenixframework.vscode-phoenix",
+                "phoenixframework.phoenix",
+                "piousdeer.adwaita-theme",
+                "PKief.material-icon-theme",
+                "vscodevim.vim",
+                "waderyan.gitblame"
             ]
         }
     }
