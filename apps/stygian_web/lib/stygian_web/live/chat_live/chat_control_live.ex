@@ -53,7 +53,14 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
             <.button id="chat-input-sender" phx-disable-with="Inviando..." class="w-full">
               Invia
             </.button>
-            <.button type="button" disabled="true" phx-disable-with="..." class="w-full">
+            <.button
+              id={@dice_button_id}
+              type="button"
+              phx-disable-with="..."
+              disabled={not dices_active?(@current_character)}
+              phx-click="open_dices"
+              class="w-full"
+            >
               Dadi
             </.button>
           </div>
@@ -125,4 +132,7 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
     do:
       attrs
       |> Map.put("type", :text)
+
+  defp dices_active?(nil), do: false
+  defp dices_active?(_), do: true
 end

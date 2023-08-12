@@ -294,6 +294,23 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Returns the list of character skills, split between attributes and skills.
+  """
+  @spec list_character_attributes_skills(character :: Character.t()) ::
+          {attributes :: list(CharacterSkill.t()), skills :: list(CharacterSkill.t())}
+  def list_character_attributes_skills(character) do
+    case list_character_skills(character) do
+      nil ->
+        {[], []}
+
+      skills ->
+        Enum.split_with(skills, fn s ->
+          Enum.any?(s.skill.skill_types, &(&1.name == "Attribute"))
+        end)
+    end
+  end
+
+  @doc """
   Gets a single character_skill.
 
   Raises `Ecto.NoResultsError` if the Character skill does not exist.

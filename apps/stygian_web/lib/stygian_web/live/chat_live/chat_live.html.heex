@@ -12,8 +12,22 @@
       current_character={@current_character}
       current_user={@current_user}
       textarea_id={@textarea_id}
+      dice_button_id={@dice_button_id}
       class="min-h-[150px]"
       map={@map}
     />
+
+    <.modal
+      :if={@show_dice_thrower}
+      id="dice-thrower-modal"
+      show
+      on_cancel={JS.patch(~p"/chat/#{@map.id}")}
+    >
+      <.live_component
+        module={ChatDiceThrowerLive}
+        id={@current_character.id}
+        current_character={@current_character}
+      />
+    </.modal>
   <% end %>
 </div>
