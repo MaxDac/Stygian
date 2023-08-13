@@ -16,7 +16,7 @@ defmodule Stygian.DataCase do
 
   use ExUnit.CaseTemplate
 
-  alias Sandbox
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
