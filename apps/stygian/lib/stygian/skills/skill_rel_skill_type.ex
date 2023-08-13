@@ -1,4 +1,6 @@
 defmodule Stygian.Skills.SkillRelSkillType do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

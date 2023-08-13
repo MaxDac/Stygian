@@ -98,7 +98,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end
   end
 
-  defp assign_attributes(socket = %{assigns: %{character: %{id: character_id}}}) do
+  defp assign_attributes(%{assigns: %{character: %{id: character_id}}} = socket) do
     skills = Skills.list_creational_skills()
 
     {attributes, abilities} =
@@ -124,10 +124,10 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   defp filter_attributes(%{skill_types: [%{name: "Attribute"}]}), do: true
   defp filter_attributes(_), do: false
 
-  defp plus_attributes(socket = %{assigns: %{attribute_points: 0}}, _), do: socket
+  defp plus_attributes(%{assigns: %{attribute_points: 0}} = socket, _), do: socket
 
   defp plus_attributes(
-         socket = %{assigns: %{attribute_points: points, attributes: attributes}},
+         %{assigns: %{attribute_points: points, attributes: attributes}} = socket,
          skill_id
        ) do
     case plus(attributes, skill_id, @max_attribute_value) do
@@ -141,10 +141,10 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end
   end
 
-  defp plus_abilities(socket = %{assigns: %{ability_points: 0}}, _), do: socket
+  defp plus_abilities(%{assigns: %{ability_points: 0}} = socket, _), do: socket
 
   defp plus_abilities(
-         socket = %{assigns: %{ability_points: points, abilities: abilities}},
+         %{assigns: %{ability_points: points, abilities: abilities}} = socket,
          skill_id
        ) do
     case plus(abilities, skill_id, @max_ability_value) do
@@ -171,10 +171,10 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end
   end
 
-  defp minus_attributes(socket = %{assigns: %{attribute_points: @max_attributes}}, _), do: socket
+  defp minus_attributes(%{assigns: %{attribute_points: @max_attributes}} = socket, _), do: socket
 
   defp minus_attributes(
-         socket = %{assigns: %{attribute_points: points, attributes: attributes}},
+         %{assigns: %{attribute_points: points, attributes: attributes}} = socket,
          skill_id
        ) do
     case minus(attributes, skill_id, @min_attribute_value) do
@@ -188,10 +188,10 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end
   end
 
-  defp minus_abilities(socket = %{assigns: %{ability_points: @max_abilities}}, _), do: socket
+  defp minus_abilities(%{assigns: %{ability_points: @max_abilities}} = socket, _), do: socket
 
   defp minus_abilities(
-         socket = %{assigns: %{ability_points: points, abilities: abilities}},
+         %{assigns: %{ability_points: points, abilities: abilities}} = socket,
          skill_id
        ) do
     case minus(abilities, skill_id, @min_ability_value) do

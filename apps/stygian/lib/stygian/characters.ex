@@ -96,11 +96,11 @@ defmodule Stygian.Characters do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_character(attrs = %{"user_id" => user_id}) do
+  def create_character(%{"user_id" => user_id} = attrs) do
     create_character_internal(attrs, user_id)
   end
 
-  def create_character(attrs = %{user_id: user_id}) do
+  def create_character(%{user_id: user_id} = attrs) do
     create_character_internal(attrs, user_id)
   end
 
@@ -450,7 +450,7 @@ defmodule Stygian.Characters do
 
   defp check_creation_skills_count(previous_result), do: previous_result
 
-  defp check_creation_skills_sum(error = {:error, _}), do: error
+  defp check_creation_skills_sum({:error, _} = error), do: error
 
   defp check_creation_skills_sum({:ok, {attributes, skills}}) do
     case {
@@ -474,7 +474,7 @@ defmodule Stygian.Characters do
     end
   end
 
-  defp check_creation_skills_level(error = {:error, _}), do: error
+  defp check_creation_skills_level({:error, _} = error), do: error
 
   defp check_creation_skills_level({:ok, {attributes, skills}}) do
     {attribute_values, skill_values} = {

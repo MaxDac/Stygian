@@ -101,7 +101,7 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
     |> assign(:form, form)
   end
 
-  defp create_chat_entry(chat_params = _params) do
+  defp create_chat_entry(chat_params) do
     Maps.create_chat(chat_params)
   end
 

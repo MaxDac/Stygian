@@ -1,4 +1,9 @@
 defmodule StygianWeb.Presence do
+  @moduledoc """
+  The presence implementation for the current project, with a list of helpers to manage the characters
+  in the online list.
+  """
+
   use Phoenix.Presence,
     otp_app: :stygian_web,
     pubsub_server: StygianWeb.PubSub
