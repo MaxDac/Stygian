@@ -35,12 +35,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
             options={to_options(@attributes)}
           />
 
-          <.input
-            field={@form[:skill_id]}
-            label="Skill"
-            type="select"
-            options={to_options(@skills)}
-          />
+          <.input field={@form[:skill_id]} label="Skill" type="select" options={to_options(@skills)} />
 
           <.input
             field={@form[:modifier]}
@@ -107,21 +102,24 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     Enum.map(range, fn value -> {value, value} end)
   end
 
-  defp insert_dice_chat(%{assigns: %{
-    current_character: character,
-    map: map,
-    attributes: attributes,
-    skills: skills
-  }} = socket, %{
-    "attribute_id" => attribute_id,
-    "skill_id" => skill_id,
-    "modifier" => modifier,
-    "difficulty" => difficulty
-  }) do
+  defp insert_dice_chat(
+         %{
+           assigns: %{
+             current_character: character,
+             map: map,
+             attributes: attributes,
+             skills: skills
+           }
+         } = socket,
+         %{
+           "attribute_id" => attribute_id,
+           "skill_id" => skill_id,
+           "modifier" => modifier,
+           "difficulty" => difficulty
+         }
+       ) do
     {attribute_id, skill_id, modifier, difficulty} =
-      {String.to_integer(attribute_id),
-       String.to_integer(skill_id),
-       String.to_integer(modifier),
+      {String.to_integer(attribute_id), String.to_integer(skill_id), String.to_integer(modifier),
        String.to_integer(difficulty)}
       |> IO.inspect(label: "DiceThrower params")
 
@@ -142,9 +140,11 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     case Maps.create_dice_throw_chat_entry(request, dice_thrower) do
       {:ok, chat} ->
         send(self(), {:chat, chat})
+
         {:noreply,
          socket
          |> ChatHelpers.handle_chat_created(chat)}
+
       _ ->
         {:noreply,
          socket

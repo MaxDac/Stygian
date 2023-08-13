@@ -237,8 +237,13 @@ defmodule Stygian.MapsTest do
       skill1 = skill_fixture(%{name: "skill1"})
       skill2 = skill_fixture(%{name: "skill2"})
 
-      character_skill_1 = character_skill_fixture(%{character_id: character.id, skill_id: skill1.id, value: 1}) |> Repo.preload(:skill)
-      character_skill_2 = character_skill_fixture(%{character_id: character.id, skill_id: skill2.id, value: 2}) |> Repo.preload(:skill)
+      character_skill_1 =
+        character_skill_fixture(%{character_id: character.id, skill_id: skill1.id, value: 1})
+        |> Repo.preload(:skill)
+
+      character_skill_2 =
+        character_skill_fixture(%{character_id: character.id, skill_id: skill2.id, value: 2})
+        |> Repo.preload(:skill)
 
       %{
         map: map,
@@ -258,16 +263,21 @@ defmodule Stygian.MapsTest do
       character_skill_1: character_skill_1,
       character_skill_2: character_skill_2
     } do
-      assert {:ok, chat} = Maps.create_dice_throw_chat_entry(%{
-        character: character,
-        map: map,
-        attribute: character_skill_1,
-        skill: character_skill_2,
-        modifier: 3,
-        difficulty: 18
-      }, fn _ -> 1 end)
+      assert {:ok, chat} =
+               Maps.create_dice_throw_chat_entry(
+                 %{
+                   character: character,
+                   map: map,
+                   attribute: character_skill_1,
+                   skill: character_skill_2,
+                   modifier: 3,
+                   difficulty: 18
+                 },
+                 fn _ -> 1 end
+               )
 
-      assert chat.text == "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 18 ottenendo un fallimento critico (6 + 1)."
+      assert chat.text ==
+               "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 18 ottenendo un fallimento critico (6 + 1)."
     end
 
     test "create_dice_throw_chat_entry/2 Returns a critical success", %{
@@ -278,16 +288,21 @@ defmodule Stygian.MapsTest do
       character_skill_1: character_skill_1,
       character_skill_2: character_skill_2
     } do
-      assert {:ok, chat} = Maps.create_dice_throw_chat_entry(%{
-        character: character,
-        map: map,
-        attribute: character_skill_1,
-        skill: character_skill_2,
-        modifier: 3,
-        difficulty: 18
-      }, fn _ -> 20 end)
+      assert {:ok, chat} =
+               Maps.create_dice_throw_chat_entry(
+                 %{
+                   character: character,
+                   map: map,
+                   attribute: character_skill_1,
+                   skill: character_skill_2,
+                   modifier: 3,
+                   difficulty: 18
+                 },
+                 fn _ -> 20 end
+               )
 
-      assert chat.text == "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 18 ottenendo un successo critico (6 + 20)."
+      assert chat.text ==
+               "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 18 ottenendo un successo critico (6 + 20)."
     end
 
     test "create_dice_throw_chat_entry/2 Returns a failure", %{
@@ -298,16 +313,21 @@ defmodule Stygian.MapsTest do
       character_skill_1: character_skill_1,
       character_skill_2: character_skill_2
     } do
-      assert {:ok, chat} = Maps.create_dice_throw_chat_entry(%{
-        character: character,
-        map: map,
-        attribute: character_skill_1,
-        skill: character_skill_2,
-        modifier: 3,
-        difficulty: 18
-      }, fn _ -> 5 end)
+      assert {:ok, chat} =
+               Maps.create_dice_throw_chat_entry(
+                 %{
+                   character: character,
+                   map: map,
+                   attribute: character_skill_1,
+                   skill: character_skill_2,
+                   modifier: 3,
+                   difficulty: 18
+                 },
+                 fn _ -> 5 end
+               )
 
-      assert chat.text == "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 18 ottenendo un fallimento (6 + 5)."
+      assert chat.text ==
+               "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 18 ottenendo un fallimento (6 + 5)."
     end
 
     test "create_dice_throw_chat_entry/2 returns a success", %{
@@ -318,16 +338,21 @@ defmodule Stygian.MapsTest do
       character_skill_1: character_skill_1,
       character_skill_2: character_skill_2
     } do
-      assert {:ok, chat} = Maps.create_dice_throw_chat_entry(%{
-        character: character,
-        map: map,
-        attribute: character_skill_1,
-        skill: character_skill_2,
-        modifier: 3,
-        difficulty: 10
-      }, fn _ -> 5 end)
+      assert {:ok, chat} =
+               Maps.create_dice_throw_chat_entry(
+                 %{
+                   character: character,
+                   map: map,
+                   attribute: character_skill_1,
+                   skill: character_skill_2,
+                   modifier: 3,
+                   difficulty: 10
+                 },
+                 fn _ -> 5 end
+               )
 
-      assert chat.text == "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 10 ottenendo un successo (6 + 5)."
+      assert chat.text ==
+               "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} + 3 con Diff. 10 ottenendo un successo (6 + 5)."
     end
 
     test "create_dice_throw_chat_entry/2 returns a failure for the modifier", %{
@@ -338,36 +363,47 @@ defmodule Stygian.MapsTest do
       character_skill_1: character_skill_1,
       character_skill_2: character_skill_2
     } do
-      assert {:ok, chat} = Maps.create_dice_throw_chat_entry(%{
-        character: character,
-        map: map,
-        attribute: character_skill_1,
-        skill: character_skill_2,
-        modifier: -1,
-        difficulty: 10
-      }, fn _ -> 7 end)
+      assert {:ok, chat} =
+               Maps.create_dice_throw_chat_entry(
+                 %{
+                   character: character,
+                   map: map,
+                   attribute: character_skill_1,
+                   skill: character_skill_2,
+                   modifier: -1,
+                   difficulty: 10
+                 },
+                 fn _ -> 7 end
+               )
 
-      assert chat.text == "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} - 1 con Diff. 10 ottenendo un fallimento (2 + 7)."
+      assert chat.text ==
+               "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} - 1 con Diff. 10 ottenendo un fallimento (2 + 7)."
     end
 
-    test "create_dice_throw_chat_entry/2 returns a success when the result equals the difficulty", %{
-      map: map,
-      character: character,
-      skill1: skill1,
-      skill2: skill2,
-      character_skill_1: character_skill_1,
-      character_skill_2: character_skill_2
-    } do
-      assert {:ok, chat} = Maps.create_dice_throw_chat_entry(%{
-        character: character,
-        map: map,
-        attribute: character_skill_1,
-        skill: character_skill_2,
-        modifier: 0,
-        difficulty: 10
-      }, fn _ -> 7 end)
+    test "create_dice_throw_chat_entry/2 returns a success when the result equals the difficulty",
+         %{
+           map: map,
+           character: character,
+           skill1: skill1,
+           skill2: skill2,
+           character_skill_1: character_skill_1,
+           character_skill_2: character_skill_2
+         } do
+      assert {:ok, chat} =
+               Maps.create_dice_throw_chat_entry(
+                 %{
+                   character: character,
+                   map: map,
+                   attribute: character_skill_1,
+                   skill: character_skill_2,
+                   modifier: 0,
+                   difficulty: 10
+                 },
+                 fn _ -> 7 end
+               )
 
-      assert chat.text == "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} con Diff. 10 ottenendo un successo (3 + 7)."
+      assert chat.text ==
+               "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} con Diff. 10 ottenendo un successo (3 + 7)."
     end
   end
 end

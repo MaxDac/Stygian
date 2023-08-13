@@ -3,7 +3,7 @@ defmodule Stygian.Characters.DiceThrower do
   Schemaless form changeset
   """
 
-  defstruct [attribute_id: nil, skill_id: nil, modifier: nil, difficulty: nil]
+  defstruct attribute_id: nil, skill_id: nil, modifier: nil, difficulty: nil
 
   @types %{
     attribute_id: :integer,

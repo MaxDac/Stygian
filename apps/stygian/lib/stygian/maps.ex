@@ -228,13 +228,13 @@ defmodule Stygian.Maps do
   end
 
   @type chat_entry_request() :: %{
-    character: Character.t(),
-    map: Map.t(),
-    attribute: CharacterSkill.t(),
-    skill: CharacterSkill.t(),
-    modifier: integer(),
-    difficulty: pos_integer()
-  }
+          character: Character.t(),
+          map: Map.t(),
+          attribute: CharacterSkill.t(),
+          skill: CharacterSkill.t(),
+          modifier: integer(),
+          difficulty: pos_integer()
+        }
 
   @doc """
   Creates a chat entry for a dice throw.
@@ -243,16 +243,19 @@ defmodule Stygian.Maps do
   It has been abstracted for test purposes.
   """
   @spec create_dice_throw_chat_entry(request :: chat_entry_request(), dice_thrower :: function()) ::
-    {:ok, Chat.t()} | {:error, Ecto.Changeset.t()}
-  def create_dice_throw_chat_entry(%{
-    character: %{id: character_id},
-    map: %{id: map_id},
-    attribute: %{value: attribute_value},
-    skill: %{value: skill_value},
-    modifier: modifier,
-    difficulty: difficulty
-  } = request, dice_thrower) do
-    chat_explanation = get_chat_explanation request
+          {:ok, Chat.t()} | {:error, Ecto.Changeset.t()}
+  def create_dice_throw_chat_entry(
+        %{
+          character: %{id: character_id},
+          map: %{id: map_id},
+          attribute: %{value: attribute_value},
+          skill: %{value: skill_value},
+          modifier: modifier,
+          difficulty: difficulty
+        } = request,
+        dice_thrower
+      ) do
+    chat_explanation = get_chat_explanation(request)
     base = attribute_value + skill_value + modifier
     dice_result = dice_thrower.(20)
 
@@ -262,10 +265,13 @@ defmodule Stygian.Maps do
       case {dice_result, result} do
         {1, _} ->
           "ottenendo un fallimento critico"
+
         {20, _} ->
           "ottenendo un successo critico"
+
         {_, n} when n < difficulty ->
           "ottenendo un fallimento"
+
         _ ->
           "ottenendo un successo"
       end
@@ -281,11 +287,11 @@ defmodule Stygian.Maps do
   end
 
   defp get_chat_explanation(%{
-    attribute: %{skill: %{name: attribute_name}},
-    skill: %{skill: %{name: skill_name}},
-    modifier: modifier,
-    difficulty: difficulty
-  }) do
+         attribute: %{skill: %{name: attribute_name}},
+         skill: %{skill: %{name: skill_name}},
+         modifier: modifier,
+         difficulty: difficulty
+       }) do
     modifier_text =
       case modifier do
         n when n > 0 -> " + #{n}"
