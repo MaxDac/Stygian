@@ -62,23 +62,23 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign_dice_button_id()}
   end
 
-  # Dice button clicked
-  @impl true
-  def handle_event("open_dices", _params, socket) do
-    {:noreply,
-     socket
-     |> assign(:show_dice_thrower, true)}
-  end
-
   # This is called when the dice thrower modal is closed
   @impl true
-  def handle_params(_params, _uri, socket) do
+  def handle_info({:chat, _}, socket) do
     send_update(ChatControlLive, id: socket.assigns.map.id)
 
     {:noreply,
      socket
      |> assign(:show_dice_thrower, false)
      |> assign_dice_button_id()}
+  end
+
+  # Dice button clicked
+  @impl true
+  def handle_event("open_dices", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_dice_thrower, true)}
   end
 
   defp assign_new_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do

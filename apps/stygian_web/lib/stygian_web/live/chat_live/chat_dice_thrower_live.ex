@@ -116,9 +116,18 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     "modifier" => modifier,
     "difficulty" => difficulty
   }) do
+    {attribute_id, skill_id, modifier, difficulty} =
+      {String.to_integer(attribute_id),
+       String.to_integer(skill_id),
+       String.to_integer(modifier),
+       String.to_integer(difficulty)}
+      |> IO.inspect(label: "DiceThrower params")
+
+    IO.inspect(attributes |> Enum.at(0), label: "attributes")
+
     dice_result = :rand.uniform(20)
-    attribute_value = Enum.find(attributes, fn %{id: ^attribute_id} -> true end).value
-    skill_value = Enum.find(skills, fn %{id: ^skill_id} -> true end).value
+    attribute_value = Enum.find(attributes, fn a -> a.id == attribute_id end).value
+    skill_value = Enum.find(skills, fn s -> s.id == skill_id end).value
 
     result = dice_result + attribute_value + skill_value + modifier
 
@@ -143,7 +152,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
 
     case insertion_result do
       {:ok, chat} ->
-        send_update(socket, :close_modal, chat)
+        send(self(), {:chat, chat})
         {:noreply, socket}
       _ ->
         {:noreply,
