@@ -4,13 +4,14 @@ defmodule Stygian.Characters do
   """
 
   import Ecto.Query, warn: false
-  alias Stygian.Repo
   alias Ecto.Changeset
 
+  alias Stygian.Repo
+
+  alias Stygian.Accounts.User
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Skills.Skill
-  alias Stygian.Accounts.User
 
   @creation_max_attribute_sum 33
   @creation_mas_skills_sum 5

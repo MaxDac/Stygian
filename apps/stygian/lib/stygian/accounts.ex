@@ -6,7 +6,7 @@ defmodule Stygian.Accounts do
   import Ecto.Query, warn: false
   alias Stygian.Repo
 
-  alias Stygian.Accounts.{User, UserToken, UserNotifier}
+  alias Stygian.Accounts.{User, UserNotifier, UserToken}
 
   ## Database getters
 

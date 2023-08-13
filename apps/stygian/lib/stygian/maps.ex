@@ -4,11 +4,12 @@ defmodule Stygian.Maps do
   """
 
   import Ecto.Query, warn: false
+
   alias Stygian.Repo
 
-  alias Stygian.Maps.Map
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
+  alias Stygian.Maps.Map
 
   @default_limit_in_hour 2
 

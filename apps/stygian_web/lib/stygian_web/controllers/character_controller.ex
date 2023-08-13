@@ -25,8 +25,8 @@ defmodule StygianWeb.CharacterController do
       conn
       |> put_session(:character_id, character_id)
       |> put_flash(:info, "Il personaggio è stato creato con successo!")
-      # Redirecting instead of rendering the live view directly, because this way guarantess the execution of the route automatic mounts,
-      # that populates the character automatically.
+      # Redirecting instead of rendering the live view directly, because this way guarantess the execution of the
+      # route automatic mounts, that populates the character automatically.
       |> redirect(to: ~p"/character/sheet")
     else
       conn
@@ -49,8 +49,8 @@ defmodule StygianWeb.CharacterController do
       %{id: character_id} ->
         conn
         |> put_session(:character_id, character_id)
-        # Redirecting instead of rendering the live view directly, because this way guarantess the execution of the route automatic mounts,
-        # that populates the character automatically.
+        # Redirecting instead of rendering the live view directly, because this way guarantess the execution of the
+        # route automatic mounts, that populates the character automatically.
         |> redirect(to: ~p"/character/sheet")
 
       _ ->
