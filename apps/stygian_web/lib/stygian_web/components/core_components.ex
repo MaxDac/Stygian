@@ -17,8 +17,8 @@ defmodule StygianWeb.CoreComponents do
   alias Phoenix.LiveView.JS
   import StygianWeb.Gettext
 
-  alias Form
-  alias FormField
+  alias Phoenix.HTML.Form
+  alias Phoenix.HTML.FormField
 
   @doc """
   Renders a modal.
