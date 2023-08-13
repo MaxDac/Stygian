@@ -11,6 +11,7 @@ services:
         # Node Version: 12, 14, ...
         NODE_VERSION: "18"
     volumes:
+      - .:/workspace:cached
       - workspace-volume:/workspace
     command: sleep infinity
     # ports:
