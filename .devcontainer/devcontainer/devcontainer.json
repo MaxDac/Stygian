@@ -1,10 +1,10 @@
 {
     "workspaceFolder": "/workspace",
-    "name": "Stygian default environment",
+    "name": "Stygian dev container environment",
     "dockerComposeFile": "docker-compose.yml",
     "service": "elixir",
     "remoteUser": "vscode",
-    "postCreateCommand": "sudo chown vscode /workspace && git clone https://github.com/MaxDac/Stygian.git && mix deps.get && mix deps.compile && mix ecto.create && mix ecto.migrate && mix run apps/stygian/priv/repo/seeds.exs && npm install --prefix apps/stygian_web/assets",
+    "postCreateCommand": "sudo chown vscode /workspace && rm -rf Stygian && git clone https://github.com/MaxDac/Stygian.git && mix deps.get && mix deps.compile && mix ecto.create && mix ecto.migrate && mix run apps/stygian/priv/repo/seeds.exs && npm install --prefix apps/stygian_web/assets",
     // Trying activating it manually for more control
     // "postStartCommand": "mix phx.server",
 	"forwardPorts": [4000, 4001, 5432],

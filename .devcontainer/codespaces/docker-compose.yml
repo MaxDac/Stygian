@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  elixir:
+    build:
+      dockerfile: Dockerfile  
+      context: .
+      args:
+        # Elixir Version: 1.9, 1.10, 1.10.4, ...
+        VARIANT: "1.15.4-otp-25"
+        # Node Version: 12, 14, ...
+        NODE_VERSION: "18"
+    volumes:
+      - ../:/workspace:cached
+    command: sleep infinity
+    # ports:
+    #   - 4000:4000
+    # depends_on:
+    #   - db
+    network_mode: service:db
+  
+  db:
+    image: postgres
+    restart: unless-stopped
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: postgres
+      POSTGRES_DB: stygian_dev
+    volumes:
+      - /postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:            
