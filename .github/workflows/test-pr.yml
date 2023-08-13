@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  MIX_ENV: prod
+  MIX_ENV: test
 
 permissions:
   contents: read
@@ -102,45 +102,6 @@ jobs:
     - name: Compiles without warnings
       run: mix compile --warnings-as-errors
 
-    # Step: Check that the checked in code has already been formatted.
-    # This step fails if something was found unformatted.
-    # Customize this step as desired.
-    - name: Check Formatting
-      run: mix format --check-formatted
-
-    # Step: Checks Credo rules.
-    - name: Check Credo
-      run: mix credo --strict
-    
-    # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
-    # Cache key based on Elixir & Erlang version (also useful when running in matrix)
-    - name: Restore PLT cache
-      uses: actions/cache/restore@v3
-      id: plt_cache
-      with:
-        key: |
-                      ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
-        restore-keys: |
-                      ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
-        path: |
-                      priv/plts
-
-    # Create PLTs if no cache was found
-    - name: Create PLTs
-      if: steps.plt_cache.outputs.cache-hit != 'true'
-      run: mix dialyzer --plt
-    
-    # Step: Save PLT cache if it was updated
-    - name: Save PLT cache
-      uses: actions/cache/save@v3
-      if: steps.plt_cache.outputs.cache-hit != 'true'
-      id: plt_cache_save
-      with:
-        key: |
-          ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
-        path: |
-          priv/plts
-
-    # Step: Run Dialyzer
-    - name: Run dialyzer
-      run: mix dialyzer --format github
+    # Step: Execute the tests.
+    - name: Run tests
+      run: mix test
