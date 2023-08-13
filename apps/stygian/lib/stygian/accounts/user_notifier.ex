@@ -1,4 +1,6 @@
 defmodule Stygian.Accounts.UserNotifier do
+  @moduledoc false
+
   import Swoosh.Email
 
   alias Stygian.Mailer

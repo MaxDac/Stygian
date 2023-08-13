@@ -1,4 +1,6 @@
 defmodule Stygian.Maps.Map do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

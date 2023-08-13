@@ -30,12 +30,10 @@ defmodule StygianWeb.Release do
   end
 
   def seed do
-    try do
-      path = Application.app_dir(@backend_app, "priv/repo") <> "/seeds.exs"
-      Code.eval_file(path)
-    rescue
-      e ->
-        Logger.warning("Error while registering exception: #{inspect(e)}")
-    end
+    path = Application.app_dir(@backend_app, "priv/repo") <> "/seeds.exs"
+    Code.eval_file(path)
+  rescue
+    e ->
+      Logger.warning("Error while registering exception: #{inspect(e)}")
   end
 end

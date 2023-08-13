@@ -121,7 +121,6 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     {attribute_id, skill_id, modifier, difficulty} =
       {String.to_integer(attribute_id), String.to_integer(skill_id), String.to_integer(modifier),
        String.to_integer(difficulty)}
-      |> IO.inspect(label: "DiceThrower params")
 
     attribute = Enum.find(attributes, fn a -> a.id == attribute_id end)
     skill = Enum.find(skills, fn s -> s.id == skill_id end)

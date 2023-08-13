@@ -5,8 +5,8 @@ defmodule StygianWeb.ChatLive.OnlineLive do
 
   use StygianWeb, :container_live_view
 
-  alias StygianWeb.Presence
   alias StygianWeb.Endpoint
+  alias StygianWeb.Presence
 
   @impl true
   def mount(_params, _session, socket) do

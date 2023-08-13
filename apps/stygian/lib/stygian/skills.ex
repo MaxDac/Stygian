@@ -7,8 +7,8 @@ defmodule Stygian.Skills do
   alias Stygian.Repo
 
   alias Stygian.Skills.Skill
-  alias Stygian.Skills.SkillType
   alias Stygian.Skills.SkillRelSkillType
+  alias Stygian.Skills.SkillType
 
   @non_creational_skill_type_name "Non creational"
 
@@ -146,7 +146,7 @@ defmodule Stygian.Skills do
   Gets all the skills available on creation.
   """
   @spec list_creational_skills() :: [Skill.t()]
-  def list_creational_skills() do
+  def list_creational_skills do
     Skill
     |> distinct(true)
     |> from()

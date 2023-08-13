@@ -6,6 +6,10 @@ defmodule Stygian.Umbrella.MixProject do
       apps_path: "apps",
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
+      # Configuration due to new functionalities introduces in Elixir 1.15 that collides with dialyzer.
+      # Commented as added dialyzer dependency on each umbrella applications.
+      # https://github.com/jeremyjh/dialyxir/issues/508
+      prune_code_paths: false,
       deps: deps(),
       aliases: aliases(),
       releases: [
@@ -36,7 +40,7 @@ defmodule Stygian.Umbrella.MixProject do
       # Required to run "mix format" on ~H/.heex files from the umbrella root
       {:phoenix_live_view, ">= 0.0.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.3", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]
   end
 

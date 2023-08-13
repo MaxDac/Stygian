@@ -62,14 +62,6 @@ defmodule Stygian.CharactersTest do
       assert Characters.get_user_first_character(user_id) == character
     end
 
-    # TODO - fix in issue #16
-    # test "get_user_first_character/1 returns the first character created by the user" do
-    #   %{id: user_id} = user_fixture()
-    #   character1 = character_fixture(%{user_id: user_id})
-    #   character2 = character_fixture(%{name: "Second character", user_id: user_id})
-    #   assert Characters.get_user_first_character(user_id) == character1
-    # end
-
     test "create_character/1 with valid data creates a character" do
       %{id: user_id} = user_fixture()
 

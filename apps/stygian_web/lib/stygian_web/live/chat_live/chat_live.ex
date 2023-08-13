@@ -13,10 +13,10 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   use StygianWeb, :container_live_view
 
-  alias StygianWeb.ChatLive.ChatHelpers
+  alias Stygian.Maps
   alias StygianWeb.ChatLive.ChatControlLive
   alias StygianWeb.ChatLive.ChatDiceThrowerLive
-  alias Stygian.Maps
+  alias StygianWeb.ChatLive.ChatHelpers
   alias StygianWeb.Presence
 
   import StygianWeb.ChatLive.ChatEntryLive

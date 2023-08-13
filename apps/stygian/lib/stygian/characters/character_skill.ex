@@ -1,4 +1,6 @@
 defmodule Stygian.Characters.CharacterSkill do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -4,9 +4,10 @@ defmodule StygianWeb.ChatLive.ChatHelpers do
   """
 
   alias Phoenix.LiveView.Socket
-  alias StygianWeb.Endpoint
+
   alias Stygian.Maps.Chat
   alias StygianWeb.ChatLive.ChatLive
+  alias StygianWeb.Endpoint
 
   import Phoenix.LiveView
 

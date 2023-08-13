@@ -1,4 +1,6 @@
 defmodule Stygian.Maps.Chat do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

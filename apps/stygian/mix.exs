@@ -42,7 +42,9 @@ defmodule Stygian.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.2"},
       {:swoosh, "~> 1.3"},
-      {:finch, "~> 0.13"}
+      {:finch, "~> 0.13"},
+      # Adding the dependency on each singular app for [this issue](https://github.com/jeremyjh/dialyxir/issues/508)
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]
   end
 

@@ -11,7 +11,7 @@ services:
         # Node Version: 12, 14, ...
         NODE_VERSION: "18"
     volumes:
-      - ../:/workspace:cached
+      - workspace-volume:/workspace:cached
     command: sleep infinity
     # ports:
     #   - 4000:4000
@@ -33,3 +33,4 @@ services:
 
 volumes:
   postgres-data:            
+  workspace-volume:

@@ -1,0 +1,73 @@
+{
+    "workspaceFolder": "/workspace",
+    "name": "Stygian Codespaces environment",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "elixir",
+    "remoteUser": "vscode",
+    "postCreateCommand": "sudo chown vscode /workspace && mix deps.get && mix deps.compile && mix ecto.create && mix ecto.migrate && mix run apps/stygian/priv/repo/seeds.exs && npm install --prefix apps/stygian_web/assets",
+    // Trying activating it manually for more control
+    // "postStartCommand": "mix phx.server",
+	"forwardPorts": [4000, 4001, 5432],
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "version": "latest"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash",
+                "workbench.colorTheme": "Adwaita Dark & default syntax highlighting",
+                "workbench.iconTheme": "material-icon-theme",
+                "material-icon-theme.folders.theme": "specific",
+                "material-icon-theme.activeIconPack": "none",
+                "material-icon-theme.files.associations": {
+                    "*.html.heex": "ejs",
+                    "*test.exs": "test",
+                    "*.exs": "Liquid"
+                },
+                "material-icon-theme.folders.associations": {
+                    "live": "controller",
+                    "components": "layout",
+                    "priv": "public",
+                    ".gitpod": "config",
+                    ".elixir_ls": "config"
+                },
+                "editor.fontFamily": "FiraCode Nerd Font",
+                "terminal.integrated.fontFamily": "FiraCode Nerd Font",
+                "editor.fontSize": 12,
+                "scm.inputFontSize": 12,
+                "markdown.preview.fontSize": 12,
+                "debug.console.fontSize": 12,
+                "terminal.integrated.fontSize": 12,
+                "chat.editor.fontSize": 12,
+                "editor.fontLigatures": true,
+                "editor.rulers": [
+                    80,
+                    120
+                ],
+                "editor.lineNumbers": "relative"
+            },
+            "extensions": [
+                "bradlc.vscode-tailwindcss",
+                "donjayamanne.githistory",
+                "GitHub.codespaces",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "GitHub.github-vscode-theme",
+                "GitHub.vscode-pull-request-github",
+                "hbenl.vscode-test-explorer",
+                "JakeBecker.elixir-ls",
+                "mhutchie.git-graph",
+                "ms-ossdata.vscode-postgresql",
+                "ms-vscode.test-adapter-converter",
+                "pantajoe.vscode-elixir-credo",
+                "phoenixframework.phoenix",
+                "piousdeer.adwaita-theme",
+                "PKief.material-icon-theme",
+                "vscodevim.vim",
+                "waderyan.gitblame"
+            ]
+        }
+    }
+}
