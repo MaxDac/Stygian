@@ -12,7 +12,9 @@ services:
         NODE_VERSION: "18"
     volumes:
       - .:/workspace:cached
-      - workspace-volume:/workspace
+      - workspace-volume-build:/workspace/_build:cached
+      - workspace-volume-ls:/workspace/elixir_ls:cached
+      - workspace-volume-deps:/workspace/deps:cached
     command: sleep infinity
     # ports:
     #   - 4000:4000
@@ -34,4 +36,6 @@ services:
 
 volumes:
   postgres-data:            
-  workspace-volume:
+  workspace-volume-build:
+  workspace-volume-ls:
+  workspace-volume-deps:
