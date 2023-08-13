@@ -7,6 +7,7 @@ defmodule Stygian.Maps do
   alias Stygian.Repo
 
   alias Stygian.Maps.Map
+  alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
 
   @default_limit_in_hour 2
