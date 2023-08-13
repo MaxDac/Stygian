@@ -1,9 +1,13 @@
 <div class="h-[calc(100vh-2.5rem)] w-full flex flex-col justify-start overflow-y-hidden">
-  <.chat_entries_screen
+  <div
+    id={"chat-screen-#{@map.id}"}
     class="overflow-y-auto min-h-[calc(100vh-150px-3.5rem)]"
-    map_id={@map.id}
-    chat_entries={@chat_entries}
-  />
+    phx-hook="ChatScreen"
+  >
+    <%= for chat <- @chat_entries do %>
+      <.chat_entry chat={chat} />
+    <% end %>
+  </div>
 
   <%= if @current_character do %>
     <.live_component
@@ -12,8 +16,23 @@
       current_character={@current_character}
       current_user={@current_user}
       textarea_id={@textarea_id}
+      dice_button_id={@dice_button_id}
       class="min-h-[150px]"
       map={@map}
     />
+
+    <.modal
+      :if={@show_dice_thrower}
+      id="dice-thrower-modal"
+      show
+      on_cancel={JS.patch(~p"/chat/#{@map.id}")}
+    >
+      <.live_component
+        module={ChatDiceThrowerLive}
+        id={@current_character.id}
+        current_character={@current_character}
+        map={@map}
+      />
+    </.modal>
   <% end %>
 </div>

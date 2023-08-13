@@ -5,6 +5,8 @@ defmodule StygianWeb.Presence do
 
   alias StygianWeb.Presence
 
+  require Logger
+
   @user_activity_topic "user_activity"
 
   def get_online_topic, do: @user_activity_topic
@@ -58,14 +60,21 @@ defmodule StygianWeb.Presence do
     presences
     |> Map.to_list()
     |> Enum.map(&map_onlines/1)
-    |> Enum.reduce(%{}, fn %{map: %{name: map_name} = character_map, character: character}, map ->
-      if Map.has_key?(map, map_name) do
-        info = map[map_name]
-        Map.replace(map, map_name, [%{character: character, map: character_map} | info])
-      else
-        Map.put(map, map_name, [%{character: character, map: character_map}])
-      end
-    end)
+    |> Enum.reduce(%{}, &match_presence/2)
+  end
+
+  defp match_presence(%{map: %{name: map_name} = character_map, character: character}, map) do
+    if Map.has_key?(map, map_name) do
+      info = map[map_name]
+      Map.replace(map, map_name, [%{character: character, map: character_map} | info])
+    else
+      Map.put(map, map_name, [%{character: character, map: character_map}])
+    end
+  end
+
+  defp match_presence(wrong_match, map) do
+    Logger.error("Error while mapping presences: #{inspect(wrong_match)}")
+    map
   end
 
   defp map_character(%{

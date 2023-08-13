@@ -15,6 +15,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   alias StygianWeb.ChatLive.ChatHelpers
   alias StygianWeb.ChatLive.ChatControlLive
+  alias StygianWeb.ChatLive.ChatDiceThrowerLive
   alias Stygian.Maps
   alias StygianWeb.Presence
 
@@ -32,10 +33,12 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:ok,
      socket
      |> assign_map(map_id)
+     |> assign(:show_dice_thrower, false)
      |> update_presence()
      |> assign_chat_entries(Maps.list_map_chats(map_id))
      |> ChatHelpers.subscribe_to_chat_events(map_id)
-     |> assign_textarea_id()}
+     |> assign_textarea_id()
+     |> assign_dice_button_id()}
   end
 
   @impl true
@@ -49,6 +52,33 @@ defmodule StygianWeb.ChatLive.ChatLive do
   def handle_info({:chat_input_sent, _}, socket) do
     send_update(ChatControlLive, id: socket.assigns.map.id, textarea_id: new_textarea_id())
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:close_modal, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_dice_thrower, false)
+     |> assign_dice_button_id()}
+  end
+
+  # This is called when the dice thrower modal is closed
+  @impl true
+  def handle_info({:chat, _}, socket) do
+    send_update(ChatControlLive, id: socket.assigns.map.id)
+
+    {:noreply,
+     socket
+     |> assign(:show_dice_thrower, false)
+     |> assign_dice_button_id()}
+  end
+
+  # Dice button clicked
+  @impl true
+  def handle_event("open_dices", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_dice_thrower, true)}
   end
 
   defp assign_new_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do
@@ -68,7 +98,13 @@ defmodule StygianWeb.ChatLive.ChatLive do
     assign(socket, :textarea_id, new_textarea_id())
   end
 
+  defp assign_dice_button_id(socket) do
+    assign(socket, :dice_button_id, new_dice_button_id())
+  end
+
   defp new_textarea_id, do: "textarea-id-#{:rand.uniform(10)}"
+
+  defp new_dice_button_id, do: "dice-button-id-#{:rand.uniform(10)}"
 
   defp update_presence(
          %{

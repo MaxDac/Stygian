@@ -48,7 +48,11 @@ defmodule StygianWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div
+        id={"#{@id}-bg"}
+        class="bg-container-background/80 fixed inset-0 transition-opacity"
+        aria-hidden="true"
+      />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -64,7 +68,7 @@ defmodule StygianWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="shadow-black/10 ring-brand/10 border border-brand-inactive relative hidden rounded-2xl bg-container-background p-14 shadow-lg ring-1 transition"
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -73,7 +77,7 @@ defmodule StygianWeb.CoreComponents do
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
                   aria-label={gettext("close")}
                 >
-                  <.icon name="hero-x-mark-solid" class="h-5 w-5" />
+                  <.icon name="close" class="h-4 w-4" />
                 </button>
               </div>
               <div id={"#{@id}-content"}>
@@ -107,24 +111,25 @@ defmodule StygianWeb.CoreComponents do
     ~H"""
     <div
       :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
-      id={@id}
+      d={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        "fixed top-2 right-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1 font-typewriter",
+        @kind == :info && "bg-container-background text-brand ring-brand fill-container-background",
+        @kind == :error &&
+          "bg-container-background text-rose-300 shadow-md ring-rose-700 fill-container-background"
       ]}
       {@rest}
     >
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
+        <.icon :if={@kind == :info} name="info" class="h-2 w-2" />
+        <.icon :if={@kind == :error} name="exclamation" class="h-2 w-2" />
         <%= @title %>
       </p>
       <p class="mt-2 text-sm leading-5"><%= msg %></p>
       <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
-        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
+        <.icon name="close" class="h-3 w-3 opacity-40 group-hover:opacity-70" />
       </button>
     </div>
     """
@@ -151,7 +156,7 @@ defmodule StygianWeb.CoreComponents do
       phx-connected={hide("#client-error")}
       hidden
     >
-      Attempting to reconnect <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
+      Attempting to reconnect <.icon name="reconnect" class="ml-1 h-3 w-3 animate-spin" />
     </.flash>
 
     <.flash
@@ -163,7 +168,7 @@ defmodule StygianWeb.CoreComponents do
       hidden
     >
       Hang in there while we get back on track
-      <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
+      <.icon name="reconnect" class="ml-1 h-3 w-3 animate-spin" />
     </.flash>
     """
   end
@@ -332,7 +337,7 @@ defmodule StygianWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="mt-2 block w-full text-lg font-typewriter rounded-md border border-brand bg-container-background shadow-sm focus:border-brand focus:ring-0"
         multiple={@multiple}
         {@rest}
       >
@@ -459,7 +464,7 @@ defmodule StygianWeb.CoreComponents do
   def error(assigns) do
     ~H"""
     <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
-      <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
+      <.icon name="exclamation" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>
     """
@@ -594,29 +599,118 @@ defmodule StygianWeb.CoreComponents do
   end
 
   @doc """
-  Renders a [Heroicon](https://heroicons.com).
-
-  Heroicons come in three styles – outline, solid, and mini.
-  By default, the outline style is used, but solid and mini may
-  be applied by using the `-solid` and `-mini` suffix.
-
-  You can customize the size and colors of the icons by setting
-  width, height, and background color classes.
-
-  Icons are extracted from your `assets/vendor/heroicons` directory and bundled
-  within your compiled app.css by the plugin in your `assets/tailwind.config.js`.
-
-  ## Examples
-
-      <.icon name="hero-x-mark-solid" />
-      <.icon name="hero-arrow-path" class="ml-1 w-3 h-3 animate-spin" />
+  Renders an icon.
+  Each icon SVG must be added manually
   """
   attr :name, :string, required: true
   attr :class, :string, default: nil
 
-  def icon(%{name: "hero-" <> _} = assigns) do
+  def icon(%{name: "close"} = assigns) do
     ~H"""
-    <span class={[@name, @class]} />
+    <svg
+      class={"#{@class} text-zinc-100"}
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 14 14"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+      />
+    </svg>
+    """
+  end
+
+  def icon(%{name: "info"} = assigns) do
+    ~H"""
+    <svg
+      class={"#{@class} text-zinc-100"}
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+    """
+  end
+
+  def icon(%{name: "exclamation"} = assigns) do
+    ~H"""
+    <svg
+      class={"#{@class} text-zinc-100"}
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+    """
+  end
+
+  def icon(%{name: "reconnect"} = assigns) do
+    ~H"""
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="m1 14 3-3m-3 3 3 3m-3-3h16v-3m2-7-3 3m3-3-3-3m3 3H3v3"
+      />
+    </svg>
+    <svg
+      class={"#{@class} text-zinc-100"}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-6 h-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+      />
+    </svg>
+    """
+  end
+
+  def icon(assigns) do
+    ~H"""
+    <svg
+      class={"#{@class} text-zinc-100"}
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
     """
   end
 
