@@ -375,12 +375,7 @@ defmodule StygianWeb.CoreComponents do
 
   def input(%{type: "hidden"} = assigns) do
     ~H"""
-    <input
-      type="hidden"
-      name={@name}
-      id={@id}
-      value={Form.normalize_value(@type, @value)}
-    />
+    <input type="hidden" name={@name} id={@id} value={Form.normalize_value(@type, @value)} />
     """
   end
 
