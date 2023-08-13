@@ -10,13 +10,8 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
   """
   def chat_entry(%{chat: %{type: :master}} = assigns) do
     ~H"""
-    <div class="text-medium text-brand text-[1rem] flex justify-start space-x-5 mb-5">
-      <div
-        :if={@chat.type == :master}
-        class="font-typewriter text-white text-center not-format w-full"
-      >
-        <%= raw(Earmark.as_html!(@chat.text)) %>
-      </div>
+    <div class="font-typewriter text-white text-medium text-[1rem] text-center not-format w-full">
+      <%= raw(Earmark.as_html!(@chat.text)) %>
     </div>
     """
   end
@@ -36,10 +31,26 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
     """
   end
 
+  def chat_entry(%{chat: %{type: :dices}} = assigns) do
+    ~H"""
+    <div class="text-medium text-brand text-[1rem] flex justify-start space-x-5 mb-5">
+      <.chat_avatar chat={@chat} />
+      <div class="w-full">
+        <div class="font-report">
+          <%= chat_time(@chat.inserted_at) %> - <%= @chat.character.name %>
+        </div>
+        <div class="font-typewriter text-rose-500 not-format">
+          <%= raw(Earmark.as_html!(@chat.text)) %>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
   def chat_entry(assigns) do
     ~H"""
     <div class="text-medium text-brand text-[1rem] flex justify-start space-x-5 mb-5">
-      <.chat_avatar :if={@chat.type != :master} chat={@chat} />
+      <.chat_avatar chat={@chat} />
       <div class="w-full">
         <div class="font-report">
           <%= chat_time(@chat.inserted_at) %> - <%= @chat.character.name %>

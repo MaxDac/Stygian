@@ -4,6 +4,8 @@ defmodule Stygian.SkillsFixtures do
   entities via the `Stygian.Skills` context.
   """
 
+  def unique_skill_name, do: "skill#{System.unique_integer()}"
+
   @doc """
   Generate a skill_type.
   """
@@ -27,7 +29,7 @@ defmodule Stygian.SkillsFixtures do
       attrs
       |> Enum.into(%{
         description: "some description",
-        name: "some name"
+        name: unique_skill_name()
       })
       |> Stygian.Skills.create_skill()
 

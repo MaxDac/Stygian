@@ -9,6 +9,8 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   alias Stygian.Characters.DiceThrower
   alias Stygian.Maps
 
+  alias StygianWeb.ChatLive.ChatHelpers
+
   @impl true
   def update(assigns, socket) do
     {:ok,
@@ -44,7 +46,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
             field={@form[:modifier]}
             label="Modificatore"
             type="select"
-            options={range_as_options(0..10)}
+            options={range_as_options(-3..3)}
           />
 
           <.input
@@ -107,7 +109,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
 
   defp insert_dice_chat(%{assigns: %{
     current_character: character,
-    map: %{id: map_id},
+    map: map,
     attributes: attributes,
     skills: skills
   }} = socket, %{
@@ -123,37 +125,26 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
        String.to_integer(difficulty)}
       |> IO.inspect(label: "DiceThrower params")
 
-    IO.inspect(attributes |> Enum.at(0), label: "attributes")
+    attribute = Enum.find(attributes, fn a -> a.id == attribute_id end)
+    skill = Enum.find(skills, fn s -> s.id == skill_id end)
 
-    dice_result = :rand.uniform(20)
-    attribute_value = Enum.find(attributes, fn a -> a.id == attribute_id end).value
-    skill_value = Enum.find(skills, fn s -> s.id == skill_id end).value
+    request = %{
+      character: character,
+      map: map,
+      attribute: attribute,
+      skill: skill,
+      modifier: modifier,
+      difficulty: difficulty
+    }
 
-    result = dice_result + attribute_value + skill_value + modifier
+    dice_thrower = &:rand.uniform/1
 
-    text =
-      case {dice_result, result} do
-        {1, _} ->
-          "Hai ottenuto un fallimento critico."
-        {20, _} ->
-          "Hai ottenuto un successo critico."
-        {_, n} when n < difficulty ->
-          "Hai ottenuto un fallimento."
-        _ ->
-          "Hai ottenuto un successo."
-      end
-
-    insertion_result = Maps.create_chat(%{
-      character_id: character.id,
-      text: text,
-      map_id: map_id,
-      type: :dices
-    })
-
-    case insertion_result do
+    case Maps.create_dice_throw_chat_entry(request, dice_thrower) do
       {:ok, chat} ->
         send(self(), {:chat, chat})
-        {:noreply, socket}
+        {:noreply,
+         socket
+         |> ChatHelpers.handle_chat_created(chat)}
       _ ->
         {:noreply,
          socket
