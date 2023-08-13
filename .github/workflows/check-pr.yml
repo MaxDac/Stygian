@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  MIX_ENV: prod
+  MIX_ENV: dev
 
 permissions:
   contents: read
