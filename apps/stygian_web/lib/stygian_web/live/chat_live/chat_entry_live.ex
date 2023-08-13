@@ -6,19 +6,6 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
   use StygianWeb, :html
 
   @doc """
-  Creates the chat entries screen.
-  """
-  def chat_entries_screen(assigns) do
-    ~H"""
-    <div id={"chat-screen-#{@map_id}"} class={@class} phx-hook="ChatScreen">
-      <%= for chat <- @chat_entries do %>
-        <.chat_entry chat={chat} />
-      <% end %>
-    </div>
-    """
-  end
-
-  @doc """
   Creates the chat entry in the chat window.
   """
   def chat_entry(%{chat: %{type: :master}} = assigns) do

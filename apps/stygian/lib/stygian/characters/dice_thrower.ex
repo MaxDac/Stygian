@@ -16,12 +16,11 @@ defmodule Stygian.Characters.DiceThrower do
 
   alias Stygian.Characters.DiceThrower
 
-
   @type t() :: %__MODULE__{
-          attribute_id: non_neg_integer(),
-          skill_id: non_neg_integer(),
-          modifier: non_neg_integer(),
-          difficulty: non_neg_integer()
+          attribute_id: non_neg_integer() | nil,
+          skill_id: non_neg_integer() | nil,
+          modifier: non_neg_integer() | nil,
+          difficulty: non_neg_integer() | nil
         }
 
   @spec changeset(DiceThrower.t(), map()) :: Ecto.Changeset.t()

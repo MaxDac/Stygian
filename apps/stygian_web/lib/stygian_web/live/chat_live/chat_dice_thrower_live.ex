@@ -64,7 +64,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   end
 
   @impl true
-  def handle_event("submit", %{"dice_thrower" => params}, socket) do
+  def handle_event("submit", %{"dice_thrower" => params}, socket) when is_map(params) do
     changeset = DiceThrower.changeset(%DiceThrower{}, params)
 
     if changeset.valid? do
