@@ -54,7 +54,7 @@ defmodule StygianWeb.MixProject do
       {:gen_smtp, "~> 1.2"},
       {:earmark, "~> 1.4"},
       # Adding the dependency on each singular app for [this issue](https://github.com/jeremyjh/dialyxir/issues/508)
-      {:dialyxir, "~> 1.3", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]
   end
 

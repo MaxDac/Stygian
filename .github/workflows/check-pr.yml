@@ -92,6 +92,36 @@ jobs:
         mix clean
       shell: sh
 
+      
+    # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
+    # Cache key based on Elixir & Erlang version (also useful when running in matrix)
+    - name: Restore PLT cache
+      uses: actions/cache/restore@v3
+      id: plt_cache
+      with:
+        key: |
+                      ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
+        restore-keys: |
+                      ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
+        path: |
+                      priv/plts
+
+    # Create PLTs if no cache was found
+    - name: Create PLTs
+      if: steps.plt_cache.outputs.cache-hit != 'true'
+      run: mix dialyzer --plt
+    
+    # Step: Save PLT cache if it was updated
+    - name: Save PLT cache
+      uses: actions/cache/save@v3
+      if: steps.plt_cache.outputs.cache-hit != 'true'
+      id: plt_cache_save
+      with:
+        key: |
+          ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
+        path: |
+          priv/plts
+
     # Step: Download project dependencies. If unchanged, uses
     # the cached version.
     - name: Install dependencies
@@ -111,10 +141,10 @@ jobs:
     # Step: Checks Credo rules.
     - name: Check Credo
       run: mix credo --strict
-
-    # Step: Checks Dialyzer rules.
-    - name: Check Dialyzer
-      run: mix dialyzer --halt-exit-status
+    
+    # Step: Run Dialyzer
+    - name: Run dialyzer
+      run: mix dialyzer --format github
 
     # Step: Execute the tests.
     - name: Run tests
