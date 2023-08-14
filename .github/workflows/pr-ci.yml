@@ -26,7 +26,7 @@ jobs:
     # The `runs-on` configuration must be set only at the top level workflow execution.
     runs-on: ubuntu-latest
 
-    name: PR CI Build Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
+    name: Pull Request CI Build Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
 
     strategy:
       # Specify the OTP and Elixir versions to use when building
