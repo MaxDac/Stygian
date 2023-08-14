@@ -1,25 +1,24 @@
 name: Elixir CI - Tests
+description: "Runs tests on the codebase."
 
-on:
-  workflow_call:
-    inputs:
-      postgres_image_version:
-        description: 'Postgres image version'
-        required: true
-        default: 'postgres:11'
-      postgres_test_password:
-        description: 'Postgres test password'
-        required: true
-      otp:
-        type: string
-        description: 'OTP version'
-        required: true
-        default: '25.2.3'
-      elixir:
-        type: string
-        description: 'Elixir version'
-        required: true
-        default: '1.15.4'
+inputs:
+  postgres_image_version:
+    description: 'Postgres image version'
+    required: true
+    default: 'postgres:11'
+  postgres_test_password:
+    description: 'Postgres test password'
+    required: true
+  otp:
+    type: string
+    description: 'OTP version'
+    required: true
+    default: '25.2.3'
+  elixir:
+    type: string
+    description: 'Elixir version'
+    required: true
+    default: '1.15.4'
 
 env:
   MIX_ENV: test
@@ -27,32 +26,22 @@ env:
 permissions:
   contents: read
 
-jobs:
-  build:
-    services:
-      db:
-        image: ${{ inputs.postgres_image_version }}
-        ports: ['5432:5432']
-        env:
-          POSTGRES_PASSWORD: ${{ inputs.postgres_test_password }}
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+runs:
+  using: "composite"
 
+  services:
+    db:
+      image: ${{ inputs.postgres_image_version }}
+      ports: ['5432:5432']
+      env:
+        POSTGRES_PASSWORD: ${{ inputs.postgres_test_password }}
+      options: >-
+        --health-cmd pg_isready
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
 
-    name: Test on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
-
-    strategy:
-      # Specify the OTP and Elixir versions to use when building
-      # and running the workflow steps.
-      matrix:
-        otp: ['25.2.3']
-        elixir: ['1.15.4']
-
-    steps:
-
+  steps:
     # Step: Setup Elixir + Erlang image as the base.
     - name: Set up Elixir
       uses: erlef/setup-beam@v1

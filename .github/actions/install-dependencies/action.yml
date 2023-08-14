@@ -1,28 +1,25 @@
 name: dependencies
+description: 'Install required dependencies and compiles them'
 
-on:
-  workflow_call:
-    inputs:
-      otp:
-        type: string
-        description: 'OTP version'
-        required: true
-        default: '25.2.3'
-      elixir:
-        type: string
-        description: 'Elixir version'
-        required: true
-        default: '1.15.4'
+inputs:
+  otp:
+    type: string
+    description: 'OTP version'
+    required: true
+    default: '25.2.3'
+  elixir:
+    type: string
+    description: 'Elixir version'
+    required: true
+    default: '1.15.4'
 
 permissions:
   contents: read
 
-jobs:
-  build:
-    name: Install dependencies on OTP ${{inputs.otp}} / Elixir ${{inputs.elixir}}
+runs:
+  using: "composite"
 
-    steps:
-
+  steps:
     # Step: Define how to cache deps. Restores existing cache if present.
     - name: Cache deps
       id: cache-deps

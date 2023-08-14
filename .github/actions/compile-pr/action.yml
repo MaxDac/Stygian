@@ -22,43 +22,44 @@ permissions:
 runs:
   using: "composite"
 
-  # Step: Setup Elixir + Erlang image as the base.
-  - name: Set up Elixir
-    uses: erlef/setup-beam@v1
-    with:
-      otp-version: ${{ inputs.otp }}
-      elixir-version: ${{ inputs.elixir }}
-
   steps:
-  # Step: Setup project and install/cache dependencies.
-  - name: Install dependencies
-    uses: ./.github/actions/install-dependencies
-    with:
-      otp: ${{ inputs.otp }}
-      elixir: ${{ inputs.elixir }}
+    # Step: Setup Elixir + Erlang image as the base.
+    - name: Set up Elixir
+      uses: erlef/setup-beam@v1
+      with:
+        otp-version: ${{ inputs.otp }}
+        elixir-version: ${{ inputs.elixir }}
 
-  # Step: Compile the project treating any warnings as errors.
-  # Customize this step if a different behavior is desired.
-  - name: Compiles without warnings
-    run: mix compile --warnings-as-errors
+    steps:
+    # Step: Setup project and install/cache dependencies.
+    - name: Install dependencies
+      uses: ./.github/actions/install-dependencies
+      with:
+        otp: ${{ inputs.otp }}
+        elixir: ${{ inputs.elixir }}
 
-  # Step: Check that the checked in code has already been formatted.
-  # This step fails if something was found unformatted.
-  # Customize this step as desired.
-  - name: Check Formatting
-    run: mix format --check-formatted
+    # Step: Compile the project treating any warnings as errors.
+    # Customize this step if a different behavior is desired.
+    - name: Compiles without warnings
+      run: mix compile --warnings-as-errors
 
-  # Step: Checks Credo rules.
-  - name: Check Credo
-    run: mix credo --strict
-  
-  # Step: Retrieving from cache or building and caching the PLTs for dialyzer
-  - name: Caching PLTs
-    uses: ./.github/actions/cache-plts
-    with:
-      otp: ${{ inputs.otp }}
-      elixir: ${{ inputs.elixir }}
+    # Step: Check that the checked in code has already been formatted.
+    # This step fails if something was found unformatted.
+    # Customize this step as desired.
+    - name: Check Formatting
+      run: mix format --check-formatted
 
-  # Step: Run Dialyzer
-  - name: Run dialyzer
-    run: mix dialyzer --format github
+    # Step: Checks Credo rules.
+    - name: Check Credo
+      run: mix credo --strict
+    
+    # Step: Retrieving from cache or building and caching the PLTs for dialyzer
+    - name: Caching PLTs
+      uses: ./.github/actions/cache-plts
+      with:
+        otp: ${{ inputs.otp }}
+        elixir: ${{ inputs.elixir }}
+
+    # Step: Run Dialyzer
+    - name: Run dialyzer
+      run: mix dialyzer --format github
