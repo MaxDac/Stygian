@@ -69,7 +69,7 @@ jobs:
 
     # Step: Setup project and install/cache dependencies.
     - name: Install dependencies
-      uses: ./actions/install-dependencies.yml
+      uses: ./.github/actions/install-dependencies
       with:
         otp: ${{ matrix.otp }}
         elixir: ${{ matrix.elixir }}

@@ -41,7 +41,7 @@ jobs:
     steps:
     # Step: Setup project and install/cache dependencies.
     - name: Install dependencies
-      uses: ./actions/install-dependencies.yml
+      uses: ./.github/actions/install-dependencies
       with:
         otp: ${{ inputs.otp }}
         elixir: ${{ inputs.elixir }}
@@ -63,7 +63,7 @@ jobs:
     
     # Step: Retrieving from cache or building and caching the PLTs for dialyzer
     - name: Caching PLTs
-      uses: ./actions/cache-plts.yml
+      uses: ./.github/actions/cache-plts
       with:
         otp: ${{ inputs.otp }}
         elixir: ${{ inputs.elixir }}

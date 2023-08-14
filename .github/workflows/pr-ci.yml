@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: Build PR
-        uses: ./actions/compile-pr.yml
+        uses: ./.github/actions/compile-pr
         with: 
           otp: ${{ matrix.otp }}
           elixir: ${{ matrix.elixir }}
@@ -58,7 +58,7 @@ jobs:
 
     steps:
       - name: Build PR
-        uses: ./actions/test-pr.yml
+        uses: ./.github/actions/test-pr
         with: 
           otp: ${{ matrix.otp }}
           elixir: ${{ matrix.elixir }}
