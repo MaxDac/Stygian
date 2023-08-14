@@ -11,6 +11,10 @@ on:
 
     branches: 
       - main
+  
+  push:
+    branches: main
+    branches-ignore: main
 
 env:
   MIX_ENV: dev
