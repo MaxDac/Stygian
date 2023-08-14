@@ -19,9 +19,6 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
     name: PLT caching on OTP ${{ inputs.otp }} / Elixir ${{ inputs.elixir }}
 
     steps:

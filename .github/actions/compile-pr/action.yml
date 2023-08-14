@@ -22,9 +22,6 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
     name: Test on OTP ${{ inputs.otp }} / Elixir ${{ inputs.elixir }}
 
     # Step: Setup Elixir + Erlang image as the base.

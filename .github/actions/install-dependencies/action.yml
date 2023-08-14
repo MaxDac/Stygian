@@ -19,9 +19,6 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
     name: Install dependencies on OTP ${{inputs.otp}} / Elixir ${{inputs.elixir}}
 
     steps:

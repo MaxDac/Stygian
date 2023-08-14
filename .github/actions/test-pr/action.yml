@@ -29,9 +29,6 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
     services:
       db:
         image: ${{ inputs.postgres_image_version }}
