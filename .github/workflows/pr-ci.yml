@@ -23,7 +23,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     name: PR CI Build Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
@@ -37,7 +36,7 @@ jobs:
 
     steps:
       - name: Build PR
-        uses: MaxDac/Stygian/.github/workflows/actions/compile-pr.yml@main
+        uses: ./actions/compile-pr.yml
         with: 
           otp: ${{ matrix.otp }}
           elixir: ${{ matrix.elixir }}
@@ -59,7 +58,7 @@ jobs:
 
     steps:
       - name: Build PR
-        uses: MaxDac/Stygian/.github/workflows/actions/test-pr.yml@main
+        uses: ./actions/test-pr.yml
         with: 
           otp: ${{ matrix.otp }}
           elixir: ${{ matrix.elixir }}

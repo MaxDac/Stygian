@@ -30,7 +30,7 @@ jobs:
     steps:
     # Step: Setup project and install/cache dependencies.
     - name: Install dependencies
-      uses: MaxDac/Stygian/.github/workflows/actions/install-dependencies.yml@main
+      uses: ./actions/install-dependencies.yml
       with:
         otp: ${{ inputs.otp }}
         elixir: ${{ inputs.elixir }}
@@ -52,7 +52,7 @@ jobs:
     
     # Step: Retrieving from cache or building and caching the PLTs for dialyzer
     - name: Caching PLTs
-      uses: MaxDac/Stygian/.github/workflows/actions/cache-plts.yml@main
+      uses: ./actions/cache-plts.yml
       with:
         otp: ${{ inputs.otp }}
         elixir: ${{ inputs.elixir }}

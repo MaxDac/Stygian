@@ -58,7 +58,7 @@ jobs:
 
     # Step: Setup project and install/cache dependencies.
     - name: Install dependencies
-      uses: MaxDac/Stygian/.github/workflows/actions/install-dependencies.yml@main
+      uses: ./actions/install-dependencies.yml
       with:
         otp: ${{ matrix.otp }}
         elixir: ${{ matrix.elixir }}
