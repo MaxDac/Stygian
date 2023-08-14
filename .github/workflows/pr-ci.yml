@@ -2,6 +2,13 @@ name: Elixir CI - Compilation
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+      - ready_for_review
+
     branches: 
       - main
 
