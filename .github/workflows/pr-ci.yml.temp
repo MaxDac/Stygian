@@ -1,0 +1,61 @@
+# Enable this in a second PR
+# name: Elixir CI - Compilation
+
+# on:
+#   pull_request:
+#     branches: 
+#       - main
+#     types:
+#       - opened
+#       - synchronize
+#       - reopened
+#       - ready_for_review
+
+# env:
+#   MIX_ENV: dev
+
+# permissions:
+#   contents: read
+
+# jobs:
+#   build:
+
+#     runs-on: ubuntu-latest
+
+#     name: PR CI Build Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
+
+#     strategy:
+#       # Specify the OTP and Elixir versions to use when building
+#       # and running the workflow steps.
+#       matrix:
+#         otp: ['25.2.3']
+#         elixir: ['1.15.4']
+
+#     steps:
+#       - name: Build PR
+#         uses: MaxDac/Stygian/.github/workflows/actions/compile-pr.yml@main
+#         with: 
+#           otp: ${{ matrix.otp }}
+#           elixir: ${{ matrix.elixir }}
+
+#   test:
+
+#     needs: build
+
+#     runs-on: ubuntu-latest
+
+#     name: PR CI Test Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
+
+#     strategy:
+#       # Specify the OTP and Elixir versions to use when building
+#       # and running the workflow steps.
+#       matrix:
+#         otp: ['25.2.3']
+#         elixir: ['1.15.4']
+
+#     steps:
+#       - name: Build PR
+#         uses: MaxDac/Stygian/.github/workflows/actions/test-pr.yml@main
+#         with: 
+#           otp: ${{ matrix.otp }}
+#           elixir: ${{ matrix.elixir }}
