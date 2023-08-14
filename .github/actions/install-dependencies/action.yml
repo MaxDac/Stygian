@@ -1,61 +1,25 @@
-name: Elixir CI - Tests
+name: dependencies
+description: 'Install required dependencies and compiles them'
 
-on:
-  pull_request:
-    branches: 
-      = main
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-
-env:
-  MIX_ENV: test
+inputs:
+  otp:
+    type: string
+    description: 'OTP version'
+    required: true
+    default: '25.2.3'
+  elixir:
+    type: string
+    description: 'Elixir version'
+    required: true
+    default: '1.15.4'
 
 permissions:
   contents: read
 
-jobs:
-  build:
+runs:
+  using: "composite"
 
-    runs-on: ubuntu-latest
-
-    services:
-      db:
-        image: postgres:11
-        ports: ['5432:5432']
-        env:
-          POSTGRES_PASSWORD: mysecretpassword
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-
-    name: Test on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
-
-    strategy:
-      # Specify the OTP and Elixir versions to use when building
-      # and running the workflow steps.
-      matrix:
-        otp: ['25.2.3']
-        elixir: ['1.15.4']
-
-    steps:
-
-    # Step: Setup Elixir + Erlang image as the base.
-    - name: Set up Elixir
-      uses: erlef/setup-beam@v1
-      with:
-        otp-version: ${{matrix.otp}}
-        elixir-version: ${{matrix.elixir}}
-
-    # Step: Check out the code.
-    - name: Checkout code
-      uses: actions/checkout@v3
-
+  steps:
     # Step: Define how to cache deps. Restores existing cache if present.
     - name: Cache deps
       id: cache-deps
@@ -91,25 +55,13 @@ jobs:
     # that are retried.
     - name: Clean to rule out incremental build as a source of flakiness
       if: github.run_attempt != '1'
+      shell: bash
       run: |
         mix deps.clean --all
         mix clean
-      shell: sh
       
     # Step: Download project dependencies. If unchanged, uses
     # the cached version.
     - name: Install dependencies
+      shell: sh
       run: mix deps.get
-
-    # Step: Compile the project treating any warnings as errors.
-    # Customize this step if a different behavior is desired.
-    - name: Compiles without warnings
-      run: mix compile --warnings-as-errors
-
-    # Step: Checks Credo rules.
-    - name: Check Credo
-      run: mix credo --strict
-
-    # Step: Execute the tests.
-    - name: Run tests
-      run: mix test

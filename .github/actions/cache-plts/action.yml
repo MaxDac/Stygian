@@ -1,31 +1,25 @@
-name: dependencies
+name: cache-plts
+description: 'Cache PLTs for Dialyzer'
 
-on:
-  workflow_call:
-    inputs:
-      otp:
-        type: string
-        description: 'OTP version'
-        required: true
-        default: '25.2.3'
-      elixir:
-        type: string
-        description: 'Elixir version'
-        required: true
-        default: '1.15.4'
+inputs:
+  otp:
+    type: string
+    description: 'OTP version'
+    required: true
+    default: '25.2.3'
+  elixir:
+    type: string
+    description: 'Elixir version'
+    required: true
+    default: '1.15.4'
 
 permissions:
   contents: read
 
-jobs:
-  build:
+runs:
+  using: "composite"
 
-    runs-on: ubuntu-latest
-
-    name: PLT caching on OTP ${{ inputs.otp }} / Elixir ${{ inputs.elixir }}
-
-    steps:
-
+  steps:
     # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
     # Cache key based on Elixir & Erlang version (also useful when running in matrix)
     - name: Restore PLT cache
@@ -42,6 +36,7 @@ jobs:
     # Create PLTs if no cache was found
     - name: Create PLTs
       if: steps.plt_cache.outputs.cache-hit != 'true'
+      shell: bash
       run: mix dialyzer --plt
     
     # Step: Save PLT cache if it was updated
@@ -54,3 +49,11 @@ jobs:
           ${{ runner.os }}-${{ inputs.elixir }}-${{ inputs.otp }}-plt
         path: |
           priv/plts
+    
+    # Step: Retrieving from cache or building and caching the PLTs for dialyzer
+    - name: Caching PLTs
+      uses: ./.github/actions/cache-plts
+      with:
+        otp: ${{ inputs.otp }}
+        elixir: ${{ inputs.elixir }}
+    
