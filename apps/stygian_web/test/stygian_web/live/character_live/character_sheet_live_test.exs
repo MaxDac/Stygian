@@ -20,9 +20,8 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLiveTest do
                |> log_in_user(user_fixture())
                |> live(~p"/character/sheet")
 
-      assert {:live_redirect, %{to: path, flash: flash}} = redirect
+      assert {:live_redirect, %{to: path}} = redirect
       assert path == ~p"/character/create"
-      assert %{"error" => "Devi creare un personaggio prima di accedere alla sua scheda."} = flash
     end
 
     test "Correctly redirects to the character completion page", %{conn: conn} do
@@ -34,13 +33,8 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLiveTest do
                |> log_in_user(user)
                |> live(~p"/character/sheet")
 
-      assert {:live_redirect, %{to: path, flash: flash}} = redirect
+      assert {:live_redirect, %{to: path}} = redirect
       assert path == ~p"/character/complete"
-
-      assert %{
-               "error" =>
-                 "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
-             } = flash
     end
   end
 end

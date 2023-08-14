@@ -114,7 +114,13 @@
               d="M7 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-2 3h4a4 4 0 0 1 4 4v2H1v-2a4 4 0 0 1 4-4Z"
             />
           </svg>
-          <span class="ml-3">Scheda</span>
+          <span class="ml-3">
+            <%= if @current_character do
+              "Scheda"
+            else
+              "Creazione"
+            end %>
+          </span>
         </.link>
       </li>
       <li>

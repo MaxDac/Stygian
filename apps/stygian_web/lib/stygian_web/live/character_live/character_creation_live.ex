@@ -21,10 +21,11 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
       %{step: 1} ->
         {:ok,
          socket
-         |> put_flash(
-           :error,
-           "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
-         )
+         # Removed as it's not an error.
+         # |> put_flash(
+         #   :error,
+         #   "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
+         # )
          |> push_navigate(to: ~p"/character/complete")}
 
       _ ->

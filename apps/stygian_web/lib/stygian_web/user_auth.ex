@@ -195,7 +195,12 @@ defmodule StygianWeb.UserAuth do
   end
 
   def on_mount(:ensure_admin, _params, session, socket) do
-    socket = mount_current_user(socket, session)
+    socket =
+      socket
+      |> mount_current_user(session)
+      # Populating the character anyway, even if it's not selected, to enable
+      # it in the layout views.
+      |> mount_current_character(session)
 
     if socket.assigns.current_user.admin do
       {:cont, socket}
@@ -215,7 +220,12 @@ defmodule StygianWeb.UserAuth do
   end
 
   defp ensure_authenticated(session, socket) do
-    socket = mount_current_user(socket, session)
+    socket =
+      socket
+      |> mount_current_user(session)
+      # Populating the character anyway, even if it's not selected, to enable
+      # it in the layout views.
+      |> mount_current_character(session)
 
     if socket.assigns.current_user do
       {:cont, socket}

@@ -10,16 +10,19 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
       nil ->
         {:ok,
          socket
-         |> put_flash(:error, "Devi creare un personaggio prima di accedere alla sua scheda.")
+         # Removed as it's not an error.
+         # |> put_flash(:error, "Devi creare un personaggio prima di accedere alla sua scheda.")
          |> push_navigate(to: ~p"/character/create")}
 
       %{step: 1} ->
         {:ok,
          socket
-         |> put_flash(
-           :error,
-           "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
-         )
+         # Removed as it's not an error.
+         # |> put_flash(:error, "Devi creare un personaggio prima di accedere alla sua scheda.")
+         # |> put_flash(
+         #   :error,
+         #   "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
+         # )
          |> push_navigate(to: ~p"/character/complete")}
 
       character ->
