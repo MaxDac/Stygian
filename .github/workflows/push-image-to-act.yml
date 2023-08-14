@@ -1,9 +1,7 @@
 name: Build Image for ACR
 on:
-  workflow_run:
-    workflows: ["Elixir CI - Compilation", "Elixir CI - Tests"]
-    types:
-      - completed
+  push:
+    branches: [ main ]
 
 jobs:
   build:
