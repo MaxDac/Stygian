@@ -35,6 +35,11 @@ jobs:
         elixir: ['1.15.4']
 
     steps:
+      # Step: Check out the code. This step must be run first because the composable actions are contained in the repo.
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step: Build PR
       - name: Build PR
         uses: ./.github/actions/compile-pr
         with: 
@@ -57,7 +62,12 @@ jobs:
         elixir: ['1.15.4']
 
     steps:
-      - name: Build PR
+      # Step: Check out the code. This step must be run first because the composable actions are contained in the repo.
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step: Test PR
+      - name: Test PR
         uses: ./.github/actions/test-pr
         with: 
           otp: ${{ matrix.otp }}

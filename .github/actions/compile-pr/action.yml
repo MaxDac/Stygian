@@ -34,10 +34,6 @@ jobs:
         otp-version: ${{ inputs.otp }}
         elixir-version: ${{ inputs.elixir }}
 
-    # Step: Check out the code.
-    - name: Checkout code
-      uses: actions/checkout@v3
-
     steps:
     # Step: Setup project and install/cache dependencies.
     - name: Install dependencies
