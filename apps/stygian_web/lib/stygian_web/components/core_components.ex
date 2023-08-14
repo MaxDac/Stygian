@@ -149,8 +149,8 @@ defmodule StygianWeb.CoreComponents do
 
   def flash_group(assigns) do
     ~H"""
-    <.flash kind={:info} title="Success!" flash={@flash} />
-    <.flash kind={:error} title="Error!" flash={@flash} />
+    <.flash kind={:info} title="OK" flash={@flash} />
+    <.flash kind={:error} title="Errorw" flash={@flash} />
     <.flash
       id="client-error"
       kind={:error}
