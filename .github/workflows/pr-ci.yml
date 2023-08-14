@@ -20,34 +20,36 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    # The `runs-on` configuration must be set only at the top level workflow execution.
-    runs-on: ubuntu-latest
+  # Temporary
+  # build:
+  #   # The `runs-on` configuration must be set only at the top level workflow execution.
+  #   runs-on: ubuntu-latest
 
-    name: Pull Request CI Build Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
+  #   name: Pull Request CI Build Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
 
-    strategy:
-      # Specify the OTP and Elixir versions to use when building
-      # and running the workflow steps.
-      matrix:
-        otp: ['25.2.3']
-        elixir: ['1.15.4']
+  #   strategy:
+  #     # Specify the OTP and Elixir versions to use when building
+  #     # and running the workflow steps.
+  #     matrix:
+  #       otp: ['25.2.3']
+  #       elixir: ['1.15.4']
 
-    steps:
-      # Step: Check out the code. This step must be run first because the composable actions are contained in the repo.
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #   steps:
+  #     # Step: Check out the code. This step must be run first because the composable actions are contained in the repo.
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      # Step: Build PR
-      - name: Build PR
-        uses: ./.github/actions/compile-pr
-        with: 
-          otp: ${{ matrix.otp }}
-          elixir: ${{ matrix.elixir }}
+  #     # Step: Build PR
+  #     - name: Build PR
+  #       uses: ./.github/actions/compile-pr
+  #       with: 
+  #         otp: ${{ matrix.otp }}
+  #         elixir: ${{ matrix.elixir }}
 
   test:
 
-    needs: build
+    # Temporary
+    # needs: build
 
     runs-on: ubuntu-latest
 

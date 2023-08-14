@@ -44,7 +44,7 @@ runs:
     # Step: installing inotify-tools to enable LiveView reloading to perform the tests.
     - name: Install OS dependencies
       shell: bash
-      run: apt install inotify-tools
+      run: sudo apt install inotify-tools
       
     # Step: Download project dependencies. If unchanged, uses
     # the cached version.
