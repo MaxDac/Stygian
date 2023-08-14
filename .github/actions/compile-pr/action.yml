@@ -21,7 +21,6 @@ permissions:
 
 runs:
   using: "composite"
-  shell: bash
 
   steps:
     # Step: Setup Elixir + Erlang image as the base.
