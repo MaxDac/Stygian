@@ -56,12 +56,13 @@ runs:
     # that are retried.
     - name: Clean to rule out incremental build as a source of flakiness
       if: github.run_attempt != '1'
+      shell: bash
       run: |
         mix deps.clean --all
         mix clean
-      shell: sh
       
     # Step: Download project dependencies. If unchanged, uses
     # the cached version.
     - name: Install dependencies
+      shell: sh
       run: mix deps.get

@@ -36,6 +36,7 @@ runs:
     # Create PLTs if no cache was found
     - name: Create PLTs
       if: steps.plt_cache.outputs.cache-hit != 'true'
+      shell: bash
       run: mix dialyzer --plt
     
     # Step: Save PLT cache if it was updated
@@ -48,3 +49,11 @@ runs:
           ${{ runner.os }}-${{ inputs.elixir }}-${{ inputs.otp }}-plt
         path: |
           priv/plts
+    
+    # Step: Retrieving from cache or building and caching the PLTs for dialyzer
+    - name: Caching PLTs
+      uses: ./.github/actions/cache-plts
+      with:
+        otp: ${{ inputs.otp }}
+        elixir: ${{ inputs.elixir }}
+    
