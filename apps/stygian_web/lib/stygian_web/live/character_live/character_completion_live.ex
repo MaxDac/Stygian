@@ -34,7 +34,8 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
       %{step: 2} ->
         {:ok,
          socket
-         |> put_flash(:info, "Hai gi&agrave; completato la creazione del personaggio.")
+         # Removed as it's not an error.
+         # |> put_flash(:info, "Hai gi&agrave; completato la creazione del personaggio.")
          |> push_navigate(to: ~p"/character/sheet")}
 
       _ ->
