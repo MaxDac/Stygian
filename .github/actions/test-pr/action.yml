@@ -2,13 +2,6 @@ name: Elixir CI - Tests
 description: "Runs tests on the codebase."
 
 inputs:
-  postgres_image_version:
-    description: 'Postgres image version'
-    required: true
-    default: 'postgres:11'
-  postgres_test_password:
-    description: 'Postgres test password'
-    required: true
   otp:
     type: string
     description: 'OTP version'
@@ -28,18 +21,6 @@ permissions:
 
 runs:
   using: "composite"
-
-  services:
-    db:
-      image: ${{ inputs.postgres_image_version }}
-      ports: ['5432:5432']
-      env:
-        POSTGRES_PASSWORD: ${{ inputs.postgres_test_password }}
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
 
   steps:
     # Step: Setup Elixir + Erlang image as the base.
