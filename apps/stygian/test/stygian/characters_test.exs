@@ -29,6 +29,15 @@ defmodule Stygian.CharactersTest do
       assert Characters.list_characters() == [character]
     end
 
+    test "list_characters_slim/0 returns all characters" do
+      character = character_fixture(%{step: 2})
+      assert [got_character] = Characters.list_characters_slim()
+      assert got_character.id == character.id
+      assert got_character.name == character.name
+      assert nil == got_character.avatar
+      assert got_character.user_id == character.user_id
+    end
+
     test "get_character!/1 returns the character with given id" do
       character = character_fixture()
       assert Characters.get_character!(character.id) == character

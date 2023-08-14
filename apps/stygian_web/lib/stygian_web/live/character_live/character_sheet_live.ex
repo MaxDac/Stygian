@@ -5,6 +5,14 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
   alias StygianWeb.Live.PermissionHelpers
 
   @impl true
+  def mount(%{"character_id" => character_id}, _session, socket) do
+    {:ok,
+     socket
+     |> assign_character(character_id)
+     |> assign_confidential_permissions()}
+  end
+
+  @impl true
   def mount(_params, _session, socket) do
     case Characters.get_user_character?(socket.assigns.current_user) do
       nil ->
@@ -30,6 +38,19 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
          socket
          |> assign(:character, character)
          |> assign_confidential_permissions()}
+    end
+  end
+
+  defp assign_character(socket, character_id) do
+    case Characters.get_character(character_id) do
+      nil -> 
+        socket
+        |> put_flash(:info, "Il personaggio non esiste")
+        |> push_navigate(~p"/")
+
+      character ->
+        socket
+        |> assign(:character, character)
     end
   end
 

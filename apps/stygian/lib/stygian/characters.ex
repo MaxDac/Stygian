@@ -43,6 +43,17 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Returns a slim list of characters, containing only the id, the user and the name.
+  """
+  def list_characters_slim do
+    Character
+    |> from()
+    |> where([c], c.step == 2)
+    |> select([c], %Character{id: c.id, name: c.name, user_id: c.user_id})
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single character.
 
   Raises `Ecto.NoResultsError` if the Character does not exist.

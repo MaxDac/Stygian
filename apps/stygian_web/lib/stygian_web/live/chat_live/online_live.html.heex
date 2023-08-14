@@ -1,6 +1,12 @@
 <div class="text-center">
   <.h1>Online</.h1>
 
+  <.link href={~p"/character/sheets"}>
+    <h3 class="font-report">
+      Lista dei Personaggi
+    </h3>
+  </.link>
+
   <%= for location <- Map.keys(@online) do %>
     <.link href={get_map_link(@online, location)}>
       <h2 class="font-report"><%= location %></h2>
