@@ -2,7 +2,13 @@ name: Elixir CI - Compilation
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: 
+      = main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
 
 env:
   MIX_ENV: dev
@@ -116,9 +122,9 @@ jobs:
       id: plt_cache
       with:
         key: |
-                      ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
+                      ${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-plt
         restore-keys: |
-                      ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
+                      ${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-plt
         path: |
                       priv/plts
 
@@ -134,7 +140,7 @@ jobs:
       id: plt_cache_save
       with:
         key: |
-          ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-plt
+          ${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-plt
         path: |
           priv/plts
 
