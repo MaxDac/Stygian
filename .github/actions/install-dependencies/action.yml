@@ -18,6 +18,7 @@ permissions:
 
 runs:
   using: "composite"
+  shell: bash
 
   steps:
     # Step: Define how to cache deps. Restores existing cache if present.

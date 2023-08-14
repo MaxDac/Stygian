@@ -28,6 +28,7 @@ permissions:
 
 runs:
   using: "composite"
+  shell: bash
 
   services:
     db:
