@@ -13,9 +13,6 @@ on:
   push:
     branches: main
 
-env:
-  MIX_ENV: dev
-
 permissions:
   contents: read
 
@@ -26,6 +23,10 @@ jobs:
   #   runs-on: ubuntu-latest
 
   #   name: Pull Request CI Build Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
+
+    # env:
+    #   MIX_ENV: dev
+
 
   #   strategy:
   #     # Specify the OTP and Elixir versions to use when building
@@ -52,6 +53,9 @@ jobs:
     # needs: build
 
     runs-on: ubuntu-latest
+
+    env:
+      MIX_ENV: test
 
     services:
       db:

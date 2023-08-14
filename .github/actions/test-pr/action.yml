@@ -13,9 +13,6 @@ inputs:
     required: true
     default: '1.15.4'
 
-env:
-  MIX_ENV: test
-
 permissions:
   contents: read
 
