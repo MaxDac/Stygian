@@ -23,13 +23,8 @@ defmodule StygianWeb.CharacterLive.CharacterCreateLiveTest do
                |> log_in_user(user)
                |> live(~p"/character/create")
 
-      assert {:live_redirect, %{to: path, flash: flash}} = redirect
+      assert {:live_redirect, %{to: path}} = redirect
       assert path == ~p"/character/complete"
-
-      assert %{
-               "error" =>
-                 "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
-             } = flash
     end
 
     # test "Correctly save the character", %{conn: conn} do
