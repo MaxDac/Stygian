@@ -116,7 +116,6 @@ defmodule StygianWeb.Router do
 
     live_session :characters_list,
       on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
-
       live "/sheets", CharacterListLive
       live "/sheet/:character_id", CharacterSheetLive, :show
       live "/custom_sheet/:character_id", CharacterCustomSheetLive, :index
@@ -124,7 +123,6 @@ defmodule StygianWeb.Router do
 
     live_session :characters_external_info,
       on_mount: [{StygianWeb.UserAuth, :ensure_admin_or_character}] do
-
       live "/stats/:character_id", CharacterSheetStatsLive, :show
     end
   end

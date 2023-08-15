@@ -45,7 +45,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
 
   defp assign_character(socket, character_id) do
     case Characters.get_character(character_id) do
-      nil -> 
+      nil ->
         socket
         |> put_flash(:info, "Il personaggio non esiste")
         |> push_navigate(~p"/")
@@ -73,14 +73,13 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
   end
 
   defp get_confidential_link(current_character, character_id) do
-    if is_own_character?(current_character, character_id) do 
+    if is_own_character?(current_character, character_id) do
       ~p"/character/stats"
     else
       ~p"/character/stats/#{character_id}"
-    end 
+    end
   end
 
   defp is_own_character?(%{id: current_character_id}, current_character_id), do: true
   defp is_own_character?(_, _), do: false
 end
-

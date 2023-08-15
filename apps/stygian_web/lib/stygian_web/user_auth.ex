@@ -213,7 +213,7 @@ defmodule StygianWeb.UserAuth do
     socket = mount_current_user(socket, session)
 
     if socket.assigns.current_user.admin do
-      {:cont, 
+      {:cont,
        socket
        |> mount_current_character(session)}
     else

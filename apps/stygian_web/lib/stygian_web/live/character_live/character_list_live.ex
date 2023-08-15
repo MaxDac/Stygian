@@ -7,7 +7,7 @@ defmodule StygianWeb.CharacterLive.CharacterListLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> assign_characters()}
   end
@@ -22,7 +22,7 @@ defmodule StygianWeb.CharacterLive.CharacterListLive do
         <%= character.name %>
       </.link>
     </div>
-   """
+    """
   end
 
   defp assign_characters(socket) do
