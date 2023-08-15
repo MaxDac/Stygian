@@ -9,7 +9,8 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
     {:ok,
      socket
      |> assign_character(character_id)
-     |> assign_confidential_permissions()}
+     |> assign_confidential_permissions()
+     |> assign_modify_permissions()}
   end
 
   @impl true
@@ -37,7 +38,8 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
         {:ok,
          socket
          |> assign(:character, character)
-         |> assign_confidential_permissions()}
+         |> assign_confidential_permissions()
+         |> assign_modify_permissions()}
     end
   end
 
@@ -61,4 +63,24 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
       PermissionHelpers.can_access_to_character_confidentials?(socket, character)
     )
   end
+
+  defp assign_modify_permissions(%{assigns: %{character: character}} = socket) do
+    assign(
+      socket,
+      :has_modify_access,
+      PermissionHelpers.can_access_to_character_modification?(socket, character)
+    )
+  end
+
+  defp get_confidential_link(current_character, character_id) do
+    if is_own_character?(current_character, character_id) do 
+      ~p"/character/stats"
+    else
+      ~p"/character/stats/#{character_id}"
+    end 
+  end
+
+  defp is_own_character?(%{id: current_character_id}, current_character_id), do: true
+  defp is_own_character?(_, _), do: false
 end
+

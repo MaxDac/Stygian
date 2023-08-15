@@ -4,6 +4,7 @@ defmodule Stygian.Characters do
   """
 
   import Ecto.Query, warn: false
+  alias Mix.Tasks.Hex.User
   alias Ecto.Changeset
 
   alias Stygian.Repo

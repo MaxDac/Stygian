@@ -1,6 +1,6 @@
 <div class="bg-[url('/images/SheetBackground.webp')] w-[740px] h-[760px] relative top-1 left-[100px] bg-no-repeat bg-cover">
   <.link
-    navigate={~p"/character/sheet"}
+    navigate={get_sheet_link(@current_character, @character.id)}
     class="absolute top-[50px] left-[540px] text-red-700 font-report text-xl rotate-2 z-30"
   >
     Dossier
@@ -10,10 +10,10 @@
     <h1 class="font-berolina text-3xl text-center">Arkham Police Department</h1>
 
     <p class="text-xl pt-4 pb-5">
-      Case File #<span class="font-bold"><%= @current_character.id %></span>
+      Case File #<span class="font-bold"><%= @character.id %></span>
 
       <.link
-        patch={~p"/character/stats?mode=#{if @mode == "stats", do: "notes", else: "stats"}"}
+        patch={get_change_sheet_mode_link(@current_character, @character.id, @mode)}
         class="text-red-700 font-report text-xl"
       >
         <%= if @mode == "stats" do

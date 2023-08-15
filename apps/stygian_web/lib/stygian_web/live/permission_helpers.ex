@@ -3,6 +3,20 @@ defmodule StygianWeb.Live.PermissionHelpers do
   Contains helpers to check permissions to access to certain parts of the applications.
   """
 
+  @spec can_access_to_character_modification?(
+          socket :: Phoenix.LiveView.Socket.t(),
+          character :: Stygian.Characters.Character.t()
+        ) :: boolean()
+  def can_access_to_character_modification?(socket, character)
+
+  def can_access_to_character_modification?(
+        %{assigns: %{current_character: %{id: character_id}}} = _socket,
+        %{id: character_id}
+      ),
+      do: true
+
+  def can_access_to_character_modification?(_, _), do: false
+
   @doc """
   Determines whether the user has access to the confidential information of the character.
   """

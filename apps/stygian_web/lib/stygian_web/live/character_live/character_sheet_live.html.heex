@@ -11,7 +11,7 @@
   </div>
 
   <.link
-    :if={@has_access}
+    :if={@has_modify_access}
     navigate={~p"/character/sheet/modify"}
     class="absolute top-[50px] left-[280px] text-red-700 font-report text-xl -rotate-3"
   >
@@ -20,7 +20,7 @@
 
   <.link
     :if={@has_access}
-    navigate={~p"/character/stats"}
+    navigate={get_confidential_link(@current_character, @character.id)}
     class="absolute top-[50px] left-[470px] text-red-700 font-report text-xl"
   >
     Confidential

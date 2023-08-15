@@ -63,7 +63,27 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
       Characters.list_character_attributes_skills(character)
 
     socket
+    |> assign(:character, character)
     |> assign(:attributes, attributes)
     |> assign(:skills, skills)
   end
+
+  defp get_change_sheet_mode_link(current_character, character_id, mode) do
+    if is_own_character?(current_character, character_id) do 
+      ~p"/character/stats?mode=#{if mode == "stats", do: "notes", else: "stats"}"
+    else
+      ~p"/character/stats/#{character_id}?mode=#{if mode == "stats", do: "notes", else: "stats"}"
+    end 
+  end
+
+  defp get_sheet_link(current_character, character_id) do
+    if is_own_character?(current_character, character_id) do 
+      ~p"/character/sheet"
+    else
+      ~p"/character/sheet/#{character_id}"
+    end 
+  end
+
+  defp is_own_character?(%{id: current_character_id}, current_character_id), do: true
+  defp is_own_character?(_, _), do: false
 end

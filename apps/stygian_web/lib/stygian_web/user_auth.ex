@@ -213,7 +213,9 @@ defmodule StygianWeb.UserAuth do
     socket = mount_current_user(socket, session)
 
     if socket.assigns.current_user.admin do
-      {:cont, socket}
+      {:cont, 
+       socket
+       |> mount_current_character(session)}
     else
       ensure_character_compatible_with_params(session, socket, params)
     end
@@ -275,6 +277,16 @@ defmodule StygianWeb.UserAuth do
          )
          |> Phoenix.LiveView.redirect(to: signed_in_path(socket))}
     end
+  end
+
+  defp ensure_character_compatible_with_params(_, socket, _) do
+    {:halt,
+     socket
+     |> Phoenix.LiveView.put_flash(
+       :error,
+       "Non hai accesso alle informazioni di questo personaggio."
+     )
+     |> Phoenix.LiveView.redirect(to: signed_in_path(socket))}
   end
 
   defp mount_current_user(socket, session) do
