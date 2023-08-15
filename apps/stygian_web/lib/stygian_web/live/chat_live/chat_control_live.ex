@@ -19,55 +19,15 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
 
   @impl true
   def update(assigns, socket) do
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign_form()}
-  end
+    socket =
+      socket
+      |> assign(assigns)
 
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div class={@class}>
-      <.simple_form
-        class="p-0"
-        for={@form}
-        id="chat_input"
-        phx-submit="send_chat_input"
-        phx-target={@myself}
-      >
-        <.input type="hidden" field={@form[:map_id]} />
-        <.input type="hidden" field={@form[:character_id]} />
-        <div class="flex flex-row justify-between">
-          <div class="w-full p-3">
-            <.input
-              id={@textarea_id}
-              field={@form[:text]}
-              type="textarea"
-              placeholder="Scrivi la tua azione qui..."
-              phx-hook="ChatInput"
-            />
-          </div>
+    form =
+      get_chat_changeset(socket)
+      |> to_form()
 
-          <div class="flex flex-col max-w-10 justify-evenly">
-            <.button id="chat-input-sender" phx-disable-with="Inviando..." class="w-full">
-              Invia
-            </.button>
-            <.button
-              id={@dice_button_id}
-              type="button"
-              phx-disable-with="..."
-              disabled={not dices_active?(@current_character)}
-              phx-click="open_dices"
-              class="w-full"
-            >
-              Dadi
-            </.button>
-          </div>
-        </div>
-      </.simple_form>
-    </div>
-    """
+    {:ok, assign(socket, :form, form)}
   end
 
   @impl true
@@ -86,19 +46,39 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
     end
   end
 
-  defp assign_form(%{assigns: %{map: map, current_character: current_character}} = socket) do
+  @impl true
+  def handle_event("validate_input", %{"chat" => chat_params}, %{} = socket) do
+    chat_params =
+      chat_params
+      |> parse_input(socket)
+
     form =
-      %Chat{}
-      |> Maps.change_chat(%{
-        map_id: map.id,
-        character_id: current_character.id,
-        text: nil,
-        type: :text
-      })
+      socket
+      |> get_chat_changeset(chat_params)
+      |> Map.put(:action, :validate)
       |> to_form()
 
-    socket
-    |> assign(:form, form)
+    {:noreply, assign(socket, :form, form)}
+  end
+
+  defp get_chat_changeset(
+         %{assigns: %{map: map, current_character: current_character}} = _socket,
+         attrs \\ nil
+       ) do
+    attrs =
+      if is_nil(attrs) do
+        %{
+          map_id: map.id,
+          character_id: current_character.id,
+          text: nil,
+          type: :text
+        }
+      else
+        attrs
+      end
+
+    %Chat{}
+    |> Maps.change_chat(attrs)
   end
 
   defp create_chat_entry(chat_params) do

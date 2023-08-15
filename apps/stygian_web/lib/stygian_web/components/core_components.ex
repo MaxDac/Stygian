@@ -359,6 +359,7 @@ defmodule StygianWeb.CoreComponents do
       <textarea
         id={@id}
         name={@name}
+        data-tooltip-target="textarea-error-tooltip"
         class={[
           "mt-2 block w-full rounded-md font-typewriter text-brand text-md focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-brand-inavtive phx-no-feedback:focus:border-brand-inactive",
@@ -368,7 +369,7 @@ defmodule StygianWeb.CoreComponents do
         ]}
         {@rest}
       ><%= Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error_tooltip tooltip_target_id="textarea-error-tooltip" errors={@errors} />
     </div>
     """
   end
@@ -465,6 +466,25 @@ defmodule StygianWeb.CoreComponents do
       <.icon name="exclamation" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>
+    """
+  end
+
+  @doc """
+  Generates an error message packed in a tooltip.
+  """
+  attr :tooltip_target_id, :string, default: "tooltip-default"
+  attr :errors, :list, required: true
+
+  def error_tooltip(assigns) do
+    ~H"""
+    <div
+      id={@tooltip_target_id}
+      role="tooltip"
+      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-rose-300 transition-opacity duration-300 rounded-lg shadow-sm opacity-0 tooltip bg-gray-700"
+    >
+      <span :for={msg <- @errors}><%= msg %></span>
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
     """
   end
 
