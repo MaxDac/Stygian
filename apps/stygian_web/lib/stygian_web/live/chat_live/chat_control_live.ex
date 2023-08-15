@@ -18,16 +18,21 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   alias StygianWeb.ChatLive.ChatHelpers
 
   @impl true
-  def update(assigns, socket) do
-    socket =
-      socket
-      |> assign(assigns)
-
+  def update(%{map: map, current_character: current_character} = assigns, socket) do
     form =
-      get_chat_changeset(socket)
+      %Chat{}
+      |> Maps.change_chat(%{
+        map_id: map.id,
+        character_id: current_character.id,
+        text: nil,
+        type: :text
+      })
       |> to_form()
 
-    {:ok, assign(socket, :form, form)}
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign(:form, form)}
   end
 
   @impl true
@@ -53,32 +58,12 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
       |> parse_input(socket)
 
     form =
-      socket
-      |> get_chat_changeset(chat_params)
+      %Chat{}
+      |> Maps.change_chat(chat_params)
       |> Map.put(:action, :validate)
       |> to_form()
 
     {:noreply, assign(socket, :form, form)}
-  end
-
-  defp get_chat_changeset(
-         %{assigns: %{map: map, current_character: current_character}} = _socket,
-         attrs \\ nil
-       ) do
-    attrs =
-      if is_nil(attrs) do
-        %{
-          map_id: map.id,
-          character_id: current_character.id,
-          text: nil,
-          type: :text
-        }
-      else
-        attrs
-      end
-
-    %Chat{}
-    |> Maps.change_chat(attrs)
   end
 
   defp create_chat_entry(chat_params) do
