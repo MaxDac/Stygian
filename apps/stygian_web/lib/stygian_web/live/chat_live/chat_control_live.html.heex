@@ -1,0 +1,41 @@
+<div class={@class}>
+  <.simple_form
+    class="p-0"
+    for={@form}
+    id="chat_input"
+    phx-submit="send_chat_input"
+    phx-change="validate_input"
+    phx-target={@myself}
+  >
+    <.input type="hidden" field={@form[:map_id]} />
+    <.input type="hidden" field={@form[:character_id]} />
+    <div class="flex flex-row justify-between">
+      <div class="w-full p-3">
+        <.input
+          id={@textarea_id}
+          field={@form[:text]}
+          type="textarea"
+          placeholder="Scrivi la tua azione qui..."
+          phx-debounce="300"
+          phx-hook="ChatInput"
+        />
+      </div>
+
+      <div class="flex flex-col max-w-10 justify-evenly">
+        <.button id="chat-input-sender" phx-disable-with="Inviando..." class="w-full">
+          Invia
+        </.button>
+        <.button
+          id={@dice_button_id}
+          type="button"
+          phx-disable-with="..."
+          disabled={not dices_active?(@current_character)}
+          phx-click="open_dices"
+          class="w-full"
+        >
+          Dadi
+        </.button>
+      </div>
+    </div>
+  </.simple_form>
+</div>

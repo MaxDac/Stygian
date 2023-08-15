@@ -32,8 +32,28 @@ defmodule Stygian.Maps.Chat do
   def changeset(chat, attrs) do
     chat
     |> cast(attrs, [:text, :type, :character_id, :map_id])
+    |> validate_chat_text_max_length()
+    |> validate_chat_text_min_length(attrs)
     |> foreign_key_constraint(:character_id)
     |> foreign_key_constraint(:map_id)
     |> validate_required([:text, :type, :character_id, :map_id])
   end
+
+  defp validate_chat_text_max_length(changeset) do
+    changeset
+    |> validate_length(:text,
+      max: 1200,
+      message: "La lunghezza massima della frase deve essere di 1200 caratteri"
+    )
+  end
+
+  defp validate_chat_text_min_length(changeset, %{"type" => :text}) do
+    changeset
+    |> validate_length(:text,
+      min: 200,
+      message: "La lunghezza minima della frase deve essere di 200 caratteri"
+    )
+  end
+
+  defp validate_chat_text_min_length(changeset, _), do: changeset
 end
