@@ -112,13 +112,18 @@ defmodule StygianWeb.Router do
       live "/sheet/modify", CharacterSheetUpdateLive, :edit
       live "/sheet", CharacterSheetLive, :index
       live "/stats", CharacterSheetStatsLive, :index
-      live "/custom_sheet", CharacterCustomSheetLive, :index
-      live "/custom_sheet/:character_id", CharacterCustomSheetLive, :index
     end
 
     live_session :characters_list,
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated}] do
+      live "/sheets", CharacterListLive
+      live "/sheet/:character_id", CharacterSheetLive, :show
+      live "/custom_sheet/:character_id", CharacterCustomSheetLive, :index
+    end
+
+    live_session :characters_external_info,
       on_mount: [{StygianWeb.UserAuth, :ensure_admin_or_character}] do
-      live "/sheet/:id", CharacterSheetLive, :show
+      live "/stats/:character_id", CharacterSheetStatsLive, :show
     end
   end
 

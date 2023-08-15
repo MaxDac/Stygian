@@ -4,6 +4,7 @@ defmodule Stygian.Characters do
   """
 
   import Ecto.Query, warn: false
+
   alias Ecto.Changeset
 
   alias Stygian.Repo
@@ -40,6 +41,17 @@ defmodule Stygian.Characters do
   """
   def list_characters do
     Repo.all(Character)
+  end
+
+  @doc """
+  Returns a slim list of characters, containing only the id, the user and the name.
+  """
+  def list_characters_slim do
+    Character
+    |> from()
+    |> where([c], c.step == 2)
+    |> select([c], %Character{id: c.id, name: c.name, user_id: c.user_id})
+    |> Repo.all()
   end
 
   @doc """
