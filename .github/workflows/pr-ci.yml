@@ -65,7 +65,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    name: PR CI Test Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
+    name: Pull Request CI Test Erlang ${{ matrix.otp }} / Elixir ${{ matrix.elixir }}
 
     strategy:
       # Specify the OTP and Elixir versions to use when building
