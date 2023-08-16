@@ -15,8 +15,8 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   alias Stygian.Maps
   alias Stygian.Maps.Chat
 
-  alias StygianWeb.FormHelpers
   alias StygianWeb.ChatLive.ChatHelpers
+  alias StygianWeb.FormHelpers
 
   @impl true
   def update(%{map: map, current_character: current_character} = assigns, socket) do
