@@ -16,9 +16,11 @@ defmodule Stygian.Characters.Character do
           custom_sheet: String.t(),
           experience: integer(),
           health: integer(),
+          lost_health: integer(),
           name: String.t(),
           notes: String.t(),
           sanity: integer(),
+          lost_sanity: integer(),
           step: integer(),
           user_id: integer(),
           user: User.t(),
@@ -36,9 +38,11 @@ defmodule Stygian.Characters.Character do
     field :custom_sheet, :string
     field :experience, :integer
     field :health, :integer
+    field :lost_health, :integer
     field :name, :string
     field :notes, :string
     field :sanity, :integer
+    field :lost_sanity, :integer
     field :step, :integer
 
     belongs_to :user, User
@@ -52,7 +56,9 @@ defmodule Stygian.Characters.Character do
       :name,
       :avatar,
       :user_id,
-      :step
+      :step,
+      :lost_health,
+      :lost_sanity
     ])
     |> validate_required([
       :name,
@@ -91,7 +97,9 @@ defmodule Stygian.Characters.Character do
       :admin_notes,
       :experience,
       :health,
+      :lost_health,
       :sanity,
+      :lost_sanity,
       :step,
       :user_id
     ])

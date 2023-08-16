@@ -25,6 +25,8 @@ defmodule Stygian.CharactersFixtures do
         # experience: 42,
         # health: 42,
         name: "some awful name",
+        lost_health: 1,
+        lost_sanity: 1,
         # notes: "some notes",
         # sanity: 42,
         step: 1,
