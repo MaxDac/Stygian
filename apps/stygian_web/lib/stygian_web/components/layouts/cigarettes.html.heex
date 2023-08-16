@@ -1,0 +1,6 @@
+<div :if={@current_character} class="fixed bottom-[50px] left-[50px] w-[100px] h-[100px] text-white cursor-pointer">
+  <img src="/images/CigarettesIcon.webp" alt="Cigarettes quantity" class="max-w-[100px] h-auto absolute" />
+  <p class="font-typewriter text-xl text-brand shadow-black absolute bottom-0 left-0">
+    <%= @current_character.cigs %>
+  </p>
+</div>
