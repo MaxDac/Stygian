@@ -3,6 +3,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
   This LiveView updates the character notes information.
   """
 
+  alias StygianWeb.FormHelpers
   use StygianWeb, :container_live_view
 
   alias Stygian.Characters
@@ -64,7 +65,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
         %{"character" => character_params},
         %{assigns: %{current_character: current_character}} = socket
       ) do
-    case Characters.update_character_sheet(current_character, character_params) do
+    case update_character_sheet(current_character, character_params) do
       {:ok, _} ->
         {:noreply,
          socket
@@ -88,5 +89,10 @@ defmodule StygianWeb.CharacterLive.CharacterSheetUpdateLive do
       |> to_form()
 
     assign(socket, form: form)
+  end
+
+  defp update_character_sheet(current_character, character_params) do
+    character_params = FormHelpers.sanitize_fields(character_params)
+    Characters.update_character_sheet(current_character, character_params)
   end
 end

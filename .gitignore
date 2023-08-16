@@ -22,10 +22,11 @@ erl_crash.dump
 # Temporary files, for example, from tests.
 /tmp/
 
-.vscode/
+**/.vscode/
 
-.fleet
+**/.fleet/
+
+**/.idea/
 
 **/.DS_Store
 
-**/.elixir_ls

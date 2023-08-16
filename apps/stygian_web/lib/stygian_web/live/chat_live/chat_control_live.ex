@@ -14,7 +14,8 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
 
   alias Stygian.Maps
   alias Stygian.Maps.Chat
-
+ 
+  alias StygianWeb.FormHelpers
   alias StygianWeb.ChatLive.ChatHelpers
 
   @impl true
@@ -67,7 +68,9 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
   end
 
   defp create_chat_entry(chat_params) do
-    Maps.create_chat(chat_params)
+    chat_params
+    |> FormHelpers.sanitize_fields()
+    |> Maps.create_chat()
   end
 
   # This function sends the update to the parent live view, that in turn will update this component.

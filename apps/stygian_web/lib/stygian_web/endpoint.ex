@@ -20,7 +20,7 @@ defmodule StygianWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :stygian_web,
-    gzip: false,
+    gzip: true,
     only: StygianWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
