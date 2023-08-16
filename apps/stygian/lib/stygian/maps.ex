@@ -10,8 +10,10 @@ defmodule Stygian.Maps do
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Maps.Map
+  alias Stygian.Maps.PrivateMapCharacters
 
   @default_limit_in_hour 2
+  @private_map_timeout_in_hour 3
 
   @doc """
   Returns the list of maps.
@@ -349,5 +351,14 @@ defmodule Stygian.Maps do
   """
   def change_chat(%Chat{} = chat, attrs \\ %{}) do
     Chat.changeset(chat, attrs)
+  end
+
+  @doc """
+  Creates a new booking for a host in a private room.
+  """
+  @spec book_private_room(character :: Character.t(), map :: Map.t()) ::
+    {:ok, PrivateMapCharacters.t()} | {:error, Changeset.t()}
+  def book_private_room(character, map) do
+    throw "not implemented yet" 
   end
 end
