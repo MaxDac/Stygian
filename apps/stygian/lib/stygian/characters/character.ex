@@ -56,7 +56,9 @@ defmodule Stygian.Characters.Character do
       :name,
       :avatar,
       :user_id,
-      :step
+      :step,
+      :lost_health,
+      :lost_sanity
     ])
     |> validate_required([
       :name,
@@ -95,7 +97,9 @@ defmodule Stygian.Characters.Character do
       :admin_notes,
       :experience,
       :health,
+      :lost_health,
       :sanity,
+      :lost_sanity,
       :step,
       :user_id
     ])
