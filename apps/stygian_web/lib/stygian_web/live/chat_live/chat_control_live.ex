@@ -14,7 +14,7 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
 
   alias Stygian.Maps
   alias Stygian.Maps.Chat
- 
+
   alias StygianWeb.FormHelpers
   alias StygianWeb.ChatLive.ChatHelpers
 
