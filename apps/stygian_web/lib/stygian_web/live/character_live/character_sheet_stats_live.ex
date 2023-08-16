@@ -69,11 +69,11 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
   end
 
   defp get_health_percentage(%{health: health, lost_health: lost_health}) do
-    ((health - lost_health) / health) * 100
+    (health - lost_health) / health * 100
   end
 
   defp get_sanity_percentage(%{sanity: sanity, lost_sanity: lost_sanity}) do
-    ((sanity - lost_sanity) / sanity) * 100
+    (sanity - lost_sanity) / sanity * 100
   end
 
   defp get_change_sheet_mode_link(current_character, character_id, mode) do

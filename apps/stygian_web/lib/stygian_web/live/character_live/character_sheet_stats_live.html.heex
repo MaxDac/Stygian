@@ -52,7 +52,12 @@
           </p>
 
           <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700">
-            <div class="h-6 bg-rose-700 rounded-full text-center" style={"width: #{get_health_percentage(@character)}%"}><%= get_health_percentage(@character) %> %</div>
+            <div
+              class="h-6 bg-rose-700 rounded-full text-center"
+              style={"width: #{get_health_percentage(@character)}%"}
+            >
+              <%= get_health_percentage(@character) %> %
+            </div>
           </div>
         </div>
 
@@ -62,7 +67,12 @@
           </p>
 
           <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700">
-            <div class="h-6 bg-brand-inactive rounded-full text-center" style={"width: #{get_sanity_percentage(@character)}%"}><%= get_sanity_percentage(@character) %> %</div>
+            <div
+              class="h-6 bg-brand-inactive rounded-full text-center"
+              style={"width: #{get_sanity_percentage(@character)}%"}
+            >
+              <%= get_sanity_percentage(@character) %> %
+            </div>
           </div>
         </div>
       </div>
