@@ -24,23 +24,47 @@
       </.link>
     </p>
 
-    <div :if={@mode == "stats"} class="flex flex-row justify-evenly space-x-2 w-full">
-      <div class="flex flex-col justify-start items-start">
-        <p class="font-report text-lg">Attributi</p>
+    <div :if={@mode == "stats"} class="flex flex-col">
+      <div class="flex flex-row justify-evenly space-x-2 w-full">
+        <div class="flex flex-col justify-start items-start">
+          <p class="font-report text-lg">Attributi</p>
 
-        <%= for attribute <- @attributes do %>
-          <p>
-            <%= attribute.skill.name %>: <span class="font-bold"><%= attribute.value %></span>
-          </p>
-        <% end %>
+          <%= for attribute <- @attributes do %>
+            <p>
+              <%= attribute.skill.name %>: <span class="font-bold"><%= attribute.value %></span>
+            </p>
+          <% end %>
+        </div>
+
+        <div class="flex flex-col justify-start items-start">
+          <p class="font-report text-lg">Skills</p>
+
+          <%= for skill <- @skills do %>
+            <p><%= skill.skill.name %>: <span class="font-bold"><%= skill.value %></span></p>
+          <% end %>
+        </div>
       </div>
 
-      <div class="flex flex-col justify-start items-start">
-        <p class="font-report text-lg">Skills</p>
+      <div class="flex flex-col">
+        <div class="flex flex-col justify-center">
+          <p class="text-xl pt-3 font-report">
+            Physical Condition
+          </p>
 
-        <%= for skill <- @skills do %>
-          <p><%= skill.skill.name %>: <span class="font-bold"><%= skill.value %></span></p>
-        <% end %>
+          <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700">
+            <div class="h-6 bg-rose-700 rounded-full text-center" style={"width: #{get_health_percentage(@character)}%"}><%= get_health_percentage(@character) %> %</div>
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <p class="text-xl pt-3 font-report">
+            Psychological Condition
+          </p>
+
+          <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700">
+            <div class="h-6 bg-brand-inactive rounded-full text-center" style={"width: #{get_sanity_percentage(@character)}%"}><%= get_sanity_percentage(@character) %> %</div>
+          </div>
+        </div>
       </div>
     </div>
 
