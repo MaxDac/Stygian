@@ -53,6 +53,7 @@ defmodule StygianWeb.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:gen_smtp, "~> 1.2"},
       {:earmark, "~> 1.4"},
+      {:html_sanitize_ex, "~> 1.4"},
       # Adding the dependency on each singular app for [this issue](https://github.com/jeremyjh/dialyxir/issues/508)
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]

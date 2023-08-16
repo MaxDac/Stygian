@@ -98,14 +98,14 @@ defmodule StygianWeb.Presence do
 
   defp map_user(%{id: user_id, username: user_name}), do: %{id: user_id, name: user_name}
 
-  defp map_onlines({_, %{metas: [%{character: character, map: map}]}}) do
+  defp map_onlines({_, %{metas: [%{character: character, map: map} | _]}}) do
     %{
       map: map,
       character: character
     }
   end
 
-  defp map_onlines({_, [%{character: character, map: map}]}) do
+  defp map_onlines({_, [%{character: character, map: map} | _]}) do
     %{
       map: map,
       character: character
