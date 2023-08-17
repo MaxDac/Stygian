@@ -10,7 +10,7 @@ defmodule Stygian.Maps do
 
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
-  alias Stygian.Maps.Map
+  alias Stygian.Maps.Map, as: LandMap
   alias Stygian.Maps.PrivateMapCharacter
 
   @default_limit_in_hour 2
@@ -26,15 +26,15 @@ defmodule Stygian.Maps do
 
   """
   def list_maps do
-    Repo.all(Map)
+    Repo.all(LandMap)
   end
 
   @doc """
   Returns the list of the main maps, the ones that does not have any parent.
   """
-  @spec list_parent_maps() :: list(Map.t())
+  @spec list_parent_maps() :: list(LandMap.t())
   def list_parent_maps do
-    Map
+    LandMap
     |> from()
     |> where([m], is_nil(m.parent_id))
     |> Repo.all()
@@ -43,9 +43,9 @@ defmodule Stygian.Maps do
   @doc """
   Returns the list of the maps whose parent is the map given in input.
   """
-  @spec list_child_maps(Map.t()) :: list(Map.t())
+  @spec list_child_maps(LandMap.t()) :: list(LandMap.t())
   def list_child_maps(%{id: parent_id}) do
-    Map
+    LandMap
     |> from()
     |> where([m], m.parent_id == ^parent_id)
     |> Repo.all()
@@ -65,24 +65,24 @@ defmodule Stygian.Maps do
       ** (Ecto.NoResultsError)
 
   """
-  def get_map!(id), do: Repo.get!(Map, id)
+  def get_map!(id), do: Repo.get!(LandMap, id)
 
   @doc """
   Gets a single map, or nil if it does not exist.
   """
-  def get_map(id), do: Repo.get(Map, id)
+  def get_map(id), do: Repo.get(LandMap, id)
 
   @doc """
   Gets a single map by name, or nil if it doesn't find it.
   """
-  def get_map_by_name(name), do: Repo.get_by(Map, name: name)
+  def get_map_by_name(name), do: Repo.get_by(LandMap, name: name)
 
   @doc """
   Gets a map with the preloaded children.
   """
-  @spec get_map_with_children(integer()) :: Map.t()
+  @spec get_map_with_children(integer()) :: LandMap.t()
   def get_map_with_children(map_id) do
-    Map
+    LandMap
     |> from()
     |> where([p], p.id == ^map_id)
     |> preload(:children)
@@ -102,8 +102,8 @@ defmodule Stygian.Maps do
 
   """
   def create_map(attrs \\ %{}) do
-    %Map{}
-    |> Map.changeset(attrs)
+    %LandMap{}
+    |> LandMap.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -119,9 +119,9 @@ defmodule Stygian.Maps do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_map(%Map{} = map, attrs) do
+  def update_map(%LandMap{} = map, attrs) do
     map
-    |> Map.changeset(attrs)
+    |> LandMap.changeset(attrs)
     |> Repo.update()
   end
 
@@ -137,7 +137,7 @@ defmodule Stygian.Maps do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_map(%Map{} = map) do
+  def delete_map(%LandMap{} = map) do
     Repo.delete(map)
   end
 
@@ -150,8 +150,8 @@ defmodule Stygian.Maps do
       %Ecto.Changeset{data: %Map{}}
 
   """
-  def change_map(%Map{} = map, attrs \\ %{}) do
-    Map.changeset(map, attrs)
+  def change_map(%LandMap{} = map, attrs \\ %{}) do
+    LandMap.changeset(map, attrs)
   end
 
   alias Stygian.Maps.Chat
@@ -234,7 +234,7 @@ defmodule Stygian.Maps do
 
   @type chat_entry_request() :: %{
           character: Character.t(),
-          map: Map.t(),
+          map: LandMap.t(),
           attribute: CharacterSkill.t(),
           skill: CharacterSkill.t(),
           modifier: integer(),
@@ -363,17 +363,17 @@ defmodule Stygian.Maps do
       NaiveDateTime.utc_now()
       |> NaiveDateTime.add(@private_map_timeout_in_hour * -1, :hour)
 
-    Map
-    |> distinct(true)
+    LandMap
     |> from()
-    |> where([m], m.private)
-    |> join(:left, [m], mp in PrivateMapCharacter, 
-      on: m.id == mp.map_id and mp.inserted_at >= ^limit and mp.host)
-    |> select([m, mp], %{id: m.id, name: m.name, count: count(mp.id)})
-    |> group_by([m, _], m.id)
+    |> where([m], m.private and m.inserted_at >= ^limit)
+    |> preload(:hosts)
     |> Repo.all()
-    |> Enum.map(fn %{id: id, name: name, count: count} -> 
-      %Map{id: id, name: name, status: if count > 0 do :occupied else :free end}
+    |> Enum.map(fn 
+      %{hosts: []} = map -> 
+        Map.put(map, :status, :free)
+
+      map ->
+        Map.put(map, :status, :occupied)
     end)
   end
 

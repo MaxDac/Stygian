@@ -5,6 +5,7 @@ defmodule Stygian.Maps.Map do
   import Ecto.Changeset
 
   alias Stygian.Maps.Map
+  alias Stygian.Maps.PrivateMapCharacter
 
   @type t :: %__MODULE__{
           id: integer(),
@@ -18,6 +19,7 @@ defmodule Stygian.Maps.Map do
           parent_id: integer(),
           parent: Map.t(),
           children: list(Map.t()),
+          hosts: list(PrivateMapCharacter.t()),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -33,6 +35,7 @@ defmodule Stygian.Maps.Map do
 
     belongs_to :parent, Map, foreign_key: :parent_id
     has_many :children, Map, foreign_key: :parent_id
+    has_many :hosts, PrivateMapCharacter, foreign_key: :map_id 
 
     timestamps()
   end

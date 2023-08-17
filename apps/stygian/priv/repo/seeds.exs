@@ -414,3 +414,19 @@ MapHelpers.add_map(%{
   coords_type: "poly",
   coords: "113,129,143,130,178,145,215,155,299,199,256,255,241,251,125,213,104,165"
 })
+
+MapHelpers.add_map(%{
+  name: "Stanza Privata 1",
+  private: true,
+})
+
+MapHelpers.add_map(%{
+  name: "Stanza Privata 2",
+  private: true,
+})
+
+MapHelpers.add_map(%{
+  name: "Stanza Privata 3",
+  private: true,
+})
+
