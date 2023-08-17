@@ -406,4 +406,121 @@ defmodule Stygian.MapsTest do
                "Ha effettuato un tiro di #{skill1.name} + #{skill2.name} con Diff. 10 ottenendo un successo (3 + 7)."
     end
   end
+
+  describe "Private maps" do
+    alias Stygian.Maps
+
+    import Stygian.MapsFixtures
+    import Stygian.CharactersFixtures
+
+    test "list_private_rooms/0 lists all the private rooms" do
+      map_fixture(%{name: "room1", private: true})
+      map_fixture(%{name: "room2", private: true})
+      map_fixture(%{name: "room3", private: false})
+
+      rooms = Maps.list_private_rooms()
+      assert 2 == Enum.count(rooms)
+      assert Enum.any?(rooms, &(&1.name == "room1"))
+      assert Enum.any?(rooms, &(&1.name == "room2"))
+    end
+
+    test "list_private_rooms/0 lists all the private rooms with the correct status" do
+      %{id: map_id_1} = map_fixture(%{name: "room1", private: true})
+      map_fixture(%{name: "room2", private: true})
+      map_fixture(%{name: "room3", private: false})
+
+      private_map_character_fixture(%{
+        map_id: map_id_1, 
+        host: true
+      })
+
+      rooms = Maps.list_private_rooms()
+      assert 2 == Enum.count(rooms)
+      assert Enum.any?(rooms, &(&1.name == "room1" && &1.status == :occupied))
+      assert Enum.any?(rooms, &(&1.name == "room2" && &1.status == :free))
+    end
+
+    test "list_private_rooms/0 returns an empty list when no private maps exist" do
+      map_fixture(%{name: "room3", private: false})
+      assert [] = Maps.list_private_rooms()
+    end
+
+    test "list_private_map_characters/1 returns the list of characters allowed into the private room" do
+      %{id: map_id} = map_fixture()
+
+      %{id: character_id_1} = character_fixture(%{name: "Name Whatever 1"})
+      %{id: character_id_2} = character_fixture(%{name: "Name Whatever 2"})
+      %{id: character_id_3} = character_fixture(%{name: "Name Whatever 3"})
+
+      private_map_character_fixture(%{map_id: map_id, character_id: character_id_1})
+      private_map_character_fixture(%{map_id: map_id, character_id: character_id_2})
+      private_map_character_fixture(%{map_id: map_id, character_id: character_id_3})
+
+      character_list = Maps.list_private_map_characters(map_id)
+
+      assert 3 = Enum.count(character_list)
+      assert Enum.any?(character_list, &(&1.character_id == character_id_1))
+      assert Enum.any?(character_list, &(&1.character_id == character_id_2))
+      assert Enum.any?(character_list, &(&1.character_id == character_id_3))
+    end
+
+    test "list_private_map_characters/1 returns an empty list when the private map is free" do
+      %{id: map_id} = map_fixture()
+      character_list = Maps.list_private_map_characters(map_id)
+      assert 0 = Enum.count(character_list)
+    end
+
+    test "book_private_room/3 fails when the host is null" do
+      assert {:error, %Ecto.Changeset{}} = Maps.book_private_room(1, nil, [1, 2])
+    end
+
+    test "book_private_room/3 fails when the chracter id list is empty" do
+      assert {:error, %Ecto.Changeset{}} = Maps.book_private_room(1, 1, [])
+    end
+
+    test "book_private_room/3 fails if the room is not private" do
+      %{id: character_id_1} = character_fixture(%{name: "Some Name 1"})
+      %{id: character_id_2} = character_fixture(%{name: "Some Name 2"})
+      %{id: character_id_3} = character_fixture(%{name: "Some Name 3"})
+
+      %{id: map_id} = map_fixture()
+
+      assert {:error, %Ecto.Changeset{}} = Maps.book_private_room(map_id, character_id_1, [character_id_2, character_id_3])
+    end
+
+    test "book_private_room/3 insert all the characters in the private room" do
+      %{id: character_id_1} = character_fixture(%{name: "Some Name 1"})
+      %{id: character_id_2} = character_fixture(%{name: "Some Name 2"})
+      %{id: character_id_3} = character_fixture(%{name: "Some Name 3"})
+
+      %{id: map_id} = map_fixture(%{private: true})
+
+      assert :ok = Maps.book_private_room(map_id, character_id_1, [character_id_2, character_id_3])
+
+      character_list = Maps.list_private_map_characters(map_id)
+
+      assert 3 = Enum.count(character_list)
+      assert Enum.any?(character_list, &(&1.character_id == character_id_1 && &1.host))
+      assert Enum.any?(character_list, &(&1.character_id == character_id_2))
+      assert Enum.any?(character_list, &(&1.character_id == character_id_3))
+    end
+
+    test "add_character_guest/2 returns an error if the room is not booked" do
+      %{id: character_id} = character_fixture()
+      %{id: map_id} = map_fixture()
+      
+      assert {:error, %Ecto.Changeset{}} = Maps.add_character_guest(map_id, character_id)
+    end
+
+    test "add_character_guest/2 adds the guest to the private room" do
+      %{id: character_id_1} = character_fixture(%{name: "Some Name 1"})
+      %{id: character_id_2} = character_fixture(%{name: "Some Name 2"})
+      %{id: character_id_3} = character_fixture(%{name: "Some Name 3"})
+
+      %{id: map_id} = map_fixture(%{private: true})
+      
+      Maps.book_private_room(map_id, character_id_1, [character_id_2])
+      assert {:ok, %Stygian.Maps.PrivateMapCharacter{}} = Maps.add_character_guest(map_id, character_id_3)
+    end
+  end
 end

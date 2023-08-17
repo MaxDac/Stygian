@@ -5,12 +5,13 @@ defmodule Stygian.Maps do
 
   import Ecto.Query, warn: false
 
+  alias Ecto.Changeset
   alias Stygian.Repo
 
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Maps.Map
-  alias Stygian.Maps.PrivateMapCharacters
+  alias Stygian.Maps.PrivateMapCharacter
 
   @default_limit_in_hour 2
   @private_map_timeout_in_hour 3
@@ -354,11 +355,113 @@ defmodule Stygian.Maps do
   end
 
   @doc """
-  Creates a new booking for a host in a private room.
+  Lists all the private rooms, specifying their status.
   """
-  @spec book_private_room(character :: Character.t(), map :: Map.t()) ::
-    {:ok, PrivateMapCharacters.t()} | {:error, Changeset.t()}
-  def book_private_room(character, map) do
-    throw "not implemented yet" 
+  @spec list_private_rooms() :: list(PrivateMapCharacter.t())
+  def list_private_rooms do
+    limit = 
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.add(@private_map_timeout_in_hour * -1, :hour)
+
+    Map
+    |> distinct(true)
+    |> from()
+    |> where([m], m.private)
+    |> join(:left, [m], mp in PrivateMapCharacter, 
+      on: m.id == mp.map_id and mp.inserted_at >= ^limit and mp.host)
+    |> select([m, mp], %{id: m.id, name: m.name, count: count(mp.id)})
+    |> group_by([m, _], m.id)
+    |> Repo.all()
+    |> Enum.map(fn %{id: id, name: name, count: count} -> 
+      %Map{id: id, name: name, status: if count > 0 do :occupied else :free end}
+    end)
+  end
+
+  @doc """
+  Lists all the characters allowed into a private map.
+  """
+  @spec list_private_map_characters(map_id :: non_neg_integer()) :: list(PrivateMapCharacters.t())
+  def list_private_map_characters(map_id) do
+    PrivateMapCharacter
+    |> from()
+    |> where([p], p.map_id == ^map_id)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a new private entry for a character.
+  """
+  @spec create_private_map_character(map()) :: 
+    {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
+  def create_private_map_character(attrs \\ %{}) do
+    %PrivateMapCharacter{}
+    |> PrivateMapCharacter.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Books a room. The room must have an host, and a list of character.
+  """
+  @spec book_private_room(
+                  map_id :: non_neg_integer(),
+                  host_id :: non_neg_integer(),
+                  character_ids :: list(non_neg_integer())) ::
+    :ok | {:error, Changeset.t()}
+  def book_private_room(map_id, host_id, character_ids)
+
+  def book_private_room(_, _, []), do: {:error, Changeset.add_error(%Changeset{}, :character_ids, "Devi specificare almeno un altro personaggio")}
+
+  def book_private_room(_, host_id, _) when is_nil(host_id), do: {:error, Changeset.add_error(%Changeset{}, :host_id, "Devi specificare l'ospite")}
+
+  def book_private_room(map_id, host_id, character_ids) do
+    if is_private(map_id) do
+      host_changeset =
+        %PrivateMapCharacter{}
+        |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: host_id, host: true})
+
+      multi = 
+        Ecto.Multi.new()
+        |> Ecto.Multi.insert(host_id, host_changeset)
+
+      multi =
+        Enum.reduce(character_ids, multi, fn id, m ->
+          changeset =
+            %PrivateMapCharacter{}
+            |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: id, host: true})
+
+          m
+          |> Ecto.Multi.insert(id, changeset)
+        end)
+
+      with {:ok, _} <- Repo.transaction(multi) do
+        :ok
+      end
+    else
+      {:error, Changeset.add_error(%Changeset{}, :map_id, "La mappa non e' una stanza privata.")}
+    end
+  end
+
+  defp is_private(map_id) do
+    case get_map(map_id) do
+      %{private: true} -> true
+      _ -> false
+    end
+  end
+
+  @doc """
+  Adds another guest to the private map. The map must be booked before inviting other characters.
+  """
+  @spec add_character_guest(map_id :: non_neg_integer(), character_id :: non_neg_integer()) ::
+    {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
+  def add_character_guest(map_id, character_id) do
+    case list_private_map_characters(map_id) do
+      [] -> 
+        {:error, Changeset.add_error(%Changeset{}, :map_id, "La mappa e' attualmente libera, non puoi aggiungere un ospite senza prenotarla.")}
+
+      _ ->
+        %PrivateMapCharacter{}
+        |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: character_id})
+        |> Repo.insert()
+    end
   end
 end

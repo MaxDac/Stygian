@@ -5,6 +5,7 @@ defmodule Stygian.MapsFixtures do
   """
 
   alias Stygian.CharactersFixtures
+  alias Stygian.Maps
 
   @doc """
   Generate a map.
@@ -42,5 +43,30 @@ defmodule Stygian.MapsFixtures do
       |> Stygian.Maps.create_chat()
 
     chat
+  end
+
+  @doc """
+  Generates a private chat occupant.
+  By passing either map_id or character_id, the fixture will not create a new one.
+  """
+  def private_map_character_fixture(attrs \\ %{}) do
+    attrs =
+      if Map.has_key?(attrs, :map_id) do
+        attrs
+      else
+        %{id: map_id} = map_fixture()
+        Map.put(attrs, :map_id, map_id)
+      end
+      
+    attrs =
+      if Map.has_key?(attrs, :character_id) do
+        attrs
+      else
+        %{id: character_id} = CharactersFixtures.character_fixture()
+        Map.put(attrs, :character_id, character_id)
+      end
+  
+    {:ok, private_map_character} = Maps.create_private_map_character(attrs)
+    private_map_character
   end
 end

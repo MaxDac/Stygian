@@ -10,7 +10,7 @@ defmodule Stygian.Maps.Chat do
   @type t() :: %__MODULE__{
           id: integer(),
           text: String.t(),
-          type: atom(),
+          type: :text | :master | :dices | :special | :off,
           character_id: integer(),
           character: Character.t(),
           map_id: integer(),

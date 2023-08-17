@@ -1,4 +1,4 @@
-defmodule Stygian.Maps.PrivateMapCharacters do
+defmodule Stygian.Maps.PrivateMapCharacter do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -11,6 +11,7 @@ defmodule Stygian.Maps.PrivateMapCharacters do
     character: Character.t(),
     map_id: integer(),
     map: Map.t(),
+    host: boolean(),
 
     inserted_at: NaiveDateTime.t(),
     updated_at: NaiveDateTime.t()
@@ -19,7 +20,7 @@ defmodule Stygian.Maps.PrivateMapCharacters do
   schema "private_map_rel_characters" do
     belongs_to :character, Character
     belongs_to :map, Map
-    field :host, :boolean, default: false
+    field :host, :boolean, default: false 
 
     timestamps()
   end
