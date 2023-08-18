@@ -6,6 +6,7 @@ defmodule StygianWeb.UserAuthTest do
   alias StygianWeb.UserAuth
   import Stygian.AccountsFixtures
   import Stygian.CharactersFixtures
+  import Stygian.CharactersFixtures
 
   @remember_me_cookie "_stygian_web_user_remember_me"
 
@@ -126,6 +127,35 @@ defmodule StygianWeb.UserAuthTest do
       conn = UserAuth.fetch_current_user(conn, [])
       refute get_session(conn, :user_token)
       refute conn.assigns.current_user
+    end
+  end
+
+  describe "fetch_character/2" do
+    test "get the character from the session and put it in the assigns", %{conn: conn, user: user} do
+      user_token = Accounts.generate_user_session_token(user)
+      character = character_fixture(%{user_id: user.id})
+
+      conn =
+        conn
+        |> put_session(:user_token, user_token)
+        |> put_session(:character_id, character.id)
+        |> UserAuth.fetch_character([])
+
+      assert character == conn.assigns.current_character
+    end
+
+    test "cannot get the character id from the session, putting nil to the assigns", %{
+      conn: conn,
+      user: user
+    } do
+      user_token = Accounts.generate_user_session_token(user)
+
+      conn =
+        conn
+        |> put_session(:user_token, user_token)
+        |> UserAuth.fetch_character([])
+
+      assert nil == conn.assigns.current_character
     end
   end
 
@@ -303,6 +333,31 @@ defmodule StygianWeb.UserAuthTest do
 
     test "does not redirect if user is authenticated", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.require_authenticated_user([])
+      refute conn.halted
+      refute conn.status
+    end
+  end
+
+  describe "require_user_authenticated_and_character/2" do
+    test "redirects if character is not defined", %{conn: conn, user: user} do
+      conn =
+        conn
+        |> assign(:current_user, user)
+        |> UserAuth.require_user_authenticated_and_character([])
+
+      assert conn.halted
+      assert redirected_to(conn) == ~p"/"
+    end
+
+    test "does not redirect if character is defined in the session", %{conn: conn, user: user} do
+      character = character_fixture(%{user_id: user.id})
+
+      conn =
+        conn
+        |> assign(:current_user, user)
+        |> assign(:current_character, character)
+        |> UserAuth.require_user_authenticated_and_character([])
+
       refute conn.halted
       refute conn.status
     end

@@ -61,3 +61,11 @@ RUN su ${USERNAME} -c "mix local.hex --force \
 
 WORKDIR /app
 EXPOSE 4000
+
+# Enabling SSH
+RUN wget https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/script-library/sshd-debian.sh \
+    && apt-get update \
+    && bash sshd-debian.sh \
+    && rm sshd-debian.sh
+
+ENTRYPOINT ["/usr/local/share/ssh-init.sh"]

@@ -116,6 +116,19 @@ defmodule StygianWeb.UserAuth do
   end
 
   @doc """
+  Tries to get the character from the session.
+  If it does not find it, it will get the first one.
+  If neither contains a character, it populates the assigns key with nil.
+  """
+  def fetch_character(conn, _opts) do
+    if character_id = get_selected_character_from_session?(conn) do
+      assign(conn, :current_character, Characters.get_character!(character_id))
+    else
+      assign(conn, :current_character, nil)
+    end
+  end
+
+  @doc """
   Handles mounting and authenticating the current_user in LiveViews.
 
   ## `on_mount` arguments
@@ -342,6 +355,25 @@ defmodule StygianWeb.UserAuth do
     do: put_flash(conn, :error, "Devi effettuare il login per accedere a questa pagina.")
 
   @doc """
+  Used for routes that require the user to be authenticated and have a character.
+  """
+  def require_user_authenticated_and_character(conn, opts) do
+    conn
+    |> require_authenticated_user(opts)
+    |> require_character(opts)
+  end
+
+  defp require_character(conn, _opts) do
+    if conn.assigns[:current_character] do
+      conn
+    else
+      conn
+      |> redirect(to: ~p"/")
+      |> halt()
+    end
+  end
+
+  @doc """
   Used for routes that requires admin priviledges.
   """
   def require_admin_user(conn, _opts) do
@@ -368,6 +400,11 @@ defmodule StygianWeb.UserAuth do
   end
 
   defp put_selected_character_id_in_session(conn, _), do: conn
+
+  defp get_selected_character_from_session?(conn) do
+    conn
+    |> get_session(:character_id)
+  end
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))

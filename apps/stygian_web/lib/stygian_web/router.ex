@@ -13,6 +13,11 @@ defmodule StygianWeb.Router do
     plug :fetch_current_user
   end
 
+  pipeline :browser_internal do
+    plug :browser
+    plug :fetch_character
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -40,6 +45,16 @@ defmodule StygianWeb.Router do
   end
 
   ## Home routes
+
+  scope "/map", StygianWeb.ChatLive do
+    pipe_through [:browser_internal, :require_user_authenticated_and_character]
+
+    live_session :private_chat_live,
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
+      live "/private", PrivateRoomsLive, :index
+      live "/private/book/:map_id", BookPrivateRoomLive, :index
+    end
+  end
 
   scope "/", StygianWeb.ChatLive do
     pipe_through [:browser, :require_authenticated_user]

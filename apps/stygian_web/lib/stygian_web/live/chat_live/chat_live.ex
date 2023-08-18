@@ -38,7 +38,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign_chat_entries(Maps.list_map_chats(map_id))
      |> ChatHelpers.subscribe_to_chat_events(map_id)
      |> assign_textarea_id()
-     |> assign_dice_button_id()}
+     |> assign_dice_button_id()
+     |> check_private_room_allowance()}
   end
 
   @impl true
@@ -101,6 +102,28 @@ defmodule StygianWeb.ChatLive.ChatLive do
   defp assign_dice_button_id(socket) do
     assign(socket, :dice_button_id, new_dice_button_id())
   end
+
+  defp check_private_room_allowance(%{assigns: %{current_user: %{admin: true}}} = socket),
+    do: socket
+
+  defp check_private_room_allowance(
+         %{
+           assigns: %{
+             map: %{id: map_id, private: true},
+             current_character: %{id: current_character_id}
+           }
+         } = socket
+       ) do
+    if Maps.is_character_allowed?(map_id, current_character_id) do
+      socket
+    else
+      socket
+      |> put_flash(:error, "Non puoi accedere a questa stanza")
+      |> push_navigate(to: ~p"/")
+    end
+  end
+
+  defp check_private_room_allowance(socket), do: socket
 
   defp new_textarea_id, do: "textarea-id-#{:rand.uniform(10)}"
 

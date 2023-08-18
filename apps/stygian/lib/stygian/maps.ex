@@ -5,13 +5,16 @@ defmodule Stygian.Maps do
 
   import Ecto.Query, warn: false
 
+  alias Ecto.Changeset
   alias Stygian.Repo
 
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
-  alias Stygian.Maps.Map
+  alias Stygian.Maps.Map, as: LandMap
+  alias Stygian.Maps.PrivateMapCharacter
 
   @default_limit_in_hour 2
+  @private_map_timeout_in_hour 3
 
   @doc """
   Returns the list of maps.
@@ -23,15 +26,15 @@ defmodule Stygian.Maps do
 
   """
   def list_maps do
-    Repo.all(Map)
+    Repo.all(LandMap)
   end
 
   @doc """
   Returns the list of the main maps, the ones that does not have any parent.
   """
-  @spec list_parent_maps() :: list(Map.t())
+  @spec list_parent_maps() :: list(LandMap.t())
   def list_parent_maps do
-    Map
+    LandMap
     |> from()
     |> where([m], is_nil(m.parent_id))
     |> Repo.all()
@@ -40,9 +43,9 @@ defmodule Stygian.Maps do
   @doc """
   Returns the list of the maps whose parent is the map given in input.
   """
-  @spec list_child_maps(Map.t()) :: list(Map.t())
+  @spec list_child_maps(LandMap.t()) :: list(LandMap.t())
   def list_child_maps(%{id: parent_id}) do
-    Map
+    LandMap
     |> from()
     |> where([m], m.parent_id == ^parent_id)
     |> Repo.all()
@@ -62,24 +65,24 @@ defmodule Stygian.Maps do
       ** (Ecto.NoResultsError)
 
   """
-  def get_map!(id), do: Repo.get!(Map, id)
+  def get_map!(id), do: Repo.get!(LandMap, id)
 
   @doc """
   Gets a single map, or nil if it does not exist.
   """
-  def get_map(id), do: Repo.get(Map, id)
+  def get_map(id), do: Repo.get(LandMap, id)
 
   @doc """
   Gets a single map by name, or nil if it doesn't find it.
   """
-  def get_map_by_name(name), do: Repo.get_by(Map, name: name)
+  def get_map_by_name(name), do: Repo.get_by(LandMap, name: name)
 
   @doc """
   Gets a map with the preloaded children.
   """
-  @spec get_map_with_children(integer()) :: Map.t()
+  @spec get_map_with_children(integer()) :: LandMap.t()
   def get_map_with_children(map_id) do
-    Map
+    LandMap
     |> from()
     |> where([p], p.id == ^map_id)
     |> preload(:children)
@@ -99,8 +102,8 @@ defmodule Stygian.Maps do
 
   """
   def create_map(attrs \\ %{}) do
-    %Map{}
-    |> Map.changeset(attrs)
+    %LandMap{}
+    |> LandMap.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -116,9 +119,9 @@ defmodule Stygian.Maps do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_map(%Map{} = map, attrs) do
+  def update_map(%LandMap{} = map, attrs) do
     map
-    |> Map.changeset(attrs)
+    |> LandMap.changeset(attrs)
     |> Repo.update()
   end
 
@@ -134,7 +137,7 @@ defmodule Stygian.Maps do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_map(%Map{} = map) do
+  def delete_map(%LandMap{} = map) do
     Repo.delete(map)
   end
 
@@ -147,8 +150,8 @@ defmodule Stygian.Maps do
       %Ecto.Changeset{data: %Map{}}
 
   """
-  def change_map(%Map{} = map, attrs \\ %{}) do
-    Map.changeset(map, attrs)
+  def change_map(%LandMap{} = map, attrs \\ %{}) do
+    LandMap.changeset(map, attrs)
   end
 
   alias Stygian.Maps.Chat
@@ -231,7 +234,7 @@ defmodule Stygian.Maps do
 
   @type chat_entry_request() :: %{
           character: Character.t(),
-          map: Map.t(),
+          map: LandMap.t(),
           attribute: CharacterSkill.t(),
           skill: CharacterSkill.t(),
           modifier: integer(),
@@ -349,5 +352,168 @@ defmodule Stygian.Maps do
   """
   def change_chat(%Chat{} = chat, attrs \\ %{}) do
     Chat.changeset(chat, attrs)
+  end
+
+  defp get_current_valid_limit do
+    NaiveDateTime.utc_now()
+    |> NaiveDateTime.add(@private_map_timeout_in_hour * -1, :hour)
+  end
+
+  @doc """
+  Lists all the private rooms, specifying their status.
+  """
+  @spec list_private_rooms() :: list(PrivateMapCharacter.t())
+  def list_private_rooms do
+    limit = get_current_valid_limit()
+
+    LandMap
+    |> from()
+    |> where([m], m.private)
+    |> preload(:hosts)
+    |> Repo.all()
+    |> Enum.map(fn
+      %{hosts: []} = map ->
+        Map.put(map, :status, :free)
+
+      %{hosts: hosts} = map ->
+        status =
+          if Enum.any?(hosts, &(&1.inserted_at >= limit)) do
+            :occupied
+          else
+            :free
+          end
+
+        Map.put(map, :status, status)
+    end)
+  end
+
+  @doc """
+  Lists all the characters allowed into a private map.
+  """
+  @spec list_private_map_characters(map_id :: non_neg_integer()) :: list(PrivateMapCharacter.t())
+  def list_private_map_characters(map_id) do
+    PrivateMapCharacter
+    |> from()
+    |> where([p], p.map_id == ^map_id)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a new private entry for a character.
+  """
+  @spec create_private_map_character(map()) ::
+          {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
+  def create_private_map_character(attrs \\ %{}) do
+    %PrivateMapCharacter{}
+    |> PrivateMapCharacter.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Books a room. The room must have an host, and a list of character.
+  """
+  @spec book_private_room(
+          map_id :: non_neg_integer(),
+          host_id :: non_neg_integer(),
+          character_ids :: list(non_neg_integer())
+        ) ::
+          :ok | {:error, Changeset.t()}
+  def book_private_room(map_id, host_id, character_ids)
+
+  def book_private_room(_, _, []),
+    do:
+      {:error,
+       Changeset.add_error(
+         %Changeset{},
+         :character_ids,
+         "Devi specificare almeno un altro personaggio"
+       )}
+
+  def book_private_room(_, host_id, _) when is_nil(host_id),
+    do: {:error, Changeset.add_error(%Changeset{}, :host_id, "Devi specificare l'ospite")}
+
+  def book_private_room(map_id, host_id, character_ids) do
+    if is_private(map_id) && not character_is_already_host?(host_id) do
+      host_changeset =
+        %PrivateMapCharacter{}
+        |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: host_id, host: true})
+
+      multi =
+        Ecto.Multi.new()
+        |> Ecto.Multi.insert(host_id, host_changeset)
+
+      multi =
+        Enum.reduce(character_ids, multi, fn id, m ->
+          changeset =
+            %PrivateMapCharacter{}
+            |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: id, host: false})
+
+          m
+          |> Ecto.Multi.insert(id, changeset)
+        end)
+
+      with {:ok, _} <- Repo.transaction(multi) do
+        :ok
+      end
+    else
+      {:error, Changeset.add_error(%Changeset{}, :map_id, "La mappa non e' una stanza privata.")}
+    end
+  end
+
+  defp is_private(map_id) do
+    case get_map(map_id) do
+      %{private: true} -> true
+      _ -> false
+    end
+  end
+
+  @doc """
+  Determines whether the charcter is hosting another private room.
+  """
+  @spec character_is_already_host?(character_id :: non_neg_integer()) :: boolean()
+  def character_is_already_host?(character_id) do
+    limit = get_current_valid_limit()
+
+    PrivateMapCharacter
+    |> where([p], p.character_id == ^character_id and p.host and p.inserted_at >= ^limit)
+    |> Repo.exists?()
+  end
+
+  @doc """
+  Determines whether the character is host or has been invited in the private room.
+  """
+  @spec is_character_allowed?(map_id :: non_neg_integer(), character_id :: non_neg_integer()) ::
+          boolean()
+  def is_character_allowed?(map_id, character_id) do
+    limit = get_current_valid_limit()
+
+    PrivateMapCharacter
+    |> where(
+      [p],
+      p.map_id == ^map_id and p.character_id == ^character_id and p.inserted_at >= ^limit
+    )
+    |> Repo.exists?()
+  end
+
+  @doc """
+  Adds another guest to the private map. The map must be booked before inviting other characters.
+  """
+  @spec add_character_guest(map_id :: non_neg_integer(), character_id :: non_neg_integer()) ::
+          {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
+  def add_character_guest(map_id, character_id) do
+    case list_private_map_characters(map_id) do
+      [] ->
+        {:error,
+         Changeset.add_error(
+           %Changeset{},
+           :map_id,
+           "La mappa e' attualmente libera, non puoi aggiungere un ospite senza prenotarla."
+         )}
+
+      _ ->
+        %PrivateMapCharacter{}
+        |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: character_id})
+        |> Repo.insert()
+    end
   end
 end
