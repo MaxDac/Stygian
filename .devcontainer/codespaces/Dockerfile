@@ -69,3 +69,4 @@ RUN wget https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/
     && rm sshd-debian.sh
 
 ENTRYPOINT ["/usr/local/share/ssh-init.sh"]
+CMD ["sleep", "infinity"]
