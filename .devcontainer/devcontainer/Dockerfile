@@ -63,6 +63,9 @@ WORKDIR /app
 EXPOSE 4000
 
 # Enabling SSH
-COPY sshd-debian.sh /tmp/library-scripts/
-RUN apt-get update && bash /tmp/library-scripts/sshd-debian.sh
+RUN wget https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/script-library/sshd-debian.sh \
+    && apt-get update \
+    && bash sshd-debian.sh \
+    && rm sshd-debian.sh
+
 ENTRYPOINT ["/usr/local/share/ssh-init.sh"]
