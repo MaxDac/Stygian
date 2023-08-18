@@ -148,6 +148,8 @@ defmodule StygianWeb.Router do
     live_session :admin_dashboard,
       on_mount: [{StygianWeb.UserAuth, :ensure_admin}] do
       live "/", AdminDashboardLive, :index
+      live "/npcs", CharacterNpcDashboardLive, :index
+      live "/npc/create", CharacterNpcCreationLive, :create
     end
   end
 end

@@ -2,8 +2,8 @@
   <div class="flex flex-row h-screen">
     <div class="bg-[url('/images/HomeWallpaper.webp')] bg-cover fixed top-0 left-0 w-screen h-screen opacity-5 -z-100" />
     <.flash_group flash={@flash} />
-    <.drawer class="xl:invisible" current_character={@current_character} />
-    <.menu class="invisible xl:visible" current_character={@current_character} />
+    <.drawer class="xl:invisible" current_character={@current_character} current_user={@current_user} />
+    <.menu class="invisible xl:visible" current_character={@current_character} current_user={@current_user} />
     <div class="w-full flex justify-center">
       <div>
         <%= @inner_content %>

@@ -38,6 +38,13 @@ defmodule Stygian.CharactersTest do
       assert got_character.user_id == character.user_id
     end
 
+    test "list_npcs/0 returns only NPC characters" do
+      npc = character_fixture(%{name: "Some NPC character", npc: true})
+      character_fixture(%{name: "Some non NPC character"})
+
+      assert [npc] = Characters.list_npcs()
+    end
+
     test "get_character!/1 returns the character with given id" do
       character = character_fixture()
       assert Characters.get_character!(character.id) == character

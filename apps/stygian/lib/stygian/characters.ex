@@ -55,6 +55,16 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Gets a list of NPCs
+  """
+  def list_npcs do
+    Character
+    |> from()
+    |> where([c], c.npc)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single character.
 
   Raises `Ecto.NoResultsError` if the Character does not exist.
@@ -88,7 +98,7 @@ defmodule Stygian.Characters do
 
   @doc """
   Returns the first character of a user.
-  TODO - fix in issue #16, the admin user can have more than one character, but only PNGs.
+  TODO - fix in issue #16, the admin user can have more than one character, but only NPCs.
   """
   def get_user_first_character(user_id) do
     Character

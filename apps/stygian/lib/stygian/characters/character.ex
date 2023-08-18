@@ -22,6 +22,7 @@ defmodule Stygian.Characters.Character do
           sanity: integer(),
           lost_sanity: integer(),
           step: integer(),
+          npc: boolean(),
           user_id: integer(),
           user: User.t(),
           inserted_at: NaiveDateTime.t(),
@@ -44,6 +45,7 @@ defmodule Stygian.Characters.Character do
     field :sanity, :integer
     field :lost_sanity, :integer
     field :step, :integer
+    field :npc, :boolean
 
     belongs_to :user, User
 
@@ -58,7 +60,8 @@ defmodule Stygian.Characters.Character do
       :user_id,
       :step,
       :lost_health,
-      :lost_sanity
+      :lost_sanity,
+      :npc
     ])
     |> validate_required([
       :name,
@@ -101,6 +104,7 @@ defmodule Stygian.Characters.Character do
       :sanity,
       :lost_sanity,
       :step,
+      :npc,
       :user_id
     ])
     |> validate_required([

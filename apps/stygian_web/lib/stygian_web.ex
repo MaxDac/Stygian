@@ -96,6 +96,9 @@ defmodule StygianWeb do
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
 
+      # A collection of helpers for the layout management
+      import StygianWeb.GenericLiveViewHelpers
+
       # Routes generation with the ~p sigil
       unquote(verified_routes())
     end

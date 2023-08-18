@@ -115,11 +115,7 @@
             />
           </svg>
           <span class="ml-3">
-            <%= if @current_character do
-              "Scheda"
-            else
-              "Creazione"
-            end %>
+            <%= get_sheet_link_title(@current_user, @current_character) %>
           </span>
         </.link>
       </li>
