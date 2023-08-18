@@ -390,7 +390,7 @@ defmodule Stygian.Maps do
   @doc """
   Lists all the characters allowed into a private map.
   """
-  @spec list_private_map_characters(map_id :: non_neg_integer()) :: list(PrivateMapCharacters.t())
+  @spec list_private_map_characters(map_id :: non_neg_integer()) :: list(PrivateMapCharacter.t())
   def list_private_map_characters(map_id) do
     PrivateMapCharacter
     |> from()
