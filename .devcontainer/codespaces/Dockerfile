@@ -63,6 +63,6 @@ WORKDIR /app
 EXPOSE 4000
 
 # Enabling SSH
-COPY library-scripts/sshd-debian.sh /tmp/library-scripts/
+COPY script-library/sshd-debian.sh /tmp/library-scripts/
 RUN apt-get update && bash /tmp/library-scripts/sshd-debian.sh
 ENTRYPOINT ["/usr/local/share/ssh-init.sh"]
