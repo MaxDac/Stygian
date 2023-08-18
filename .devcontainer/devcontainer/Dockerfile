@@ -59,10 +59,10 @@ RUN su ${USERNAME} -c "mix local.hex --force \
 # [Optional] Uncomment this line to install additional package.
 # RUN  mix ...
 
+WORKDIR /app
+EXPOSE 4000
+
 # Enabling SSH
 COPY library-scripts/sshd-debian.sh /tmp/library-scripts/
 RUN apt-get update && bash /tmp/library-scripts/sshd-debian.sh
 ENTRYPOINT ["/usr/local/share/ssh-init.sh"]
-
-WORKDIR /app
-EXPOSE 4000
