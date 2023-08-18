@@ -354,14 +354,17 @@ defmodule Stygian.Maps do
     Chat.changeset(chat, attrs)
   end
 
+  defp get_current_valid_limit do
+    NaiveDateTime.utc_now()
+    |> NaiveDateTime.add(@private_map_timeout_in_hour * -1, :hour)
+  end
+
   @doc """
   Lists all the private rooms, specifying their status.
   """
   @spec list_private_rooms() :: list(PrivateMapCharacter.t())
   def list_private_rooms do
-    limit =
-      NaiveDateTime.utc_now()
-      |> NaiveDateTime.add(@private_map_timeout_in_hour * -1, :hour)
+    limit = get_current_valid_limit()
 
     LandMap
     |> from()
@@ -469,8 +472,26 @@ defmodule Stygian.Maps do
   """
   @spec character_is_already_host?(character_id :: non_neg_integer()) :: boolean()
   def character_is_already_host?(character_id) do
+    limit = get_current_valid_limit()
+
     PrivateMapCharacter
-    |> where([p], p.character_id == ^character_id and p.host)
+    |> where([p], p.character_id == ^character_id and p.host and p.inserted_at >= ^limit)
+    |> Repo.exists?()
+  end
+
+  @doc """
+  Determines whether the character is host or has been invited in the private room.
+  """
+  @spec is_character_allowed?(map_id :: non_neg_integer(), character_id :: non_neg_integer()) ::
+          boolean()
+  def is_character_allowed?(map_id, character_id) do
+    limit = get_current_valid_limit()
+
+    PrivateMapCharacter
+    |> where(
+      [p],
+      p.map_id == ^map_id and p.character_id == ^character_id and p.inserted_at >= ^limit
+    )
     |> Repo.exists?()
   end
 

@@ -37,6 +37,9 @@ defmodule StygianWeb.ChatLive.PrivateRoomsLive do
         <.link :if={map.status == :free} navigate={~p"/map/private/book/#{map.id}"}>
           <span class="font-typewriter text-sm text-zinc-300">Libera - Prenota</span>
         </.link>
+        <.link :if={@current_user.admin} navigate={~p"/chat/#{map.id}"}>
+          <span class="font-typewriter text-sm text-rose-700">Accedi</span>
+        </.link>
       </div>
     </div>
     """
