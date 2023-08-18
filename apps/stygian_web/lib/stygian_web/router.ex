@@ -52,6 +52,7 @@ defmodule StygianWeb.Router do
     live_session :private_chat_live,
       on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
       live "/private", PrivateRoomsLive, :index
+      live "/private/book/:map_id", BookPrivateRoomLive, :index
     end
   end
 

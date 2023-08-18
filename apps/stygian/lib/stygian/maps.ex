@@ -359,21 +359,28 @@ defmodule Stygian.Maps do
   """
   @spec list_private_rooms() :: list(PrivateMapCharacter.t())
   def list_private_rooms do
-    limit = 
+    limit =
       NaiveDateTime.utc_now()
       |> NaiveDateTime.add(@private_map_timeout_in_hour * -1, :hour)
 
     LandMap
     |> from()
-    |> where([m], m.private and m.inserted_at >= ^limit)
+    |> where([m], m.private)
     |> preload(:hosts)
     |> Repo.all()
-    |> Enum.map(fn 
-      %{hosts: []} = map -> 
+    |> Enum.map(fn
+      %{hosts: []} = map ->
         Map.put(map, :status, :free)
 
-      map ->
-        Map.put(map, :status, :occupied)
+      %{hosts: hosts} = map ->
+        status =
+          if Enum.any?(hosts, &(&1.inserted_at >= limit)) do
+            :occupied
+          else
+            :free
+          end
+
+        Map.put(map, :status, status)
     end)
   end
 
@@ -391,8 +398,8 @@ defmodule Stygian.Maps do
   @doc """
   Creates a new private entry for a character.
   """
-  @spec create_private_map_character(map()) :: 
-    {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
+  @spec create_private_map_character(map()) ::
+          {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
   def create_private_map_character(attrs \\ %{}) do
     %PrivateMapCharacter{}
     |> PrivateMapCharacter.changeset(attrs)
@@ -403,23 +410,32 @@ defmodule Stygian.Maps do
   Books a room. The room must have an host, and a list of character.
   """
   @spec book_private_room(
-                  map_id :: non_neg_integer(),
-                  host_id :: non_neg_integer(),
-                  character_ids :: list(non_neg_integer())) ::
-    :ok | {:error, Changeset.t()}
+          map_id :: non_neg_integer(),
+          host_id :: non_neg_integer(),
+          character_ids :: list(non_neg_integer())
+        ) ::
+          :ok | {:error, Changeset.t()}
   def book_private_room(map_id, host_id, character_ids)
 
-  def book_private_room(_, _, []), do: {:error, Changeset.add_error(%Changeset{}, :character_ids, "Devi specificare almeno un altro personaggio")}
+  def book_private_room(_, _, []),
+    do:
+      {:error,
+       Changeset.add_error(
+         %Changeset{},
+         :character_ids,
+         "Devi specificare almeno un altro personaggio"
+       )}
 
-  def book_private_room(_, host_id, _) when is_nil(host_id), do: {:error, Changeset.add_error(%Changeset{}, :host_id, "Devi specificare l'ospite")}
+  def book_private_room(_, host_id, _) when is_nil(host_id),
+    do: {:error, Changeset.add_error(%Changeset{}, :host_id, "Devi specificare l'ospite")}
 
   def book_private_room(map_id, host_id, character_ids) do
-    if is_private(map_id) do
+    if is_private(map_id) && not character_is_already_host?(host_id) do
       host_changeset =
         %PrivateMapCharacter{}
         |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: host_id, host: true})
 
-      multi = 
+      multi =
         Ecto.Multi.new()
         |> Ecto.Multi.insert(host_id, host_changeset)
 
@@ -427,7 +443,7 @@ defmodule Stygian.Maps do
         Enum.reduce(character_ids, multi, fn id, m ->
           changeset =
             %PrivateMapCharacter{}
-            |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: id, host: true})
+            |> PrivateMapCharacter.changeset(%{map_id: map_id, character_id: id, host: false})
 
           m
           |> Ecto.Multi.insert(id, changeset)
@@ -449,14 +465,29 @@ defmodule Stygian.Maps do
   end
 
   @doc """
+  Determines whether the charcter is hosting another private room.
+  """
+  @spec character_is_already_host?(character_id :: non_neg_integer()) :: boolean()
+  def character_is_already_host?(character_id) do
+    PrivateMapCharacter
+    |> where([p], p.character_id == ^character_id and p.host)
+    |> Repo.exists?()
+  end
+
+  @doc """
   Adds another guest to the private map. The map must be booked before inviting other characters.
   """
   @spec add_character_guest(map_id :: non_neg_integer(), character_id :: non_neg_integer()) ::
-    {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
+          {:ok, PrivateMapCharacter.t()} | {:error, Changeset.t()}
   def add_character_guest(map_id, character_id) do
     case list_private_map_characters(map_id) do
-      [] -> 
-        {:error, Changeset.add_error(%Changeset{}, :map_id, "La mappa e' attualmente libera, non puoi aggiungere un ospite senza prenotarla.")}
+      [] ->
+        {:error,
+         Changeset.add_error(
+           %Changeset{},
+           :map_id,
+           "La mappa e' attualmente libera, non puoi aggiungere un ospite senza prenotarla."
+         )}
 
       _ ->
         %PrivateMapCharacter{}

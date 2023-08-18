@@ -417,16 +417,15 @@ MapHelpers.add_map(%{
 
 MapHelpers.add_map(%{
   name: "Stanza Privata 1",
-  private: true,
+  private: true
 })
 
 MapHelpers.add_map(%{
   name: "Stanza Privata 2",
-  private: true,
+  private: true
 })
 
 MapHelpers.add_map(%{
   name: "Stanza Privata 3",
-  private: true,
+  private: true
 })
-

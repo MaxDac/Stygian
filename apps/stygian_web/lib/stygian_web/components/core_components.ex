@@ -829,7 +829,6 @@ defmodule StygianWeb.CoreComponents do
   @doc """
   The default `h1` component.
   """
-
   slot :inner_block, doc: "the title to render"
 
   def h1(assigns) do
@@ -837,6 +836,43 @@ defmodule StygianWeb.CoreComponents do
     <h1 class="text-center font-berolina">
       <%= render_slot(@inner_block) %>
     </h1>
+    """
+  end
+
+  @doc """
+  Exposes a list of characters.
+  To guarantee maximum performance, the list of characters must be provided in input as an assign.
+  """
+  attr :field, FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :label, :string, default: nil
+  attr :characters, :list, required: true
+
+  def character_selection(%{characters: characters} = assigns) do
+    options =
+      characters
+      |> Enum.map(&{&1.name, &1.id})
+
+    assigns =
+      assigns
+      |> Map.put(:options, options)
+      |> Map.delete(:characters)
+
+    character_selection(assigns)
+  end
+
+  def character_selection(assigns) do
+    ~H"""
+    <div>
+      <.input
+        field={@field}
+        label={@label}
+        type="select"
+        prompt="Seleziona il personaggio"
+        options={@options}
+      />
+    </div>
     """
   end
 end

@@ -144,7 +144,10 @@ defmodule StygianWeb.UserAuthTest do
       assert character == conn.assigns.current_character
     end
 
-    test "cannot get the character id from the session, putting nil to the assigns", %{conn: conn, user: user} do
+    test "cannot get the character id from the session, putting nil to the assigns", %{
+      conn: conn,
+      user: user
+    } do
       user_token = Accounts.generate_user_session_token(user)
 
       conn =
@@ -337,16 +340,21 @@ defmodule StygianWeb.UserAuthTest do
 
   describe "require_user_authenticated_and_character/2" do
     test "redirects if character is not defined", %{conn: conn, user: user} do
-      conn = conn |> assign(:current_user, user) |> UserAuth.require_user_authenticated_and_character([])
+      conn =
+        conn
+        |> assign(:current_user, user)
+        |> UserAuth.require_user_authenticated_and_character([])
+
       assert conn.halted
       assert redirected_to(conn) == ~p"/"
     end
 
     test "does not redirect if character is defined in the session", %{conn: conn, user: user} do
       character = character_fixture(%{user_id: user.id})
-      conn = 
-        conn 
-        |> assign(:current_user, user) 
+
+      conn =
+        conn
+        |> assign(:current_user, user)
         |> assign(:current_character, character)
         |> UserAuth.require_user_authenticated_and_character([])
 

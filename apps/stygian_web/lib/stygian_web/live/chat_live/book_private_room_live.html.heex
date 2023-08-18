@@ -1,0 +1,25 @@
+<.h1>Prenota <%= @map.name %></.h1>
+
+<div class="w-full text-center">
+  <.link navigate={~p"/map/private"} class="font-typewriter text-md w-full text-center">
+    Torna alla lista delle stanze
+  </.link>
+</div>
+
+<div>
+  Quali persone desideri invitare?
+</div>
+
+<.simple_form for={@form} phx-submit="book">
+  <div class="flex flex-col space-y-5">
+    <%= for i <- 1..5 do %>
+      <.character_selection
+        field={@form[String.to_atom("character_#{i}")]}
+        label={"Personaggio #{i}"}
+        characters={@characters}
+      />
+    <% end %>
+
+    <.button>Prenota!</.button>
+  </div>
+</.simple_form>

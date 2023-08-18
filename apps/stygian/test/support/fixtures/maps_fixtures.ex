@@ -57,7 +57,7 @@ defmodule Stygian.MapsFixtures do
         %{id: map_id} = map_fixture()
         Map.put(attrs, :map_id, map_id)
       end
-      
+
     attrs =
       if Map.has_key?(attrs, :character_id) do
         attrs
@@ -65,7 +65,7 @@ defmodule Stygian.MapsFixtures do
         %{id: character_id} = CharactersFixtures.character_fixture()
         Map.put(attrs, :character_id, character_id)
       end
-  
+
     {:ok, private_map_character} = Maps.create_private_map_character(attrs)
     private_map_character
   end
