@@ -37,6 +37,11 @@ RUN git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
 RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
 RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
 
+# Neovim
+RUN asdf plugin add neovim \
+    && asdf install neovim 0.9.1 \
+    && git clone https://github.com/MaxDac/neovim-configuration
+
 # ZSH
 ENV ZSH_THEME cloud
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
