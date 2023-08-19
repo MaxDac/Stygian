@@ -48,10 +48,10 @@ RUN git config --global advice.detachedHead false; \
     exec bash; \
     # Neovim
     /bin/bash -c asdf plugin add neovim; \
-    /bin/bash -c asdf install neovim ${NEOVIM_VERSION}; \
     /bin/bash -c asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git; \
-    KERL_BUILD_DOCS=yes /bin/bash -c "asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git"; \
+    KERL_BUILD_DOCS=yes /bin/bash -c asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git; \
     /bin/bash -c asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git; \
+    /bin/bash -c asdf install neovim ${NEOVIM_VERSION}; \
     /bin/bash -c asdf install erlang ${ERLANG_VERSION}; \
     /bin/bash -c asdf install elixir ${ELIXIR_VERSION}; \
     /bin/bash -c asdf install nodejs ${NODEJS_VERSION}; \
@@ -59,9 +59,9 @@ RUN git config --global advice.detachedHead false; \
     /bin/bash -c asdf global erlang ${ERLANG_VERSION}; \
     /bin/bash -c asdf global elixir ${ELIXIR_VERSION}; \
     /bin/bash -c asdf global nodejs ${NODEJS_VERSION}; \
-    git clone https://github.com/MaxDac/neovim-configuration $HOME/.config/nvim; \
-    wget https://gist.githubusercontent.com/MaxDac/46ca202e8456fe91cad5d3f77147ce6f/raw/f184201b0a8b4288de691c7af903239e9112f568/.zshrc -o $HOME/.zshrc;
+    git clone https://github.com/MaxDac/neovim-configuration $HOME/.config/nvim;
 
 # ZSH
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; \
-    git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k;
+    git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k; \
+    wget https://gist.githubusercontent.com/MaxDac/46ca202e8456fe91cad5d3f77147ce6f/raw/f184201b0a8b4288de691c7af903239e9112f568/.zshrc -o $HOME/.zshrc;
