@@ -11,22 +11,9 @@ tasks:
       # Initialising DB
       psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
       gp sync-done DB
-  
-  - name: asdf
-    env: 
-      KERL_BUILD_DOCS: yes
-    init: |
-      
+
   - name: Phx
     init: |
-      # Installing Elixir global dependencies
-      mix local.hex --force
-      mix local.rebar --force
-      mix archive.install hex phx_new --force
-
-      # Installing Elixir local dependencies
-      mix deps.get && mix deps.compile
-
       # Waiting for the DB user to be created 
       gp sync-await DB
 
