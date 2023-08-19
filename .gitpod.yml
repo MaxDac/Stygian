@@ -7,14 +7,16 @@ tasks:
   - name: postgres
     init: |
       # Initialising DB
-      psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
+      NEXT_WAIT_TIME=0
+      until [ $NEXT_WAIT_TIME -eq 5 ] || psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';"; do
+          sleep $(( NEXT_WAIT_TIME++ ))
+      done
+      [ $NEXT_WAIT_TIME -lt 5 ]§
+       
       gp sync-done DB
 
   - name: Phx
     init: |
-      # Waiting for the DB user to be created 
-      gp sync-await DB
-
       # Installing Elixir global dependencies
       mix local.hex --force
       mix local.rebar --force
@@ -22,6 +24,9 @@ tasks:
 
       # Installing Elixir local dependencies
       mix deps.get && mix deps.compile
+
+      # Waiting for the DB user to be created 
+      gp sync-await DB
 
       # Migrating the tables to the DB
       mix ecto.create && mix ecto.migrate
