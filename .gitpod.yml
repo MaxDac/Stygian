@@ -6,8 +6,6 @@ ports:
 tasks:
   - name: postgres
     init: |
-      gp sync-await ZSH
-
       # Initialising DB
       psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
       gp sync-done DB
