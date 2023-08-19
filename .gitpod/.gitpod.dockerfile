@@ -45,9 +45,9 @@ USER gitpod
 RUN git config --global advice.detachedHead false; \
     git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch ${ASDF_VERSION}; \
     /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
-    /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc'; \
-    exec bash; \
-    # Neovim
+    /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc';
+
+RUN exec bash; \
     /bin/bash -c asdf plugin add neovim; \
     /bin/bash -c asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git; \
     /bin/bash -c asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git; \
