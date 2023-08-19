@@ -34,13 +34,22 @@ USER gitpod
 
 RUN git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
 
-RUN echo ". $HOME/.asdf/asdf.sh" >> $HOME/.bashrc.d/asdf.sh
-RUN echo ". $HOME/.asdf/completions/asdf.bash" >> $HOME/.bashrc.d/asdf.sh
-
-# Neovim
-RUN asdf plugin add neovim \
-    && asdf install neovim 0.9.1 \
-    && git clone https://github.com/MaxDac/neovim-configuration
+# Installing asdf and dependencies
+RUN git config --global advice.detachedHead false; \
+    git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
+    /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
+    /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc'; \
+    exec bash; \
+    # Neovim
+    /bin/bash -c asdf plugin add neovim; \
+    $HOME/.asdf/asdf.sh install neovim 0.9.1; \
+    /bin/bash -c "asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git"; \
+    KERL_BUILD_DOCS=yes /bin/bash -c "asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git"; \
+    /bin/bash -c "asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git"; \
+    /bin/bash -c asdf install erlang 25.3.2.5; \
+    /bin/bash -c asdf install elixir 1.15.4-otp-25; \
+    /bin/bash -c asdf install nodejs 18.17.0; \
+    git clone https://github.com/MaxDac/neovim-configuration $HOME/.config/nvim;
 
 # ZSH
 ENV ZSH_THEME cloud
