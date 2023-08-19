@@ -1,5 +1,11 @@
 FROM gitpod/workspace-postgres
 
+ARG ASDF_VERSION=v0.12.0
+ARG NEOVIM_VERSION=0.9.1
+ARG ERLANG_VERSION=25.3.2.5
+ARG ELIXIR_VERSION=1.15.4-otp-25
+ARG NODEJS_VERSION=18.17.0
+
 # Maybe not needed
 # ENV DEBIAN_FRONTEND noninteractive
 
@@ -32,24 +38,23 @@ RUN sudo apt-get update -y \
 
 USER gitpod
 
-RUN git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
-
 # Installing asdf and dependencies
 RUN git config --global advice.detachedHead false; \
-    git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
+    git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch ${ASDF_VERSION}; \
     /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
     /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc'; \
     exec bash; \
     # Neovim
     /bin/bash -c asdf plugin add neovim; \
-    $HOME/.asdf/asdf.sh install neovim 0.9.1; \
+    $HOME/.asdf/asdf.sh install neovim ${NEOVIM_VERSION}; \
     /bin/bash -c "asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git"; \
     KERL_BUILD_DOCS=yes /bin/bash -c "asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git"; \
     /bin/bash -c "asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git"; \
-    /bin/bash -c asdf install erlang 25.3.2.5; \
-    /bin/bash -c asdf install elixir 1.15.4-otp-25; \
-    /bin/bash -c asdf install nodejs 18.17.0; \
-    git clone https://github.com/MaxDac/neovim-configuration $HOME/.config/nvim;
+    /bin/bash -c asdf install erlang ${ERLANG_VERSION}; \
+    /bin/bash -c asdf install elixir ${ELIXIR_VERSION}; \
+    /bin/bash -c asdf install nodejs ${NODEJS_VERSION}; \
+    git clone https://github.com/MaxDac/neovim-configuration $HOME/.config/nvim; \
+    wget https://gist.githubusercontent.com/MaxDac/46ca202e8456fe91cad5d3f77147ce6f/raw/f184201b0a8b4288de691c7af903239e9112f568/.zshrc -o $HOME/.zshrc;
 
 # ZSH
 ENV ZSH_THEME cloud
