@@ -58,6 +58,7 @@ RUN git clone https://github.com/MaxDac/neovim-configuration $HOME/.config/nvim
 # ZSH
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; \
     git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k; \
-    wget https://gist.githubusercontent.com/MaxDac/46ca202e8456fe91cad5d3f77147ce6f/raw/f184201b0a8b4288de691c7af903239e9112f568/.zshrc -o $HOME/.zshrc;
+    wget https://gist.githubusercontent.com/MaxDac/46ca202e8456fe91cad5d3f77147ce6f/raw/f184201b0a8b4288de691c7af903239e9112f568/.zshrc -O $HOME/.zshrc; \
+    wget https://gist.githubusercontent.com/MaxDac/73b2e0d201243b796cdfa5019d6ea287/raw/47c40e1fd21cc52153dd155d5df94322624582bf/.p10k.zsh -O $HOME/.p10k.zsh;
 
 CMD ["zsh"]
