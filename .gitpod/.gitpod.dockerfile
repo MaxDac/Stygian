@@ -1,4 +1,4 @@
-FROM maxdac/gitpod-elixir:1.15.4-otp-25
+FROM maxdac/gitpod-elixir
 
 ENV SHELL=/usr/bin/zsh
 
