@@ -194,7 +194,6 @@ defmodule Stygian.Characters do
     character_changeset =
       %Character{}
       |> Character.npc_changeset(params)
-      |> IO.inspect(label: "is npc?")
 
     character =
       character_changeset

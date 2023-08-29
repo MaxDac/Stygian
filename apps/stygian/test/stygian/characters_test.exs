@@ -239,6 +239,39 @@ defmodule Stygian.CharactersTest do
       assert {:error, %Ecto.Changeset{}} = Characters.create_character_skill(@invalid_attrs)
     end
 
+    test "create_npc/2 with invalid data returns an error changeset" do
+      user_fixture(%{username: "Narratore"})
+      %{id: skill_id} = skill_fixture()
+
+      invalid_character = %{
+        "avatar" => "some_avatar"
+      }
+
+      skills = [
+        %{ skill_id: skill_id, value: 4 }
+      ]
+
+      assert {:error, _} = Characters.create_npc(invalid_character, skills)
+    end
+
+    test "create_npc/2 with valid data creates the character" do
+      user_fixture(%{username: "Narratore"})
+      %{id: skill_id} = skill_fixture()
+
+      valid_character = %{
+        "name" => "some_name",
+        "avatar" => "some_avatar"
+      }
+
+      skills = [
+        %{ skill_id: skill_id, value: 4 }
+      ]
+
+      assert {:ok, _} = Characters.create_npc(valid_character, skills)
+      assert [npcs] = Characters.list_npcs()
+      assert "some_name" == npcs.name
+    end
+
     test "update_character_skill/2 with valid data updates the character_skill" do
       character_skill = character_skill_fixture()
       update_attrs = %{value: 43}
