@@ -91,11 +91,11 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
         %{"npc_creation_request" => params},
         %{assigns: %{skills: skills}} = socket
       ) do
-    changeset =
+    %{valid?: valid?} =
       %NpcCreationRequest{}
       |> NpcCreationRequest.changeset(params)
 
-    if changeset.valid? do
+    if valid? do
       case Characters.create_npc(params, skills) do
         {:ok, _} ->
           {:noreply, redirect(socket, to: ~p"/admin/npcs")}

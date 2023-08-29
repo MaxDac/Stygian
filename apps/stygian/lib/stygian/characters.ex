@@ -5,11 +5,11 @@ defmodule Stygian.Characters do
 
   import Ecto.Query, warn: false
 
-  alias Stygian.Accounts
   alias Ecto.Changeset
 
   alias Stygian.Repo
 
+  alias Stygian.Accounts
   alias Stygian.Accounts.User
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill

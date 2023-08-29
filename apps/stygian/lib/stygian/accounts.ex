@@ -4,7 +4,7 @@ defmodule Stygian.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Mix.Tasks.Hex.User
+
   alias Ecto.Changeset
   alias Stygian.Repo
 
@@ -68,7 +68,7 @@ defmodule Stygian.Accounts do
   Gets the principal admin user.
   """
   @spec get_admin_user() :: User.t()
-  def get_admin_user() do
+  def get_admin_user do
     User
     |> from()
     |> where([u], u.username == ^@admin_user_name)

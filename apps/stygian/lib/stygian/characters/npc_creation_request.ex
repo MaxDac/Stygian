@@ -18,9 +18,9 @@ defmodule Stygian.Characters.NpcCreationRequest do
   alias Stygian.Skills.Skill
 
   @type t() :: %__MODULE__{
-          name: String.t(),
-          avatar: String.t(),
-          small_avatar: String.t(),
+          name: String.t() | nil,
+          avatar: String.t() | nil,
+          small_avatar: String.t() | nil,
           attributes: list(Skill.t())
         }
 

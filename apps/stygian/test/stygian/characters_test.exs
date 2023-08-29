@@ -248,7 +248,7 @@ defmodule Stygian.CharactersTest do
       }
 
       skills = [
-        %{ skill_id: skill_id, value: 4 }
+        %{skill_id: skill_id, value: 4}
       ]
 
       assert {:error, _} = Characters.create_npc(invalid_character, skills)
@@ -264,7 +264,7 @@ defmodule Stygian.CharactersTest do
       }
 
       skills = [
-        %{ skill_id: skill_id, value: 4 }
+        %{skill_id: skill_id, value: 4}
       ]
 
       assert {:ok, _} = Characters.create_npc(valid_character, skills)
