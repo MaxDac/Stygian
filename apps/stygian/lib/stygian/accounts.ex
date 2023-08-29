@@ -4,6 +4,8 @@ defmodule Stygian.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Mix.Tasks.Hex.User
+  alias Ecto.Changeset
   alias Stygian.Repo
 
   alias Stygian.Accounts.{User, UserNotifier, UserToken}
@@ -166,6 +168,26 @@ defmodule Stygian.Accounts do
     else
       _ -> :error
     end
+  end
+
+  @doc """
+  Updates the username of the user.
+  """
+  @spec update_user_name(user :: User.t(), username :: String.t()) ::
+          {:ok, User.t()} | {:error, Changeset.t()}
+  def update_user_name(user, username)
+
+  def update_user_name(_, nil), do: Changeset.add_error(%Changeset{}, :username, "Can't be empty")
+
+  def update_user_name(_, ""), do: Changeset.add_error(%Changeset{}, :username, "Can't be empty")
+
+  def update_user_name(_, username) when not is_binary(username),
+    do: Changeset.add_error(%Changeset{}, :username, "Must be a string")
+
+  def update_user_name(user, username) do
+    user
+    |> User.username_changeset(%{username: username})
+    |> Repo.update()
   end
 
   defp user_email_multi(user, email, context) do

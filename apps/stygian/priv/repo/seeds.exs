@@ -15,17 +15,34 @@ alias Stygian.Skills
 alias Stygian.Maps
 
 defmodule AccountsHelpers do
-  def create_user?(attrs = %{username: username}) do
+  def create_user?(%{username: username} = attrs) do
     case Accounts.get_user_by_username(username) do
       nil ->
-        with {:ok, user} <- Accounts.register_user(attrs) do
-          Accounts.update_user(user, attrs)
+        case Accounts.register_user(attrs) do
+          {:ok, user} ->
+            Accounts.update_user(user, attrs)
+
+          # User changed name 
+          {:error, %{errors: [email: {"has already been taken", _}]}} ->
+            update_user_name(attrs)
+
+          error ->
+            error
         end
 
       user ->
         Accounts.update_user(user, attrs)
     end
   end
+
+  defp update_user_name(attrs = %{username: username, email: email}) do
+    with user <- Accounts.get_user_by_email(email),
+         {:ok, user} <- Accounts.update_user_name(user, username) do
+      Accounts.update_user(user, attrs)
+    end
+  end
+
+  defp update_user_name(_), do: {:error, "Email or username emtpy"}
 end
 
 defmodule SkillHelpers do

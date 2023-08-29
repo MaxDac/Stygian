@@ -181,10 +181,12 @@ defmodule Stygian.Characters do
   @doc """
   Creates an NPC.
   """
-  @spec create_npc(params :: map(), skills :: list(Skill.t())) :: {:ok, Character.t()} | {:error, Changeset.t()}
+  @spec create_npc(params :: map(), skills :: list(Skill.t())) ::
+          {:ok, Character.t()} | {:error, Changeset.t()}
   def create_npc(params, skills) do
     %{id: admin_user_id} = Accounts.get_admin_user()
-    params = 
+
+    params =
       params
       |> Map.put("npc", true)
       |> Map.put("user_id", admin_user_id)
@@ -192,7 +194,7 @@ defmodule Stygian.Characters do
     character_changeset =
       %Character{}
       |> Character.npc_changeset(params)
-      |> IO.inspect(label: "Creation")
+      |> IO.inspect(label: "is npc?")
 
     character =
       character_changeset
@@ -464,8 +466,14 @@ defmodule Stygian.Characters do
     end
   end
 
+  @spec create_character_skills_internal(
+          skills :: list(CharacterSkill.t()),
+          character_id :: non_neg_integer()
+        ) ::
+          {:ok, any()} | {:error, any()} | any()
   defp create_character_skills_internal(skills, character_id) do
     skills
+    |> Enum.map(&Map.put(&1, :character_id, character_id))
     |> Enum.reduce(
       Ecto.Multi.new()
       |> Ecto.Multi.delete_all(

@@ -20,7 +20,8 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
   end
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_character: current_character}} = socket) when is_nil(current_character) do
+  def mount(_params, _session, %{assigns: %{current_character: current_character}} = socket)
+      when is_nil(current_character) do
     # If the user does not have a character yet, redirecting to creation
     {:ok,
      socket
@@ -36,7 +37,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
   end
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_character: current_character}} = socket) do
+  def mount(_params, _session, socket) do
     {:ok,
      socket
      |> assign_character()

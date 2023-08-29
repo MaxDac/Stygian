@@ -2,7 +2,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
   @moduledoc """
   Creates a new NPC.
   """
-  
+
   use StygianWeb, :container_live_view
 
   import StygianWeb.CharacterLive.CharacterCompletionSelectorComponent
@@ -14,7 +14,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> assign_skills()
      |> assign_form()}
@@ -23,42 +23,22 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <.h1>PNG - Creazione</.h1> 
-    
-    <.simple_form
-      for={@form}
-      phx-change="validate"
-      phx-submit="create">
-      
-      <.input
-        field={@form[:name]}
-        phx-debounce="blur"
-        label="Nome" />
+    <.h1>PNG - Creazione</.h1>
 
-      <.input
-        field={@form[:avatar]}
-        phx-debounce="blur"
-        label="Avatar" />
+    <.simple_form for={@form} phx-change="validate" phx-submit="create">
+      <.input field={@form[:name]} phx-debounce="blur" label="Nome" />
 
-      <.input
-        field={@form[:small_avatar]}
-        phx-debounce="blur"
-        label="Avatar per la Chat" />
+      <.input field={@form[:avatar]} phx-debounce="blur" label="Avatar" />
+
+      <.input field={@form[:small_avatar]} phx-debounce="blur" label="Avatar per la Chat" />
 
       <.button>
         Salva
       </.button>
 
       <div :for={%{skill: skill, value: value} <- @skills}>
-        <.attribute_selector
-          skill={skill}
-          value={value}
-          kind="skill"
-          on_plus="plus"
-          on_minus="minus"
-        />
+        <.attribute_selector skill={skill} value={value} kind="skill" on_plus="plus" on_minus="minus" />
       </div>
-
     </.simple_form>
     """
   end
@@ -83,7 +63,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
 
     skills =
       skills
-      |> Enum.map(fn 
+      |> Enum.map(fn
         %{skill_id: ^skill_id, value: value} = s -> Map.put(s, :value, value + 1)
         s -> s
       end)
@@ -97,7 +77,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
 
     skills =
       skills
-      |> Enum.map(fn 
+      |> Enum.map(fn
         %{skill_id: ^skill_id, value: value} = s -> Map.put(s, :value, value - 1)
         s -> s
       end)
@@ -106,8 +86,12 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
   end
 
   @impl true
-  def handle_event("create", %{"npc_creation_request" => params}, %{assigns: %{skills: skills}} = socket) do
-    changeset = 
+  def handle_event(
+        "create",
+        %{"npc_creation_request" => params},
+        %{assigns: %{skills: skills}} = socket
+      ) do
+    changeset =
       %NpcCreationRequest{}
       |> NpcCreationRequest.changeset(params)
 
@@ -117,7 +101,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
           {:noreply, redirect(socket, to: ~p"/admin/npcs")}
 
         {:error, %Ecto.Changeset{}} ->
-          {:noreply, 
+          {:noreply,
            socket
            |> put_flash(:error, "Errore durante la creazione del PNG")
            |> assign_form(params)}
@@ -128,7 +112,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
   end
 
   defp assign_skills(socket) do
-    skills = 
+    skills =
       Skills.list_skills()
       |> Enum.map(&%CharacterSkill{skill: &1, skill_id: &1.id, value: 0})
 

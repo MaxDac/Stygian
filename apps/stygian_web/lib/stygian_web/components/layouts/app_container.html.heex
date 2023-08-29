@@ -2,8 +2,16 @@
   <div class="flex flex-row h-screen">
     <div class="bg-[url('/images/HomeWallpaper.webp')] bg-cover fixed top-0 left-0 w-screen h-screen opacity-5 -z-100" />
     <.flash_group flash={@flash} />
-    <.drawer class="xl:invisible" current_character={@current_character} current_user={@current_user} />
-    <.menu class="invisible xl:visible" current_character={@current_character} current_user={@current_user} />
+    <.drawer
+      class="xl:invisible"
+      current_character={@current_character}
+      current_user={@current_user}
+    />
+    <.menu
+      class="invisible xl:visible"
+      current_character={@current_character}
+      current_user={@current_user}
+    />
     <div class="absolute top-0 left-0 w-full 3xl:left-[150px] 3xl:w-[calc(100%-150px)] xl:bg-[url('/images/Tentacles2.webp')] bg-no-repeat h-screen">
       <div class="ml-0 xl:ml-[500px] bg-gradient-to-r from-container-background to-container-background/95 w-full xl:w-[calc(100%-500px)] h-full">
         <div class="overflow-x-hidden w-full h-full text-brand p-5">

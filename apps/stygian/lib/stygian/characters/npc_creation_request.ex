@@ -22,7 +22,7 @@ defmodule Stygian.Characters.NpcCreationRequest do
           avatar: String.t(),
           small_avatar: String.t(),
           attributes: list(Skill.t())
-  }
+        }
 
   @spec changeset(NpcCreationRequest.t(), map()) :: Ecto.Changeset.t()
   def changeset(request, attrs \\ %{}) do

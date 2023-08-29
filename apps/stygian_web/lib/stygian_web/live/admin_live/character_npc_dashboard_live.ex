@@ -2,14 +2,14 @@ defmodule StygianWeb.AdminLive.CharacterNpcDashboardLive do
   @moduledoc """
   This is the admin dashboard for the NPCs. 
   """
-  
+
   use StygianWeb, :container_live_view
 
   alias Stygian.Characters
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> assign_npcs()}
   end
@@ -24,9 +24,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcDashboardLive do
     </div>
 
     <div class="w-full text-center">
-      <.link
-        navigate={~p"/admin/npc/create"}
-        class="font-typewriter">
+      <.link navigate={~p"/admin/npc/create"} class="font-typewriter">
         Crea nuovo PNG
       </.link>
     </div>

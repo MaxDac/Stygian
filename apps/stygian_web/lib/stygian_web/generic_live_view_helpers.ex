@@ -6,7 +6,8 @@ defmodule StygianWeb.GenericLiveViewHelpers do
   alias Stygian.Accounts.User
   alias Stygian.Characters.Character
 
-  @spec get_sheet_link_title(current_user :: User.t(), current_character :: Character.t()) :: String.t()
+  @spec get_sheet_link_title(current_user :: User.t(), current_character :: Character.t()) ::
+          String.t()
   def get_sheet_link_title(current_user, current_character)
   def get_sheet_link_title(%{admin: true}, _), do: "PNG"
   def get_sheet_link_title(_, character) when not is_nil(character), do: "Scheda"
