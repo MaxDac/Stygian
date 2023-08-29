@@ -7,12 +7,13 @@ tasks:
   - name: postgres
     init: |
       # Initialising DB
-      NEXT_WAIT_TIME=0
-      until [ $NEXT_WAIT_TIME -eq 5 ] || psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';"; do
-          sleep $(( NEXT_WAIT_TIME++ ))
-      done
-      [ $NEXT_WAIT_TIME -lt 5 ]§
-       
+      # Awaiting for port 5432 to be available
+      gp ports await 5432
+
+      # Adding postgres user to the database
+      psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';"       
+
+      # Synchronising with the next task
       gp sync-done DB
 
   - name: Phx
