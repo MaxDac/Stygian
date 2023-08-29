@@ -3,11 +3,12 @@ defmodule Stygian.Characters.NpcCreationRequest do
   A request to create an NPC.
   """
 
-  defstruct name: nil, avatar: nil, attributes: []
+  defstruct name: nil, avatar: nil, small_avatar: nil, attributes: []
 
   @types %{
     name: :string,
     avatar: :string,
+    small_avatar: :string,
     attributes: :list
   }
 
@@ -19,13 +20,14 @@ defmodule Stygian.Characters.NpcCreationRequest do
   @type t() :: %__MODULE__{
           name: String.t(),
           avatar: String.t(),
+          small_avatar: String.t(),
           attributes: list(Skill.t())
   }
 
   @spec changeset(NpcCreationRequest.t(), map()) :: Ecto.Changeset.t()
   def changeset(request, attrs \\ %{}) do
     {request, @types}
-    |> cast(attrs, [:name, :avatar, :attributes])
-    |> validate_required([:name, :attributes])
+    |> cast(attrs, [:name, :avatar, :small_avatar, :attributes])
+    |> validate_required([:name, :avatar, :attributes])
   end
 end

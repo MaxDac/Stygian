@@ -85,6 +85,13 @@ defmodule Stygian.Characters.Character do
     |> validate_required([:avatar, :biography, :description])
   end
 
+  def npc_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:user_id, :name, :avatar, :small_avatar])
+    |> validate_required([:user_id, :name, :avatar])
+    |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)
+  end
+
   @doc false
   def changeset(character, attrs) do
     character

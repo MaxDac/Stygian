@@ -5,6 +5,7 @@ defmodule Stygian.Characters do
 
   import Ecto.Query, warn: false
 
+  alias Stygian.Accounts
   alias Ecto.Changeset
 
   alias Stygian.Repo
@@ -175,6 +176,32 @@ defmodule Stygian.Characters do
   def user_has_complete_charater?(user) do
     character = get_user_character?(user)
     character.step == 2
+  end
+
+  @doc """
+  Creates an NPC.
+  """
+  @spec create_npc(params :: map(), skills :: list(Skill.t())) :: {:ok, Character.t()} | {:error, Changeset.t()}
+  def create_npc(params, skills) do
+    %{id: admin_user_id} = Accounts.get_admin_user()
+    params = 
+      params
+      |> Map.put("npc", true)
+      |> Map.put("user_id", admin_user_id)
+
+    character_changeset =
+      %Character{}
+      |> Character.npc_changeset(params)
+      |> IO.inspect(label: "Creation")
+
+    character =
+      character_changeset
+      |> Repo.insert()
+
+    with {:ok, %Character{id: character_id}} <- character,
+         {:ok, _} <- create_character_skills_internal(skills, character_id) do
+      {:ok, character}
+    end
   end
 
   @doc """
@@ -433,26 +460,31 @@ defmodule Stygian.Characters do
 
       {:ok, {attributes, skills}} ->
         Enum.concat(attributes, skills)
-        |> Enum.reduce(
-          Ecto.Multi.new()
-          |> Ecto.Multi.delete_all(
-            :delete_all,
-            from(c in CharacterSkill, where: c.character_id == ^character_id)
-          ),
-          fn %{skill_id: skill_id, character_id: character_id, value: value}, multi ->
-            multi
-            |> Ecto.Multi.insert(
-              skill_id,
-              CharacterSkill.changeset(%CharacterSkill{}, %{
-                character_id: character_id,
-                skill_id: skill_id,
-                value: value
-              })
-            )
-          end
-        )
-        |> Repo.transaction()
+        |> create_character_skills_internal(character_id)
     end
+  end
+
+  defp create_character_skills_internal(skills, character_id) do
+    skills
+    |> Enum.reduce(
+      Ecto.Multi.new()
+      |> Ecto.Multi.delete_all(
+        :delete_all,
+        from(c in CharacterSkill, where: c.character_id == ^character_id)
+      ),
+      fn %{skill_id: skill_id, character_id: character_id, value: value}, multi ->
+        multi
+        |> Ecto.Multi.insert(
+          skill_id,
+          CharacterSkill.changeset(%CharacterSkill{}, %{
+            character_id: character_id,
+            skill_id: skill_id,
+            value: value
+          })
+        )
+      end
+    )
+    |> Repo.transaction()
   end
 
   @spec check_creation_skills(

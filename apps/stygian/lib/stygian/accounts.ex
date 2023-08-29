@@ -8,6 +8,8 @@ defmodule Stygian.Accounts do
 
   alias Stygian.Accounts.{User, UserNotifier, UserToken}
 
+  @admin_user_name "Narratore"
+
   ## Database getters
 
   @doc """
@@ -59,6 +61,17 @@ defmodule Stygian.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Gets the principal admin user.
+  """
+  @spec get_admin_user() :: User.t()
+  def get_admin_user() do
+    User
+    |> from()
+    |> where([u], u.username == ^@admin_user_name)
+    |> Repo.one!()
+  end
 
   ## User registration
 

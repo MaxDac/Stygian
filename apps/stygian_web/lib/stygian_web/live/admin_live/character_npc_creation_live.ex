@@ -7,6 +7,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
 
   import StygianWeb.CharacterLive.CharacterCompletionSelectorComponent
 
+  alias Stygian.Characters
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Characters.NpcCreationRequest
   alias Stygian.Skills
@@ -26,15 +27,23 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
     
     <.simple_form
       for={@form}
+      phx-change="validate"
       phx-submit="create">
       
       <.input
         field={@form[:name]}
+        phx-debounce="blur"
         label="Nome" />
 
       <.input
         field={@form[:avatar]}
-        label="Nome" />
+        phx-debounce="blur"
+        label="Avatar" />
+
+      <.input
+        field={@form[:small_avatar]}
+        phx-debounce="blur"
+        label="Avatar per la Chat" />
 
       <.button>
         Salva
@@ -52,6 +61,20 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
 
     </.simple_form>
     """
+  end
+
+  @doc """
+  It seems that the validation is mandatory to load the updated form values in the back-end,
+  otherwise every other event triggered by the plus/minus buttons to change the attributes would
+  delete all the values in the form.
+
+  Added the deboucing mechanism to all the form input anyway.
+  """
+  @impl true
+  def handle_event("validate", %{"npc_creation_request" => params}, socket) do
+    {:noreply,
+     socket
+     |> assign_form(params)}
   end
 
   @impl true
@@ -84,8 +107,24 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
 
   @impl true
   def handle_event("create", %{"npc_creation_request" => params}, %{assigns: %{skills: skills}} = socket) do
-    IO.inspect params, label: "npc params"
-    {:noreply, socket}
+    changeset = 
+      %NpcCreationRequest{}
+      |> NpcCreationRequest.changeset(params)
+
+    if changeset.valid? do
+      case Characters.create_npc(params, skills) do
+        {:ok, _} ->
+          {:noreply, redirect(socket, to: ~p"/admin/npcs")}
+
+        {:error, %Ecto.Changeset{}} ->
+          {:noreply, 
+           socket
+           |> put_flash(:error, "Errore durante la creazione del PNG")
+           |> assign_form(params)}
+      end
+    else
+      {:noreply, assign_form(socket, params)}
+    end
   end
 
   defp assign_skills(socket) do
@@ -96,10 +135,10 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
     assign(socket, :skills, skills)
   end
 
-  defp assign_form(socket) do
+  defp assign_form(socket, params \\ %{}) do
     form =
       %NpcCreationRequest{}
-      |> NpcCreationRequest.changeset()
+      |> NpcCreationRequest.changeset(params)
       |> to_form()
 
     assign(socket, :form, form)

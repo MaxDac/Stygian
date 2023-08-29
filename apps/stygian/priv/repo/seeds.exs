@@ -64,7 +64,7 @@ end
 # Creating admin users
 AccountsHelpers.create_user?(%{
   email: "postmaster@stygian.eu",
-  username: "ghostLayer",
+  username: "Narratore",
   password: "password1234",
   admin: true
 })
