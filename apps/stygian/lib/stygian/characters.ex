@@ -15,14 +15,17 @@ defmodule Stygian.Characters do
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Skills.Skill
 
+  @max_attribute_points 9
+  @max_skill_points 9
+
   @creation_max_attribute_sum 33
-  @creation_mas_skills_sum 5
+  @creation_max_skill_sum 9
 
-  @creation_max_attribute 8
-  @creation_min_attribute 3
+  @creation_max_attribute_value 8
+  @creation_min_attribute_value 3
 
-  @creation_max_skill 5
-  @creation_min_skill 0
+  @creation_max_skill_value 4
+  @creation_min_skill_value 0
 
   @physique_skill_name "Fisico"
   @mind_skill_name "Mente"
@@ -30,6 +33,42 @@ defmodule Stygian.Characters do
 
   @default_character_initial_cigs 200
   @default_character_initial_experience 0
+
+  @spec get_max_available_attribute_points(character :: Character.t()) :: non_neg_integer()
+  def get_max_available_attribute_points(character)
+  def get_max_available_attribute_points(%{age: :young}), do: @max_attribute_points + 1
+  def get_max_available_attribute_points(%{age: :old}), do: @max_attribute_points - 1
+  def get_max_available_attribute_points(_), do: @max_attribute_points
+
+  @spec get_max_available_skill_points(character :: Character.t()) :: non_neg_integer()
+  def get_max_available_skill_points(character)
+  def get_max_available_skill_points(%{age: :young}), do: @max_skill_points - 4
+  def get_max_available_skill_points(%{age: :old}), do: @max_skill_points + 4
+  def get_max_available_skill_points(_), do: @max_skill_points
+
+  @spec get_creation_max_attribute_points(character :: Character.t()) :: non_neg_integer()
+  def get_creation_max_attribute_points(character)
+  def get_creation_max_attribute_points(%{age: :young}), do: @creation_max_attribute_sum + 1
+  def get_creation_max_attribute_points(%{age: :old}), do: @creation_max_attribute_sum - 1
+  def get_creation_max_attribute_points(_), do: @creation_max_attribute_sum
+
+  @spec get_creation_max_skill_points(character :: Character.t()) :: non_neg_integer()
+  def get_creation_max_skill_points(character)
+  def get_creation_max_skill_points(%{age: :young}), do: @creation_max_skill_sum - 4
+  def get_creation_max_skill_points(%{age: :old}), do: @creation_max_skill_sum + 4
+  def get_creation_max_skill_points(_), do: @creation_max_skill_sum
+
+  def get_creation_max_attribute_value, do: @creation_max_attribute_value
+
+  def get_creation_min_attribute_value, do: @creation_min_attribute_value
+
+  @spec get_creation_max_skill_value(character :: Character.t()) :: non_neg_integer()
+  def get_creation_max_skill_value(character)
+  def get_creation_max_skill_value(%{age: :young}), do: @creation_max_skill_value - 1
+  def get_creation_max_skill_value(%{age: :old}), do: @creation_max_skill_value + 1
+  def get_creation_max_skill_value(_), do: @creation_max_skill_value
+
+  def get_creation_min_skill_value, do: @creation_min_skill_value
 
   @doc """
   Returns the list of characters.
@@ -456,12 +495,16 @@ defmodule Stygian.Characters do
 
   The character id must already be contained in the `CharacterSkill` type.
   """
-  @spec create_character_skills(list(CharacterSkill.t()), list(CharacterSkill.t())) ::
+  @spec create_character_skills(
+          list(CharacterSkill.t()),
+          list(CharacterSkill.t()),
+          character :: Character.t()
+        ) ::
           {:ok, any()} | {:error, Changeset.t()}
-  def create_character_skills(character_attributes, character_skills) do
+  def create_character_skills(character_attributes, character_skills, character) do
     [%{character_id: character_id} | _] = character_attributes
 
-    case check_creation_skills(character_attributes, character_skills) do
+    case check_creation_skills(character_attributes, character_skills, character) do
       changeset = {:error, _} ->
         changeset
 
@@ -502,13 +545,14 @@ defmodule Stygian.Characters do
 
   @spec check_creation_skills(
           attributes :: list(CharacterSkill.t()),
-          skills :: list(CharacterSkill.t())
+          skills :: list(CharacterSkill.t()),
+          character :: Character.t()
         ) ::
           {:ok, {list(CharacterSkill.t()), list(CharacterSkill.t())}} | {:error, Changeset.t()}
-  defp check_creation_skills(attributes, skills) do
+  defp check_creation_skills(attributes, skills, character) do
     check_creation_skills_count({:ok, {attributes, skills}})
-    |> check_creation_skills_sum()
-    |> check_creation_skills_level()
+    |> check_creation_skills_sum(character)
+    |> check_creation_skills_level(character)
   end
 
   defp check_creation_skills_count({:ok, {attributes, _}}) when length(attributes) != 6 do
@@ -518,9 +562,12 @@ defmodule Stygian.Characters do
 
   defp check_creation_skills_count(previous_result), do: previous_result
 
-  defp check_creation_skills_sum({:error, _} = error), do: error
+  defp check_creation_skills_sum({:error, _} = error, _), do: error
 
-  defp check_creation_skills_sum({:ok, {attributes, skills}}) do
+  defp check_creation_skills_sum({:ok, {attributes, skills}}, character) do
+    creation_max_attribute_sum = get_creation_max_attribute_points(character)
+    creation_max_skill_sum = get_creation_max_skill_points(character)
+
     case {
       attributes
       |> Enum.map(& &1.value)
@@ -529,22 +576,27 @@ defmodule Stygian.Characters do
       |> Enum.map(& &1.value)
       |> Enum.sum()
     } do
-      {@creation_max_attribute_sum, @creation_mas_skills_sum} ->
+      {^creation_max_attribute_sum, ^creation_max_skill_sum} ->
         {:ok, {attributes, skills}}
 
-      {a, _} when a != @creation_max_attribute_sum ->
+      {a, _} when a != creation_max_attribute_sum ->
         {:error,
          Changeset.add_error(%Changeset{}, :character_attributes, "wrong number of attributes")}
 
-      {_, b} when b != @creation_mas_skills_sum ->
+      {_, b} when b != creation_max_skill_sum ->
         {:error,
          Changeset.add_error(%Changeset{}, :character_attributes, "wrong number of attributes")}
     end
   end
 
-  defp check_creation_skills_level({:error, _} = error), do: error
+  defp check_creation_skills_level({:error, _} = error, _), do: error
 
-  defp check_creation_skills_level({:ok, {attributes, skills}}) do
+  defp check_creation_skills_level({:ok, {attributes, skills}}, character) do
+    creation_min_attribute = get_creation_min_attribute_value()
+    creation_max_attribute = get_creation_max_attribute_value()
+    creation_min_skill = get_creation_min_skill_value()
+    creation_max_skill = get_creation_max_skill_value(character)
+
     {attribute_values, skill_values} = {
       attributes
       |> Enum.map(& &1.value),
@@ -562,18 +614,18 @@ defmodule Stygian.Characters do
       skill_values
       |> Enum.max()
     } do
-      {a_min, _, _, _} when a_min < @creation_min_attribute ->
+      {a_min, _, _, _} when a_min < creation_min_attribute ->
         {:error,
          Changeset.add_error(%Changeset{}, :character_attributes, "wrong level for attributes")}
 
-      {_, a_max, _, _} when a_max > @creation_max_attribute ->
+      {_, a_max, _, _} when a_max > creation_max_attribute ->
         {:error,
          Changeset.add_error(%Changeset{}, :character_attributes, "wrong level for attributes")}
 
-      {_, _, s_min, _} when s_min < @creation_min_skill ->
+      {_, _, s_min, _} when s_min < creation_min_skill ->
         {:error, Changeset.add_error(%Changeset{}, :character_skills, "wrong level for skills")}
 
-      {_, _, _, s_max} when s_max > @creation_max_skill ->
+      {_, _, _, s_max} when s_max > creation_max_skill ->
         {:error, Changeset.add_error(%Changeset{}, :character_skills, "wrong level for skills")}
 
       _ ->

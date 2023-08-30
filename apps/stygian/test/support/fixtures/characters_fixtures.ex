@@ -25,6 +25,8 @@ defmodule Stygian.CharactersFixtures do
         # experience: 42,
         # health: 42,
         name: "some awful name",
+        age: :adult,
+        sin: "some awful sin",
         lost_health: 1,
         lost_sanity: 1,
         npc: false,

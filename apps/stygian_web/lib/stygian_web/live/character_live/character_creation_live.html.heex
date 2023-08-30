@@ -32,6 +32,17 @@
       required
     />
 
+    <.input field={@form[:age]} label="Età del personaggio" type="select" options={@ages} />
+
+    <.input
+      field={@form[:sin]}
+      label="Peccato del personaggio"
+      class="bg-black p-0 border border-brand"
+      phx-debounce="blur"
+      floating
+      required
+    />
+
     <:actions>
       <.button phx-disable-with="Creando personaggio..." class="w-full">
         Crea

@@ -22,6 +22,8 @@ defmodule Stygian.Characters.Character do
           sanity: integer(),
           lost_sanity: integer(),
           step: integer(),
+          age: :young | :adult | :old,
+          sin: String.t(),
           npc: boolean(),
           user_id: integer(),
           user: User.t(),
@@ -45,6 +47,8 @@ defmodule Stygian.Characters.Character do
     field :sanity, :integer
     field :lost_sanity, :integer
     field :step, :integer
+    field :age, Ecto.Enum, values: [:young, :adult, :old]
+    field :sin, :string
     field :npc, :boolean
 
     belongs_to :user, User
@@ -59,6 +63,8 @@ defmodule Stygian.Characters.Character do
       :avatar,
       :user_id,
       :step,
+      :age,
+      :sin,
       :lost_health,
       :lost_sanity,
       :npc
@@ -66,7 +72,9 @@ defmodule Stygian.Characters.Character do
     |> validate_required([
       :name,
       :avatar,
-      :user_id
+      :user_id,
+      :age,
+      :sin
     ])
     |> validate_length(:name, min: 10, max: 50)
     |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)
@@ -87,8 +95,8 @@ defmodule Stygian.Characters.Character do
 
   def npc_changeset(character, attrs) do
     character
-    |> cast(attrs, [:user_id, :name, :avatar, :small_avatar, :npc])
-    |> validate_required([:user_id, :name, :avatar, :npc])
+    |> cast(attrs, [:user_id, :name, :avatar, :small_avatar, :npc, :age, :sin])
+    |> validate_required([:user_id, :name, :avatar, :npc, :age, :sin])
     |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)
   end
 
@@ -111,6 +119,8 @@ defmodule Stygian.Characters.Character do
       :sanity,
       :lost_sanity,
       :step,
+      :age,
+      :sin,
       :npc,
       :user_id
     ])
@@ -126,6 +136,7 @@ defmodule Stygian.Characters.Character do
       :health,
       :sanity,
       :step,
+      :age,
       :user_id
     ])
     |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)

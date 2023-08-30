@@ -1,5 +1,4 @@
 defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
-  require Logger
   use StygianWeb, :container_live_view
 
   require Logger
@@ -11,15 +10,6 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
 
   import StygianWeb.CharacterLive.CharacterCompletionSelectorComponent
 
-  @max_attributes 9
-  @max_abilities 5
-
-  @max_attribute_value 8
-  @max_ability_value 5
-
-  @min_attribute_value 3
-  @min_ability_value 0
-
   @impl true
   def mount(_params, _session, %{assigns: %{current_user: current_user}} = socket) do
     case Characters.get_user_character?(current_user) do
@@ -27,6 +17,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
         {:ok,
          socket
          |> assign(character: character)
+         |> assign_character_stats()
          |> assign_attributes()
          |> assign_can_save()}
 
@@ -99,7 +90,15 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end
   end
 
-  defp assign_attributes(%{assigns: %{character: %{id: character_id}}} = socket) do
+  defp assign_attributes(
+         %{
+           assigns: %{
+             character: %{id: character_id},
+             max_attributes: max_attributes,
+             max_skills: max_skills
+           }
+         } = socket
+       ) do
     skills = Skills.list_creational_skills()
 
     {attributes, abilities} =
@@ -119,7 +118,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
         &%CharacterSkill{skill: &1, skill_id: &1.id, character_id: character_id, value: 0}
       )
     )
-    |> assign(attribute_points: @max_attributes, ability_points: @max_abilities)
+    |> assign(attribute_points: max_attributes, ability_points: max_skills)
   end
 
   defp filter_attributes(%{skill_types: [%{name: "Attribute"}]}), do: true
@@ -128,10 +127,16 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   defp plus_attributes(%{assigns: %{attribute_points: 0}} = socket, _), do: socket
 
   defp plus_attributes(
-         %{assigns: %{attribute_points: points, attributes: attributes}} = socket,
+         %{
+           assigns: %{
+             attribute_points: points,
+             attributes: attributes,
+             max_attribute_value: max_attribute_value
+           }
+         } = socket,
          skill_id
        ) do
-    case plus(attributes, skill_id, @max_attribute_value) do
+    case plus(attributes, skill_id, max_attribute_value) do
       {true, attributes} ->
         socket
         |> update_attributes(attributes)
@@ -145,10 +150,16 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   defp plus_abilities(%{assigns: %{ability_points: 0}} = socket, _), do: socket
 
   defp plus_abilities(
-         %{assigns: %{ability_points: points, abilities: abilities}} = socket,
+         %{
+           assigns: %{
+             ability_points: points,
+             abilities: abilities,
+             max_skill_value: max_skill_value
+           }
+         } = socket,
          skill_id
        ) do
-    case plus(abilities, skill_id, @max_ability_value) do
+    case plus(abilities, skill_id, max_skill_value) do
       {true, abilities} ->
         socket
         |> update_abilities(abilities)
@@ -172,13 +183,23 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end
   end
 
-  defp minus_attributes(%{assigns: %{attribute_points: @max_attributes}} = socket, _), do: socket
+  defp minus_attributes(
+         %{assigns: %{attribute_points: max_attributes, max_attributes: max_attributes}} = socket,
+         _
+       ),
+       do: socket
 
   defp minus_attributes(
-         %{assigns: %{attribute_points: points, attributes: attributes}} = socket,
+         %{
+           assigns: %{
+             attribute_points: points,
+             attributes: attributes,
+             min_attribute_value: min_attribute_value
+           }
+         } = socket,
          skill_id
        ) do
-    case minus(attributes, skill_id, @min_attribute_value) do
+    case minus(attributes, skill_id, min_attribute_value) do
       {true, attributes} ->
         socket
         |> update_attributes(attributes)
@@ -189,13 +210,23 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end
   end
 
-  defp minus_abilities(%{assigns: %{ability_points: @max_abilities}} = socket, _), do: socket
+  defp minus_abilities(
+         %{assigns: %{ability_points: max_skills, max_skills: max_skills}} = socket,
+         _
+       ),
+       do: socket
 
   defp minus_abilities(
-         %{assigns: %{ability_points: points, abilities: abilities}} = socket,
+         %{
+           assigns: %{
+             ability_points: points,
+             abilities: abilities,
+             min_skill_value: min_skill_value
+           }
+         } = socket,
          skill_id
        ) do
-    case minus(abilities, skill_id, @min_ability_value) do
+    case minus(abilities, skill_id, min_skill_value) do
       {true, abilities} ->
         socket
         |> update_abilities(abilities)
@@ -244,6 +275,27 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
     end)
   end
 
+  defp assign_character_stats(%{assigns: %{character: character}} = socket) do
+    max_attributes = Characters.get_max_available_attribute_points(character)
+    max_skills = Characters.get_max_available_skill_points(character)
+
+    max_attribute_value = Characters.get_creation_max_attribute_value()
+    max_skill_value = Characters.get_creation_max_skill_value(character)
+
+    min_attribute_value = Characters.get_creation_min_attribute_value()
+    min_skill_value = Characters.get_creation_min_skill_value()
+
+    socket
+    |> assign(
+      max_attributes: max_attributes,
+      max_skills: max_skills,
+      max_attribute_value: max_attribute_value,
+      max_skill_value: max_skill_value,
+      min_attribute_value: min_attribute_value,
+      min_skill_value: min_skill_value
+    )
+  end
+
   defp assign_can_save(%{assigns: %{attribute_points: 0, ability_points: 0}} = socket) do
     socket
     |> assign(can_save: true)
@@ -255,7 +307,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   end
 
   defp complete_character(character, attributes, abilities) do
-    with {:ok, _} <- Characters.create_character_skills(attributes, abilities),
+    with {:ok, _} <- Characters.create_character_skills(attributes, abilities, character),
          result = {:ok, _} <- Characters.complete_character(character) do
       result
     end
