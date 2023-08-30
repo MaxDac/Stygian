@@ -4,49 +4,20 @@ image:
 ports:
   - port: 4000
 tasks:
-  - name: zsh
-    init: |
-      # Cloning Power10k
-      sudo git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
-
-      gp sync-done ZSH
-
   - name: postgres
     init: |
-      gp sync-await ZSH
-
       # Initialising DB
-      psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';" 
+      # Awaiting for port 5432 to be available
+      gp ports await 5432
+
+      # Adding postgres user to the database
+      psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD 'mysecretpassword';"       
+
+      # Synchronising with the next task
       gp sync-done DB
-  
-  - name: asdf
-    env: 
-      KERL_BUILD_DOCS: yes
-    init: |
-      gp sync-await ZSH
 
-      # Declaring `asdf` dependencies
-      echo "erlang 25.3.2.5" >> $HOME/.tool-versions
-      echo "elixir 1.15.4-otp-25" >> $HOME/.tool-versions
-      echo "nodejs 18.17.0" >> $HOME/.tool-versions
-
-      # Exporting asdf shims to PATH
-      export PATH="$HOME/.asdf/shims:$PATH"
-
-      # Installing asdf plugins
-      asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git 
-      asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git
-      asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
-
-      # Installing `asdf` dependencies
-      asdf install
-      gp sync-done ASDF
-      
   - name: Phx
     init: |
-      # Waiting for ASDF to finish installing the dependencies
-      gp sync-await ASDF
-
       # Installing Elixir global dependencies
       mix local.hex --force
       mix local.rebar --force
@@ -68,9 +39,6 @@ tasks:
       npm install --prefix apps/stygian_web/assets
 
     command: |
-      # Starting zsh
-      zsh
-
       # Starting Phoenix
       export PATH="$HOME/.asdf/shims:$PATH"
       mix phx.server
