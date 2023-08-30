@@ -15,6 +15,7 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
 
         {:ok,
          socket
+         |> assign_ages()
          |> assign(form: form)}
 
       # Character already created, redirecting to completion
@@ -68,5 +69,15 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
 
         {:noreply, assign(socket, form: form)}
     end
+  end
+
+  defp assign_ages(socket) do
+    ages = [
+      {"Giovane (potrai selezionare più attributi, ma meno skill)", :young},
+      {"Adulto", :adult},
+      {"Maturità (potrai selezionare più skills, ma meno attributi)", :old}
+    ]
+
+    assign(socket, :ages, ages)
   end
 end

@@ -84,6 +84,8 @@ defmodule Stygian.CharactersTest do
       valid_attrs = %{
         avatar: "some avatar",
         name: "some very awful name",
+        age: :adult,
+        sin: "Some awful sin",
         user_id: user_id
       }
 
@@ -100,6 +102,8 @@ defmodule Stygian.CharactersTest do
       valid_attrs = %{
         "avatar" => "some avatar",
         "name" => "some very awful name",
+        "age" => :adult,
+        "sin" => "Some awful sin",
         "user_id" => user_id
       }
 
