@@ -17,6 +17,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
     {:ok,
      socket
      |> assign_skills()
+     |> assign_ages()
      |> assign_form()}
   end
 
@@ -31,6 +32,15 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
       <.input field={@form[:avatar]} phx-debounce="blur" label="Avatar" />
 
       <.input field={@form[:small_avatar]} phx-debounce="blur" label="Avatar per la Chat" />
+
+      <.input
+        field={@form[:age]}
+        label="Età del personaggio"
+        type="select"
+        options={@ages}
+      />
+
+      <.input field={@form[:sin]} phx-debounce="blur" label="Peccato del PNG" />
 
       <.button>
         Salva
@@ -123,6 +133,16 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
       end)
 
     assign(socket, :skills, skills)
+  end
+
+  defp assign_ages(socket) do
+    ages = [
+      {"Adulto", :adult},
+      {"Giovane (potrai selezionare più attributi, ma meno skill)", :young},
+      {"Mezza Età (potrai selezionare più skills, ma meno attributi)", :old}
+    ]
+
+    assign(socket, :ages, ages)
   end
 
   defp assign_form(socket, params \\ %{}) do
