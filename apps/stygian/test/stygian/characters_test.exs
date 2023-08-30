@@ -69,13 +69,13 @@ defmodule Stygian.CharactersTest do
 
     test "get_user_first_character/1 returns nil if the user has no character available created" do
       %{id: user_id} = user_fixture()
-      assert Characters.get_user_first_character(user_id) == nil
+      assert Characters.get_user_first_character(%{id: user_id}) == nil
     end
 
     test "get_user_first_character/1 returns the only character created by the user" do
       %{id: user_id} = user_fixture()
       character = character_fixture(%{user_id: user_id})
-      assert Characters.get_user_first_character(user_id) == character
+      assert Characters.get_user_first_character(%{id: user_id}) == character
     end
 
     test "create_character/1 with valid data creates a character" do
