@@ -33,12 +33,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
 
       <.input field={@form[:small_avatar]} phx-debounce="blur" label="Avatar per la Chat" />
 
-      <.input
-        field={@form[:age]}
-        label="Età del personaggio"
-        type="select"
-        options={@ages}
-      />
+      <.input field={@form[:age]} label="Età del personaggio" type="select" options={@ages} />
 
       <.input field={@form[:sin]} phx-debounce="blur" label="Peccato del PNG" />
 

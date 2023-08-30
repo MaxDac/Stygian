@@ -46,7 +46,9 @@ defmodule Stygian.CharacterCreationTest do
         |> Enum.map(fn i -> %{name: "ability_#{i}", value: 1} end)
         |> Enum.map(&create_character_skill.(&1))
 
-      assert {:error, changeset} = Characters.create_character_skills(attributes, abilities, character)
+      assert {:error, changeset} =
+               Characters.create_character_skills(attributes, abilities, character)
+
       assert %{errors: [character_attributes: {"wrong number of attributes", _}]} = changeset
       assert %{step: 1} = Characters.get_character!(character_id)
     end
@@ -84,7 +86,9 @@ defmodule Stygian.CharacterCreationTest do
         |> Enum.map(fn i -> %{name: "ability_#{i}", value: 2} end)
         |> Enum.map(&create_character_skill.(&1))
 
-      assert {:error, changeset} = Characters.create_character_skills(attributes, abilities, character)
+      assert {:error, changeset} =
+               Characters.create_character_skills(attributes, abilities, character)
+
       assert %{errors: [character_attributes: {"wrong number of attributes", _}]} = changeset
       assert %{step: 1} = Characters.get_character!(character_id)
     end
@@ -117,7 +121,9 @@ defmodule Stygian.CharacterCreationTest do
         |> Enum.map(fn i -> %{name: "ability_#{i}", value: 2} end)
         |> Enum.map(&create_character_skill.(&1))
 
-      assert {:error, changeset} = Characters.create_character_skills(attributes, abilities, character)
+      assert {:error, changeset} =
+               Characters.create_character_skills(attributes, abilities, character)
+
       assert %{errors: [character_attributes: {"wrong number of attributes", _}]} = changeset
       assert %{step: 1} = Characters.get_character!(character_id)
     end
@@ -150,14 +156,17 @@ defmodule Stygian.CharacterCreationTest do
         |> Enum.map(fn i -> %{name: "ability_#{i}", value: 2} end)
         |> Enum.map(&create_character_skill.(&1))
 
-      assert {:error, changeset} = Characters.create_character_skills(attributes, abilities, character)
+      assert {:error, changeset} =
+               Characters.create_character_skills(attributes, abilities, character)
+
       assert %{errors: [character_attributes: {"wrong number of attributes", _}]} = changeset
       assert %{step: 1} = Characters.get_character!(character_id)
     end
 
-    test "create_character_skills/3 returns error when the skills number is wrong for the character age", %{
-      character: %{id: character_id} = character
-    } do
+    test "create_character_skills/3 returns error when the skills number is wrong for the character age",
+         %{
+           character: %{id: character_id} = character
+         } do
       create_character_skill = fn attrs = %{value: value} ->
         skill = skill_fixture(attrs |> Map.delete(:value))
 
@@ -235,7 +244,8 @@ defmodule Stygian.CharacterCreationTest do
     end
 
     test "create_character_skills/3 returns ok when all the parameters pass the checks for young" do
-      %{id: character_id} = character = character_fixture(%{name: "A Young Character Name", age: :young})
+      %{id: character_id} =
+        character = character_fixture(%{name: "A Young Character Name", age: :young})
 
       create_character_skill = fn attrs = %{value: value} ->
         skill = skill_fixture(attrs |> Map.delete(:value))
@@ -277,7 +287,8 @@ defmodule Stygian.CharacterCreationTest do
     end
 
     test "create_character_skills/3 returns ok when all the parameters pass the checks for old" do
-      %{id: character_id} = character = character_fixture(%{name: "An Old Character Name", age: :old})
+      %{id: character_id} =
+        character = character_fixture(%{name: "An Old Character Name", age: :old})
 
       create_character_skill = fn attrs = %{value: value} ->
         skill = skill_fixture(attrs |> Map.delete(:value))

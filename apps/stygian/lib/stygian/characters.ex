@@ -495,7 +495,11 @@ defmodule Stygian.Characters do
 
   The character id must already be contained in the `CharacterSkill` type.
   """
-  @spec create_character_skills(list(CharacterSkill.t()), list(CharacterSkill.t()), character :: Character.t()) ::
+  @spec create_character_skills(
+          list(CharacterSkill.t()),
+          list(CharacterSkill.t()),
+          character :: Character.t()
+        ) ::
           {:ok, any()} | {:error, Changeset.t()}
   def create_character_skills(character_attributes, character_skills, character) do
     [%{character_id: character_id} | _] = character_attributes
