@@ -116,7 +116,7 @@ defmodule Stygian.SkillsTest do
       skills = Skills.list_preloaded_skills()
 
       assert length(skills) == 3
-      assert length(Enum.filter(skills, &(&1.is_attribute))) == 2
+      assert length(Enum.filter(skills, & &1.is_attribute)) == 2
     end
 
     test "add_is_attribute/1 correctly adds the is_attribute flag to false when the type is not attribute" do
@@ -126,7 +126,7 @@ defmodule Stygian.SkillsTest do
       assert {:ok, _} = Skills.add_skill_type_to_skill(skill, skill_type)
 
       # Recovering skill with preloaded skill_types
-      skill = 
+      skill =
         Skills.get_preloaded_skill!(skill_id)
 
       skill = Skill.add_is_attribute(skill)
@@ -137,7 +137,7 @@ defmodule Stygian.SkillsTest do
       %{id: skill_id} = skill_fixture()
 
       # Recovering skill with preloaded skill_types
-      skill = 
+      skill =
         Skills.get_preloaded_skill!(skill_id)
 
       skill = Skill.add_is_attribute(skill)
@@ -151,7 +151,7 @@ defmodule Stygian.SkillsTest do
       assert {:ok, _} = Skills.add_skill_type_to_skill(skill, skill_type)
 
       # Recovering skill with preloaded skill_types
-      skill = 
+      skill =
         Skills.get_preloaded_skill!(skill_id)
 
       skill = Skill.add_is_attribute(skill)

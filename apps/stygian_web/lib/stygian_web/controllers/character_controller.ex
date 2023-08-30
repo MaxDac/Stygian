@@ -66,7 +66,9 @@ defmodule StygianWeb.CharacterController do
   @doc """
   This endpoint selects the npc character for the admin, and puts it into the session.
   """
-  def handle_admin_selection(%{assigns: %{current_user: %{admin: true}}} = conn, %{"character_id" => character_id}) do
+  def handle_admin_selection(%{assigns: %{current_user: %{admin: true}}} = conn, %{
+        "character_id" => character_id
+      }) do
     %{npc: is_npc, name: character_name} = Characters.get_character(character_id)
 
     if is_npc do
