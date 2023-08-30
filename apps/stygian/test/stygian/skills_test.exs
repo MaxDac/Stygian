@@ -71,9 +71,108 @@ defmodule Stygian.SkillsTest do
       assert Skills.list_skills() == [skill]
     end
 
+    test "list_skills/0 returns the correct number of skills with different types associated" do
+      attribute_skill_type = skill_type_fixture(%{name: "Attribute"})
+      non_attribute_skill_type = skill_type_fixture(%{name: "Not Attribute"})
+
+      skill_1 = skill_fixture(%{name: "Skill 1"})
+      skill_2 = skill_fixture(%{name: "Skill 2"})
+      skill_3 = skill_fixture(%{name: "Skill 3"})
+
+      Skills.add_skill_type_to_skill(skill_1, attribute_skill_type)
+      Skills.add_skill_type_to_skill(skill_2, non_attribute_skill_type)
+      Skills.add_skill_type_to_skill(skill_3, attribute_skill_type)
+      Skills.add_skill_type_to_skill(skill_3, non_attribute_skill_type)
+
+      skills = Skills.list_skills()
+
+      assert length(skills) == 3
+    end
+
+    test "list_preloaded_skills/0 returns all skills" do
+      skill = skill_fixture()
+
+      assert [found_skill] = Skills.list_preloaded_skills()
+
+      assert found_skill.name == skill.name
+      assert found_skill.description == skill.description
+      refute found_skill.is_attribute
+      assert [] == found_skill.skill_types
+    end
+
+    test "list_preloaded_skills/0 returns all skills with the correct `is_attribute` flag" do
+      attribute_skill_type = skill_type_fixture(%{name: "Attribute"})
+      non_attribute_skill_type = skill_type_fixture(%{name: "Not Attribute"})
+
+      skill_1 = skill_fixture(%{name: "Skill 1"})
+      skill_2 = skill_fixture(%{name: "Skill 2"})
+      skill_3 = skill_fixture(%{name: "Skill 3"})
+
+      Skills.add_skill_type_to_skill(skill_1, attribute_skill_type)
+      Skills.add_skill_type_to_skill(skill_2, non_attribute_skill_type)
+      Skills.add_skill_type_to_skill(skill_3, attribute_skill_type)
+      Skills.add_skill_type_to_skill(skill_3, non_attribute_skill_type)
+
+      skills = Skills.list_preloaded_skills()
+
+      assert length(skills) == 3
+      assert length(Enum.filter(skills, &(&1.is_attribute))) == 2
+    end
+
+    test "add_is_attribute/1 correctly adds the is_attribute flag to false when the type is not attribute" do
+      skill_type = skill_type_fixture(%{name: "Not Attribute"})
+      %{id: skill_id} = skill = skill_fixture()
+
+      assert {:ok, _} = Skills.add_skill_type_to_skill(skill, skill_type)
+
+      # Recovering skill with preloaded skill_types
+      skill = 
+        Skills.get_preloaded_skill!(skill_id)
+
+      skill = Skill.add_is_attribute(skill)
+      refute skill.is_attribute
+    end
+
+    test "add_is_attribute/1 correctly adds the is_attribute flag to false when no type is present" do
+      %{id: skill_id} = skill_fixture()
+
+      # Recovering skill with preloaded skill_types
+      skill = 
+        Skills.get_preloaded_skill!(skill_id)
+
+      skill = Skill.add_is_attribute(skill)
+      refute skill.is_attribute
+    end
+
+    test "add_is_attribute/1 correctly adds the is_attribute flag to true" do
+      skill_type = skill_type_fixture(%{name: "Attribute"})
+      %{id: skill_id} = skill = skill_fixture()
+
+      assert {:ok, _} = Skills.add_skill_type_to_skill(skill, skill_type)
+
+      # Recovering skill with preloaded skill_types
+      skill = 
+        Skills.get_preloaded_skill!(skill_id)
+
+      skill = Skill.add_is_attribute(skill)
+      assert skill.is_attribute
+    end
+
     test "get_skill!/1 returns the skill with given id" do
       skill = skill_fixture()
       assert Skills.get_skill!(skill.id) == skill
+    end
+
+    test "get_preloaded_skill!/1 returns the skill with given id with the skill types preloaded" do
+      skill_type = skill_type_fixture()
+      skill = skill_fixture()
+
+      assert {:ok, _} = Skills.add_skill_type_to_skill(skill, skill_type)
+
+      found_skill = Skills.get_preloaded_skill!(skill.id)
+      assert found_skill.name == skill.name
+      assert [found_skill_type] = found_skill.skill_types
+      assert found_skill_type.name == skill_type.name
     end
 
     test "create_skill/1 with valid data creates a skill" do

@@ -101,7 +101,13 @@ defmodule Stygian.Characters do
   Returns the first character of a user.
   TODO - fix in issue #16, the admin user can have more than one character, but only NPCs.
   """
-  def get_user_first_character(user_id) do
+  @spec get_user_first_character(User.t()) :: Character.t() | nil
+  def get_user_first_character(user)
+
+  # If the user is an admin, it will have to select the character manually from the list of NPCs.
+  def get_user_first_character(%{admin: true}), do: nil
+
+  def get_user_first_character(%{id: user_id}) do
     Character
     |> from()
     |> where([c], c.user_id == ^user_id)

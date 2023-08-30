@@ -114,7 +114,10 @@ defmodule StygianWeb.AdminLive.CharacterNpcCreationLive do
   defp assign_skills(socket) do
     skills =
       Skills.list_skills()
-      |> Enum.map(&%CharacterSkill{skill: &1, skill_id: &1.id, value: 0})
+      |> Enum.map(fn 
+        skill -> 
+          %CharacterSkill{skill: skill, skill_id: skill.id, value: 0}
+      end)
 
     assign(socket, :skills, skills)
   end

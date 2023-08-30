@@ -42,7 +42,7 @@ defmodule StygianWeb.AdminLive.CharacterNpcDashboardLive do
       </.link>
 
       <span>
-        ( <.link navigate={~p"/character/redirect/#{npc_id}"}>Seleziona</.link> )
+        ( <.link navigate={~p"/admin/redirect/#{npc_id}"}>Seleziona</.link> )
       </span>
     </div>
     """

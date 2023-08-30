@@ -62,4 +62,22 @@ defmodule StygianWeb.CharacterController do
         |> redirect(to: ~p"/")
     end
   end
+
+  @doc """
+  This endpoint selects the npc character for the admin, and puts it into the session.
+  """
+  def handle_admin_selection(%{assigns: %{current_user: %{admin: true}}} = conn, %{"character_id" => character_id}) do
+    %{npc: is_npc, name: character_name} = Characters.get_character(character_id)
+
+    if is_npc do
+      conn
+      |> put_session(:character_id, character_id)
+      |> put_flash(:info, "Hai selezionato il personaggio #{character_name}")
+      |> redirect(to: ~p"/admin/npcs")
+    else
+      conn
+      |> put_flash(:error, "Non puoi selezionare un personaggio non npc.")
+      |> redirect(to: ~p"/admin/npcs")
+    end
+  end
 end
