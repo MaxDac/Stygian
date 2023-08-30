@@ -26,11 +26,14 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLiveTest do
 
     test "Correctly redirects to the character completion page", %{conn: conn} do
       user = user_fixture()
-      _ = character_fixture(%{user_id: user.id})
+      character = character_fixture(%{user_id: user.id})
 
       assert {:error, redirect} =
                conn
                |> log_in_user(user)
+               # Assigning it, as it will be assign in the login and after creation to the session.
+               # There is an active issue #66 to deal with edge cases.
+               |> assign(:current_character, character)
                |> live(~p"/character/sheet")
 
       assert {:live_redirect, %{to: path}} = redirect

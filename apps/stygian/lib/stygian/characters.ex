@@ -9,6 +9,7 @@ defmodule Stygian.Characters do
 
   alias Stygian.Repo
 
+  alias Stygian.Accounts
   alias Stygian.Accounts.User
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
@@ -55,6 +56,16 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Gets a list of NPCs
+  """
+  def list_npcs do
+    Character
+    |> from()
+    |> where([c], c.npc)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single character.
 
   Raises `Ecto.NoResultsError` if the Character does not exist.
@@ -88,9 +99,15 @@ defmodule Stygian.Characters do
 
   @doc """
   Returns the first character of a user.
-  TODO - fix in issue #16, the admin user can have more than one character, but only PNGs.
+  TODO - fix in issue #16, the admin user can have more than one character, but only NPCs.
   """
-  def get_user_first_character(user_id) do
+  @spec get_user_first_character(User.t()) :: Character.t() | nil
+  def get_user_first_character(user)
+
+  # If the user is an admin, it will have to select the character manually from the list of NPCs.
+  def get_user_first_character(%{admin: true}), do: nil
+
+  def get_user_first_character(%{id: user_id}) do
     Character
     |> from()
     |> where([c], c.user_id == ^user_id)
@@ -165,6 +182,33 @@ defmodule Stygian.Characters do
   def user_has_complete_charater?(user) do
     character = get_user_character?(user)
     character.step == 2
+  end
+
+  @doc """
+  Creates an NPC.
+  """
+  @spec create_npc(params :: map(), skills :: list(Skill.t())) ::
+          {:ok, Character.t()} | {:error, Changeset.t()}
+  def create_npc(params, skills) do
+    %{id: admin_user_id} = Accounts.get_admin_user()
+
+    params =
+      params
+      |> Map.put("npc", true)
+      |> Map.put("user_id", admin_user_id)
+
+    character_changeset =
+      %Character{}
+      |> Character.npc_changeset(params)
+
+    character =
+      character_changeset
+      |> Repo.insert()
+
+    with {:ok, %Character{id: character_id}} <- character,
+         {:ok, _} <- create_character_skills_internal(skills, character_id) do
+      {:ok, character}
+    end
   end
 
   @doc """
@@ -423,26 +467,37 @@ defmodule Stygian.Characters do
 
       {:ok, {attributes, skills}} ->
         Enum.concat(attributes, skills)
-        |> Enum.reduce(
-          Ecto.Multi.new()
-          |> Ecto.Multi.delete_all(
-            :delete_all,
-            from(c in CharacterSkill, where: c.character_id == ^character_id)
-          ),
-          fn %{skill_id: skill_id, character_id: character_id, value: value}, multi ->
-            multi
-            |> Ecto.Multi.insert(
-              skill_id,
-              CharacterSkill.changeset(%CharacterSkill{}, %{
-                character_id: character_id,
-                skill_id: skill_id,
-                value: value
-              })
-            )
-          end
-        )
-        |> Repo.transaction()
+        |> create_character_skills_internal(character_id)
     end
+  end
+
+  @spec create_character_skills_internal(
+          skills :: list(CharacterSkill.t()),
+          character_id :: non_neg_integer()
+        ) ::
+          {:ok, any()} | {:error, any()} | any()
+  defp create_character_skills_internal(skills, character_id) do
+    skills
+    |> Enum.map(&Map.put(&1, :character_id, character_id))
+    |> Enum.reduce(
+      Ecto.Multi.new()
+      |> Ecto.Multi.delete_all(
+        :delete_all,
+        from(c in CharacterSkill, where: c.character_id == ^character_id)
+      ),
+      fn %{skill_id: skill_id, character_id: character_id, value: value}, multi ->
+        multi
+        |> Ecto.Multi.insert(
+          skill_id,
+          CharacterSkill.changeset(%CharacterSkill{}, %{
+            character_id: character_id,
+            skill_id: skill_id,
+            value: value
+          })
+        )
+      end
+    )
+    |> Repo.transaction()
   end
 
   @spec check_creation_skills(

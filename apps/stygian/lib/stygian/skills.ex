@@ -122,6 +122,19 @@ defmodule Stygian.Skills do
   end
 
   @doc """
+  Like the previous function, returns the complete list of skills, but with 
+  the skill_types preloaded.
+
+  The skills will have the `is_attribute` flag populated
+  """
+  def list_preloaded_skills do
+    Skill
+    |> preload(:skill_types)
+    |> Repo.all()
+    |> Enum.map(&Skill.add_is_attribute/1)
+  end
+
+  @doc """
   Gets a single skill.
 
   Raises `Ecto.NoResultsError` if the Skill does not exist.
@@ -136,6 +149,15 @@ defmodule Stygian.Skills do
 
   """
   def get_skill!(id), do: Repo.get!(Skill, id)
+
+  @doc """
+  Gets a single skill with its skill_types preloaded.
+  """
+  def get_preloaded_skill!(id) do
+    Skill
+    |> preload(:skill_types)
+    |> Repo.get!(id)
+  end
 
   @doc """
   Gets a single skill by name.

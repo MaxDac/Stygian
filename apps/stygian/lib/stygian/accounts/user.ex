@@ -185,4 +185,13 @@ defmodule Stygian.Accounts.User do
       add_error(changeset, :current_password, "is not valid")
     end
   end
+
+  @doc """
+  Updates the user name.
+  """
+  def username_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:username])
+    |> validate_required([:username])
+  end
 end

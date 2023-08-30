@@ -33,7 +33,7 @@ defmodule StygianWeb.UserAuth do
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
-    character = Characters.get_user_first_character(user.id)
+    character = Characters.get_user_first_character(user)
 
     conn
     |> renew_session()

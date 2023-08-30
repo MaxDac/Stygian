@@ -38,6 +38,13 @@ defmodule Stygian.CharactersTest do
       assert got_character.user_id == character.user_id
     end
 
+    test "list_npcs/0 returns only NPC characters" do
+      npc = character_fixture(%{name: "Some NPC character", npc: true})
+      character_fixture(%{name: "Some non NPC character"})
+
+      assert [npc] = Characters.list_npcs()
+    end
+
     test "get_character!/1 returns the character with given id" do
       character = character_fixture()
       assert Characters.get_character!(character.id) == character
@@ -62,13 +69,13 @@ defmodule Stygian.CharactersTest do
 
     test "get_user_first_character/1 returns nil if the user has no character available created" do
       %{id: user_id} = user_fixture()
-      assert Characters.get_user_first_character(user_id) == nil
+      assert Characters.get_user_first_character(%{id: user_id}) == nil
     end
 
     test "get_user_first_character/1 returns the only character created by the user" do
       %{id: user_id} = user_fixture()
       character = character_fixture(%{user_id: user_id})
-      assert Characters.get_user_first_character(user_id) == character
+      assert Characters.get_user_first_character(%{id: user_id}) == character
     end
 
     test "create_character/1 with valid data creates a character" do
@@ -230,6 +237,39 @@ defmodule Stygian.CharactersTest do
 
     test "create_character_skill/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Characters.create_character_skill(@invalid_attrs)
+    end
+
+    test "create_npc/2 with invalid data returns an error changeset" do
+      user_fixture(%{username: "Narratore"})
+      %{id: skill_id} = skill_fixture()
+
+      invalid_character = %{
+        "avatar" => "some_avatar"
+      }
+
+      skills = [
+        %{skill_id: skill_id, value: 4}
+      ]
+
+      assert {:error, _} = Characters.create_npc(invalid_character, skills)
+    end
+
+    test "create_npc/2 with valid data creates the character" do
+      user_fixture(%{username: "Narratore"})
+      %{id: skill_id} = skill_fixture()
+
+      valid_character = %{
+        "name" => "some_name",
+        "avatar" => "some_avatar"
+      }
+
+      skills = [
+        %{skill_id: skill_id, value: 4}
+      ]
+
+      assert {:ok, _} = Characters.create_npc(valid_character, skills)
+      assert [npcs] = Characters.list_npcs()
+      assert "some_name" == npcs.name
     end
 
     test "update_character_skill/2 with valid data updates the character_skill" do

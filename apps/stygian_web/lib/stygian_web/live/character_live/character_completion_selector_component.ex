@@ -3,6 +3,9 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionSelectorComponent do
 
   alias Stygian.Skills.Skill
 
+  @doc """
+  A single attribute selector, with controls to increase or decrease its value.
+  """
   attr :skill, Skill, required: true
   attr :value, :integer, required: true
   attr :kind, :string, required: true

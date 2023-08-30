@@ -22,6 +22,7 @@ defmodule Stygian.Characters.Character do
           sanity: integer(),
           lost_sanity: integer(),
           step: integer(),
+          npc: boolean(),
           user_id: integer(),
           user: User.t(),
           inserted_at: NaiveDateTime.t(),
@@ -44,6 +45,7 @@ defmodule Stygian.Characters.Character do
     field :sanity, :integer
     field :lost_sanity, :integer
     field :step, :integer
+    field :npc, :boolean
 
     belongs_to :user, User
 
@@ -58,7 +60,8 @@ defmodule Stygian.Characters.Character do
       :user_id,
       :step,
       :lost_health,
-      :lost_sanity
+      :lost_sanity,
+      :npc
     ])
     |> validate_required([
       :name,
@@ -82,6 +85,13 @@ defmodule Stygian.Characters.Character do
     |> validate_required([:avatar, :biography, :description])
   end
 
+  def npc_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:user_id, :name, :avatar, :small_avatar, :npc])
+    |> validate_required([:user_id, :name, :avatar, :npc])
+    |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)
+  end
+
   @doc false
   def changeset(character, attrs) do
     character
@@ -101,6 +111,7 @@ defmodule Stygian.Characters.Character do
       :sanity,
       :lost_sanity,
       :step,
+      :npc,
       :user_id
     ])
     |> validate_required([

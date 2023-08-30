@@ -14,33 +14,41 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
   end
 
   @impl true
+  def mount(_params, _session, %{assigns: %{current_user: %{admin: true}}} = socket) do
+    # If the user is an admin, redirecting to the PNGs dashboard
+    {:ok, push_navigate(socket, to: ~p"/admin/npcs")}
+  end
+
+  @impl true
+  def mount(_params, _session, %{assigns: %{current_character: current_character}} = socket)
+      when is_nil(current_character) do
+    # If the user does not have a character yet, redirecting to creation
+    {:ok,
+     socket
+     |> push_navigate(to: ~p"/character/create")}
+  end
+
+  @impl true
+  def mount(_params, _session, %{assigns: %{current_character: %{step: 1}}} = socket) do
+    # Character creation at step 1 already, redirecting to character completion
+    {:ok,
+     socket
+     |> push_navigate(to: ~p"/character/complete")}
+  end
+
+  @impl true
   def mount(_params, _session, socket) do
-    case Characters.get_user_character?(socket.assigns.current_user) do
-      nil ->
-        {:ok,
-         socket
-         # Removed as it's not an error.
-         # |> put_flash(:error, "Devi creare un personaggio prima di accedere alla sua scheda.")
-         |> push_navigate(to: ~p"/character/create")}
+    {:ok,
+     socket
+     |> assign_character()
+     |> assign_confidential_permissions()
+     |> assign_modify_permissions()}
+  end
 
-      %{step: 1} ->
-        {:ok,
-         socket
-         # Removed as it's not an error.
-         # |> put_flash(:error, "Devi creare un personaggio prima di accedere alla sua scheda.")
-         # |> put_flash(
-         #   :error,
-         #   "Devi completare la creazione del personaggio prima di accedere alla sua scheda."
-         # )
-         |> push_navigate(to: ~p"/character/complete")}
+  defp assign_character(socket, character_id \\ nil)
 
-      character ->
-        {:ok,
-         socket
-         |> assign(:character, character)
-         |> assign_confidential_permissions()
-         |> assign_modify_permissions()}
-    end
+  defp assign_character(%{assigns: %{current_character: current_character}} = socket, nil) do
+    assign(socket, :character, current_character)
   end
 
   defp assign_character(socket, character_id) do
@@ -51,8 +59,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
         |> push_navigate(~p"/")
 
       character ->
-        socket
-        |> assign(:character, character)
+        assign(socket, :character, character)
     end
   end
 

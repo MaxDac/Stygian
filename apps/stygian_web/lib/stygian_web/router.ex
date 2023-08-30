@@ -142,12 +142,16 @@ defmodule StygianWeb.Router do
     end
   end
 
-  scope "/admin", StygianWeb.AdminLive do
+  scope "/admin", StygianWeb do
     pipe_through [:browser, :require_admin_user]
+
+    get "/redirect/:character_id", CharacterController, :handle_admin_selection
 
     live_session :admin_dashboard,
       on_mount: [{StygianWeb.UserAuth, :ensure_admin}] do
-      live "/", AdminDashboardLive, :index
+      live "/", AdminLive.AdminDashboardLive, :index
+      live "/npcs", AdminLive.CharacterNpcDashboardLive, :index
+      live "/npc/create", AdminLive.CharacterNpcCreationLive, :create
     end
   end
 end
