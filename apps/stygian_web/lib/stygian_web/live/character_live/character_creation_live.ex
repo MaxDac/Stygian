@@ -73,9 +73,9 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
 
   defp assign_ages(socket) do
     ages = [
-      {"Giovane (potrai selezionare più attributi, ma meno skill)", :young},
       {"Adulto", :adult},
-      {"Maturità (potrai selezionare più skills, ma meno attributi)", :old}
+      {"Giovane (potrai selezionare più attributi, ma meno skill)", :young},
+      {"Mezza Età (potrai selezionare più skills, ma meno attributi)", :old}
     ]
 
     assign(socket, :ages, ages)
