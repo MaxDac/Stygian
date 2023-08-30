@@ -236,8 +236,8 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
   end
 
   defp assign_character_stats(%{assigns: %{character: character}} = socket) do
-    max_abilities = Characters.get_max_available_attribute_points(character)
-    max_skills = Characters.get_max_available_attribute_points(character)
+    max_attributes = Characters.get_max_available_attribute_points(character)
+    max_skills = Characters.get_max_available_skill_points(character)
 
     max_attribute_value = Characters.get_creation_max_attribute_value()
     max_skill_value = Characters.get_creation_max_skill_value(character)
@@ -247,7 +247,7 @@ defmodule StygianWeb.CharacterLive.CharacterCompletionLive do
 
     socket
     |> assign(
-      max_abilities: max_abilities,
+      max_attributes: max_attributes,
       max_skills: max_skills,
       max_attribute_value: max_attribute_value,
       max_skill_value: max_skill_value,

@@ -16,7 +16,7 @@ defmodule Stygian.Characters do
   alias Stygian.Skills.Skill
 
   @max_attribute_points 9
-  @max_skill_points 5
+  @max_skill_points 9
 
   @creation_max_attribute_sum 33
   @creation_max_skill_sum 9
@@ -24,7 +24,7 @@ defmodule Stygian.Characters do
   @creation_max_attribute_value 8
   @creation_min_attribute_value 3
 
-  @creation_max_skill_value 5
+  @creation_max_skill_value 4
   @creation_min_skill_value 0
 
   @physique_skill_name "Fisico"
