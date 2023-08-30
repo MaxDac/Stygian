@@ -264,7 +264,9 @@ defmodule Stygian.CharactersTest do
 
       valid_character = %{
         "name" => "some_name",
-        "avatar" => "some_avatar"
+        "avatar" => "some_avatar",
+        "sin" => "some_awful_sin",
+        "age" => :adult
       }
 
       skills = [
