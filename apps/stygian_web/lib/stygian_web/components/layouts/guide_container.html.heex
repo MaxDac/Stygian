@@ -1,0 +1,22 @@
+<body class="bg-zinc-900 w-full h-screen bg-no-repeat bg-contain bg-center">
+  <div class="flex flex-row h-screen">
+    <div class="bg-[url('/images/HomeWallpaper.webp')] bg-cover fixed top-0 left-0 w-screen h-screen opacity-5 -z-100" />
+    <div class="absolute top-0 left-0 w-full xl:bg-[url('/images/Tentacles2.webp')] bg-no-repeat h-screen">
+      <div class="ml-0 xl:ml-[500px] bg-gradient-to-r from-container-background to-container-background/95 w-full xl:w-[calc(100%-500px)] h-full">
+        <div class="overflow-x-hidden w-full h-full text-brand p-5">
+          <article class="format-invert lg:format-lg format-green text-normal font-medium">
+            <div class="flex justify-center pb-5">
+              <.link 
+                navigate={~p"/"}
+                class="font-typewriter text-sm"
+              >
+                Torna alla home
+              </.link>
+            </div>
+            <%= @inner_content %>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

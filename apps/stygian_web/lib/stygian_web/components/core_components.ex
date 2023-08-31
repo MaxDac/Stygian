@@ -875,4 +875,17 @@ defmodule StygianWeb.CoreComponents do
     </div>
     """
   end
+
+  @doc """
+  The guide paragraph.
+  """
+  slot :inner_block, doc: "The content of the paragraph"
+
+  def guide_p(assigns) do
+    ~H"""
+    <p class="font-typewriter text-md">
+      <%= render_slot(@inner_block) %>
+    </p>
+    """
+  end
 end
