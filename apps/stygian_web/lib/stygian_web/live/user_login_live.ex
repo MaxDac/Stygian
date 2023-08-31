@@ -35,9 +35,12 @@ defmodule StygianWeb.UserLoginLive do
           </.button>
         </:actions>
         <:actions>
-          <div class="w-full text-center">
+          <div class="w-full text-center flex space-x-4 justify-center">
             <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
               Registrati
+            </.link>
+            <.link navigate={~p"/guide"} target="_blank" class="font-semibold text-brand hover:underline">
+              Guida
             </.link>
           </div>
         </:actions>
