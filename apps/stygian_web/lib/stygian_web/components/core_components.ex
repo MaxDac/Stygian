@@ -879,11 +879,13 @@ defmodule StygianWeb.CoreComponents do
   @doc """
   The guide paragraph.
   """
+  attr :class, :string, required: false, default: nil, doc: "The custom class to apply to the paragraph"
+
   slot :inner_block, doc: "The content of the paragraph"
 
   def guide_p(assigns) do
     ~H"""
-    <p class="font-typewriter text-md">
+    <p class={"font-typewriter text-md #{@class}"}>
       <%= render_slot(@inner_block) %>
     </p>
     """
