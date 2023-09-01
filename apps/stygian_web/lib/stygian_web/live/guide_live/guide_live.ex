@@ -11,7 +11,7 @@ defmodule StygianWeb.GuideLive.GuideLive do
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
-  
+
   @impl true
   def handle_params(%{"action" => action}, _uri, socket) do
     {:noreply,
@@ -29,13 +29,14 @@ defmodule StygianWeb.GuideLive.GuideLive do
   end
 
   defp assign_menu_entries(%{assigns: %{action: action}} = socket) do
-    entries = [
-      %{ title: "Introduzione", action: :introduction },
-      %{ title: "Ambientazione", action: :environment },
-      %{ title: "Creazione", action: :creation },
-      %{ title: "Regolamento", action: :rules },
-    ]
-    |> Enum.map(&Map.put(&1, :active, &1.action == action))
+    entries =
+      [
+        %{title: "Introduzione", action: :introduction},
+        %{title: "Ambientazione", action: :environment},
+        %{title: "Creazione", action: :creation},
+        %{title: "Regolamento", action: :rules}
+      ]
+      |> Enum.map(&Map.put(&1, :active, &1.action == action))
 
     assign(socket, :menu_entries, entries)
   end
