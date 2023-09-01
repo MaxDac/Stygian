@@ -39,7 +39,11 @@ defmodule StygianWeb.UserLoginLive do
             <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
               Registrati
             </.link>
-            <.link navigate={~p"/guide"} target="_blank" class="font-semibold text-brand hover:underline">
+            <.link
+              navigate={~p"/guide"}
+              target="_blank"
+              class="font-semibold text-brand hover:underline"
+            >
               Guida
             </.link>
           </div>

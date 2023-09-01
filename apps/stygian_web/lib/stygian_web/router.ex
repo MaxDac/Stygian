@@ -147,6 +147,7 @@ defmodule StygianWeb.Router do
 
     live_session :guide do
       live "/", GuideLive
+      live "/:action", GuideLive
     end
   end
 

@@ -2,8 +2,8 @@ defmodule StygianWeb.UserRegistrationDisclaimer do
   @moduledoc """
   User registration disclaimer function components.
   """
-  
-  use Phoenix.Component
+
+  use StygianWeb, :html
 
   def disclaimer(assigns) do
     ~H"""

@@ -48,11 +48,7 @@ defmodule StygianWeb.UserRegistrationLive do
         </:actions>
       </.simple_form>
 
-      <.modal
-        :if={@show_disclaimer}
-        id="dice-thrower-modal"
-        show
-      >
+      <.modal :if={@show_disclaimer} id="dice-thrower-modal" show>
         <.disclaimer />
       </.modal>
     </div>
