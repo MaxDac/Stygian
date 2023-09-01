@@ -885,7 +885,7 @@ defmodule StygianWeb.CoreComponents do
 
   def guide_p(assigns) do
     ~H"""
-    <p class={"font-typewriter text-md #{@class}"}>
+    <p class={"font-normal #{@class}"}>
       <%= render_slot(@inner_block) %>
     </p>
     """
