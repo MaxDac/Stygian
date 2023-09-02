@@ -50,6 +50,15 @@ defmodule Stygian.CharactersTest do
       assert Characters.get_character!(character.id) == character
     end
 
+    test "get_character_by_name/1 returns the character when existent" do
+      character = character_fixture()
+      assert Characters.get_character_by_name(character.name) == character
+    end
+
+    test "get_character_by_name/1 returns nil when non existent" do
+      assert Characters.get_character_by_name("some name") == nil
+    end
+
     test "character_belongs_to_user?/2 returns true when the character belongs to the user" do
       %{id: character_id, user_id: user_id} = character_fixture()
       assert Characters.character_belongs_to_user?(character_id, user_id) == true
