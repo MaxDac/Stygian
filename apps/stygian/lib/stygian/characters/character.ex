@@ -25,6 +25,7 @@ defmodule Stygian.Characters.Character do
           age: :young | :adult | :old,
           sin: String.t(),
           npc: boolean(),
+          rest_timer: NaiveDateTime.t(),
           user_id: integer(),
           user: User.t(),
           inserted_at: NaiveDateTime.t(),
@@ -50,6 +51,7 @@ defmodule Stygian.Characters.Character do
     field :age, Ecto.Enum, values: [:young, :adult, :old]
     field :sin, :string
     field :npc, :boolean
+    field :rest_timer, :naive_datetime
 
     belongs_to :user, User
 
@@ -122,16 +124,13 @@ defmodule Stygian.Characters.Character do
       :age,
       :sin,
       :npc,
+      :rest_timer,
       :user_id
     ])
     |> validate_required([
       :name,
       :avatar,
-      :biography,
-      :description,
       :cigs,
-      :notes,
-      :admin_notes,
       :experience,
       :health,
       :sanity,
