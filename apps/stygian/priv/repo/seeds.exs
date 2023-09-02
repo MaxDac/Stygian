@@ -19,7 +19,7 @@ alias Stygian.Characters.CharacterSkill
 
 defmodule AccountsHelpers do
   def create_user?(%{username: username} = attrs) do
-    {:ok, user} = 
+    {:ok, user} =
       case Accounts.get_user_by_username(username) do
         nil ->
           case Accounts.register_user(attrs) do
@@ -88,12 +88,12 @@ end
 defmodule CharacterHelpers do
   def create_character?(%{name: name} = attrs) do
     case Characters.get_character_by_name(name) do
-      nil -> 
+      nil ->
         with {:ok, character} <- Characters.create_character(attrs) do
           Characters.update_character(character, attrs)
         end
 
-      character -> 
+      character ->
         Characters.update_character(character, attrs)
     end
   end
@@ -108,12 +108,13 @@ defmodule CharacterHelpers do
 end
 
 # Creating admin users
-_admin_user = AccountsHelpers.create_user?(%{
-  email: "postmaster@stygian.eu",
-  username: "Narratore",
-  password: "password1234",
-  admin: true
-})
+_admin_user =
+  AccountsHelpers.create_user?(%{
+    email: "postmaster@stygian.eu",
+    username: "Narratore",
+    password: "password1234",
+    admin: true
+  })
 
 AccountsHelpers.create_user?(%{
   email: "gabriele.dacunzo@outlook.com",
@@ -131,12 +132,13 @@ AccountsHelpers.create_user?(%{
 })
 
 # Creating user that could be used to demo the land
-{:ok, test_user} = AccountsHelpers.create_user?(%{
-  email: "user@stygian.eu",
-  username: "User",
-  password: "somepassword4321",
-  admin: false
-})
+{:ok, test_user} =
+  AccountsHelpers.create_user?(%{
+    email: "user@stygian.eu",
+    username: "User",
+    password: "somepassword4321",
+    admin: false
+  })
 
 #
 # Creating skill types
@@ -328,26 +330,27 @@ SkillHelpers.add_skill_type_to_skill(%{id: occult_id}, %{id: occult_skill_id})
 # Creating default characters
 #
 
-{:ok, test_character} = CharacterHelpers.create_character?(%{
-  name: "John Doe",
-  admin_notes: "Some admin_notes",
-  avatar: "/images/avatars/TestUser.webp",
-  chat_avatar: "/images/avatars/TestUserSmall.webp",
-  biography: "Some biography",
-  cigs: 200,
-  description: "Some description",
-  experience: 0,
-  health: 100,
-  age: :adult,
-  sin: "Some sins",
-  lost_health: 1,
-  lost_sanity: 1,
-  npc: false,
-  notes: "Some notes",
-  sanity: 42,
-  step: 2,
-  user_id: test_user.id
-})
+{:ok, test_character} =
+  CharacterHelpers.create_character?(%{
+    name: "John Doe",
+    admin_notes: "Some admin_notes",
+    avatar: "/images/avatars/TestUser.webp",
+    chat_avatar: "/images/avatars/TestUserSmall.webp",
+    biography: "Some biography",
+    cigs: 200,
+    description: "Some description",
+    experience: 0,
+    health: 100,
+    age: :adult,
+    sin: "Some sins",
+    lost_health: 1,
+    lost_sanity: 1,
+    npc: false,
+    notes: "Some notes",
+    sanity: 42,
+    step: 2,
+    user_id: test_user.id
+  })
 
 CharacterHelpers.associate_skills_to_character(test_character, [
   %CharacterSkill{character_id: test_character.id, skill_id: fisico_id, value: 6},
