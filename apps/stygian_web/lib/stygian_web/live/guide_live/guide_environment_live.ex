@@ -41,6 +41,25 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
     <.guide_p>
       (Todo)
     </.guide_p>
+
+    <.guide_h1>Luoghi di ritrovo</.guide_h1>
+
+    <.guide_p>
+      La parte orientale della cittadina di Rochester può nascondere pericoli in qualsiasi vicolo oscuro in cui ci si imbatte, o in qualsiasi casa abbandonata a cui si accede alla ricerca di provviste. Nella Notte Eterna di Rochester, pochi sono i luoghi in cui ci si può sentire veramente al sicuro. Di seguito, vengono proposti alcuni dei luoghi di ritrovo, in cui i personaggi possono interagire liberamente tra di loro, scambiare opinioni, commerciare o anche sfidarsi.
+      <ul>
+        <li class="font-normal text-md">
+          <b>Old Eel Hotel</b>: l'Old Eel Hotel è uno dei luoghi franchi a Rochester per tutte le organizzazioni. Nell'hotel, che prima del Cataclisma era una delle poche strutture che offrivano servizi ai forestieri, seppur non di troppa qualità, tutti i personaggi possono riunirsi nella grande hall e affittare delle camere per poter riposare, sicuro di avere una certa sicurezza. Il barista è un immigrato di seconda generazione italiano, Frankie Masiello, dal carattere non troppo accomodante. I nuovi personaggi possono considerare di avere conoscenza del luogo, e di sapere che al suo interno possono sentirsi al sicuro. Le stanze segrete che si possono prenotare sono proprio nell'Old Eel Hotel.
+        </li>
+
+        <li class="font-normal text-md">
+          <b>Moshe's shop</b>: Moshe è un ebreo di origine polacca, che prima del Cataclisma gestiva un negozio di antiquariato. Dopo il Cataclisma, Moshe ha deciso di aprire un negozio di ferramenta, e di vendere le sue scorte di oggetti antichi per poter comprare nuove scorte. Moshe non è un personaggio molto amichevole, a meno che non abbiate a disposizione delle chiavi di natura ignota. Il negozio di Moshe può essere considerato un luogo di ritrovo per tutti i personaggi, e gode della tolleranza, se non della protezione, delle organizzazioni criminali, che temono più che altro il malocchio che ha più volte minacciato di poter lanciare; per qualche ragione, nessuno dei fenomeni paranormali che tutti notano nella cittadina ha mai avuto luogo nel negozio di Moshe, il che ha dato corpo alle credenze dei mafiosi sulle conoscenze soprannaturali del mercante. Il negozio di Moshe si trova nella <i>French Hill</i>, nei <i>Georgian Apartments</i>.
+        </li>
+
+        <li class="font-normal text-md">
+          <b>Stanze private</b>: le stanze private possono essere considerate come stanze private all'Old Eel Hotel. Usufruirne non costa nulla, ma non possono essere usate per riposare, solo per tenere delle riunioni a porte chiuse. Sono accessibili dalla mappa centrale nella locazione "The Unknown".
+        </li>
+      </ul>
+    </.guide_p>
     """
   end
 end

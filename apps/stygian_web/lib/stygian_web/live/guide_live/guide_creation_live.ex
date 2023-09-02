@@ -116,6 +116,16 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
     <.guide_p>
       La creazione non determina la fine della scheda, ma consente ai giocatori di definirne le caratteristiche necessarie ed automatiche, creando il personaggio; dopo questo si potranno modificare la biografia, la descrizione, le note, e si potrà anche modificare la scheda personalizzata, accessibile dal tasto oscuro alla fine della scheda principale. La biografia è forse la parte più importante del personaggio: la possibilità di modificarla è stata posta dopo la creazione per dare la possibilità di modificarla e definirla con più calma; la biografia dovrà rispecchiare l'ambientazione, quindi il giocatore dovrà considerare che il suo personaggio dovrà essere credibile nel New England del 1930: a tal proposito, potrebbe essere di ispirazione la lettura delle novelle di H. P. Lovecraft (da dove abbastanza chiaramente questa ambientazione, e il gioco a cui si ispira, hanno tratto ispirazione).
     </.guide_p>
+
+    <.guide_h1>Consigli per la scrittura della biografia</.guide_h1>
+
+    <.guide_p>
+      Come detto, nella scrittura della biografia del personaggio, bisogna immaginarne uno che abbia senso negli anni '20/'30 del secolo scorso. Inoltre, è da considerare il fatto che il personaggio non può essere autoctono della cittadina di Rochester. Dovrete immaginare che, prima o dopo del Cataclisma, il personaggio ha percepito un richiamo, un impulso inconscio a recarsi a Rochester, a volte senza nemmeno sapere esattamente dove si stava recando. La mente, durante il richiamo, trovava tutti i modi, senza uno sforzo cosciente, per giustificare l'improvviso impulso ad andare: che sia una improvvisa e morbosa curiosità per il parco nazionale, o la volontà di scaricare un po' di stress in una tranquilla località sull'oceano, o ancora, il personaggio può aver provato un forte impulso a consumare alcol, e per qualche motivo era sicuro di poterne trovare al confine con il Canada, proprio a Rochester. Qualsiasi sia la motivazione, non c'è nessuna restrizione sul tipo di personaggio che può arrivare, la unica condizione è che abbia serbato un segreto, un peccato o comunque un'azione passata per cui prova profonda vergogna.
+    </.guide_p>
+
+    <.guide_p>
+      Ogni giocatore può decidere che il proprio personaggio sia arrivato poco prima del Cataclisma, o dopo. Per qualche strana ragione, anche se ha assistito al Cataclisma in prima persona, i ricordi di quell'accadimenti sono obnubilati, sfocati, confusi. Potrebbe anche accadere che un giorno il ricordo sia differente rispetto ad un altro. I ricordi cominciano ad assumere nitidezza solo a partire da qualche giorno dopo il Cataclisma.
+    </.guide_p>
     """
   end
 end
