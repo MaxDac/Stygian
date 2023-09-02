@@ -11,7 +11,8 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     </.guide_p>
 
     <.guide_p class="font-typewriter text-sm">
-      Poi per&ograve; l'effetto dell'alcol svanisce, e tutte le conseguenze del <i>moonshine</i> scampato al proibizionismo in qualche alcova o tunnel sotterraneo dell'<i>Old Eel</i> riaffiorano. Il sapore di vomito che la mente evoca automaticamente ti fa venire voglia di farla finita, di barattare qualcuna delle tue sigarette per una pallottola, premere il grilletto; lo scoppio ispirato dal grilletto che inonda la stanza, riesci quasi ad immaginarlo, e riesce a regalarti una forma distorta di sollievo...
+      Poi per&ograve; l'effetto dell'alcol svanisce, e tutte le conseguenze del <i>moonshine</i>
+      scampato al proibizionismo in qualche alcova o tunnel sotterraneo dell'<i>Old Eel</i> riaffiorano. Il sapore di vomito che la mente evoca automaticamente ti fa venire voglia di farla finita, di barattare qualcuna delle tue sigarette per una pallottola, premere il grilletto; lo scoppio ispirato dal grilletto che inonda la stanza, riesci quasi ad immaginarlo, e riesce a regalarti una forma distorta di sollievo...
     </.guide_p>
 
     <.guide_p class="font-typewriter text-sm">

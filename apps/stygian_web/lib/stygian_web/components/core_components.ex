@@ -879,7 +879,10 @@ defmodule StygianWeb.CoreComponents do
   @doc """
   The guide paragraph.
   """
-  attr :class, :string, required: false, default: nil, doc: "The custom class to apply to the paragraph"
+  attr :class, :string,
+    required: false,
+    default: nil,
+    doc: "The custom class to apply to the paragraph"
 
   slot :inner_block, doc: "The content of the paragraph"
 

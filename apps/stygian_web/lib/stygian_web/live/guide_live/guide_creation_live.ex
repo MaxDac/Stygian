@@ -6,7 +6,10 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
   def creation(assigns) do
     ~H"""
     <.guide_p>
-      Per poter partecipare al gioco, si dovrà registrare un utente. La registrazione comporta l’immediato accesso alla parte interna del sito, e si potrà visionare il gioco nelle chat pubbliche, ma per poter partecipare attivamente, si dovrà creare un personaggio. La creazione del personaggio è subordinata alla verifica dell’utente, che avverrà una volta attivato il link ricevuto per posta elettronica: se non riceverete la mail in fase di registrazione, controllate la cartella di posta indesiderata, altrimenti contattate un gestore su <.link href="https://discord.gg/HYuZ3rKdsn" class="font-bold underline underline-offset-8">Discord</.link>.
+      Per poter partecipare al gioco, si dovrà registrare un utente. La registrazione comporta l’immediato accesso alla parte interna del sito, e si potrà visionare il gioco nelle chat pubbliche, ma per poter partecipare attivamente, si dovrà creare un personaggio. La creazione del personaggio è subordinata alla verifica dell’utente, che avverrà una volta attivato il link ricevuto per posta elettronica: se non riceverete la mail in fase di registrazione, controllate la cartella di posta indesiderata, altrimenti contattate un gestore su <.link
+        href="https://discord.gg/HYuZ3rKdsn"
+        class="font-bold underline underline-offset-8"
+      >Discord</.link>.
     </.guide_p>
 
     <.guide_p>
@@ -40,7 +43,6 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
 
     <.guide_p>
       Gli Attributi si dividono in:
-
       <ul>
         <li class="font-normal text-md">
           <b>Fisico</b>: rappresenta le capacità fisiche del personaggio, la sua forza, resistenza.
@@ -65,7 +67,6 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
 
     <.guide_p>
       Di seguito, una lista delle Abilità:
-
       <ul>
         <li class="font-normal text-md">
           <b>Armi da fuoco</b>: rappresenta la capacità del personaggio di utilizzare armi da fuoco, e di mantenere la calma durante un conflitto a fuoco.
