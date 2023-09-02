@@ -6,7 +6,7 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
   def environment(assigns) do
     ~H"""
     <.guide_p>
-      Come anticipato nell'<.link patch={~p"/guide/introduction"} class="font-bold underline underline-offset-8">introduzione</.link>, il gioco è ambientato nella cittadina di Arkham, una cittadina del Maine al confine con il Canada, che si affaccia sull'Oceano Atlantico, a cavallo tra il 1920 e il 1930. Un fenomeno del tutto soprannaturale e misterioso si è abbattuto sulla cittadina in un periodo imprecisato, uno o due anni prima. Il fenomeno viene chiamato dagli abitanti superstiti il <b>Cataclisma</b>.
+      Come anticipato nell'<.link patch={~p"/guide/introduction"} class="font-bold underline underline-offset-8">introduzione</.link>, il gioco è ambientato nella cittadina di Rochester, una cittadina del Maine al confine con il Canada, che si affaccia sull'Oceano Atlantico, a cavallo tra il 1920 e il 1930. Un fenomeno del tutto soprannaturale e misterioso si è abbattuto sulla cittadina in un periodo imprecisato, uno o due anni prima. Il fenomeno viene chiamato dagli abitanti superstiti il <b>Cataclisma</b>.
     </.guide_p>
 
     <.guide_p>

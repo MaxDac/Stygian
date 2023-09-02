@@ -2,12 +2,12 @@
   <img
     src="/images/MapWithoutBackgroundResized.webp"
     aria-label="Map Image"
-    usemap="#arkham"
+    usemap="#rochester"
     class="w-[800px] h-auto min-w-[800px]"
   />
 </div>
 
-<map name="arkham">
+<map name="rochester">
   <%= for map <- @parent_maps do %>
     <.area
       navigate={~p"/map/#{map.id}"}

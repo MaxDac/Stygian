@@ -29,7 +29,7 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     <hr class="brand" />
 
     <.guide_p>
-      Stygian &egrave; un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo "Stygian: Reign of the Old Ones" ambientato nella cittadina statunitense di Arkham, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico, durante il proibizionismo, attorno al 1930. In realt&agrave; l'anno esatto &egrave; impossibile da determinare, poich&eacute; la citt&agrave;, da un anno circa secondo alcuni, almeno due per altri, &egrave; stata sottratta dal normale scorrere del tempo, dello spazio, del meteo, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
+      Stygian &egrave; un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo "Stygian: Reign of the Old Ones" ambientato nella cittadina statunitense di Rochester, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico, durante il proibizionismo, attorno al 1930. In realt&agrave; l'anno esatto &egrave; impossibile da determinare, poich&eacute; la citt&agrave;, da un anno circa secondo alcuni, almeno due per altri, &egrave; stata sottratta dal normale scorrere del tempo, dello spazio, del meteo, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
     </.guide_p>
 
     <.guide_p>
@@ -37,7 +37,7 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     </.guide_p>
 
     <.guide_p>
-      Come se la notte eterna che avvolge la citt&agrave; o la scarsit&agrave; di provviste non fosse abbastanza, altri pericoli minacciano la vita dei cittadini di Arkham: da una parte, avvistamenti di umanoidi contorti, orribilmente glabri e mutati, che si nutrono di qualsiasi cosa gli capiti a tiro, umani compresi, dall'altra la follia e la brutalit&agrave; umana che hanno preso il sopravvento approfittando dell'assenza della legge.
+      Come se la notte eterna che avvolge la citt&agrave; o la scarsit&agrave; di provviste non fosse abbastanza, altri pericoli minacciano la vita dei cittadini di Rochester: da una parte, avvistamenti di umanoidi contorti, orribilmente glabri e mutati, che si nutrono di qualsiasi cosa gli capiti a tiro, umani compresi, dall'altra la follia e la brutalit&agrave; umana che hanno preso il sopravvento approfittando dell'assenza della legge.
     </.guide_p>
 
     <.guide_p>
