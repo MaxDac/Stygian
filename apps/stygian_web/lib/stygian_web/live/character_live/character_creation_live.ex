@@ -5,7 +5,7 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
   alias Stygian.Characters.Character
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_user: current_user}} = socket) do
+  def mount(_params, _session, %{assigns: %{current_user: %{confirmed_at: confirmed_at} = current_user}} = socket) when not is_nil(confirmed_at) do
     case Characters.get_user_character?(current_user) do
       nil ->
         form =
@@ -35,6 +35,14 @@ defmodule StygianWeb.CharacterLive.CharacterCreationLive do
          |> put_flash(:error, "Hai gi&agrave; creato un personaggio.")
          |> push_navigate(to: ~p"/character/sheet")}
     end
+  end
+
+  @impl true
+  def mount(_params, _session, socket) do
+    {:ok,
+     socket
+     |> put_flash(:error, "Devi confermare la tua email prima di poter creare un personaggio.")
+     |> push_navigate(to: ~p"/")}
   end
 
   @impl true
