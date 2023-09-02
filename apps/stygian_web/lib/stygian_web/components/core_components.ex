@@ -853,7 +853,7 @@ defmodule StygianWeb.CoreComponents do
     doc: "the custom class to apply to the h1 tag"
 
   slot :inner_block, doc: "the title to render"
-  
+
   def guide_h1(assigns) do
     ~H"""
     <.h1 class={"pt-2 #{@class}"}>

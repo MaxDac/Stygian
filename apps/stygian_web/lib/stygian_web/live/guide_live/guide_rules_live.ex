@@ -52,7 +52,10 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     <.guide_h1>Esperienza</.guide_h1>
 
     <.guide_p>
-      Giocando nell'ambientazione preparata in chat, il personaggio avrà diritto ad acquisire una quantità variabile di punti esperienza in base alla sua interpretazione, alle idee dimostrate, ed ai risultati raggiunti, in questo ordine di importanza. Una buona interpretazione dovrà tenere conto dello spirito dell'ambientazione, e sarà una costruzione che dovrà partire necessariamente dalla costruzione del personaggio: un personaggio non adeguato all'ambientazione, non partirà da una buona posizione nell'interpretazione. Per avere un'idea di cosa tenere a mente durante la creazione e la scrittura del personaggio, fate riferimento alla pagina di <.link patch={~p"/guide/creation"} class="font-bold underline underline-offset-8">Creazione</.link>.
+      Giocando nell'ambientazione preparata in chat, il personaggio avrà diritto ad acquisire una quantità variabile di punti esperienza in base alla sua interpretazione, alle idee dimostrate, ed ai risultati raggiunti, in questo ordine di importanza. Una buona interpretazione dovrà tenere conto dello spirito dell'ambientazione, e sarà una costruzione che dovrà partire necessariamente dalla costruzione del personaggio: un personaggio non adeguato all'ambientazione, non partirà da una buona posizione nell'interpretazione. Per avere un'idea di cosa tenere a mente durante la creazione e la scrittura del personaggio, fate riferimento alla pagina di <.link
+        patch={~p"/guide/creation"}
+        class="font-bold underline underline-offset-8"
+      >Creazione</.link>.
     </.guide_p>
 
     <.guide_p>
@@ -60,7 +63,7 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     </.guide_p>
 
     <.guide_p>
-      Non tutte le Abilità disponibili sono acquisibili in fase di creazione. In effetti, il numero di Abilità che si possono acquisire è variabile, ma tutte le Abilità non disponibili in creazione dovranno avere un mentore per poter essere apprese, mentre quelle disponibili in creazione potranno essere acquisite studiando, o addestrando il personaggio. 
+      Non tutte le Abilità disponibili sono acquisibili in fase di creazione. In effetti, il numero di Abilità che si possono acquisire è variabile, ma tutte le Abilità non disponibili in creazione dovranno avere un mentore per poter essere apprese, mentre quelle disponibili in creazione potranno essere acquisite studiando, o addestrando il personaggio.
     </.guide_p>
 
     <.guide_h1>Sanità e Salute</.guide_h1>
@@ -71,10 +74,11 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
 
     <.guide_p>
       A livello di regolamento, quindi, a discrezione del Narratore il personaggio potrà perdere una quantità variabile di punti di Sanità mentale. Normalmente, comunque, si seguirà questo regolamento:
-
       <ul>
         <li class="font-normal text-md">
-          A fronte di un evento traumatico, il personaggio dovrà tirare <b>Volontà</b> + <b>Psicologia</b> o <b>Occulto</b>, dipendendo dal tipo di scena. La difficoltà sarà a discrezione del Narratore, mentre a seconda dell'età del personaggio, si potrà sommare un bonus: 
+          A fronte di un evento traumatico, il personaggio dovrà tirare <b>Volontà</b>
+          + <b>Psicologia</b>
+          o <b>Occulto</b>, dipendendo dal tipo di scena. La difficoltà sarà a discrezione del Narratore, mentre a seconda dell'età del personaggio, si potrà sommare un bonus:
           <ul>
             <li class="font-normal text-md">
               Un personaggio giovane non avrà bonus.
@@ -96,10 +100,10 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
 
     <.guide_p>
       Se il personaggio perderà il 70% della sua Sanità mentale, il giocatore potrà acquisire una alienazione mentale. La natura di questa alienazione mentale dovrà essere concordata con un Narratore alla fine della giocata. L'acquisizione dell'alienazione mentale avrà come effetto quello di riportare la Sanità mentale all'80% del normale. Si può recuperare parte del punteggio di Sanità mentale in differenti modi:
-
       <ul>
         <li class="font-normal text-md">
-          <b>Riposo</b>: ogni giorno, un personaggio potrà recuperare 5 punti di Sanità mentale. Per farlo, dovrà attivamente accedere al sito e far riposare il personaggio. Ogni giocatore avrà questa possibilità per il proprio personaggio una volta ogni <b>24 ore</b>
+          <b>Riposo</b>: ogni giorno, un personaggio potrà recuperare 5 punti di Sanità mentale. Per farlo, dovrà attivamente accedere al sito e far riposare il personaggio. Ogni giocatore avrà questa possibilità per il proprio personaggio una volta ogni
+          <b>24 ore</b>
         </li>
         <li class="font-normal text-md">
           <b>Consumando sostanze</b>: alcune sostanze, come l'alcol. l'oppio, la cocaina, o altre sviluppate dai giocatori, possono alleviare almeno temporaneamente lo stato mentale di un personaggio. Il problema di queste sostanze è che questo tipo di sostanze provocano dipendenza; quindi, il personaggio rischia consumandole di soffrire di dipendenza da queste sostanze.
