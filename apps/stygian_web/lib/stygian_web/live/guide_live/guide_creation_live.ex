@@ -57,7 +57,7 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
           <b>Carisma</b>: il carisma rappresenta lo charme naturale del personaggio, la sua capacità di ammaliare o convincere gli altri, e la capacità di ispirare autorità.
         </li>
         <li class="font-normal text-md">
-          <b>Mente</b>: è l’intelligenza e la saggezza del personaggio, la sua capacità di studio, di ragionamento e di interpretazione del mondo e dei fenomeni soprannaturali comuni ad Rochester.
+          <b>Mente</b>: è l’intelligenza e la saggezza del personaggio, la sua capacità di studio, di ragionamento e di interpretazione del mondo e dei fenomeni soprannaturali comuni a Rochester.
         </li>
         <li class="font-normal text-md">
           <b>Sensi</b>: questo attributo rappresenta la potenza e la chiarezza dei sensi di un personaggio. Un basso valore di questo Attributo potrebbe obbligare il personaggio all’utilizzo di oggetti per ovviare alla sua deficienza sensoriale, e la perdita di questi potrebbe comportare malus al tiro dei dadi.
@@ -96,7 +96,7 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
           <b>Psicologia</b>: rappresenta la capacità del personaggio di comprendere le motivazioni e le intenzioni degli altri, e di interpretarne il comportamento.
         </li>
         <li class="font-normal text-md">
-          <b>Scienza</b>: rappresenta la conoscenza del personaggio delle scienze naturali, come la biologia, la chimica, la fisica, e la medicina. Questa abilità aiuterà il personaggio a sviluppare e disegnare nuove tecnologie e dispositivi, che potranno essere creati per facilitargli la vita ad Rochester.
+          <b>Scienza</b>: rappresenta la conoscenza del personaggio delle scienze naturali, come la biologia, la chimica, la fisica, e la medicina. Questa abilità aiuterà il personaggio a sviluppare e disegnare nuove tecnologie e dispositivi, che potranno essere creati per facilitargli la vita a Rochester.
         </li>
         <li class="font-normal text-md">
           <b>Sotterfugio</b>: rappresenta la capacità del personaggio di scassinare serrature, di agire di nascosto, o borseggiare. Può anche essere utilizzata per rendere credibile una menzogna, o per truffare altri personaggi.
@@ -109,6 +109,12 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
 
     <.guide_p>
       Gli Attributi partono da un punteggio minimo di 4, mentre le Abilità partiranno da 0. È possibile scendere fino al punteggio di 3 per un Attributo, ma questo risulterà in una forte deficienza del personaggio in quell'Attributo, ed a discrezione del narratore, alcuni tiri di dado potranno subire dei malus aggiuntivi. Il punteggio massimo degli Attributi in creazione è 8, mentre il punteggio massimo per le Abilità dipenderà dall'età del personaggio: un giovane avrà un massimale di 3, un adulto di 4, mentre un personaggio anziano potrà arrivare a 5.
+    </.guide_p>
+
+    <.guide_h1>Completare la scheda</.guide_h1>
+
+    <.guide_p>
+      La creazione non determina la fine della scheda, ma consente ai giocatori di definirne le caratteristiche necessarie ed automatiche, creando il personaggio; dopo questo si potranno modificare la biografia, la descrizione, le note, e si potrà anche modificare la scheda personalizzata, accessibile dal tasto oscuro alla fine della scheda principale. La biografia è forse la parte più importante del personaggio: la possibilità di modificarla è stata posta dopo la creazione per dare la possibilità di modificarla e definirla con più calma; la biografia dovrà rispecchiare l'ambientazione, quindi il giocatore dovrà considerare che il suo personaggio dovrà essere credibile nel New England del 1930: a tal proposito, potrebbe essere di ispirazione la lettura delle novelle di H. P. Lovecraft (da dove abbastanza chiaramente questa ambientazione, e il gioco a cui si ispira, hanno tratto ispirazione).
     </.guide_p>
     """
   end

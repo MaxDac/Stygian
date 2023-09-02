@@ -30,7 +30,7 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
       L'instabile tregua è l'unico argine alla completa autodistruzione: i due gruppi hanno concesso la creazione di altre organizzazioni "disarmate", ed hanno di comune accordo deciso di usare le sigarette, le <i>Cigs</i>, come valuta per regolare le transazioni. Le armi sarebbero state permesse solo da componenti dei gruppi malavitosi, le altre organizzazioni avrebbero dovuto gestire lavori più servili, come la costruzione di mura, o la gestione dei rifugi e dei negozi per il riciclaggio delle scorte disponibili.
     </.guide_p>
 
-    <.h1>Organizzazioni</.h1>
+    <.guide_h1>Organizzazioni</.guide_h1>
 
     <.guide_p>
       Un personaggio potrà far parte di una delle seguenti organizzazioni. Far parte di una organizzazione garantirà un ingresso di
