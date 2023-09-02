@@ -55,6 +55,8 @@ defmodule StygianWeb do
 
   def login_live_view, do: add_live_view(:login)
 
+  def guide_live_view, do: add_live_view(:guide_container)
+
   defp add_live_view(layout) when is_atom(layout) do
     quote do
       use Phoenix.LiveView,

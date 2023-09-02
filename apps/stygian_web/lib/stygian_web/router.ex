@@ -142,6 +142,15 @@ defmodule StygianWeb.Router do
     end
   end
 
+  scope "/guide", StygianWeb.GuideLive do
+    pipe_through [:browser]
+
+    live_session :guide do
+      live "/", GuideLive
+      live "/:action", GuideLive
+    end
+  end
+
   scope "/admin", StygianWeb do
     pipe_through [:browser, :require_admin_user]
 
