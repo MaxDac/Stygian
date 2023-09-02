@@ -130,6 +130,17 @@ defmodule Stygian.Characters do
   def get_character(id), do: Repo.get(Character, id)
 
   @doc """
+  Gets the character by name, if exists, otherwise returns nil.
+  """
+  @spec get_character_by_name(character_name :: String.t()) :: Character.t() | nil
+  def get_character_by_name(character_name) do
+    Character
+    |> from()
+    |> where([c], c.name == ^character_name)
+    |> Repo.one()
+  end
+
+  @doc """
   Determines whether the character belongs to the user or not.
   """
   @spec character_belongs_to_user?(character_id :: integer(), user_id :: integer()) :: boolean()
@@ -562,12 +573,16 @@ defmodule Stygian.Characters do
     end
   end
 
+  @doc """
+  Creates a character relationship with its skills.
+  The method is public only to help with the character seeds creation.
+  """
   @spec create_character_skills_internal(
           skills :: list(CharacterSkill.t()),
           character_id :: non_neg_integer()
         ) ::
           {:ok, any()} | {:error, any()} | any()
-  defp create_character_skills_internal(skills, character_id) do
+  def create_character_skills_internal(skills, character_id) do
     skills
     |> Enum.map(&Map.put(&1, :character_id, character_id))
     |> Enum.reduce(

@@ -78,7 +78,7 @@ defmodule Stygian.Characters.Character do
       :age,
       :sin
     ])
-    |> validate_length(:name, min: 10, max: 50)
+    |> validate_length(:name, min: 5, max: 50)
     |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)
     |> unique_constraint(:name)
   end

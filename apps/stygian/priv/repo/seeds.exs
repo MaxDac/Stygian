@@ -11,28 +11,35 @@
 # and so on) as they will fail if something goes wrong.
 
 alias Stygian.Accounts
+alias Stygian.Characters
 alias Stygian.Skills
 alias Stygian.Maps
 
+alias Stygian.Characters.CharacterSkill
+
 defmodule AccountsHelpers do
   def create_user?(%{username: username} = attrs) do
-    case Accounts.get_user_by_username(username) do
-      nil ->
-        case Accounts.register_user(attrs) do
-          {:ok, user} ->
-            Accounts.update_user(user, attrs)
+    {:ok, user} = 
+      case Accounts.get_user_by_username(username) do
+        nil ->
+          case Accounts.register_user(attrs) do
+            {:ok, user} ->
+              Accounts.update_user(user, attrs)
 
-          # User changed name 
-          {:error, %{errors: [email: {"has already been taken", _}]}} ->
-            update_user_name(attrs)
+            # User changed name 
+            {:error, %{errors: [email: {"has already been taken", _}]}} ->
+              update_user_name(attrs)
 
-          error ->
-            error
-        end
+            error ->
+              error
+          end
 
-      user ->
-        Accounts.update_user(user, attrs)
-    end
+        user ->
+          Accounts.update_user(user, attrs)
+      end
+
+    user
+    |> Accounts.confirm_user_test()
   end
 
   defp update_user_name(attrs = %{username: username, email: email}) do
@@ -78,8 +85,30 @@ defmodule MapHelpers do
   end
 end
 
+defmodule CharacterHelpers do
+  def create_character?(%{name: name} = attrs) do
+    case Characters.get_character_by_name(name) do
+      nil -> 
+        with {:ok, character} <- Characters.create_character(attrs) do
+          Characters.update_character(character, attrs)
+        end
+
+      character -> 
+        Characters.update_character(character, attrs)
+    end
+  end
+
+  @doc """
+  This function will delete and recreate again the skills of the character.
+  Make sure that with every update the character skills are up to date, otherwise they'll be rewritten.
+  """
+  def associate_skills_to_character(character, skills) do
+    Characters.create_character_skills_internal(skills, character.id)
+  end
+end
+
 # Creating admin users
-AccountsHelpers.create_user?(%{
+_admin_user = AccountsHelpers.create_user?(%{
   email: "postmaster@stygian.eu",
   username: "Narratore",
   password: "password1234",
@@ -102,7 +131,7 @@ AccountsHelpers.create_user?(%{
 })
 
 # Creating user that could be used to demo the land
-AccountsHelpers.create_user?(%{
+{:ok, test_user} = AccountsHelpers.create_user?(%{
   email: "user@stygian.eu",
   username: "User",
   password: "somepassword4321",
@@ -294,6 +323,56 @@ SkillHelpers.add_skill_type_to_skill(%{id: subterfuge_id}, %{id: knowledge_skill
 SkillHelpers.add_skill_type_to_skill(%{id: survival_id}, %{id: knowledge_skill_id})
 
 SkillHelpers.add_skill_type_to_skill(%{id: occult_id}, %{id: occult_skill_id})
+
+#
+# Creating default characters
+#
+
+{:ok, test_character} = CharacterHelpers.create_character?(%{
+  name: "John Doe",
+  admin_notes: "Some admin_notes",
+  avatar: "/images/avatars/TestUser.webp",
+  chat_avatar: "/images/avatars/TestUserSmall.webp",
+  biography: "Some biography",
+  cigs: 200,
+  description: "Some description",
+  experience: 0,
+  health: 100,
+  age: :adult,
+  sin: "Some sins",
+  lost_health: 1,
+  lost_sanity: 1,
+  npc: false,
+  notes: "Some notes",
+  sanity: 42,
+  step: 2,
+  user_id: test_user.id
+})
+
+CharacterHelpers.associate_skills_to_character(test_character, [
+  %CharacterSkill{character_id: test_character.id, skill_id: fisico_id, value: 6},
+  %CharacterSkill{character_id: test_character.id, skill_id: agilita_id, value: 5},
+  %CharacterSkill{character_id: test_character.id, skill_id: volonta_id, value: 7},
+  %CharacterSkill{character_id: test_character.id, skill_id: carisma_id, value: 6},
+  %CharacterSkill{character_id: test_character.id, skill_id: mente_id, value: 6},
+  %CharacterSkill{character_id: test_character.id, skill_id: sensi_id, value: 5},
+  %CharacterSkill{character_id: test_character.id, skill_id: firearms_id, value: 1},
+  %CharacterSkill{character_id: test_character.id, skill_id: melee_id, value: 2},
+  %CharacterSkill{character_id: test_character.id, skill_id: brawl_id, value: 0},
+  %CharacterSkill{character_id: test_character.id, skill_id: athletic_id, value: 0},
+  %CharacterSkill{character_id: test_character.id, skill_id: dialettica_id, value: 3},
+  %CharacterSkill{character_id: test_character.id, skill_id: furtivita_id, value: 0},
+  %CharacterSkill{character_id: test_character.id, skill_id: investigazione_id, value: 2},
+  %CharacterSkill{character_id: test_character.id, skill_id: occult_id, value: 0},
+  %CharacterSkill{character_id: test_character.id, skill_id: psichology_id, value: 0},
+  %CharacterSkill{character_id: test_character.id, skill_id: science_id, value: 1},
+  %CharacterSkill{character_id: test_character.id, skill_id: subterfuge_id, value: 2},
+  %CharacterSkill{character_id: test_character.id, skill_id: survival_id, value: 1}
+])
+
+#
+# Creating maps
+#
 
 {:ok, %{id: wastes_id}} =
   MapHelpers.add_map(%{
