@@ -130,11 +130,7 @@ defmodule Stygian.Characters.Character do
     |> validate_required([
       :name,
       :avatar,
-      :biography,
-      :description,
       :cigs,
-      :notes,
-      :admin_notes,
       :experience,
       :health,
       :sanity,

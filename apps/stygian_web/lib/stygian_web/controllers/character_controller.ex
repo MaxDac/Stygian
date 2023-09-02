@@ -82,4 +82,45 @@ defmodule StygianWeb.CharacterController do
       |> redirect(to: ~p"/admin/npcs")
     end
   end
+
+  @doc """
+  Performs the character's rest, activable from the main window.
+  """
+  def handle_rest(%{assigns: %{current_character: current_character}} = conn, _params) do
+    handle_rest_internal(conn, current_character)
+  end
+
+  def handle_rest(conn, _params) do
+    if get_session(conn, :character_id) do
+      character = Characters.get_character(get_session(conn, :character_id))
+      handle_rest_internal(conn, character)
+    else
+      conn
+      |> put_flash(:error, "Non puoi riposare senza un personaggio selezionato.")
+      |> redirect(to: ~p"/")
+    end
+  end
+
+  defp handle_rest_internal(conn, character) do
+    case Characters.rest_character(character) do
+      {:ok, character} ->
+        conn
+        |> assign(:current_character, character)
+        |> put_flash(:info, "Hai riposato con successo.")
+        |> redirect(to: ~p"/")
+
+      {:error, error} when is_binary(error) ->
+        conn
+        |> put_flash(:error, error)
+        |> redirect(to: ~p"/")
+
+      {:error, _} ->
+        conn
+        |> put_flash(
+          :error,
+          "C'è stato un errore in fase di riposo, contatta un admin per maggiori informazioni."
+        )
+        |> redirect(to: ~p"/")
+    end
+  end
 end

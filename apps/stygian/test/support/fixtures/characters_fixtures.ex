@@ -47,7 +47,7 @@ defmodule Stygian.CharactersFixtures do
     # Creating the user first as it's a mandatory field for the character.
     %{id: user_id} = user_fixture()
 
-    attrs = 
+    attrs =
       attrs
       |> Enum.into(%{
         admin_notes: "some admin_notes",

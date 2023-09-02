@@ -111,6 +111,7 @@ defmodule StygianWeb.Router do
 
     get "/redirect", CharacterController, :handle_create
     get "/redirect/:character_id", CharacterController, :handle_create
+    get "/rest", CharacterController, :handle_rest
   end
 
   scope "/character", StygianWeb.CharacterLive do
