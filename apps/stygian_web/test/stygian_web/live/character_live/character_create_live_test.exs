@@ -5,6 +5,9 @@ defmodule StygianWeb.CharacterLive.CharacterCreateLiveTest do
   import Stygian.AccountsFixtures
   import Stygian.CharactersFixtures
 
+  alias Inspect.Stygian.Accounts
+  alias Stygian.Accounts
+
   describe "Character creation page" do
     test "Redirects if not logged in", %{conn: conn} do
       assert {:error, redirect} = live(conn, ~p"/character/create")
@@ -15,7 +18,10 @@ defmodule StygianWeb.CharacterLive.CharacterCreateLiveTest do
     end
 
     test "Correctly redirects to the character completion page", %{conn: conn} do
-      user = user_fixture()
+      {:ok, user} =
+        user_fixture()
+        |> Accounts.confirm_user_test()
+
       _ = character_fixture(%{user_id: user.id})
 
       assert {:error, redirect} =
@@ -25,6 +31,21 @@ defmodule StygianWeb.CharacterLive.CharacterCreateLiveTest do
 
       assert {:live_redirect, %{to: path}} = redirect
       assert path == ~p"/character/complete"
+    end
+
+    test "Correctly redirects to the main page if the user has not yet been confirmed.", %{
+      conn: conn
+    } do
+      user = user_fixture()
+      _ = character_fixture(%{user_id: user.id})
+
+      assert {:error, redirect} =
+               conn
+               |> log_in_user(user)
+               |> live(~p"/character/create")
+
+      assert {:live_redirect, %{to: path}} = redirect
+      assert path == ~p"/"
     end
 
     # test "Correctly save the character", %{conn: conn} do
