@@ -41,6 +41,46 @@ defmodule Stygian.CharactersFixtures do
   end
 
   @doc """
+  Generate a character with a complete set of entries.
+  """
+  def character_fixture_complete(attrs \\ %{}) do
+    # Creating the user first as it's a mandatory field for the character.
+    %{id: user_id} = user_fixture()
+
+    attrs = 
+      attrs
+      |> Enum.into(%{
+        admin_notes: "some admin_notes",
+        avatar: "some avatar",
+        biography: "some biography",
+        cigs: 42,
+        description: "some description",
+        experience: 42,
+        health: 42,
+        name: "some awful name",
+        age: :adult,
+        sin: "some awful sin",
+        lost_health: 1,
+        lost_sanity: 1,
+        npc: false,
+        notes: "some notes",
+        sanity: 42,
+        step: 1,
+        user_id: user_id
+      })
+
+    {:ok, character} =
+      attrs
+      |> Stygian.Characters.create_character()
+
+    {:ok, character} =
+      character
+      |> Stygian.Characters.update_character(attrs)
+
+    character
+  end
+
+  @doc """
   Generate a character_skill.
   """
   def character_skill_fixture(attrs \\ %{}) do

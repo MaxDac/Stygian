@@ -167,6 +167,61 @@ defmodule Stygian.CharactersTest do
       character = character_fixture()
       assert %Ecto.Changeset{} = Characters.change_character(character)
     end
+
+    test "rest_character/1 correctly restored lost sanity to the character" do
+      character = character_fixture_complete(%{lost_sanity: 6, cigs: 10})
+
+      assert {:ok, %Character{} = character} = Characters.rest_character(character)
+
+      assert character.lost_sanity == 1
+      assert character.cigs == 5
+    end
+
+    test "rest_character/1 correctly restored lost sanity to the character, but only the lost one" do
+      character = character_fixture_complete(%{lost_sanity: 2, cigs: 10})
+
+      assert {:ok, %Character{} = character} = Characters.rest_character(character)
+
+      assert character.lost_sanity == 0
+      assert character.cigs == 5
+    end
+
+    test "rest_character/1 does not restore sanity if sanity was already at its maximum, but subtracts the cigs" do
+      character = character_fixture_complete(%{lost_sanity: 0, cigs: 10})
+
+      assert {:ok, %Character{} = character} = Characters.rest_character(character)
+
+      assert character.lost_sanity == 0
+      assert character.cigs == 5
+    end
+
+    test "rest_character/1 does not restore the character if 24 hours haven't passed" do
+      character = character_fixture_complete(%{
+        lost_sanity: 6,
+        cigs: 10,
+        rest_timer: NaiveDateTime.utc_now()
+      })
+
+      assert {:error, "Non puoi ancora far riposare il personaggio."} = Characters.rest_character(character)
+
+      character = Characters.get_character!(character.id)
+      assert character.lost_sanity == 6
+      assert character.cigs == 10
+    end
+
+    test "rest_character/1 does not restore the character if it doesn't have enough cigs" do
+      character = character_fixture_complete(%{
+        lost_sanity: 6,
+        cigs: 4,
+        rest_timer: NaiveDateTime.utc_now()
+      })
+
+      assert {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."} = Characters.rest_character(character)
+
+      character = Characters.get_character!(character.id)
+      assert character.lost_sanity == 6
+      assert character.cigs == 4
+    end
   end
 
   describe "character_skills" do

@@ -102,8 +102,8 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
       Se il personaggio perderà il 70% della sua Sanità mentale, il giocatore potrà acquisire una alienazione mentale. La natura di questa alienazione mentale dovrà essere concordata con un Narratore alla fine della giocata. L'acquisizione dell'alienazione mentale avrà come effetto quello di riportare la Sanità mentale all'80% del normale. Si può recuperare parte del punteggio di Sanità mentale in differenti modi:
       <ul>
         <li class="font-normal text-md">
-          <b>Riposo</b>: ogni giorno, un personaggio potrà recuperare 5 punti di Sanità mentale. Per farlo, dovrà attivamente accedere al sito e far riposare il personaggio. Ogni giocatore avrà questa possibilità per il proprio personaggio una volta ogni
-          <b>24 ore</b>
+          <b>Riposo</b>: ogni giorno, un personaggio potrà prenotare una stanza d'albergo all'<i>Old Eel Hotel</i> e recuperare 5 punti di Sanità mentale. Per farlo, dovrà attivamente accedere al sito e far riposare il personaggio. Ogni giocatore avrà questa possibilità per il proprio personaggio una volta ogni
+          <b>24 ore</b>, a patto di avere le <b>5</b> sigarette necessarie per poter prenotare la stanza.
         </li>
         <li class="font-normal text-md">
           <b>Consumando sostanze</b>: alcune sostanze, come l'alcol. l'oppio, la cocaina, o altre sviluppate dai giocatori, possono alleviare almeno temporaneamente lo stato mentale di un personaggio. Il problema di queste sostanze è che questo tipo di sostanze provocano dipendenza; quindi, il personaggio rischia consumandole di soffrire di dipendenza da queste sostanze.
