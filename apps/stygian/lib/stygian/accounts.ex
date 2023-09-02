@@ -341,6 +341,16 @@ defmodule Stygian.Accounts do
     |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, ["confirm"]))
   end
 
+  @doc """
+  This function must only be used for unit testing.
+  """
+  @spec confirm_user_test(user :: User.t()) :: {:ok, User.t()} | :error
+  def confirm_user_test(user) do
+    user
+    |> User.confirm_changeset()
+    |> Repo.update()
+  end
+
   ## Reset password
 
   @doc ~S"""
