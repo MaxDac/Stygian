@@ -829,13 +829,36 @@ defmodule StygianWeb.CoreComponents do
   @doc """
   The default `h1` component.
   """
+  attr :class, :string,
+    required: false,
+    default: "",
+    doc: "the custom class to apply to the h1 tag"
+
   slot :inner_block, doc: "the title to render"
 
   def h1(assigns) do
     ~H"""
-    <h1 class="text-center font-berolina">
+    <h1 class={"text-center font-berolina #{@class}"}>
       <%= render_slot(@inner_block) %>
     </h1>
+    """
+  end
+
+  @doc """
+  The default `h1` component.
+  """
+  attr :class, :string,
+    required: false,
+    default: "",
+    doc: "the custom class to apply to the h1 tag"
+
+  slot :inner_block, doc: "the title to render"
+
+  def guide_h1(assigns) do
+    ~H"""
+    <.h1 class={"pt-2 #{@class}"}>
+      <%= render_slot(@inner_block) %>
+    </.h1>
     """
   end
 
