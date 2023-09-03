@@ -20,9 +20,10 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     <.guide_h1>Gioco in chat</.guide_h1>
 
     <.guide_p>
-      Il gioco avverrà principalmente in chat, e sarà diviso in turni. Ogni personaggio che vorrà prendere parte ad una giocata dovrà aspettare il proprio turno per scrivere la sua azione. L'interpretazione dell'azione
-      <b>non dovrà lasciare spazio ai pensieri del personaggio</b>,
-      si dovrà cioè limitare solamente a ciò che del personaggio è visibile: ad esempio, non si potrà scrivere in un'azione: <i>Il personaggio pensa a quanto il suo interlocutore sia del tutto orripilante</i>, ma si potrà invece scrivere che <i>Il personaggio non riesce a celare una espressione di profondo sdegno e orrore mentre discute col suo interlocutore</i>. Il giocatore, poi, avrà a disposizione per ogni azione un numero massimo di <span class="font-bold underline">1200 caratteri</span>, ed un minimo di 200 caratteri; questo limite si restringe ulteriormente ad <b>800 caratteri</b> durante una giocata in presenza del Narratore, o in generale <b>con più di tre giocatori</b>.
+      Il gioco avverrà principalmente in chat, e sarà diviso in turni. Ogni personaggio che vorrà prendere parte ad una giocata dovrà aspettare il proprio turno per scrivere la sua azione. L'interpretazione dell'azione <b>non dovrà lasciare spazio ai pensieri del personaggio</b>,
+      si dovrà cioè limitare solamente a ciò che del personaggio è visibile: ad esempio, non si potrà scrivere in un'azione: <i>Il personaggio pensa a quanto il suo interlocutore sia del tutto orripilante</i>, ma si potrà invece scrivere che <i>Il personaggio non riesce a celare una espressione di profondo sdegno e orrore mentre discute col suo interlocutore</i>. Il giocatore, poi, avrà a disposizione per ogni azione un numero massimo di <span class="font-bold underline">1200 caratteri</span>, ed un minimo di 200 caratteri; questo limite si restringe ulteriormente ad
+      <b>800 caratteri</b>
+      durante una giocata in presenza del Narratore, o in generale <b>con più di tre giocatori</b>.
     </.guide_p>
 
     <.guide_p>
@@ -50,7 +51,10 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     </.guide_p>
 
     <.guide_p>
-      Un valore importante da specificare è la <b>Difficoltà</b> del tiro, che può essere assegnata direttamente nella finestra del tiro di dadi. Per considerarsi riuscito, il valore ottenuto nella somma di Attributo, Abilità e il risultato del dado dovrà essere <b>uguale o superiore</b> alla Difficoltà. La tabella di seguito associa ad alcuni valori di Difficoltà il grado di complessità dell'azione:
+      Un valore importante da specificare è la <b>Difficoltà</b>
+      del tiro, che può essere assegnata direttamente nella finestra del tiro di dadi. Per considerarsi riuscito, il valore ottenuto nella somma di Attributo, Abilità e il risultato del dado dovrà essere
+      <b>uguale o superiore</b>
+      alla Difficoltà. La tabella di seguito associa ad alcuni valori di Difficoltà il grado di complessità dell'azione:
     </.guide_p>
 
     <.guide_p>
@@ -79,7 +83,7 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     </.guide_p>
 
     <.guide_p>
-      Il dado tirato è un dado da 20, ed è tirato automaticamente dal sito. Normalmente, il risultato del tiro viene sommato al punteggio dell'Attributo e dell'Abilità del personaggio, ma nel caso in cui il risultato del dado sia 1, l'azione fallirà automaticamente, ed in modo catastrofico: il personaggio può ad esempio inciampare mentre scavalca la staccionata, cadendo rovinosamente ed infortunandosi; nel caso in cui il risultato del dado sia 20, invece, l'azione riuscirà automaticamente, anche se la somma totale del dado è inferiore alla Difficoltà. 
+      Il dado tirato è un dado da 20, ed è tirato automaticamente dal sito. Normalmente, il risultato del tiro viene sommato al punteggio dell'Attributo e dell'Abilità del personaggio, ma nel caso in cui il risultato del dado sia 1, l'azione fallirà automaticamente, ed in modo catastrofico: il personaggio può ad esempio inciampare mentre scavalca la staccionata, cadendo rovinosamente ed infortunandosi; nel caso in cui il risultato del dado sia 20, invece, l'azione riuscirà automaticamente, anche se la somma totale del dado è inferiore alla Difficoltà.
     </.guide_p>
 
     <.guide_h1>Ricerca</.guide_h1>
