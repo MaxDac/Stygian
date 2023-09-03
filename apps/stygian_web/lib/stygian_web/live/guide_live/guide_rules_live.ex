@@ -7,7 +7,7 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     ~H"""
     <.guide_p>
       <b>Stygian</b>
-      è un gioco di ruolo a turni, strettamente via chat. Ogni giocatore avrà la possibilità di creare e gestire un solo personaggio alla volta, e potrà decidere di abbandonarlo, perdendo tutti i punti esperienza accumulati, oppure crearne uno nuovo quando il precedente personaggio morirà o scomparirà in azione - in questo conservando la totalità dei suoi punti esperienza.
+      è un gioco di ruolo a turni, strettamente via chat. Ogni giocatore avrà la possibilità di creare e gestire <b>un solo personaggio alla volta</b>, e potrà decidere di abbandonarlo, perdendo tutti i punti esperienza accumulati, oppure crearne uno nuovo quando il precedente personaggio morirà o scomparirà in azione - in questo conservando la totalità dei suoi punti esperienza. In casi eccezionali, e strettamente legati al gioco, data la natura dell'ambientazione, il trasferimento di punti esperienza potrà avvenire anche in caso in cui il personaggio voglia intraprendere "la strada rapida fuori di qui".
     </.guide_p>
 
     <.guide_p>
@@ -21,16 +21,16 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
 
     <.guide_p>
       Il gioco avverrà principalmente in chat, e sarà diviso in turni. Ogni personaggio che vorrà prendere parte ad una giocata dovrà aspettare il proprio turno per scrivere la sua azione. L'interpretazione dell'azione
-      <b>non dovrà lasciare spazio ai pensieri del personaggio</b>
-      si dovrà cioè limitare solamente a ciò che del personaggio è visibile: ad esempio, non si potrà dire in un'azione: <i>Il personaggio pensa a quanto il suo interlocutore sia del tutto orripilante</i>, ma si potrà dire <i>Il personaggio non riesce a celare una espressione di profondo sdegno e orrore mentre discute col suo interlocutore</i>. Il giocatore, poi, avrà a disposizione per ogni azione del personaggio un numero massimo di <span class="font-bold underline">1200 caratteri</span>, ed un minimo di 200 caratteri.
+      <b>non dovrà lasciare spazio ai pensieri del personaggio</b>,
+      si dovrà cioè limitare solamente a ciò che del personaggio è visibile: ad esempio, non si potrà scrivere in un'azione: <i>Il personaggio pensa a quanto il suo interlocutore sia del tutto orripilante</i>, ma si potrà invece scrivere che <i>Il personaggio non riesce a celare una espressione di profondo sdegno e orrore mentre discute col suo interlocutore</i>. Il giocatore, poi, avrà a disposizione per ogni azione un numero massimo di <span class="font-bold underline">1200 caratteri</span>, ed un minimo di 200 caratteri; questo limite si restringe ulteriormente ad <b>800 caratteri</b> durante una giocata in presenza del Narratore, o in generale <b>con più di tre giocatori</b>.
     </.guide_p>
 
     <.guide_p>
-      Si potranno usare i caratteri `**` per circondare una frase in grassetto. Ad esempio, "**circondando il parlato con due asterischi**" lo renderà grassetto. Anteponendo poi un `+` alla frase, si potrà scrivere un intervento off. Sconsigliamo l'utilizzo di tali commenti, ma può essere un ottimo modo per mettersi d'accordo all'inizio della giocata. Un altro tipo di intervento è il tiro dei dadi: ogni personaggio potrà aprire una finestra modale in cui potrà tirare i dadi, associando un Attributo e un'Abilità, con un Malus, specificando la difficoltà del tiro.
+      Si potranno usare i caratteri `**` per circondare una frase in grassetto. Ad esempio, "**<b>circondando il parlato con due asterischi</b>**" lo renderà grassetto. Anteponendo poi un `+` alla frase, si potrà scrivere un intervento off. Sconsigliamo l'utilizzo di tali commenti, ma possono essere utili per mettersi d'accordo all'inizio della giocata. Un altro tipo di intervento è il tiro dei dadi: ogni personaggio potrà aprire una finestra modale in cui potrà tirare i dadi, associando un Attributo e un'Abilità, con un Malus, specificando la difficoltà del tiro.
     </.guide_p>
 
     <.guide_p>
-      Pur comprendendo che il gioco ha delle tinte <i>forti</i>, e che i temi affrontati potrebbero essere sgradevoli, si richiama all'esigenza di mantenere tutto <span class="font-bold underline">all'interno del gioco</span>, ed anzi di sincerarsi sempre che gli argomenti trattati non mettano a disagio qualcuno dei giocatori. Sentitevi liberi di comunicare il vostro stato d'animo se una giocata non vi piace, o se affronta temi per voi sgradevoli e difficili, il narratore in quel caso avrà l'obbligo di estromettere il vostro personaggio dalla giocata, sospendendola o prendendo il controllo del vostro personaggio. Sappiate, però, che in una ambientazione come questa l'orrore e argomenti sgradevoli sono parte integrante della trama, anche se mai fini a sé stessi; quindi, consigliamo di non considerare questo gioco se la vostra sensibilità non lo consente.
+      Pur comprendendo che il gioco ha delle tinte <i>forti</i>, e che i temi affrontati potrebbero essere sgradevoli, si richiama all'esigenza di mantenere tutto <span class="font-bold underline">all'interno del gioco</span>, ed anzi di sincerarsi sempre che gli argomenti trattati non mettano a disagio qualcuno dei giocatori. Sentitevi liberi di comunicare il vostro stato d'animo se una giocata non vi piace, o se affronta temi per voi sgradevoli e difficili, il Narratore in quel caso avrà l'obbligo di estromettere il vostro personaggio dalla giocata, sospendendola o prendendo il controllo del vostro personaggio. Sappiate, però, che in una ambientazione come questa l'orrore e argomenti sgradevoli sono parte integrante della trama, anche se mai fini a sé stessi; quindi, consigliamo di non considerare questo gioco se la vostra sensibilità non lo consente.
     </.guide_p>
 
     <.guide_p>
@@ -43,10 +43,53 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
       </ul>
     </.guide_p>
 
+    <.guide_h1>Lancio dei dadi</.guide_h1>
+
+    <.guide_p>
+      Come detto, il giocatore in chat potrà effettuare un tiro di dadi utilizzando gli attributi del personaggio. In generale, il tiro dei dadi è un modo per comprendere il grado di successo di un'azione del personaggio, soprattutto in un contesto di sfida, sia personale (il personaggio sta per esempio tentando di scavalcare una staccionata, o di sfondare una porta), che nei confronti di altri personaggi (quando ad esempio il personaggio sta tentando di borseggiare, o di mentire ad un altro personaggio). Ogni tiro è caratterizzato dall'associazione di un Attributo, che rappresenta la propensione naturale del personaggio nell'azione che sta tentando di eseguire, e l'Abilità corrispondente all'azione. Ad esempio, per scavalcare una staccionata, il personaggio dovrà tirare Agilità e Atletica.
+    </.guide_p>
+
+    <.guide_p>
+      Un valore importante da specificare è la <b>Difficoltà</b> del tiro, che può essere assegnata direttamente nella finestra del tiro di dadi. Per considerarsi riuscito, il valore ottenuto nella somma di Attributo, Abilità e il risultato del dado dovrà essere <b>uguale o superiore</b> alla Difficoltà. La tabella di seguito associa ad alcuni valori di Difficoltà il grado di complessità dell'azione:
+    </.guide_p>
+
+    <.guide_p>
+      <table class="table-auto">
+        <thead>
+          <tr>
+            <th class="text-center">Difficoltà</th>
+            <th class="text-center">Descrizione</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>15</td>
+            <td>Azione semplice</td>
+          </tr>
+          <tr>
+            <td>20</td>
+            <td>Azione moderatamente complessa</td>
+          </tr>
+          <tr>
+            <td>25</td>
+            <td>Azione molto complessa</td>
+          </tr>
+        </tbody>
+      </table>
+    </.guide_p>
+
+    <.guide_p>
+      Il dado tirato è un dado da 20, ed è tirato automaticamente dal sito. Normalmente, il risultato del tiro viene sommato al punteggio dell'Attributo e dell'Abilità del personaggio, ma nel caso in cui il risultato del dado sia 1, l'azione fallirà automaticamente, ed in modo catastrofico: il personaggio può ad esempio inciampare mentre scavalca la staccionata, cadendo rovinosamente ed infortunandosi; nel caso in cui il risultato del dado sia 20, invece, l'azione riuscirà automaticamente, anche se la somma totale del dado è inferiore alla Difficoltà. 
+    </.guide_p>
+
     <.guide_h1>Ricerca</.guide_h1>
 
     <.guide_p>
-      La ricerca costituisce una parte fondamentale del gioco di <b>Stygian</b>. La fase di ricerca è un modo che il giocatore ha per determinare il funzionamento e le caratteristiche di un oggetto, sia esso soprannaturale o meno, o di sviluppare il disegno e il funzionamento di nuovi oggetti, dispositivi, o sostanze che potranno aiutarlo a sopravvivere, o che potrà commerciare con altri personaggi. La fase di ricerca consisterà nella scrittura di almeno dieci azioni solitarie del personaggio in qualsiasi locazione pubblica, in cui il personaggio potrà interpretare lo svolgimento della sperimentazione che ha in mente: in queste azioni, il giocatore se lo riterrà opportuno potrà andare in deroga alla regola di non manifestare i pensieri del suo personaggio, ma questo potrà influire a discrezione del narratore nel computo dei punti esperienza assegnati, quindi andranno ben ponderati. Alla fine delle dieci azioni, il personaggio potrà avvisare un narratore della sua giocata, allegando l'orario; il narratore, poi, chiederà di effettuare un tiro per determinare la riuscita dello studio: il tiro potrà essere effettuato in chat in qualsiasi orario, ma dovrà essere comunicato al Narratore. Il Narratore, a seconda della riuscita del tiro e dell'interpretazione, potrà assegnare un numero di punti esperienza variabili, ed alcuni oggetti al personaggio. Se un altro personaggio vorrà giocare approfittando della vostra presenza, la ricerca sarà interrotta, ma potrete "riutilizzare" il numero di turni in solitaria già interpretati in un'altra giocata: se quindi ad esempio avrete già interpretato in solitaria cinque azioni di ricerca, e decidete di cominciare una giocata (cosa estremamente consigliata), potrete ricominciare la ricerca in un secondo momento, ed a quel punto basteranno cinque azioni per terminare la sessione di studio.
+      La ricerca costituisce una parte fondamentale del gioco di <b>Stygian</b>. La fase di ricerca è un modo che il giocatore ha per determinare il funzionamento e le caratteristiche di un oggetto, sia esso soprannaturale o meno, o di sviluppare il disegno e il funzionamento di nuovi oggetti, dispositivi, o sostanze che potranno aiutarlo a sopravvivere, o che potrà commerciare con altri personaggi. Il limite agli oggetti che si possono progettare è solo il buon senso, e la fantasia dei giocatori. Prima della sessione di ricerca, comunque, è sempre consigliato discutere con un Narratore a proposito dell'oggetto che si vuole sviluppare, così da confermarne la fattibilità. Il Narratore poi darà tutti i dettagli sui materiali necessari per realizzare l'oggetto. La realizzazione dell'oggetto necessiterà di una o più sessioni di ricerca.
+    </.guide_p>
+
+    <.guide_p>
+      La fase di ricerca consisterà nella scrittura di almeno dieci azioni solitarie del personaggio in qualsiasi locazione pubblica, in cui il personaggio potrà interpretare lo svolgimento della sperimentazione che ha in mente: in queste azioni, il giocatore se lo riterrà opportuno potrà andare in deroga alla regola di non manifestare i pensieri del suo personaggio, ma questo potrà influire a discrezione del Narratore nel computo dei punti esperienza assegnati, quindi andranno ben ponderati. Alla fine delle dieci azioni, il personaggio potrà avvisare un Narratore della sua giocata, allegando l'orario; il Narratore, poi, chiederà di effettuare un tiro per determinare la riuscita dello studio: il tiro potrà essere effettuato in chat in qualsiasi orario, ma dovrà essere comunicato al Narratore. Il Narratore, a seconda della riuscita del tiro e dell'interpretazione, potrà assegnare un numero di punti esperienza variabili, ed alcuni oggetti al personaggio. Se un altro personaggio vorrà giocare approfittando della vostra presenza, la ricerca sarà interrotta, ma potrete "riutilizzare" il numero di turni in solitaria già interpretati in un'altra giocata: se quindi ad esempio avrete già interpretato in solitaria cinque azioni di ricerca, e decidete di cominciare una giocata (cosa estremamente consigliata), potrete ricominciare la ricerca in un secondo momento, ed a quel punto basteranno cinque azioni per terminare la sessione di studio.
     </.guide_p>
 
     <.guide_h1>Esperienza</.guide_h1>
