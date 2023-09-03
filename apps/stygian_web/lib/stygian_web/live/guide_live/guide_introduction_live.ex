@@ -30,11 +30,11 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     <hr class="brand" />
 
     <.guide_p>
-      Stygian &egrave; un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo "Stygian: Reign of the Old Ones" e alle novelle di H. P. Lovecraft, ambientato nella città di finzione di Rochester, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico, attorno al 1930 durante il proibizionismo. L'anno esatto è impossibile da determinare, poiché la città, da un anno circa secondo alcuni, almeno due per altri, è stata sottratta dal normale scorrere del tempo, dello spazio ed anche del meteo, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
+      Stygian &egrave; un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo "Stygian: Reign of the Old Ones" e alle novelle di H. P. Lovecraft, ambientato nella città di finzione di Rochester, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico. È opinione comune che l'anno sia il 1930, durante il proibizionismo, anche se è impossibile da determinare con esattezza, poiché la città, da un anno circa secondo alcuni, almeno due per altri, è stata sottratta dal normale scorrere del tempo, dello spazio, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
     </.guide_p>
 
     <.guide_p>
-      È qui che il tuo personaggio si muoverà ed interagirà con altri personaggi, capitati qui per caso, magari attirati dal vicino parco nazionale, o dal viale sul mare, una volta famoso per le sue case colorate e il buon cibo; alcuni giurano di essere stati richiamati addirittura dall'altra parte degli Stati Uniti, dal vicino Canada o dal Messico, o addirittura dal Vecchio Continente, da una forza oscura, da sogni, o sussurri da una regione nascosta e recondita della loro mente. Ad ogni modo, ora tutti sono intrappolati nella città, ogni tentativo di sfuggire attraverso strade o boschi è inevitabilmente destinata al fallimento... o peggio. La forza soprannaturale che tiene prigionieri i nuovi abitanti della cittadina, comunque, non impedisce l'arrivo di altri sfortunati, che, percorrendo la strada principale, sprofondano loro malgrado nell'incubo, confrontati con l'impossibilità di andarsene.
+      È qui che il tuo personaggio si muoverà ed interagirà con altri personaggi, capitati qui per caso, magari attirati dal vicino parco nazionale, o da quello che un tempo era un affascinante viale sul mare, una volta famoso per le sue case colorate e il buon cibo; alcuni giurano di essere stati richiamati addirittura dall'altra parte degli Stati Uniti, dal vicino Canada o dal Messico, o addirittura dal Vecchio Continente, da una forza oscura, da sogni, o sussurri da una regione nascosta e recondita della loro mente. Sia come sia, ora tutti sono intrappolati nella città, ogni tentativo di sfuggire attraverso strade o boschi è invariabilmente destinato al fallimento, o peggio, alla morte. La forza soprannaturale che tiene prigionieri i nuovi abitanti della cittadina, non impedisce l'arrivo di altri sfortunati, che, percorrendo la strada principale, sprofondano loro malgrado nell'incubo, condannati, senza più alcuna via d'uscita.
     </.guide_p>
 
     <.guide_p>
@@ -42,7 +42,7 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     </.guide_p>
 
     <.guide_p>
-      La vita della cittadina, stretta all'interno delle vecchie mura coloniali costruite dai francesi rafforzate con costruzioni di fortuna, è gestita dalla <i>Mob</i>, la mafia statunitense, che si è liberata dalla presenza della scarsa e già corrotta forza di polizia quasi subito dopo il <b>Cataclisma</b>, il giorno in cui tutto è cambiato, ed ha di fatto assunto il controllo. L'unica cosa che impedisce uno stato di costante minaccia e sopruso alle persone comuni è la presenza di due organizzazioni criminali differenti: una, composta da elementi di origine italiana, e l'altra, composta per la maggior parte di immigrati di origine irlandese; la precaria situazione creatasi, da "guerra fredda" tra le due organizzazioni, fa sì che entrambe tendano a non rovinare i rapporti con le persone, cercando di garantirsene l'alleanza, o l'obbedienza.
+      La vita della cittadina, stretta all'interno delle vecchie mura coloniali costruite dai francesi rafforzate con costruzioni di fortuna, è gestita dalla <i>Mob</i>, la mafia statunitense, che si è liberata dalla presenza della scarsa e già corrotta forza di polizia quasi subito dopo il <b>Cataclisma</b>, il giorno in cui tutto è cambiato, ed ha di fatto assunto il controllo. L'unico argine ad uno stato di costante minaccia e sopruso è la presenza di due organizzazioni criminali differenti: una, composta da elementi di origine italiana, e l'altra, composta per la maggior parte di immigrati di origine irlandese; la precaria situazione di tregua armata creatasi tra le due organizzazioni fa sì che entrambe tendano a non trattare le persone comuni come strumenti su cui sfogare le loro pulsioni e frustrazioni, cercando di garantirsene l'alleanza, o l'obbedienza.
     </.guide_p>
 
     <.guide_p>
@@ -50,7 +50,7 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     </.guide_p>
 
     <.guide_p>
-      È in questa situazione che il tuo personaggio deve muoversi. Dovrà ottenere una posizione all'interno della cittadina per sopravvivere, potrà studiare nuove tecnologie, nuove forme di occulto, o sviluppare nuove sostanze per guarire, stimolare o avvelenare altri personaggi, o cercare una strada che conduca fuori dalla città che non si affacci sul fondo della canna di una pistola.
+      È in questa situazione che il tuo personaggio dovrà muoversi. Dovrà costruirsi una posizione all'interno della cittadina per sopravvivere, potrà studiare nuove tecnologie, nuove forme di occulto, o sviluppare nuove sostanze per guarire, stimolare o avvelenare altri personaggi, o cercare una strada che conduca fuori dalla città che non si affacci sul fondo della canna di una pistola.
     </.guide_p>
     """
   end
