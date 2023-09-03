@@ -34,7 +34,8 @@ defmodule StygianWeb.GuideLive.GuideLive do
         %{title: "Introduzione", action: :introduction},
         %{title: "Ambientazione", action: :environment},
         %{title: "Creazione", action: :creation},
-        %{title: "Regolamento", action: :rules}
+        %{title: "Regolamento", action: :rules},
+        %{title: "Gameplay", action: :gameplay}
       ]
       |> Enum.map(&Map.put(&1, :active, &1.action == action))
 
