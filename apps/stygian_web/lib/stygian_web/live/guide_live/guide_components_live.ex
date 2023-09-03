@@ -9,6 +9,7 @@ defmodule StygianWeb.GuideLive.GuideComponentsLive do
   import StygianWeb.GuideLive.GuideEnvironmentLive
   import StygianWeb.GuideLive.GuideCreationLive
   import StygianWeb.GuideLive.GuideRulesLive
+  import StygianWeb.GuideLive.GuideGameplayLive
 
   @doc """
   The menu component. It will receive the menu items from the main live view.
@@ -91,6 +92,7 @@ defmodule StygianWeb.GuideLive.GuideComponentsLive do
       <.environment :if={@action == :environment} />
       <.creation :if={@action == :creation} />
       <.rules :if={@action == :rules} />
+      <.gameplay :if={@action == :gameplay} />
     </article>
     """
   end
