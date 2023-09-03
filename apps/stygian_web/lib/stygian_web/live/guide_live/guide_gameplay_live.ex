@@ -8,13 +8,13 @@ defmodule StygianWeb.GuideLive.GuideGameplayLive do
   def gameplay(assigns) do
     ~H"""
     <.guide_p>
-      L'ultima sezione della guida è anche quella più importante per strutturare il personaggio. Qui i giocatori potranno capire quali sono le direttive di gioco principali, quali sono le possibilità di gioco, quali le possibilità offerte dall'ambientazione. 
+      L'ultima sezione della guida è anche quella più importante per strutturare il personaggio. Qui i giocatori potranno capire quali sono le direttive di gioco principali, quali sono le possibilità di gioco, quali le possibilità offerte dall'ambientazione.
     </.guide_p>
 
     <.guide_h1>Obiettivi</.guide_h1>
 
     <.guide_p>
-      La prima cosa da tenere a mente nella creazione e strutturazione del personaggio è che, dopo il <b>Cataclisma</b>, il primo obiettivo di qualsiasi personaggio non è quello di sopravvivere, ma di avere una motivazione per farlo. Bisogna considerare che molti hanno voluto intraprendere la via più rapida per uscire da Rochester, tramite il suicidio, dopo aver capito che non c'era una facile via d'uscita fuori dall'incubo di follia in cui tutti erano precipitati. La prima domanda che un giocatore si dovrà porre quindi è cosa lo fa tirare avanti: scoprire una via d'uscita dalla cittadina per poter tornare alla propria vita? Approfittare dell'assenza di una struttura di potere statale superiore per accumulare potere in questo contesto ridotto? Oppure il motivo per cui il personaggio vuole sopravvivere a tutti i costi è l'investigazione dei fenomeni paranormali che accadono normalmente nel perimetro della cittadina, e fuori? 
+      La prima cosa da tenere a mente nella creazione e strutturazione del personaggio è che, dopo il <b>Cataclisma</b>, il primo obiettivo di qualsiasi personaggio non è quello di sopravvivere, ma di avere una motivazione per farlo. Bisogna considerare che molti hanno voluto intraprendere la via più rapida per uscire da Rochester, tramite il suicidio, dopo aver capito che non c'era una facile via d'uscita fuori dall'incubo di follia in cui tutti erano precipitati. La prima domanda che un giocatore si dovrà porre quindi è cosa lo fa tirare avanti: scoprire una via d'uscita dalla cittadina per poter tornare alla propria vita? Approfittare dell'assenza di una struttura di potere statale superiore per accumulare potere in questo contesto ridotto? Oppure il motivo per cui il personaggio vuole sopravvivere a tutti i costi è l'investigazione dei fenomeni paranormali che accadono normalmente nel perimetro della cittadina, e fuori?
     </.guide_p>
 
     <.guide_p>
@@ -24,13 +24,18 @@ defmodule StygianWeb.GuideLive.GuideGameplayLive do
     <.guide_h1>Presenza del narratore</.guide_h1>
 
     <.guide_p>
-      Per quanto alcune giocate, o responsi, debbano essere necessariamente gestiti da un Narratore, ciò non toglie che altri scambi possano essere gestiti direttamente in giocate tra personaggi. Scambi di valuta (<i>Cigs</i>), di oggetti, o anche di conoscenza, sottoforma di addestramento in Abilità non di creazione o schemi di implementazione di oggetti, possono essere scambiati liberamente tra personaggi (Todo - scambi di valuta, oggetti o <i>blueprints</i> saranno implementati prossimamente).
+      Per quanto alcune giocate, o responsi, debbano essere necessariamente gestiti da un Narratore, ciò non toglie che altri scambi possano essere gestiti direttamente in giocate tra personaggi. Scambi di valuta (<i>Cigs</i>), di oggetti, o anche di conoscenza, sottoforma di addestramento in Abilità non di creazione o schemi di implementazione di oggetti, possono essere scambiati liberamente tra personaggi (Todo - scambi di valuta, oggetti o
+      <i>blueprints</i>
+      saranno implementati prossimamente).
     </.guide_p>
 
     <.guide_h1>Zone franche</.guide_h1>
 
     <.guide_p>
-      Personaggi interessati nell'indagine dei fenomeni paranormali identificati in alcune delle zone della mappa, poi, potranno mettersi d'accordo direttamente nelle locazioni della mappa considerate "<b>neutrali</b>": l'<b>Old Eel Hotel</b> e il <b>Negozio di Moshe</b>, quest'ultimo situato nei <b>Georgian Apartments</b> in <b>French Hill</b>. Queste due locazioni sono da considerarsi, come detto, <b>neutrali</b>, ovvero in queste locazioni le organizzazioni criminali osservano una tregua armata: in queste locazioni, i nuovi personaggi, o anche personaggi che vogliono incontrarsi per poter dialogare senza il pericolo di subire violenze, possono giocare liberamente. I giocatori potranno anche utilizzare le locazioni private, che saranno a meno che il Narratore non decida diversamente da intendersi come tavoli riservati o stanze nell'<b>Old Eel Hotel</b>, per poter scambiare informazioni segrete. Le stanze private sono raggiungibili a partire dalla mappa principale nella locazione <b>The Unknown</b>
+      Personaggi interessati nell'indagine dei fenomeni paranormali identificati in alcune delle zone della mappa, poi, potranno mettersi d'accordo direttamente nelle locazioni della mappa considerate "<b>neutrali</b>": l'<b>Old Eel Hotel</b> e il <b>Negozio di Moshe</b>, quest'ultimo situato nei
+      <b>Georgian Apartments</b>
+      in <b>French Hill</b>. Queste due locazioni sono da considerarsi, come detto, <b>neutrali</b>, ovvero in queste locazioni le organizzazioni criminali osservano una tregua armata: in queste locazioni, i nuovi personaggi, o anche personaggi che vogliono incontrarsi per poter dialogare senza il pericolo di subire violenze, possono giocare liberamente. I giocatori potranno anche utilizzare le locazioni private, che saranno a meno che il Narratore non decida diversamente da intendersi come tavoli riservati o stanze nell'<b>Old Eel Hotel</b>, per poter scambiare informazioni segrete. Le stanze private sono raggiungibili a partire dalla mappa principale nella locazione
+      <b>The Unknown</b>
     </.guide_p>
 
     <.guide_h1>Spazio di gioco</.guide_h1>
