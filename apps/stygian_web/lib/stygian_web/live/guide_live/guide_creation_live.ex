@@ -20,7 +20,7 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
       L’età del personaggio non ha solo un significato interpretativo, ma determina anche la distribuzione delle caratteristiche del personaggio nella fase di creazione successiva. Si hanno a disposizione tre opzioni:
       <ul>
         <li class="font-normal text-md">
-          <b>Giovinezza</b>: il personaggio ha meno di 35 anni, ma più di 18. Ha la possibilità di assegnare un punto supplementare agli attributi, ma potrà assegnare 4 punti di abilità in meno rispetto al normale.
+          <b>Giovane</b>: il personaggio ha meno di 35 anni, ma più di 18. Ha la possibilità di assegnare un punto supplementare agli attributi, ma potrà assegnare 4 punti di abilità in meno rispetto al normale.
         </li>
 
         <li class="font-normal text-md">
@@ -28,7 +28,7 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
         </li>
 
         <li class="font-normal text-md">
-          <b>Anzianità</b>: il personaggio ha più di 50 anni. Si avrà diritto a quattro punti in più da distribuire sulle abilità del personaggio, ma avrà un punto in meno da assegnare agli attributi. Un Anziano avrà una maggiore resistenza alla perdita di Sanità mentale.
+          <b>Anziano</b>: il personaggio ha più di 50 anni. Si avrà diritto a quattro punti in più da distribuire sulle abilità del personaggio, ma avrà un punto in meno da assegnare agli attributi. Un Anziano avrà una maggiore resistenza alla perdita di Sanità mentale.
         </li>
       </ul>
     </.guide_p>
@@ -114,17 +114,17 @@ defmodule StygianWeb.GuideLive.GuideCreationLive do
     <.guide_h1>Completare la scheda</.guide_h1>
 
     <.guide_p>
-      La creazione non determina la fine della scheda, ma consente ai giocatori di definirne le caratteristiche necessarie ed automatiche, creando il personaggio; dopo questo si potranno modificare la biografia, la descrizione, le note, e si potrà anche modificare la scheda personalizzata, accessibile dal tasto oscuro alla fine della scheda principale. La biografia è forse la parte più importante del personaggio: la possibilità di modificarla è stata posta dopo la creazione per dare la possibilità di modificarla e definirla con più calma; la biografia dovrà rispecchiare l'ambientazione, quindi il giocatore dovrà considerare che il suo personaggio dovrà essere credibile nel New England del 1930: a tal proposito, potrebbe essere di ispirazione la lettura delle novelle di H. P. Lovecraft (da dove abbastanza chiaramente questa ambientazione, e il gioco a cui si ispira, hanno tratto ispirazione).
+      La creazione non costituisce la fase finale della creazione del personaggio, ma consente ai giocatori di definirne le caratteristiche necessarie ed automatiche; nella scheda del personaggio appena creato si potranno modificare la biografia, la descrizione, le note, e si potrà anche modificare la scheda personalizzata, accessibile dal tasto oscuro nella parte finale della pagina della scheda. La biografia è forse la parte più importante del personaggio: la possibilità di modificarla è stata posta dopo la creazione per dare la possibilità di modificarla e definirla con più calma; la biografia dovrà essere scritta avendo bene in mente l'ambientazione, il giocatore dovrà considerare che il suo personaggio dovrà essere credibile nel New England del 1930: a tal proposito, potrebbe essere di ispirazione la lettura delle novelle di H. P. Lovecraft (da dove abbastanza chiaramente questa ambientazione, e il gioco a cui si ispira, hanno tratto ispirazione). Consigliamo, inoltre, di leggere la sezione del <.link navigate={~p"/guide/gameplay"} class="font-bold underline underline-offset-8">gameplay</.link>.
     </.guide_p>
 
     <.guide_h1>Consigli per la scrittura della biografia</.guide_h1>
 
     <.guide_p>
-      Come detto, nella scrittura della biografia del personaggio, bisogna immaginarne uno che abbia senso negli anni '20/'30 del secolo scorso. Inoltre, è da considerare il fatto che il personaggio non può essere autoctono della cittadina di Rochester. Dovrete immaginare che, prima o dopo del Cataclisma, il personaggio ha percepito un richiamo, un impulso inconscio a recarsi a Rochester, a volte senza nemmeno sapere esattamente dove si stava recando. La mente, durante il richiamo, trovava tutti i modi, senza uno sforzo cosciente, per giustificare l'improvviso impulso ad andare: che sia una improvvisa e morbosa curiosità per il parco nazionale, o la volontà di scaricare un po' di stress in una tranquilla località sull'oceano, o ancora, il personaggio può aver provato un forte impulso a consumare alcol, e per qualche motivo era sicuro di poterne trovare al confine con il Canada, proprio a Rochester. Qualsiasi sia la motivazione, non c'è nessuna restrizione sul tipo di personaggio che può arrivare, la unica condizione è che abbia serbato un segreto, un peccato o comunque un'azione passata per cui prova profonda vergogna.
+      Come detto, nella scrittura della biografia del personaggio, bisogna immaginarne uno che abbia senso negli anni '20/'30 del secolo scorso. Inoltre, è importante considerare il fatto che <b>il personaggio non può essere autoctono della cittadina di Rochester</b>. Dovrete immaginare che, prima o dopo del Cataclisma, il personaggio ha percepito un richiamo, un impulso inconscio a recarsi a Rochester, a volte senza nemmeno sapere esattamente dove si stava recando. La mente, durante il richiamo, avrebbe trovato tutti i modi, senza uno sforzo cosciente, per giustificare l'improvviso impulso a recarsi in una località forse prima d'allora sconosciuta: che sia una improvvisa e morbosa curiosità per il parco nazionale, o la volontà di scaricare un po' di stress in una tranquilla località sull'oceano; O ancora, il personaggio può aver provato un forte impulso a consumare alcol, e per qualche motivo era sicuro di poterne trovare al confine con il Canada, proprio a Rochester. Qualsiasi sia la motivazione, non c'è nessuna restrizione sul tipo di personaggio che può arrivare, l'unica condizione è che abbia serbato un segreto, un peccato o comunque un'azione passata per cui prova profonda vergogna.
     </.guide_p>
 
     <.guide_p>
-      Ogni giocatore può decidere che il proprio personaggio sia arrivato poco prima del Cataclisma, o dopo. Per qualche strana ragione, anche se ha assistito al Cataclisma in prima persona, i ricordi di quell'accadimenti sono obnubilati, sfocati, confusi. Potrebbe anche accadere che un giorno il ricordo sia differente rispetto ad un altro. I ricordi cominciano ad assumere nitidezza solo a partire da qualche giorno dopo il Cataclisma.
+      Ogni giocatore può decidere che il proprio personaggio sia arrivato poco prima del Cataclisma, o dopo. Per qualche strana ragione, anche se ha assistito al Cataclisma in prima persona, i suoi ricordi di quei giorni sono obnubilati, sfocati, confusi. Potrebbe anche accadere che un giorno il personaggio abbia un ricordo, e il giorno dopo il ricordo può arrivare a giurare che il ricordo sia differente. I ricordi di ogni personaggio cominciano ad assumere nitidezza solo a partire da qualche giorno dopo il Cataclisma.
     </.guide_p>
     """
   end
