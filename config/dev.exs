@@ -65,6 +65,7 @@ config :stygian_web, StygianWeb.Endpoint,
 # Email settings
 config :stygian, Stygian.Mailer,
   adapter: Swoosh.Adapters.SMTP,
+  ssl: false,
   relay: System.get_env("MAIL_HOST"),
   port: System.get_env("MAIL_PORT"),
   username: System.get_env("MAIL_USER"),
