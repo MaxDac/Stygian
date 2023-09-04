@@ -38,8 +38,12 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
       Il gioco potrà contenere linguaggio violento, e trattare temi estremi a sfondo sessuale, dipendenze, violenza, morte e soprannaturale. È <span class="font-bold underline">assolutamente vietato l'ingresso ai minori di 18 anni</span>, e si consiglia agli utenti di leggere attentamente il disclaimer in fase di registrazione. Detto questo, la lista di seguito contiene tutto ciò che è assolutamente vietato, anche nell'interpretazione di un personaggio, pena il ban definitivo dell'utente:
       <ul>
         <li class="text-md font-normal">Bestemmie.</li>
-        <li class="text-md font-normal">Accurate descrizioni che sfocerebbero nello splatter fine a sé stesso.</li>
-        <li class="text-md font-normal">Descrizioni riguardante qualsiasi tipo di violenza di natura sessuale.</li>
+        <li class="text-md font-normal">
+          Accurate descrizioni che sfocerebbero nello splatter fine a sé stesso.
+        </li>
+        <li class="text-md font-normal">
+          Descrizioni riguardante qualsiasi tipo di violenza di natura sessuale.
+        </li>
         <li class="text-md font-normal"><i>To be completed</i>.</li>
       </ul>
     </.guide_p>
