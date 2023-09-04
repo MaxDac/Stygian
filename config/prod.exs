@@ -20,3 +20,12 @@ config :logger, level: :info
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
+
+# Email settings
+config :stygian, Stygian.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  ssl: false,
+  relay: "smtp.stygian.eu",
+  port: 587,
+  username: "postmaster@stygian.eu",
+  password: System.get_env("MAIL_PASS")
