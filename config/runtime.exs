@@ -110,13 +110,4 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
-
-  # Email settings
-  config :stygian, Stygian.Mailer,
-    adapter: Swoosh.Adapters.SMTP,
-    ssl: false,
-    relay: System.get_env("MAIL_HOST"),
-    port: System.get_env("MAIL_PORT"),
-    username: System.get_env("MAIL_USER"),
-    password: System.get_env("MAIL_PASS")
 end

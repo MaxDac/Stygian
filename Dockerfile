@@ -1,5 +1,8 @@
 FROM hexpm/elixir:1.15.5-erlang-25.2.3-debian-bullseye-20230612-slim as builder
 
+# Setting the SMTP password
+ARG MAIL_PASS  
+
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git npm \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
@@ -13,6 +16,7 @@ RUN mix local.hex --force && \
 
 # set build ENV
 ENV MIX_ENV="prod"
+ENV MAIL_PASS=${MAIL_PASS}
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
