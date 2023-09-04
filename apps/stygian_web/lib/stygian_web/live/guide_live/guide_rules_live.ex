@@ -37,10 +37,10 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     <.guide_p>
       Il gioco potrà contenere linguaggio violento, e trattare temi estremi a sfondo sessuale, dipendenze, violenza, morte e soprannaturale. È <span class="font-bold underline">assolutamente vietato l'ingresso ai minori di 18 anni</span>, e si consiglia agli utenti di leggere attentamente il disclaimer in fase di registrazione. Detto questo, la lista di seguito contiene tutto ciò che è assolutamente vietato, anche nell'interpretazione di un personaggio, pena il ban definitivo dell'utente:
       <ul>
-        <li>Bestemmie.</li>
-        <li>Accurate descrizioni che sfocerebbero nello splatter fine a sé stesso.</li>
-        <li>Descrizioni riguardante qualsiasi tipo di violenza di natura sessuale.</li>
-        <li><i>To be completed</i>.</li>
+        <li class="text-md font-normal">Bestemmie.</li>
+        <li class="text-md font-normal">Accurate descrizioni che sfocerebbero nello splatter fine a sé stesso.</li>
+        <li class="text-md font-normal">Descrizioni riguardante qualsiasi tipo di violenza di natura sessuale.</li>
+        <li class="text-md font-normal"><i>To be completed</i>.</li>
       </ul>
     </.guide_p>
 
@@ -57,30 +57,30 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
       alla Difficoltà. La tabella di seguito associa ad alcuni valori di Difficoltà il grado di complessità dell'azione:
     </.guide_p>
 
-    <.guide_p>
+    <div class="flex justify-center">
       <table class="table-auto">
-        <thead>
+        <thead class="bg-brand-inactive text-zinc-300 text-md text-left">
           <tr>
-            <th class="text-center">Difficoltà</th>
-            <th class="text-center">Descrizione</th>
+            <th scope="col" class="font-normal min-w-[200px] pt-2">Difficoltà</th>
+            <th scope="col" class="font-normal pt-2">Descrizione</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>15</td>
-            <td>Azione semplice</td>
+        <tbody class="text-left">
+          <tr class="border-b border-brand-inactive">
+            <th scope="row" class="font-normal text-xl px-2">15</th>
+            <td class="font-normal text-md px-2">Azione semplice</td>
           </tr>
-          <tr>
-            <td>20</td>
-            <td>Azione moderatamente complessa</td>
+          <tr class="border-b border-brand-inactive">
+            <th scope="row" class="font-normal text-xl px-2">20</th>
+            <td class="font-normal text-md px-2">Azione moderatamente complessa</td>
           </tr>
-          <tr>
-            <td>25</td>
-            <td>Azione molto complessa</td>
+          <tr class="border-b border-brand-inactive">
+            <th scope="row" class="font-normal text-xl px-2">25</th>
+            <td class="font-normal text-md px-2">Azione molto complessa</td>
           </tr>
         </tbody>
       </table>
-    </.guide_p>
+    </div>
 
     <.guide_p>
       Il dado tirato è un dado da 20, ed è tirato automaticamente dal sito. Normalmente, il risultato del tiro viene sommato al punteggio dell'Attributo e dell'Abilità del personaggio, ma nel caso in cui il risultato del dado sia 1, l'azione fallirà automaticamente, ed in modo catastrofico: il personaggio può ad esempio inciampare mentre scavalca la staccionata, cadendo rovinosamente ed infortunandosi; nel caso in cui il risultato del dado sia 20, invece, l'azione riuscirà automaticamente, anche se la somma totale del dado è inferiore alla Difficoltà.
@@ -89,7 +89,7 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     <.guide_h1>Ricerca</.guide_h1>
 
     <.guide_p>
-      La ricerca costituisce una parte fondamentale del gioco di <b>Stygian</b>. La fase di ricerca è un modo che il giocatore ha per determinare il funzionamento e le caratteristiche di un oggetto, sia esso soprannaturale o meno, o di sviluppare il disegno e il funzionamento di nuovi oggetti, dispositivi, o sostanze che potranno aiutarlo a sopravvivere, o che potrà commerciare con altri personaggi. Il limite agli oggetti che si possono progettare è solo il buon senso, e la fantasia dei giocatori. Prima della sessione di ricerca, comunque, è sempre consigliato discutere con un Narratore a proposito dell'oggetto che si vuole sviluppare, così da confermarne la fattibilità. Il Narratore poi darà tutti i dettagli sui materiali necessari per realizzare l'oggetto. La realizzazione dell'oggetto necessiterà di una o più sessioni di ricerca.
+      La ricerca costituisce una parte fondamentale del gioco di <b>Stygian</b>. La fase di ricerca è un modo che il giocatore ha per determinare il funzionamento e le caratteristiche di un oggetto, sia esso soprannaturale o meno, o di sviluppare il disegno e il funzionamento di nuovi oggetti, dispositivi, o sostanze che potranno aiutarlo a sopravvivere, o che potrà commerciare con altri personaggi. Il limite agli oggetti che si possono progettare è solo il buon senso, e la fantasia dei giocatori. Prima della sessione di ricerca, comunque, è sempre consigliato discutere con un Narratore a proposito dell'oggetto che si vuole sviluppare, così da confermarne la fattibilità. Il Narratore poi darà tutti i dettagli sui materiali necessari per realizzare l'oggetto. I materiali o dispositivi necessari per la realizzazione degli oggetti potranno essere acquistati, oppure potranno essere ricercati nelle locazioni della mappa in un'altra sessione di ricerca, che seguirà le stesse regole già esposte. La realizzazione dell'oggetto necessiterà di una o più sessioni di ricerca.
     </.guide_p>
 
     <.guide_p>
