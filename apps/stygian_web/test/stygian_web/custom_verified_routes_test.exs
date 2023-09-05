@@ -51,4 +51,3 @@ defmodule StygianWeb.CustomVerifiedRoutesTest do
     end
   end
 end
-
