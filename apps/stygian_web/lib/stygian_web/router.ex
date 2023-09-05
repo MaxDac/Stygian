@@ -143,6 +143,15 @@ defmodule StygianWeb.Router do
     end
   end
 
+  scope "/transactions", StygianWeb.TransactionsLive do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :transactions,
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
+      live "/", TransactionsLive, :index
+    end
+  end
+
   scope "/guide", StygianWeb.GuideLive do
     pipe_through [:browser]
 
