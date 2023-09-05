@@ -75,7 +75,7 @@ defmodule StygianWeb.UserRegistrationLive do
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
-            &url(~p"/users/confirm/#{&1}")
+            &get_url/1
           )
 
         changeset = Accounts.change_user_registration(user)
@@ -109,5 +109,10 @@ defmodule StygianWeb.UserRegistrationLive do
 
   defp assign_disclaimer_state(socket) do
     assign(socket, :show_disclaimer, false)
+  end
+
+  defp get_url(url) do
+    url_func = &url(~p"/users/confirm/#{&1}")
+    remove_verified_route_port(url_func.(url))
   end
 end
