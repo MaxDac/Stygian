@@ -141,7 +141,7 @@ defmodule StygianWeb.UserSettingsLive do
         Accounts.deliver_user_update_email_instructions(
           applied_user,
           user.email,
-          &url(~p"/users/settings/confirm_email/#{&1}")
+          &get_url/1
         )
 
         info = "A link to confirm your email change has been sent to the new address."
@@ -180,5 +180,10 @@ defmodule StygianWeb.UserSettingsLive do
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
     end
+  end
+
+  defp get_url(url) do
+    url_func = &url(~p"/users/settings/confirm_email/#{&1}")
+    remove_verified_route_port(url_func.(url))
   end
 end

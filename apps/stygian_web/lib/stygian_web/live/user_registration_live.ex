@@ -5,7 +5,6 @@ defmodule StygianWeb.UserRegistrationLive do
   alias Stygian.Accounts.User
 
   import StygianWeb.UserRegistrationDisclaimer
-  import StygianWeb.CustomVerifiedRoutes
 
   @impl true
   def render(assigns) do

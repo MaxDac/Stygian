@@ -112,6 +112,8 @@ defmodule StygianWeb do
         endpoint: StygianWeb.Endpoint,
         router: StygianWeb.Router,
         statics: StygianWeb.static_paths()
+
+      import StygianWeb.CustomVerifiedRoutes
     end
   end
 
