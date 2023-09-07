@@ -4,9 +4,10 @@ defmodule Stygian.TransactionsTest do
   alias Stygian.Transactions
 
   describe "transactions" do
-    alias Stygian.Transactions.Transaction
-    alias Stygian.Characters
     alias Ecto.Changeset
+
+    alias Stygian.Characters
+    alias Stygian.Transactions.Transaction
 
     import Stygian.TransactionsFixtures
     import Stygian.CharactersFixtures
@@ -40,13 +41,18 @@ defmodule Stygian.TransactionsTest do
       transaction = transaction_fixture()
       update_attrs = %{cigs: 43}
 
-      assert {:ok, %Transaction{} = transaction} = Transactions.update_transaction(transaction, update_attrs)
+      assert {:ok, %Transaction{} = transaction} =
+               Transactions.update_transaction(transaction, update_attrs)
+
       assert transaction.cigs == 43
     end
 
     test "update_transaction/2 with invalid data returns error changeset" do
       transaction = transaction_fixture()
-      assert {:error, %Ecto.Changeset{}} = Transactions.update_transaction(transaction, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Transactions.update_transaction(transaction, @invalid_attrs)
+
       assert transaction == Transactions.get_transaction!(transaction.id)
     end
 
@@ -65,11 +71,12 @@ defmodule Stygian.TransactionsTest do
       character1 = character_fixture_complete(%{name: "character1", cigs: 42})
       character2 = character_fixture_complete(%{name: "character2", cigs: 0})
 
-      assert {:ok, %Transaction{} = transaction} = Transactions.perform_transaction(%{
-        "sender_id" => character1.id,
-        "receiver_id" => character2.id,
-        "cigs" => 42
-      })
+      assert {:ok, %Transaction{} = transaction} =
+               Transactions.perform_transaction(%{
+                 "sender_id" => character1.id,
+                 "receiver_id" => character2.id,
+                 "cigs" => 42
+               })
 
       assert transaction.cigs == 42
       assert transaction.sender_id == character1.id
@@ -83,13 +90,12 @@ defmodule Stygian.TransactionsTest do
       character1 = character_fixture_complete(%{name: "character1", cigs: 40})
       character2 = character_fixture_complete(%{name: "character2", cigs: 0})
 
-      assert {:error, %Changeset{} = changeset} = Transactions.perform_transaction(%{
-        "sender_id" => character1.id,
-        "receiver_id" => character2.id,
-        "cigs" => 42
-      })
-
-      assert changeset.errors[:cigs] == {"Non hai abbastanza cigs.", []}
+      assert {:error, "Non hai abbastanza cigs."} =
+               Transactions.perform_transaction(%{
+                 "sender_id" => character1.id,
+                 "receiver_id" => character2.id,
+                 "cigs" => 42
+               })
 
       assert Characters.get_character!(character1.id).cigs == 40
       assert Characters.get_character!(character2.id).cigs == 0
@@ -98,29 +104,29 @@ defmodule Stygian.TransactionsTest do
     test "perform_transaction/1 returns an error if the sender does not exist." do
       character2 = character_fixture_complete(%{name: "character2", cigs: 0})
 
-      assert {:error, %Changeset{} = changeset} = Transactions.perform_transaction(%{
-        "sender_id" => 42,
-        "receiver_id" => character2.id,
-        "cigs" => 42
-      })
-
-      assert changeset.errors[:sender_id] == {"Il personaggio non esiste.", []}
+      assert {:error, "Il personaggio non esiste."} =
+               Transactions.perform_transaction(%{
+                 "sender_id" => 42,
+                 "receiver_id" => character2.id,
+                 "cigs" => 42
+               })
 
       assert Characters.get_character!(character2.id).cigs == 0
     end
 
     test "perform_transaction/1 returns an error if the receiver does not exist." do
-      character1 = character_fixture_complete(%{name: "character1", cigs: 40})
+      character1 = character_fixture_complete(%{name: "character1", cigs: 44})
 
-      assert {:error, %Changeset{} = changeset} = Transactions.perform_transaction(%{
-        "sender_id" => character1.id,
-        "receiver_id" => 42,
-        "cigs" => 42
-      })
+      assert {:error, %Changeset{} = changeset} =
+               Transactions.perform_transaction(%{
+                 "sender_id" => character1.id,
+                 "receiver_id" => 42,
+                 "cigs" => 42
+               })
 
-      assert changeset == {"Il personaggio non esiste.", []}
-
-      assert Characters.get_character!(character1.id).cigs == 40
+      refute changeset.valid?
+      assert %{errors: [receiver_id: {"does not exist", _}]} = changeset
+      assert Characters.get_character!(character1.id).cigs == 44
     end
   end
 end

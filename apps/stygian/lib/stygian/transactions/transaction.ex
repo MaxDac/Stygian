@@ -9,17 +9,15 @@ defmodule Stygian.Transactions.Transaction do
   alias Stygian.Characters.Character
 
   @type t() :: %__MODULE__{
-    id: integer(),
-    cigs: integer(),
-    sender_id: integer(),
-    receiver_id: integer(),
-
-    sender: Character.t(),
-    receiver: Character.t(),
-
-    inserted_at: DateTime.t(),
-    updated_at: DateTime.t()
-  }
+          id: integer(),
+          cigs: integer(),
+          sender_id: integer(),
+          receiver_id: integer(),
+          sender: Character.t(),
+          receiver: Character.t(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
 
   schema "transactions" do
     field :cigs, :integer

@@ -61,13 +61,17 @@ defmodule Stygian.Transactions do
   @doc """
   Performs the transaction by removing the cigs from the sender and adding them to the receiver.
   """
-  @spec perform_transaction(map()) :: {:ok, Transaction.t()} | {:error, Changeset.t()} | {:error, String.t()}
-  def perform_transaction(%{"cigs" => cigs} = attrs) when is_binary(cigs), do:
-    perform_transaction(attrs |> Map.put("cigs", String.to_integer(cigs)))
+  @spec perform_transaction(map()) ::
+          {:ok, Transaction.t()} | {:error, Changeset.t()} | {:error, String.t()}
+  def perform_transaction(%{"cigs" => cigs} = attrs) when is_binary(cigs),
+    do: perform_transaction(attrs |> Map.put("cigs", String.to_integer(cigs)))
 
-  def perform_transaction(%{"sender_id" => sender_id, "receiver_id" => receiver_id, "cigs" => cigs} = attrs) do
+  def perform_transaction(
+        %{"sender_id" => sender_id, "receiver_id" => receiver_id, "cigs" => cigs} = attrs
+      ) do
     with :ok <- check_sender_amount(sender_id, cigs),
-         {:ok, transaction} <- create_transaction(attrs) |> IO.inspect(label: "Transaction result") do
+         {:ok, transaction} <-
+           create_transaction(attrs) do
       sender = Characters.get_character!(sender_id)
       receiver = Characters.get_character!(receiver_id)
 
@@ -78,12 +82,13 @@ defmodule Stygian.Transactions do
       receiver_changeset = Characters.change_cigs(receiver, %{cigs: receiver_cigs})
 
       case Repo.transaction(fn ->
-        Repo.update!(sender_changeset)
-        Repo.update!(receiver_changeset)
-        create_transaction(%{sender_id: sender_id, receiver_id: receiver_id, cigs: cigs})
-      end) do
+             Repo.update!(sender_changeset)
+             Repo.update!(receiver_changeset)
+             create_transaction(%{sender_id: sender_id, receiver_id: receiver_id, cigs: cigs})
+           end) do
         {:ok, _} ->
           {:ok, transaction}
+
         {:error, _} ->
           delete_transaction(transaction)
           {:error, "Errore durante la transazione."}
