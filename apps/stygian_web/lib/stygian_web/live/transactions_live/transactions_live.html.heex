@@ -1,0 +1,19 @@
+<.h1>Transazioni</.h1>
+
+<div class="space-y-12 divide-y">
+  <div>
+    <.simple_form class="mt-10" for={@form} phx-submit="save" phx-change="validate">
+      <.input type="hidden" field={@form[:sender_id]} />
+
+      <.input type="number" field={@form[:cigs]} label="Amount" phx-debounce="blur" />
+
+      <.character_selection
+        field={@form[:receiver_id]}
+        label="Ricevente"
+        characters={@characters}
+      />
+
+      <.button type="submit">Trasferisci</.button>
+    </.simple_form>
+  </div>
+</div>

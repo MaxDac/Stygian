@@ -353,6 +353,13 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Returns a changeset that allow the user to modify the cigs of the character.
+  """
+  def change_cigs(%Character{} = character, attrs \\ %{}) do
+    Character.change_cigs_changeset(character, attrs)
+  end
+
+  @doc """
   Updates the step of the character to 2, thus completing it.
   """
   def complete_character(character) do

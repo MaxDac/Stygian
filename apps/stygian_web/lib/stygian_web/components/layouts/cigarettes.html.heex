@@ -1,6 +1,7 @@
-<div
+<.link
   :if={@current_character}
-  class="fixed bottom-[50px] left-[50px] w-[100px] h-[100px] text-white cursor-pointer"
+  navigate={~p"/transactions"}
+  class="fixed bottom-[50px] left-[50px] w-[100px] h-[100px] text-white"
 >
   <img
     src="/images/CigarettesIcon.webp"
@@ -10,4 +11,4 @@
   <p class="font-typewriter text-xl text-brand shadow-black absolute bottom-0 left-0">
     <%= @current_character.cigs %>
   </p>
-</div>
+</.link>
