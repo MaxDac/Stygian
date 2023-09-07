@@ -36,7 +36,7 @@ defmodule StygianWeb.TransactionsLive.TransactionsLive do
   @impl true
   def handle_event("save", %{"transaction" => transaction_params}, socket) do
     case Transactions.perform_transaction(transaction_params) do
-      {:ok, result} ->
+      {:ok, _} ->
         {:noreply,
          socket
          |> put_flash(:info, "Transazione effettuata con successo.")
