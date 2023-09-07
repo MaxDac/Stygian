@@ -4,14 +4,21 @@ defmodule Stygian.TransactionsFixtures do
   entities via the `Stygian.Transactions` context.
   """
 
+  import Stygian.CharactersFixtures
+
   @doc """
   Generate a transaction.
   """
   def transaction_fixture(attrs \\ %{}) do
+    sender = character_fixture(%{name: "sender"})
+    receiver = character_fixture(%{name: "receiver"})
+
     {:ok, transaction} =
       attrs
       |> Enum.into(%{
-        cigs: 42
+        cigs: 42,
+        sender_id: sender.id,
+        receiver_id: receiver.id
       })
       |> Stygian.Transactions.create_transaction()
 

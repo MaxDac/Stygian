@@ -102,6 +102,12 @@ defmodule Stygian.Characters.Character do
     |> foreign_key_constraint(:user_id, name: :characters_user_id_fkey)
   end
 
+  def change_cigs_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:cigs])
+    |> validate_required([:cigs])
+  end
+
   @doc false
   def changeset(character, attrs) do
     character
