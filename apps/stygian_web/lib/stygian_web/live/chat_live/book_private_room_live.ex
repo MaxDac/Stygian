@@ -13,7 +13,9 @@ defmodule StygianWeb.ChatLive.BookPrivateRoomLive do
   def mount(%{"map_id" => map_id}, _session, socket) do
     {:ok,
      socket
-     |> assign_map(String.to_integer(map_id))}
+     |> assign_map(String.to_integer(map_id))
+     |> assign_form()
+     |> assign_charcters()}
   end
 
   @impl true
@@ -82,25 +84,28 @@ defmodule StygianWeb.ChatLive.BookPrivateRoomLive do
         |> push_navigate(to: ~p"/map/private")
 
       _ ->
-        form =
-          %BookPrivateRoomRequest{}
-          |> BookPrivateRoomRequest.changeset(%{})
-          |> to_form()
-
-        characters =
-          Characters.list_characters()
-          |> Enum.filter(&(&1.id != current_character_id))
-
         socket
         |> assign(:map, map)
-        |> assign(:characters, characters)
-        |> assign(:form, form)
     end
+  end
+
+  defp assign_form(socket) do
+    form =
+      %BookPrivateRoomRequest{}
+      |> BookPrivateRoomRequest.changeset(%{})
+      |> to_form()
+
+    socket
+    |> assign(:form, form)
   end
 
   defp assign_charcters(%{assigns: %{current_character: %{id: current_character_id}}} = socket) do
     assign_async(socket, :characters, fn ->
-      
+      characters =
+        Characters.list_characters()
+        |> Enum.filter(&(&1.id != current_character_id))
+
+      {:ok, %{characters: characters}}
     end)
   end
 end
