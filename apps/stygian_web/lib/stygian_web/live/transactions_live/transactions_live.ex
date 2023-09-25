@@ -52,11 +52,14 @@ defmodule StygianWeb.TransactionsLive.TransactionsLive do
   defp assign_all_characters(
          %{assigns: %{current_character: %{id: current_character_id}}} = socket
        ) do
-    characters =
-      Characters.list_characters()
-      |> Enum.filter(&(&1.id != current_character_id))
-
-    assign(socket, :characters, characters)
+    assign_async(socket, :characters, fn ->
+      {:ok,
+       %{
+         characters:
+           Characters.list_characters()
+           |> Enum.filter(&(&1.id != current_character_id))
+       }}
+    end)
   end
 
   defp assign_form(
