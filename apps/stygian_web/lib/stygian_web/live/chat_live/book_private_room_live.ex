@@ -97,4 +97,10 @@ defmodule StygianWeb.ChatLive.BookPrivateRoomLive do
         |> assign(:form, form)
     end
   end
+
+  defp assign_charcters(%{assigns: %{current_character: %{id: current_character_id}}} = socket) do
+    assign_async(socket, :characters, fn ->
+      
+    end)
+  end
 end
