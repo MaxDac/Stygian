@@ -1,0 +1,29 @@
+<.header>
+  Object <%= @object.id %>
+  <:subtitle>This is a object record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/admin/objects/#{@object}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit object</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @object.name %></:item>
+  <:item title="Description"><%= @object.description %></:item>
+  <:item title="Image url"><%= @object.image_url %></:item>
+  <:item title="Usages"><%= @object.usages %></:item>
+</.list>
+
+<.link navigate={~p"/admin/objects"}>Back to objects</.link>
+
+<.modal :if={@live_action == :edit} id="object-modal" show on_cancel={JS.patch(~p"/admin/objects/#{@object}")}>
+  <.live_component
+    module={StygianWeb.ObjectLive.FormComponent}
+    id={@object.id}
+    title={@page_title}
+    action={@live_action}
+    object={@object}
+    patch={~p"/admin/objects/#{@object}"}
+  />
+</.modal>

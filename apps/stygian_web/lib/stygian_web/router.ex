@@ -171,6 +171,13 @@ defmodule StygianWeb.Router do
       live "/", AdminLive.AdminDashboardLive, :index
       live "/npcs", AdminLive.CharacterNpcDashboardLive, :index
       live "/npc/create", AdminLive.CharacterNpcCreationLive, :create
+
+      live "/objects", ObjectLive.Index, :index
+      live "/objects/new", ObjectLive.Index, :new
+      live "/objects/:id/edit", ObjectLive.Index, :edit
+
+      live "/objects/:id", ObjectLive.Show, :show
+      live "/objects/:id/show/edit", ObjectLive.Show, :edit
     end
   end
 end

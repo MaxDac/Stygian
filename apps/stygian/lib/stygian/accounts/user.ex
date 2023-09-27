@@ -160,6 +160,17 @@ defmodule Stygian.Accounts.User do
   end
 
   @doc """
+  This changeset will only be used for testing purposes.
+  """
+  def test_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email, :password, :username, :admin])
+    |> validate_email(opts)
+    |> validate_username(opts)
+    |> validate_password(opts)
+  end
+
+  @doc """
   Verifies the password.
 
   If there is no user or the user doesn't have a password, we call

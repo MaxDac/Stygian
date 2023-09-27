@@ -96,6 +96,16 @@ defmodule Stygian.Accounts do
   end
 
   @doc """
+  Registers a user for testing purpose.
+  This function must be used only for unit testing.
+  """
+  def register_test_user(attrs) do
+    %User{}
+    |> User.test_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples
