@@ -110,7 +110,7 @@ end
 # Creating admin users
 _admin_user =
   AccountsHelpers.create_user?(%{
-    email: "postmaster@stygian.eu",
+    email: "postmaster@stygian-gdr.it",
     username: "Narratore",
     password: "password1234",
     admin: true
@@ -134,7 +134,7 @@ AccountsHelpers.create_user?(%{
 # Creating user that could be used to demo the land
 {:ok, test_user} =
   AccountsHelpers.create_user?(%{
-    email: "user@stygian.eu",
+    email: "user@stygian-gdr.it",
     username: "User",
     password: "somepassword4321",
     admin: false

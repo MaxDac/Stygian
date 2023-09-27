@@ -25,7 +25,7 @@ config :logger, level: :info
 config :stygian, Stygian.Mailer,
   adapter: Swoosh.Adapters.SMTP,
   ssl: false,
-  relay: "smtp.stygian.eu",
+  relay: "smtp.stygian-gdr.it",
   port: 587,
-  username: "postmaster@stygian.eu",
+  username: "postmaster@stygian-gdr.it",
   password: System.get_env("MAIL_PASS")

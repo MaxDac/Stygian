@@ -35,7 +35,7 @@ if config_env() == :prod do
       """
 
   config :stygian_web, StygianWeb.Endpoint,
-    url: [host: "stygian.eu", port: System.get_env("PORT") || 4000],
+    url: [host: "stygian-gdr.it", port: System.get_env("PORT") || 4000],
     http: [
       port: String.to_integer(System.get_env("PORT") || "4000"),
       transport_options: [socket_opts: [:inet6]],
@@ -43,10 +43,10 @@ if config_env() == :prod do
       compress: true
     ],
     check_origin: [
-      "https://stygian.eu",
-      "https://test.stygian.eu",
-      "https://www.stygian.eu",
-      "https://www.test.stygian.eu"
+      "https://stygian-gdr.it",
+      "https://test.stygian-gdr.it",
+      "https://www.stygian-gdr.it",
+      "https://www.test.stygian-gdr.it"
     ],
     server: true,
     secret_key_base: secret_key_base
