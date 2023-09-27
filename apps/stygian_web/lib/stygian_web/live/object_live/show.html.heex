@@ -12,13 +12,18 @@
   <:item title="Name"><%= @object.name %></:item>
   <:item title="Description"><%= @object.description %></:item>
   <:item title="Image url">
-    <img alt="Object image" aria-label="Object image" src={@object.image_url} class="max-w-[200px] h-auto" />
+    <img
+      alt="Object image"
+      aria-label="Object image"
+      src={@object.image_url}
+      class="max-w-[200px] h-auto"
+    />
   </:item>
   <:item title="Usages"><%= @object.usages %></:item>
 </.list>
 
 <div class="mt-5 text-center">
-  <.link 
+  <.link
     navigate={~p"/admin/objects"}
     class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm font-typewriter px-5 py-2.5 mr-2 mb-2"
   >
@@ -26,7 +31,12 @@
   </.link>
 </div>
 
-<.modal :if={@live_action == :edit} id="object-modal" show on_cancel={JS.patch(~p"/admin/objects/#{@object}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="object-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/objects/#{@object}")}
+>
   <.live_component
     module={StygianWeb.ObjectLive.FormComponent}
     id={@object.id}

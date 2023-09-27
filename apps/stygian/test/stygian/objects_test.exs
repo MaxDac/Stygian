@@ -21,7 +21,12 @@ defmodule Stygian.ObjectsTest do
     end
 
     test "create_object/1 with valid data creates a object" do
-      valid_attrs = %{description: "some description", image_url: "some image_url", name: "some name", usages: 42}
+      valid_attrs = %{
+        description: "some description",
+        image_url: "some image_url",
+        name: "some name",
+        usages: 42
+      }
 
       assert {:ok, %Object{} = object} = Objects.create_object(valid_attrs)
       assert object.description == "some description"
@@ -36,7 +41,13 @@ defmodule Stygian.ObjectsTest do
 
     test "update_object/2 with valid data updates the object" do
       object = object_fixture()
-      update_attrs = %{description: "some updated description", image_url: "some updated image_url", name: "some updated name", usages: 43}
+
+      update_attrs = %{
+        description: "some updated description",
+        image_url: "some updated image_url",
+        name: "some updated name",
+        usages: 43
+      }
 
       assert {:ok, %Object{} = object} = Objects.update_object(object, update_attrs)
       assert object.description == "some updated description"

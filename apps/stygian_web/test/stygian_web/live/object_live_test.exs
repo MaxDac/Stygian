@@ -5,8 +5,18 @@ defmodule StygianWeb.ObjectLiveTest do
   import Stygian.ObjectsFixtures
   import Stygian.AccountsFixtures
 
-  @create_attrs %{description: "some description", image_url: "some image_url", name: "some name", usages: 42}
-  @update_attrs %{description: "some updated description", image_url: "some updated image_url", name: "some updated name", usages: 43}
+  @create_attrs %{
+    description: "some description",
+    image_url: "some image_url",
+    name: "some name",
+    usages: 42
+  }
+  @update_attrs %{
+    description: "some updated description",
+    image_url: "some updated image_url",
+    name: "some updated name",
+    usages: 43
+  }
   @invalid_attrs %{description: nil, image_url: nil, name: nil, usages: nil}
 
   defp create_object(_) do
@@ -23,7 +33,7 @@ defmodule StygianWeb.ObjectLiveTest do
     setup [:create_object, :create_admin_user]
 
     test "lists all objects", %{conn: conn, object: object, user: user} do
-      {:ok, _index_live, html} = 
+      {:ok, _index_live, html} =
         conn
         |> log_in_user(user)
         |> live(~p"/admin/objects")
@@ -33,7 +43,7 @@ defmodule StygianWeb.ObjectLiveTest do
     end
 
     test "saves new object", %{conn: conn, user: user} do
-      {:ok, index_live, _html} = 
+      {:ok, index_live, _html} =
         conn
         |> log_in_user(user)
         |> live(~p"/admin/objects")
