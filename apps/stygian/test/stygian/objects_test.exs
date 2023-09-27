@@ -73,4 +73,69 @@ defmodule Stygian.ObjectsTest do
       assert %Ecto.Changeset{} = Objects.change_object(object)
     end
   end
+
+  describe "characters_rel_objects" do
+    alias Stygian.Objects.CharacterObject
+
+    import Stygian.CharactersFixtures
+    import Stygian.ObjectsFixtures
+
+    @invalid_attrs %{usages: nil}
+
+    test "list_characters_rel_objects/0 returns all characters_rel_objects" do
+      character_object = character_object_fixture()
+      assert Objects.list_characters_rel_objects() == [character_object]
+    end
+
+    test "get_character_object!/1 returns the character_object with given id" do
+      character_object = character_object_fixture()
+      assert Objects.get_character_object!(character_object.id) == character_object
+    end
+
+    test "create_character_object/1 with valid data creates a character_object" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id} = object_fixture()
+
+      valid_attrs = %{
+        character_id: character_id,
+        object_id: object_id,
+        usages: 42
+      }
+
+      assert {:ok, %CharacterObject{} = character_object} = Objects.create_character_object(valid_attrs)
+
+      assert ^character_id = character_object.character_id
+      assert ^object_id = character_object.object_id
+      assert character_object.usages == 42
+    end
+
+    test "create_character_object/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Objects.create_character_object(@invalid_attrs)
+    end
+
+    test "update_character_object/2 with valid data updates the character_object" do
+      character_object = character_object_fixture()
+      update_attrs = %{usages: 43}
+
+      assert {:ok, %CharacterObject{} = character_object} = Objects.update_character_object(character_object, update_attrs)
+      assert character_object.usages == 43
+    end
+
+    test "update_character_object/2 with invalid data returns error changeset" do
+      character_object = character_object_fixture()
+      assert {:error, %Ecto.Changeset{}} = Objects.update_character_object(character_object, @invalid_attrs)
+      assert character_object == Objects.get_character_object!(character_object.id)
+    end
+
+    test "delete_character_object/1 deletes the character_object" do
+      character_object = character_object_fixture()
+      assert {:ok, %CharacterObject{}} = Objects.delete_character_object(character_object)
+      assert_raise Ecto.NoResultsError, fn -> Objects.get_character_object!(character_object.id) end
+    end
+
+    test "change_character_object/1 returns a character_object changeset" do
+      character_object = character_object_fixture()
+      assert %Ecto.Changeset{} = Objects.change_character_object(character_object)
+    end
+  end
 end
