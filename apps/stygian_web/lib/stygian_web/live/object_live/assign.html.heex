@@ -1,0 +1,13 @@
+<.h1>Assegnazione oggetto</.h1>
+
+<.simple_form for={@form} id="assign_object" phx-submit="save" phx-change="validate">
+  <.character_selection field={@form[:character_id]} label="Personaggio" characters={@characters} />
+
+  <.object_selection field={@form[:object_id]} label="Oggetto" objects={@objects} />
+
+  <.input type="number" field={@form[:usages]} label="Utilizzi" phx-debounce="blur" />
+
+  <.input type="number" field={@form[:quantity]} label="Quantità" phx-debounce="blur" />
+
+  <.button type="submit">Assegna</.button>
+</.simple_form>

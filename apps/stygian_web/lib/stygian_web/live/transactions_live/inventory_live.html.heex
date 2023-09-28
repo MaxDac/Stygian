@@ -1,0 +1,18 @@
+<.h1>Inventario</.h1>
+
+<.async_result :let={inventory} assign={@inventory}>
+  <:loading><.spinner /></:loading>
+  <:failed :let={_reason}>Errore nel caricare l'inventario .</:failed>
+
+  <.table
+    id="objects"
+    rows={inventory}
+  >
+    <:col :let={%{object: object}} label="Name"><%= object.name %></:col>
+    <:col :let={%{object: object}} label="Description"><%= object.description %></:col>
+    <:col :let={%{object: object}} label="Image url">
+      <img alt={object.name} aria-label={object.name} src={object.image_url} class="max-w-[150px] h-auto" />
+    </:col>
+    <:col :let={%{object: object}} label="Usages"><%= object.usages %></:col>
+  </.table>
+</.async_result>

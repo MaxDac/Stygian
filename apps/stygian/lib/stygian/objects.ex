@@ -221,4 +221,15 @@ defmodule Stygian.Objects do
   def change_character_object(%CharacterObject{} = character_object, attrs \\ %{}) do
     CharacterObject.changeset(character_object, attrs)
   end
+
+  @doc """
+  Returns the list of the character objects.
+  """
+  def list_character_objects(character_id) do
+    CharacterObject
+    |> from()
+    |> where([co], co.character_id == ^character_id)
+    |> preload(:object)
+    |> Repo.all()
+  end
 end

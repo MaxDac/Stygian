@@ -168,5 +168,27 @@ defmodule Stygian.ObjectsTest do
       assert ^object_id = first.object_id
       assert 42 == first.usages
     end
+
+    test "list_character_objects/1 returns all the character objects" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id_1} = object_fixture()
+      %{id: object_id_2} = object_fixture()
+
+      character_object_fixture(%{character_id: character_id, object_id: object_id_1})
+      character_object_fixture(%{character_id: character_id, object_id: object_id_2})
+
+      inventory = Objects.list_character_objects(character_id)
+
+      assert 2 == Enum.count(inventory)
+
+      [first] = Enum.filter(inventory, &(&1.object.id == object_id_1))
+      [second] = Enum.filter(inventory, &(&1.object.id == object_id_2))
+
+      assert ^character_id = first.character_id
+      assert ^character_id = second.character_id
+
+      assert ^object_id_1 = first.object.id
+      assert ^object_id_2 = second.object.id
+    end
   end
 end
