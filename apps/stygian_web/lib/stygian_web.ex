@@ -93,6 +93,8 @@ defmodule StygianWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import StygianWeb.CoreComponents
+      # Selection component for app entities
+      import StygianWeb.EntitiesSelectors
       import StygianWeb.Gettext
 
       # Shortcut for generating JS commands

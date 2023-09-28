@@ -152,6 +152,30 @@ defmodule Stygian.Objects do
   end
 
   @doc """
+  Creates more than one connection between a character and an object.
+  """
+  def create_character_objects(attrs \\ %{})
+
+  def create_character_objects(%{"quantity" => quantity} = attrs) do
+    quantity = String.to_integer(quantity)
+
+    1..quantity
+    |> Enum.reduce(
+      Ecto.Multi.new(),
+      fn index, transaction ->
+        Ecto.Multi.insert(
+          transaction,
+          "character_object_#{index}",
+          CharacterObject.changeset(%CharacterObject{}, attrs)
+        )
+      end
+    )
+    |> Repo.transaction()
+  end
+
+  def create_character_objects(attrs), do: create_character_object(attrs)
+
+  @doc """
   Updates a character_object.
 
   ## Examples

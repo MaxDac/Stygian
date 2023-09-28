@@ -102,7 +102,8 @@ defmodule Stygian.ObjectsTest do
         usages: 42
       }
 
-      assert {:ok, %CharacterObject{} = character_object} = Objects.create_character_object(valid_attrs)
+      assert {:ok, %CharacterObject{} = character_object} =
+               Objects.create_character_object(valid_attrs)
 
       assert ^character_id = character_object.character_id
       assert ^object_id = character_object.object_id
@@ -117,25 +118,55 @@ defmodule Stygian.ObjectsTest do
       character_object = character_object_fixture()
       update_attrs = %{usages: 43}
 
-      assert {:ok, %CharacterObject{} = character_object} = Objects.update_character_object(character_object, update_attrs)
+      assert {:ok, %CharacterObject{} = character_object} =
+               Objects.update_character_object(character_object, update_attrs)
+
       assert character_object.usages == 43
     end
 
     test "update_character_object/2 with invalid data returns error changeset" do
       character_object = character_object_fixture()
-      assert {:error, %Ecto.Changeset{}} = Objects.update_character_object(character_object, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Objects.update_character_object(character_object, @invalid_attrs)
+
       assert character_object == Objects.get_character_object!(character_object.id)
     end
 
     test "delete_character_object/1 deletes the character_object" do
       character_object = character_object_fixture()
       assert {:ok, %CharacterObject{}} = Objects.delete_character_object(character_object)
-      assert_raise Ecto.NoResultsError, fn -> Objects.get_character_object!(character_object.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Objects.get_character_object!(character_object.id)
+      end
     end
 
     test "change_character_object/1 returns a character_object changeset" do
       character_object = character_object_fixture()
       assert %Ecto.Changeset{} = Objects.change_character_object(character_object)
+    end
+
+    test "create_character_objects/1 adds more than one object to the character inventory" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id} = object_fixture()
+
+      attrs = %{
+        "character_id" => character_id,
+        "object_id" => object_id,
+        "usages" => 42,
+        "quantity" => 2
+      }
+
+      assert {:ok, _} = Objects.create_character_objects(attrs)
+
+      [first | _] = character_object = Objects.list_characters_rel_objects()
+
+      assert 2 = Enum.count(character_object)
+
+      assert ^character_id = first.character_id
+      assert ^object_id = first.object_id
+      assert 42 == first.usages
     end
   end
 end
