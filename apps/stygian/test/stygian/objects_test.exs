@@ -190,5 +190,9 @@ defmodule Stygian.ObjectsTest do
       assert ^object_id_1 = first.object.id
       assert ^object_id_2 = second.object.id
     end
+    
+    test "give_object/2 correctly transfers ownership to another character" do
+      # TODO
+    end
   end
 end

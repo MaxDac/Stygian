@@ -49,3 +49,18 @@
     </:action>
   </.table>
 </.async_result>
+
+<.modal
+  :if={@live_action in [:give]}
+  id="give-modal"
+  show
+  on_cancel={JS.patch(~p"/inventory")}
+>
+  <.live_component
+    module={StygianWeb.TransactionsLive.InventoryGiveFormLive}
+    id={@character_object.id || :new}
+    action={@live_action}
+    character_object={@character_object}
+    patch={~p"/inventory"}
+  />
+</.modal>

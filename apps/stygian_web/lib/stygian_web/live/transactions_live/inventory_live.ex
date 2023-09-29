@@ -22,9 +22,12 @@ defmodule StygianWeb.TransactionsLive.InventoryLive do
   end
 
   @impl true
-  def handle_params(params, _uri, %{assigns: %{live_action: :give}} = socket) do
-    IO.inspect(params, label: "give")
-    {:noreply, socket}
+  def handle_params(%{"id" => character_object_id}, _uri, %{assigns: %{live_action: :give}} = socket) do
+    character_object = Objects.get_character_object!(character_object_id)
+
+    {:noreply,
+     socket
+     |> assign(:character_object, character_object)}
   end
 
   @impl true
