@@ -547,9 +547,9 @@ defmodule StygianWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0 rounded-lg">
       <table class="w-full">
-        <thead class="text-ls text-center text-zinc-900 bg-brand-inactive">
+        <thead class="text-ls text-zinc-900 bg-brand-inactive text-left">
           <tr>
-            <th :for={col <- @col} class="pt-4 font-typewriter"><%= col[:label] %></th>
+            <th :for={col <- @col} class="pt-4 pl-1 font-typewriter"><%= col[:label] %></th>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>
         </thead>
@@ -564,8 +564,7 @@ defmodule StygianWeb.CoreComponents do
               phx-click={@row_click && @row_click.(row)}
               class="relative p-0"
             >
-              <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 sm:rounded-l-xl" />
+              <div class="block py-4 pr-6 pl-1">
                 <span class={["relative", i == 0 && "font-semibold text-brand"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>

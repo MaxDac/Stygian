@@ -8,11 +8,44 @@
     id="objects"
     rows={inventory}
   >
-    <:col :let={%{object: object}} label="Name"><%= object.name %></:col>
-    <:col :let={%{object: object}} label="Description"><%= object.description %></:col>
-    <:col :let={%{object: object}} label="Image url">
+    <:col :let={%{object: object}} label="Nome"><%= object.name %></:col>
+    <:col :let={%{object: object}} label="Descrizione">
+      <span class="max-w-[150px] inline-block">
+        <%= object.description %>
+      </span>
+    </:col>
+    <:col :let={%{object: object}} label="Immagine">
       <img alt={object.name} aria-label={object.name} src={object.image_url} class="max-w-[150px] h-auto" />
     </:col>
-    <:col :let={%{object: object}} label="Usages"><%= object.usages %></:col>
+    <:col :let={%{object: object}} label="Utilizzi">
+      <span class="text-lg">
+        <%= object.usages %>
+      </span>
+    </:col>
+    <:action :let={%{id: id}}>
+      <.link
+        patch={~p"/inventory/#{id}/use"}
+        class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-l-lg text-sm p-2 border border-transparent border-r-zinc-900"
+      >
+        Usa
+      </.link>
+    </:action>
+    <:action :let={%{id: id}}>
+      <.link
+        patch={~p"/inventory/#{id}/give"}
+        class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent"
+      >
+        Cedi
+      </.link>
+    </:action>
+    <:action :let={%{id: id}}>
+      <.link
+        phx-click={JS.push("delete", value: %{id: id}) |> hide("##{id}")}
+        data-confirm="Sei sicuro di voler buttare quest'oggetto?"
+        class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-r-lg text-sm p-2 border border-transparent border-l-zinc-900"
+      >
+        Getta
+      </.link>
+    </:action>
   </.table>
 </.async_result>

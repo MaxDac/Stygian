@@ -150,6 +150,9 @@ defmodule StygianWeb.Router do
       on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
       live "/transactions", TransactionsLive, :index
       live "/inventory", InventoryLive, :index
+      live "/inventory/:id/use", InventoryLive, :use
+      live "/inventory/:id/give", InventoryLive, :give
+      live "/inventory/:id/throw", InventoryLive, :delete
     end
   end
 
