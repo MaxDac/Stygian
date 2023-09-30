@@ -10,7 +10,7 @@ defmodule Stygian.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Stygian", "postmaster@stygian.eu"})
+      |> from({"Stygian", "postmaster@stygian-gdr.it"})
       |> subject(subject)
       |> text_body(body)
 
