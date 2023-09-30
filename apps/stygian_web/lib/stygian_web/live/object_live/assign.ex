@@ -21,7 +21,7 @@ defmodule StygianWeb.ObjectLive.Assign do
   end
 
   @impl true
-  def handle_event("validate", %{"character_object" => character_object_params} = params, socket) do
+  def handle_event("validate", %{"character_object" => character_object_params}, socket) do
     {character_object_params, socket} =
       character_object_params
       |> reassign_usages(socket)
@@ -85,7 +85,7 @@ defmodule StygianWeb.ObjectLive.Assign do
 
   defp reassign_usages(
          %{"object_id" => object_id} = params,
-         %{assigns: %{objects: %AsyncResult{result: objects} = result}} = socket
+         %{assigns: %{objects: %AsyncResult{result: objects}}} = socket
        )
        when is_binary(object_id) do
     case object_id != "" && Enum.filter(objects, &(&1.id == String.to_integer(object_id))) do

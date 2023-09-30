@@ -4,10 +4,7 @@
   <:loading><.spinner /></:loading>
   <:failed :let={_reason}>Errore nel caricare l'inventario .</:failed>
 
-  <.table
-    id="objects"
-    rows={inventory}
-  >
+  <.table id="objects" rows={inventory}>
     <:col :let={%{object: object}} label="Nome"><%= object.name %></:col>
     <:col :let={%{object: object}} label="Descrizione">
       <span class="max-w-[150px] inline-block">
@@ -15,7 +12,12 @@
       </span>
     </:col>
     <:col :let={%{object: object}} label="Immagine">
-      <img alt={object.name} aria-label={object.name} src={object.image_url} class="max-w-[150px] h-auto" />
+      <img
+        alt={object.name}
+        aria-label={object.name}
+        src={object.image_url}
+        class="max-w-[150px] h-auto"
+      />
     </:col>
     <:col :let={%{object: object}} label="Utilizzi">
       <span class="text-lg">
@@ -50,12 +52,7 @@
   </.table>
 </.async_result>
 
-<.modal
-  :if={@live_action in [:give]}
-  id="give-modal"
-  show
-  on_cancel={JS.patch(~p"/inventory")}
->
+<.modal :if={@live_action in [:give]} id="give-modal" show on_cancel={JS.patch(~p"/inventory")}>
   <.live_component
     module={StygianWeb.TransactionsLive.InventoryGiveFormLive}
     id={@character_object.id || :new}

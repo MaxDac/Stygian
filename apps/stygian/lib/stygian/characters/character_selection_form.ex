@@ -9,7 +9,7 @@ defmodule Stygian.Characters.CharacterSelectionForm do
 
   alias Stygian.Characters.CharacterSelectionForm
 
-  embedded_schema do 
+  embedded_schema do
     field :character_id, :id
   end
 

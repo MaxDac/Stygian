@@ -4,7 +4,7 @@ defmodule Stygian.Objects do
   """
 
   import Ecto.Query, warn: false
-  alias Inspect.Stygian
+
   alias Stygian.Repo
 
   alias Stygian.Characters
@@ -133,10 +133,11 @@ defmodule Stygian.Objects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_character_object!(id), do: 
-    CharacterObject
-    |> preload(:object)
-    |> Repo.get!(id)
+  def get_character_object!(id),
+    do:
+      CharacterObject
+      |> preload(:object)
+      |> Repo.get!(id)
 
   @doc """
   Creates a character_object.
@@ -241,10 +242,14 @@ defmodule Stygian.Objects do
   @doc """
   Changes the ownership of an object from one character to the other.
   """
-  @spec give_object(character_object :: %CharacterObject{}, receiver_character_id :: non_neg_integer()) :: {:ok, %CharacterObject{}} | {:error, %Ecto.Changeset{}}
+  @spec give_object(
+          character_object :: %CharacterObject{},
+          receiver_character_id :: non_neg_integer()
+        ) :: {:ok, %CharacterObject{}} | {:error, %Ecto.Changeset{}}
   def give_object(character_object, receiver_character_id) do
-    if Characters.get_character(receiver_character_id) do
-      nil -> {:error, %Ecto.Changeset{}}
+    case Characters.get_character(receiver_character_id) do
+      nil ->
+        {:error, %Ecto.Changeset{}}
 
       _ ->
         character_object

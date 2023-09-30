@@ -190,9 +190,34 @@ defmodule Stygian.ObjectsTest do
       assert ^object_id_1 = first.object.id
       assert ^object_id_2 = second.object.id
     end
-    
+
     test "give_object/2 correctly transfers ownership to another character" do
-      # TODO
+      %{id: character_id_1} = character_fixture()
+      %{id: character_id_2} = character_fixture(%{name: "another character"})
+      %{id: object_id} = object_fixture()
+
+      character_object =
+        character_object_fixture(%{character_id: character_id_1, object_id: object_id})
+
+      assert {:ok, _} = Objects.give_object(character_object, character_id_2)
+
+      assert 0 == Enum.count(Objects.list_character_objects(character_id_1))
+      assert 1 == Enum.count(Objects.list_character_objects(character_id_2))
+
+      [first] = Objects.list_character_objects(character_id_2)
+
+      assert first.character_id == character_id_2
+      assert first.object_id == object_id
+    end
+
+    test "give_object/2 returns an error when the receiver character does not exist" do
+      %{id: character_id_1} = character_fixture()
+      %{id: object_id} = object_fixture()
+
+      character_object =
+        character_object_fixture(%{character_id: character_id_1, object_id: object_id})
+
+      assert {:error, _} = Objects.give_object(character_object, 42)
     end
   end
 end
