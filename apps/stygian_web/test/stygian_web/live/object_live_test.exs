@@ -48,8 +48,8 @@ defmodule StygianWeb.ObjectLiveTest do
         |> log_in_user(user)
         |> live(~p"/admin/objects")
 
-      assert index_live |> element("a", "New Object") |> render_click() =~
-               "New Object"
+      assert index_live |> element("a", "Nuovo Oggetto") |> render_click() =~
+               "Nuovo Oggetto"
 
       assert_patch(index_live, ~p"/admin/objects/new")
 

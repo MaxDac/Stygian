@@ -89,7 +89,9 @@ defmodule Stygian.ObjectsTest do
 
     test "get_character_object!/1 returns the character_object with given id" do
       character_object = character_object_fixture()
-      assert Objects.get_character_object!(character_object.id) == character_object
+
+      assert Map.delete(Objects.get_character_object!(character_object.id), :object) ==
+               Map.delete(character_object, :object)
     end
 
     test "create_character_object/1 with valid data creates a character_object" do
@@ -130,7 +132,8 @@ defmodule Stygian.ObjectsTest do
       assert {:error, %Ecto.Changeset{}} =
                Objects.update_character_object(character_object, @invalid_attrs)
 
-      assert character_object == Objects.get_character_object!(character_object.id)
+      assert Map.delete(character_object, :object) ==
+               Map.delete(Objects.get_character_object!(character_object.id), :object)
     end
 
     test "delete_character_object/1 deletes the character_object" do
@@ -154,8 +157,8 @@ defmodule Stygian.ObjectsTest do
       attrs = %{
         "character_id" => character_id,
         "object_id" => object_id,
-        "usages" => 42,
-        "quantity" => 2
+        "usages" => "42",
+        "quantity" => "2"
       }
 
       assert {:ok, _} = Objects.create_character_objects(attrs)
@@ -201,7 +204,7 @@ defmodule Stygian.ObjectsTest do
 
       assert {:ok, _} = Objects.give_object(character_object, character_id_2)
 
-      assert 0 == Enum.count(Objects.list_character_objects(character_id_1))
+      assert Enum.empty?(Objects.list_character_objects(character_id_1))
       assert 1 == Enum.count(Objects.list_character_objects(character_id_2))
 
       [first] = Objects.list_character_objects(character_id_2)

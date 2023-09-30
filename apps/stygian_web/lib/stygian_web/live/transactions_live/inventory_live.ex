@@ -16,8 +16,7 @@ defmodule StygianWeb.TransactionsLive.InventoryLive do
   end
 
   @impl true
-  def handle_params(params, _uri, %{assigns: %{live_action: :use}} = socket) do
-    IO.inspect(params, label: "use")
+  def handle_params(_params, _uri, %{assigns: %{live_action: :use}} = socket) do
     {:noreply, socket}
   end
 

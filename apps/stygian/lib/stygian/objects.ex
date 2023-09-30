@@ -8,6 +8,7 @@ defmodule Stygian.Objects do
   alias Stygian.Repo
 
   alias Stygian.Characters
+  alias Stygian.Objects.CharacterObject
   alias Stygian.Objects.Object
 
   @doc """
@@ -243,9 +244,9 @@ defmodule Stygian.Objects do
   Changes the ownership of an object from one character to the other.
   """
   @spec give_object(
-          character_object :: %CharacterObject{},
+          character_object :: CharacterObject.t(),
           receiver_character_id :: non_neg_integer()
-        ) :: {:ok, %CharacterObject{}} | {:error, %Ecto.Changeset{}}
+        ) :: {:ok, CharacterObject.t()} | {:error, Ecto.Changeset.t()}
   def give_object(character_object, receiver_character_id) do
     case Characters.get_character(receiver_character_id) do
       nil ->
