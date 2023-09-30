@@ -70,7 +70,7 @@ defmodule SkillHelpers do
   def add_skill_type_to_skill(skill, skill_type) do
     case not Skills.skill_has_type?(skill, skill_type) &&
            Skills.add_skill_type_to_skill(skill, skill_type) do
-      {:ok, skill} -> true
+      {:ok, _} -> true
       false -> false
     end
   end
