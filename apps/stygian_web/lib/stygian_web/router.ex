@@ -143,12 +143,16 @@ defmodule StygianWeb.Router do
     end
   end
 
-  scope "/transactions", StygianWeb.TransactionsLive do
+  scope "/", StygianWeb.TransactionsLive do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :transactions,
       on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
-      live "/", TransactionsLive, :index
+      live "/transactions", TransactionsLive, :index
+      live "/inventory", InventoryLive, :index
+      live "/inventory/:id/use", InventoryLive, :use
+      live "/inventory/:id/give", InventoryLive, :give
+      live "/inventory/:id/throw", InventoryLive, :delete
     end
   end
 
@@ -171,6 +175,15 @@ defmodule StygianWeb.Router do
       live "/", AdminLive.AdminDashboardLive, :index
       live "/npcs", AdminLive.CharacterNpcDashboardLive, :index
       live "/npc/create", AdminLive.CharacterNpcCreationLive, :create
+
+      live "/objects/assign", ObjectLive.Assign, :index
+
+      live "/objects", ObjectLive.Index, :index
+      live "/objects/new", ObjectLive.Index, :new
+      live "/objects/:id/edit", ObjectLive.Index, :edit
+
+      live "/objects/:id", ObjectLive.Show, :show
+      live "/objects/:id/show/edit", ObjectLive.Show, :edit
     end
   end
 end

@@ -42,7 +42,7 @@ defmodule Stygian.CharactersTest do
       npc = character_fixture(%{name: "Some NPC character", npc: true})
       character_fixture(%{name: "Some non NPC character"})
 
-      assert [npc] = Characters.list_npcs()
+      assert [^npc] = Characters.list_npcs()
     end
 
     test "get_character!/1 returns the character with given id" do

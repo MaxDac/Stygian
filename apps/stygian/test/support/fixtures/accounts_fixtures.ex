@@ -20,7 +20,7 @@ defmodule Stygian.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> Stygian.Accounts.register_user()
+      |> Stygian.Accounts.register_test_user()
 
     user
   end

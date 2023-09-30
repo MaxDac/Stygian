@@ -1,0 +1,66 @@
+<.header>
+  Listing Objects
+  <:actions>
+    <.link patch={~p"/admin/objects/new"}>
+      <.button>Nuovo Oggetto</.button>
+    </.link>
+  </:actions>
+
+  <:actions>
+    <.link patch={~p"/admin/objects/assign"}>
+      <.button>Assegna Oggetto</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="objects"
+  rows={@streams.objects}
+  row_click={fn {_id, object} -> JS.navigate(~p"/admin/objects/#{object}") end}
+>
+  <:col :let={{_id, object}} label="Name"><%= object.name %></:col>
+  <:col :let={{_id, object}} label="Description"><%= object.description %></:col>
+  <:col :let={{_id, object}} label="Image url"><%= object.image_url %></:col>
+  <:col :let={{_id, object}} label="Usages"><%= object.usages %></:col>
+  <:action :let={{_id, object}}>
+    <.link
+      patch={~p"/admin/objects/#{object}"}
+      class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-l-lg text-sm p-2 border border-transparent border-r-zinc-900"
+    >
+      Show
+    </.link>
+  </:action>
+  <:action :let={{_id, object}}>
+    <.link
+      patch={~p"/admin/objects/#{object}/edit"}
+      class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent"
+    >
+      Edit
+    </.link>
+  </:action>
+  <:action :let={{id, object}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: object.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+      class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-r-lg text-sm p-2 border border-transparent border-l-zinc-900"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="object-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/objects")}
+>
+  <.live_component
+    module={StygianWeb.ObjectLive.FormComponent}
+    id={@object.id || :new}
+    title={@page_title}
+    action={@live_action}
+    object={@object}
+    patch={~p"/admin/objects"}
+  />
+</.modal>
