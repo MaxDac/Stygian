@@ -388,5 +388,32 @@ defmodule Stygian.CharactersTest do
       user = user_fixture()
       assert Characters.get_user_character?(user) == nil
     end
+
+    test "assign_experience_points/2 correctly updates the character experience" do
+      %{id: character_id} = character_fixture_complete(%{experience: 0})
+
+      assert {:ok, _} =
+               Characters.assign_experience_points(character_id, %{"experience" => "3"})
+
+      assert %{experience: 3} = Characters.get_character!(character_id)
+    end
+
+    test "assign_experience_points/2 correctly reduces the character experience" do
+      %{id: character_id} = character_fixture_complete(%{experience: 3})
+
+      assert {:ok, _} =
+               Characters.assign_experience_points(character_id, %{"experience" => "-2"})
+
+      assert %{experience: 1} = Characters.get_character!(character_id)
+    end
+
+    test "assign_experience_points/2 does not reduce the character experience when under 0" do
+      %{id: character_id} = character_fixture_complete(%{experience: 1})
+
+      assert {:error, changeset} =
+               Characters.assign_experience_points(character_id, %{"experience" => "-2"})
+
+      assert %{errors: [experience: {"Non è possibile ridurre l'esperienza ad un valore minore di 0.", _}]} = changeset
+    end
   end
 end

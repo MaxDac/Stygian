@@ -186,6 +186,8 @@ defmodule StygianWeb.Router do
       live "/objects/:id/show/edit", ObjectLive.Show, :edit
 
       live "/transactions", AdminLive.TransactionsListLive, :index
+
+      live "/character", AdminLive.CharacterSheetEditLive, :edit
     end
   end
 end

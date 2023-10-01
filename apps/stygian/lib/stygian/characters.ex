@@ -732,4 +732,27 @@ defmodule Stygian.Characters do
   def change_character_skill(%CharacterSkill{} = character_skill, attrs \\ %{}) do
     CharacterSkill.changeset(character_skill, attrs)
   end
+  
+  @doc """
+  Assigns experience points to a character.
+  """
+  @spec assign_experience_points(character_id :: non_neg_integer(), attrs :: map()) :: {:ok, Character.t()} | {:error, Changeset.t()}
+  def assign_experience_points(character_id, %{"experience" => experience}) do
+    experience = extract_number(experience)
+    case get_character(character_id) do
+      nil ->
+        {:error, Changeset.add_error(%Changeset{}, :character_id, "Il personaggio non esiste.")}
+
+      %{experience: current_experience} when (current_experience + experience) < 0 ->
+        {:error, Changeset.add_error(%Changeset{}, :experience, "Non è possibile ridurre l'esperienza ad un valore minore di 0.")}
+
+      %{experience: current_experience} = character ->
+        character
+        |> Character.change_experience_changeset(%{"experience" => current_experience + experience})
+        |> Repo.update()
+    end
+  end
+
+  defp extract_number(exp) when is_binary(exp), do: String.to_integer(exp)
+  defp extract_number(exp), do: exp
 end
