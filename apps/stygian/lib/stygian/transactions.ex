@@ -33,8 +33,6 @@ defmodule Stygian.Transactions do
   def list_transactions_complete(map) when map_size(map) == 0, do: []
 
   def list_transactions_complete(filters) do
-    IO.inspect(filters, label: "filtes")
-
     Transaction
     |> from()
     |> apply_character_filter(filters)

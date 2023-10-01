@@ -5,8 +5,8 @@ defmodule Stygian.Objects do
 
   import Ecto.Query, warn: false
 
-  alias Stygian.Transactions
   alias Stygian.Repo
+  alias Stygian.Transactions
 
   alias Stygian.Characters
   alias Stygian.Objects.CharacterObject

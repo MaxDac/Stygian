@@ -65,7 +65,6 @@ defmodule StygianWeb.AdminLive.TransactionsListFilters do
         changeset
       end
       |> to_form()
-      |> IO.inspect(label: "form")
 
     assign(socket, :form, form)
   end
