@@ -20,9 +20,9 @@ defmodule StygianWeb.AdminLive.TransactionsListFilters do
             characters={@characters}
           />
 
-          <.input field={@form[:date_from]} label="Da:" type="date" />
+          <.input field={@form[:date_from]} label="Da:" type="datetime-local" />
 
-          <.input field={@form[:date_to]} label="A:" type="date" />
+          <.input field={@form[:date_to]} label="A:" type="datetime-local" />
         </div>
       </.simple_form>
     </div>
@@ -40,13 +40,10 @@ defmodule StygianWeb.AdminLive.TransactionsListFilters do
 
   @impl true
   def handle_event("apply", %{"admin_list_filters" => params}, socket) do
-    params = adapt_dates(params)
-
     %{changes: changes} =
       changeset =
       %AdminListFilters{}
       |> AdminListFilters.changeset(params)
-      |> IO.inspect(label: "changeset")
 
     if changeset.valid? do
       send(self(), {:apply, changes})
@@ -58,8 +55,17 @@ defmodule StygianWeb.AdminLive.TransactionsListFilters do
 
   defp assign_form(socket, changeset \\ nil) do
     form =
-      if(is_nil(changeset), do: AdminListFilters.changeset(%AdminListFilters{}), else: changeset)
+      if is_nil(changeset) do
+        %AdminListFilters{
+          date_from: NaiveDateTime.utc_now(),
+          date_to: NaiveDateTime.add(NaiveDateTime.utc_now(), -24, :hour)
+        }
+        |> AdminListFilters.changeset()
+      else
+        changeset
+      end
       |> to_form()
+      |> IO.inspect(label: "form")
 
     assign(socket, :form, form)
   end
@@ -72,14 +78,4 @@ defmodule StygianWeb.AdminLive.TransactionsListFilters do
        }}
     end)
   end
-
-  defp adapt_dates(params) do
-    params
-    |> Map.update!("date_from", &add_hour(&1, "00:00:00"))
-    |> Map.update!("date_to", &add_hour(&1, "23:59:59"))
-  end
-
-  defp add_hour("", _), do: ""
-
-  defp add_hour(date, hour), do: "#{date}T#{hour}"
 end

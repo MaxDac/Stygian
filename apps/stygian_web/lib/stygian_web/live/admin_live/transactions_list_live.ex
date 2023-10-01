@@ -15,7 +15,6 @@ defmodule StygianWeb.AdminLive.TransactionsListLive do
 
   @impl true
   def handle_info({:apply, params}, socket) do
-    IO.inspect(params, label: "params")
     {:noreply, stream(socket, :transactions, Transactions.list_transactions_complete(params))}
   end
 end
