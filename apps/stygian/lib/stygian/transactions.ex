@@ -4,9 +4,9 @@ defmodule Stygian.Transactions do
   """
 
   import Ecto.Query, warn: false
-  alias Stygian.Repo
 
   alias Ecto.Changeset
+  alias Stygian.Repo
 
   alias Stygian.Characters
   alias Stygian.Transactions.Transaction
@@ -23,6 +23,37 @@ defmodule Stygian.Transactions do
   def list_transactions do
     Repo.all(Transaction)
   end
+
+  @doc """
+  Returns the list of transactions with all the related data.
+  It will not return any data without filters.
+  """
+  def list_transactions_complete(filters \\ %{})
+
+  def list_transactions_complete(map) when map_size(map) == 0, do: []
+
+  def list_transactions_complete(filters) do
+    Transaction
+    |> from()
+    |> apply_character_filter(filters)
+    |> apply_date_filter(filters)
+    |> preload([:sender, :receiver, character_object: [:object]])
+    |> Repo.all()
+  end
+
+  defp apply_character_filter(query, %{character_id: character_id}) do
+    query
+    |> where([t], t.sender_id == ^character_id or t.receiver_id == ^character_id)
+  end
+
+  defp apply_character_filter(query, _), do: query
+
+  defp apply_date_filter(query, %{date_from: date_from, date_to: date_to}) do
+    query
+    |> where([t], t.inserted_at >= ^date_from and t.inserted_at <= ^date_to)
+  end
+
+  defp apply_date_filter(query, _), do: query
 
   @doc """
   Gets a single transaction.
@@ -154,5 +185,21 @@ defmodule Stygian.Transactions do
   """
   def change_transaction(%Transaction{} = transaction, attrs \\ %{}) do
     Transaction.changeset(transaction, attrs)
+  end
+
+  @doc """
+  Returns an object transaction changeset based on the given attributes. 
+  """
+  def object_transaction_changeset(attrs \\ %{}) do
+    %Transaction{}
+    |> Transaction.object_changeset(attrs)
+  end
+
+  @doc """
+  Creates a new object transaction between two different characters.
+  """
+  def create_object_transaction(attrs \\ %{}) do
+    object_transaction_changeset(attrs)
+    |> Repo.insert()
   end
 end

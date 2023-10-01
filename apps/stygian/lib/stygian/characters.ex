@@ -414,11 +414,12 @@ defmodule Stygian.Characters do
       nil ->
         apply_rest_effect(character)
 
-      rest_timer when rest_timer < limit ->
-        apply_rest_effect(character)
-
-      _ ->
-        {:error, "Non puoi ancora far riposare il personaggio."}
+      rest_timer ->
+        if NaiveDateTime.compare(rest_timer, limit) == :lt do
+          apply_rest_effect(character)
+        else
+          {:error, "Non puoi ancora far riposare il personaggio."}
+        end
     end
   end
 

@@ -10,8 +10,8 @@ defmodule Stygian.TransactionsFixtures do
   Generate a transaction.
   """
   def transaction_fixture(attrs \\ %{}) do
-    sender = character_fixture(%{name: "sender"})
-    receiver = character_fixture(%{name: "receiver"})
+    sender = character_fixture(%{name: "sender#{System.unique_integer()}"})
+    receiver = character_fixture(%{name: "receiver#{System.unique_integer()}"})
 
     {:ok, transaction} =
       attrs

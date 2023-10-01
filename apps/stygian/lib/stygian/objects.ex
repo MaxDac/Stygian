@@ -6,6 +6,7 @@ defmodule Stygian.Objects do
   import Ecto.Query, warn: false
 
   alias Stygian.Repo
+  alias Stygian.Transactions
 
   alias Stygian.Characters
   alias Stygian.Objects.CharacterObject
@@ -253,9 +254,21 @@ defmodule Stygian.Objects do
         {:error, %Ecto.Changeset{}}
 
       _ ->
-        character_object
-        |> CharacterObject.changeset(%{character_id: receiver_character_id})
-        |> Repo.update()
+        character_object_changeset =
+          character_object
+          |> CharacterObject.changeset(%{character_id: receiver_character_id})
+
+        object_transaction_changeset =
+          Transactions.object_transaction_changeset(%{
+            "sender_id" => character_object.character_id,
+            "receiver_id" => receiver_character_id,
+            "character_object_id" => character_object.id
+          })
+
+        Ecto.Multi.new()
+        |> Ecto.Multi.update(:character_object, character_object_changeset)
+        |> Ecto.Multi.insert(:transaction, object_transaction_changeset)
+        |> Repo.transaction()
     end
   end
 end

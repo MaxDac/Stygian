@@ -76,6 +76,7 @@ defmodule Stygian.ObjectsTest do
 
   describe "characters_rel_objects" do
     alias Stygian.Objects.CharacterObject
+    alias Stygian.Transactions
 
     import Stygian.CharactersFixtures
     import Stygian.ObjectsFixtures
@@ -211,6 +212,12 @@ defmodule Stygian.ObjectsTest do
 
       assert first.character_id == character_id_2
       assert first.object_id == object_id
+
+      assert [transaction] = Transactions.list_transactions()
+
+      assert transaction.character_object_id == character_object.id
+      assert transaction.sender_id == character_id_1
+      assert transaction.receiver_id == character_id_2
     end
 
     test "give_object/2 returns an error when the receiver character does not exist" do
