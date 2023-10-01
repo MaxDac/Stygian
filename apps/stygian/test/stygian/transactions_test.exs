@@ -11,12 +11,64 @@ defmodule Stygian.TransactionsTest do
 
     import Stygian.TransactionsFixtures
     import Stygian.CharactersFixtures
+    import Stygian.ObjectsFixtures
 
     @invalid_attrs %{cigs: nil}
 
     test "list_transactions/0 returns all transactions" do
       transaction = transaction_fixture()
       assert Transactions.list_transactions() == [transaction]
+    end
+
+    test "list_transactions_complete/1 returns an empty list when no filters are passed" do
+      transaction_fixture()
+      assert [] = Transactions.list_transactions_complete()
+    end
+
+    test "list_transactions_complete/1 returns the transaction when the character id is specified" do
+      %{sender_id: sender_id, receiver_id: receiver_id} = transaction_fixture()
+
+      assert [sender] =
+               Transactions.list_transactions_complete(%{
+                 character_id: sender_id
+               })
+
+      assert [receiver] =
+               Transactions.list_transactions_complete(%{
+                 character_id: receiver_id
+               })
+
+      assert sender_id == sender.sender.id
+      assert receiver_id == sender.receiver.id
+
+      assert sender_id == receiver.sender.id
+      assert receiver_id == receiver.receiver.id
+    end
+
+    test "list_transactions_complete/1 returns the transaction when the date range is specified" do
+      first_date = NaiveDateTime.utc_now()
+      second_date = NaiveDateTime.add(first_date, -24, :hour)
+      third_date = NaiveDateTime.add(first_date, 24, :hour)
+
+      transaction_fixture(%{inserted_at: third_date})
+
+      assert [_] =
+               Transactions.list_transactions_complete(%{
+                 date_from: first_date,
+                 date_to: third_date
+               })
+
+      assert [_] =
+               Transactions.list_transactions_complete(%{
+                 date_from: second_date,
+                 date_to: third_date
+               })
+
+      assert [] =
+               Transactions.list_transactions_complete(%{
+                 date_from: first_date,
+                 date_to: second_date
+               })
     end
 
     test "get_transaction!/1 returns the transaction with given id" do
@@ -127,6 +179,28 @@ defmodule Stygian.TransactionsTest do
       refute changeset.valid?
       assert %{errors: [receiver_id: {"does not exist", _}]} = changeset
       assert Characters.get_character!(character1.id).cigs == 44
+    end
+
+    test "create_object_transaction/1 creates an object transaction between character" do
+      %{id: character_id_1} = character_fixture(%{name: "character1"})
+      %{id: character_id_2} = character_fixture(%{name: "character2"})
+      %{id: object_id} = object_fixture()
+
+      %{id: character_object_id} =
+        character_object_fixture(%{character_id: character_id_1, object_id: object_id})
+
+      assert {:ok, %{id: transaction_id}} =
+               Transactions.create_object_transaction(%{
+                 "sender_id" => character_id_1,
+                 "receiver_id" => character_id_2,
+                 "character_object_id" => character_object_id
+               })
+
+      transaction = Transactions.get_transaction!(transaction_id)
+
+      assert transaction.sender_id == character_id_1
+      assert transaction.receiver_id == character_id_2
+      assert transaction.character_object_id == character_object_id
     end
   end
 end

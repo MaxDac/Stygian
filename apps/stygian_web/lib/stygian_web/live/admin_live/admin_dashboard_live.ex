@@ -17,6 +17,7 @@ defmodule StygianWeb.AdminLive.AdminDashboardLive do
 
     <div class="w-full flex flex-col items-center">
       <.link class="text-xl font-typewriter" patch={~p"/admin/objects"}>Oggetti</.link>
+      <.link class="text-xl font-typewriter" patch={~p"/admin/transactions"}>Lista transazioni</.link>
     </div>
     """
   end

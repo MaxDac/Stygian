@@ -1,0 +1,14 @@
+<.h1>Lista delle transazioni tra personaggi</.h1>
+
+<div class="w-full text-center font-typewriter">
+  <.link patch={~p"/admin"}>Torna alla dashboard</.link>
+</div>
+
+<.live_component id="transactions-list-filters" module={TransactionsListFilters} />
+
+<.table id="transactions" rows={@streams.transactions}>
+  <:col :let={%{sender: %{name: sender_name}}} label="Name"><%= sender_name %></:col>
+  <:col :let={%{receiver: %{name: receiver_name}}} label="Name"><%= receiver_name %></:col>
+  <:col :let={%{cigs: cigs}} label="Name"><%= cigs %></:col>
+  <:col :let={%{character_object: %{name: object_name}}} label="Name"><%= object_name %></:col>
+</.table>
