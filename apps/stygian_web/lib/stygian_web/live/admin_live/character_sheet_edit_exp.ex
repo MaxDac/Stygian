@@ -5,7 +5,6 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditExp do
 
   use StygianWeb, :live_component
 
-  alias Stygian.Characters
   alias Stygian.Characters.CharacterExpForm
 
   @impl true
@@ -58,8 +57,8 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditExp do
   end
 
   @impl true
-  def handle_event("save", %{"character_exp_form" => %{"character_id" => character_id} = params}, socket) do
-    send_form(socket, params)
+  def handle_event("save", %{"character_exp_form" => params}, socket) do
+    send_form(params)
     {:noreply, assign_form(socket)}
   end
 
@@ -82,7 +81,7 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditExp do
     assign(socket, :form, form)
   end
 
-  defp send_form(socket, params) do
+  defp send_form(params) do
     send(self(), {:update, params})
   end
 end

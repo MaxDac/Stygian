@@ -18,7 +18,6 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditLive do
 
   @impl true
   def handle_info({:update, level, message}, socket) do
-    IO.inspect({:update, level, message}, label: "put info")
     {:noreply,
      socket
      |> assign(level, message)}

@@ -413,7 +413,11 @@ defmodule Stygian.CharactersTest do
       assert {:error, changeset} =
                Characters.assign_experience_points(character_id, %{"experience" => "-2"})
 
-      assert %{errors: [experience: {"Non è possibile ridurre l'esperienza ad un valore minore di 0.", _}]} = changeset
+      assert %{
+               errors: [
+                 experience: {"Non è possibile ridurre l'esperienza ad un valore minore di 0.", _}
+               ]
+             } = changeset
     end
   end
 end
