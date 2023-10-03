@@ -104,4 +104,52 @@ defmodule StygianWeb.EntitiesSelectors do
     </div>
     """
   end
+
+  @doc """
+  Exposes a list of skills.
+  To guarantee maximum performance, the list of skills must be provided in input as an assign.
+  """
+  attr :field, FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :label, :string, default: nil
+  attr :skills, :list, required: true
+
+  def skill_selection(%{skills: %AsyncResult{}} = assigns) do
+    ~H"""
+    <.async_result :let={skills} assign={@skills}>
+      <:loading><.spinner /></:loading>
+      <:failed :let={_reason}>Errore nel caricare gli oggetti.</:failed>
+
+      <.skill_selection skills={skills} field={@field} label={@label} />
+    </.async_result>
+    """
+  end
+
+  def skill_selection(%{skills: skills} = assigns) do
+    options =
+      skills
+      |> Enum.map(&{&1.name, &1.id})
+
+    assigns =
+      assigns
+      |> Map.put(:options, options)
+      |> Map.delete(:skills)
+
+    skill_selection(assigns)
+  end
+
+  def skill_selection(assigns) do
+    ~H"""
+    <div>
+      <.input
+        field={@field}
+        label={@label}
+        type="select"
+        prompt="Seleziona l'oggetto"
+        options={@options}
+      />
+    </div>
+    """
+  end
 end

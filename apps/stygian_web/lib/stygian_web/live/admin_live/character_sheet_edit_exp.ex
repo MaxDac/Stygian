@@ -15,7 +15,7 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditExp do
 
       <.simple_form
         for={@form}
-        id="transactions-list-filters"
+        id="character-exp-form"
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
@@ -82,6 +82,6 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditExp do
   end
 
   defp send_form(params) do
-    send(self(), {:update, params})
+    send(self(), {:update_exp, params})
   end
 end

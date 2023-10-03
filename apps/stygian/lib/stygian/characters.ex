@@ -762,6 +762,36 @@ defmodule Stygian.Characters do
     end
   end
 
+  @spec assign_character_status(character_id :: non_neg_integer(), params :: map()) ::
+          {:ok, Character.t()} | {:error, Changeset.t()}
+  def assign_character_status(character_id, %{"health" => health, "sanity" => sanity}) do
+    {health, sanity} = {extract_number(health), extract_number(sanity)}
+
+    case get_character(character_id) do
+      nil ->
+        {:error, Changeset.add_error(%Changeset{}, :character_id, "Il personaggio non esiste.")}
+
+      %{health: current_health} when current_health < health ->
+        {:error, Changeset.add_error(%Changeset{}, :health, "Il valore specificato è maggiore della salute del personaggio.")}
+
+      %{sanity: current_sanity} when current_sanity < sanity ->
+        {:error, Changeset.add_error(%Changeset{}, :sanity, "Il valore specificato è maggiore della sanità del personaggio.")}
+
+      %{health: current_health, sanity: current_sanity} = character ->
+        {lost_health, lost_sanity} = {
+          current_health - health,
+          current_sanity - sanity
+        }
+
+        character
+        |> Character.change_health_and_sanity_changeset(%{
+          "lost_health" => lost_health,
+          "lost_sanity" => lost_sanity
+        })
+        |> Repo.update()
+    end
+  end
+
   defp extract_number(exp) when is_binary(exp), do: String.to_integer(exp)
   defp extract_number(exp), do: exp
 end

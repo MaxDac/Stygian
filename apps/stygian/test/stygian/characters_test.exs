@@ -419,5 +419,37 @@ defmodule Stygian.CharactersTest do
                ]
              } = changeset
     end
+
+    test "assign_character_status/2 correctly assign the right health and sanity loss to the character" do
+      %{id: character_id} = character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+
+      assert {:ok, _} = Characters.assign_character_status(character_id, %{"health" => 70, "sanity" => 40})
+
+      assert %{health: 100, sanity: 50, lost_health: 30, lost_sanity: 10} = Characters.get_character!(character_id)
+    end
+
+    test "assign_character_status/2 does not assign the health when the specified value is greater than the character's health" do
+      %{id: character_id} = character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+
+      assert {:error, changeset} = Characters.assign_character_status(character_id, %{"health" => 110, "sanity" => 40})
+
+      assert %{
+               errors: [
+                 health: {"Il valore specificato è maggiore della salute del personaggio.", _}
+               ]
+             } = changeset
+    end
+
+    test "assign_character_status/2 does not assign the sanity when the specified value is greater than the character's sanity" do
+      %{id: character_id} = character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+
+      assert {:error, changeset} = Characters.assign_character_status(character_id, %{"health" => 90, "sanity" => 60})
+
+      assert %{
+               errors: [
+                 sanity: {"Il valore specificato è maggiore della sanità del personaggio.", _}
+               ]
+             } = changeset
+    end
   end
 end
