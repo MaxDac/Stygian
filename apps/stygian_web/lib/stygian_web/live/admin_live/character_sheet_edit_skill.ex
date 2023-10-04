@@ -1,4 +1,4 @@
-defmodule StygianWeb.AdminLive.CharacterSheetEditAttribute do
+defmodule StygianWeb.AdminLive.CharacterSheetEditSkill do
   @moduledoc """
   A form that changes a character attribute.
   """
