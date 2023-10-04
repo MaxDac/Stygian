@@ -1,6 +1,12 @@
 defmodule Stygian.Characters.CharacterStatusForm do
+  @moduledoc """
+  Embedded schema to handle the character status form. 
+  """
+
   use Ecto.Schema
+
   import Ecto.Changeset
+
   alias Stygian.Characters.CharacterStatusForm
 
   @type t() :: %__MODULE__{

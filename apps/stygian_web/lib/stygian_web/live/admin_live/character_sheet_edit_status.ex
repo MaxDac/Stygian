@@ -5,8 +5,8 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
 
   use StygianWeb, :live_component
 
-  alias Stygian.Characters.CharacterStatusForm
   alias Stygian.Characters
+  alias Stygian.Characters.CharacterStatusForm
 
   @impl true
   def render(assigns) do

@@ -570,7 +570,7 @@ defmodule Stygian.Characters do
   @spec update_character_skill_form(attrs :: map()) ::
           {:ok, CharacterSkill.t()} | {:error, String.t()} | {:error, Changeset.t()}
   def update_character_skill_form(%{"new_value" => new_value} = attrs) do
-    with %{valid?: true, changes: %{character_id: character_id, skill_id: skill_id}} <- 
+    with %{valid?: true, changes: %{character_id: character_id, skill_id: skill_id}} <-
            CharacterSkillForm.changeset(%CharacterSkillForm{}, attrs),
          character_skill <- get_character_skill(character_id, skill_id),
          attrs <- Map.put(attrs, "value", new_value) do

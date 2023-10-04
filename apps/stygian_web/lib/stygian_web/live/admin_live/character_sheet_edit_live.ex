@@ -8,9 +8,9 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditLive do
   alias Stygian.Characters
   alias Stygian.Skills
 
+  alias StygianWeb.AdminLive.CharacterSheetEditAttribute
   alias StygianWeb.AdminLive.CharacterSheetEditExp
   alias StygianWeb.AdminLive.CharacterSheetEditStatus
-  alias StygianWeb.AdminLive.CharacterSheetEditAttribute
 
   @impl true
   def mount(_, _, socket) do

@@ -358,14 +358,15 @@ defmodule Stygian.CharactersTest do
     end
 
     test "update_character_skill/1 correctly updates the character skill" do
-      %{character_id: character_id, skill_id: skill_id, value: original_value} = character_skill_fixture()
+      %{character_id: character_id, skill_id: skill_id, value: original_value} =
+        character_skill_fixture()
 
       new_value = original_value + 1
 
       update_attrs = %{
         "character_id" => character_id,
         "skill_id" => skill_id,
-        "new_value" => new_value,
+        "new_value" => new_value
       }
 
       assert {:ok, %CharacterSkill{} = character_skill} =
