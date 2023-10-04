@@ -108,6 +108,18 @@ defmodule Stygian.Characters.Character do
     |> validate_required([:cigs])
   end
 
+  def change_experience_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:experience])
+    |> validate_required([:experience])
+  end
+
+  def change_health_and_sanity_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:lost_health, :lost_sanity])
+    |> validate_required([:lost_health, :lost_sanity])
+  end
+
   @doc false
   def changeset(character, attrs) do
     character

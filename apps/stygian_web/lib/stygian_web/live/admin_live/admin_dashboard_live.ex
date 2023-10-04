@@ -15,9 +15,10 @@ defmodule StygianWeb.AdminLive.AdminDashboardLive do
     ~H"""
     <.h1>Admin Dashboard</.h1>
 
-    <div class="w-full flex flex-col items-center">
+    <div class="w-full flex flex-col space-y-5 items-center">
       <.link class="text-xl font-typewriter" patch={~p"/admin/objects"}>Oggetti</.link>
       <.link class="text-xl font-typewriter" patch={~p"/admin/transactions"}>Lista transazioni</.link>
+      <.link class="text-xl font-typewriter" patch={~p"/admin/character"}>Edita personaggio</.link>
     </div>
     """
   end

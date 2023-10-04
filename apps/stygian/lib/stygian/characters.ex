@@ -13,6 +13,7 @@ defmodule Stygian.Characters do
   alias Stygian.Accounts.User
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
+  alias Stygian.Characters.CharacterSkillForm
   alias Stygian.Skills.Skill
 
   @max_attribute_points 9
@@ -491,6 +492,18 @@ defmodule Stygian.Characters do
   def get_character_skill!(id), do: Repo.get!(CharacterSkill, id)
 
   @doc """
+  Returns the character skill if existent, null otherwise.
+  """
+  @spec get_character_skill(character_id :: non_neg_integer(), skill_id :: non_neg_integer()) ::
+          CharacterSkill.t() | nil
+  def get_character_skill(character_id, skill_id) do
+    CharacterSkill
+    |> from()
+    |> where([cs], cs.character_id == ^character_id and cs.skill_id == ^skill_id)
+    |> Repo.one()
+  end
+
+  @doc """
   Gets a character skill and its value based on the skill name.
   This function is needed at creation, for instance, to compute the automatic character values.
   """
@@ -548,6 +561,24 @@ defmodule Stygian.Characters do
     character_skill
     |> CharacterSkill.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Updates a character skill from the character form data to change the skill, 
+  the CharacterSkillForm struct.
+  """
+  @spec update_character_skill_form(attrs :: map()) ::
+          {:ok, CharacterSkill.t()} | {:error, String.t()} | {:error, Changeset.t()}
+  def update_character_skill_form(%{"new_value" => new_value} = attrs) do
+    with %{valid?: true, changes: %{character_id: character_id, skill_id: skill_id}} <-
+           CharacterSkillForm.changeset(%CharacterSkillForm{}, attrs),
+         character_skill <- get_character_skill(character_id, skill_id),
+         attrs <- Map.put(attrs, "value", new_value) do
+      update_character_skill(character_skill, attrs)
+    else
+      _ ->
+        {:error, "Errore nell'aggiornamento della skill."}
+    end
   end
 
   @doc """
@@ -732,4 +763,76 @@ defmodule Stygian.Characters do
   def change_character_skill(%CharacterSkill{} = character_skill, attrs \\ %{}) do
     CharacterSkill.changeset(character_skill, attrs)
   end
+
+  @doc """
+  Assigns experience points to a character.
+  """
+  @spec assign_experience_points(character_id :: non_neg_integer(), attrs :: map()) ::
+          {:ok, Character.t()} | {:error, Changeset.t()}
+  def assign_experience_points(character_id, %{"experience" => experience}) do
+    experience = extract_number(experience)
+
+    case get_character(character_id) do
+      nil ->
+        {:error, Changeset.add_error(%Changeset{}, :character_id, "Il personaggio non esiste.")}
+
+      %{experience: current_experience} when current_experience + experience < 0 ->
+        {:error,
+         Changeset.add_error(
+           %Changeset{},
+           :experience,
+           "Non è possibile ridurre l'esperienza ad un valore minore di 0."
+         )}
+
+      %{experience: current_experience} = character ->
+        character
+        |> Character.change_experience_changeset(%{
+          "experience" => current_experience + experience
+        })
+        |> Repo.update()
+    end
+  end
+
+  @spec assign_character_status(character_id :: non_neg_integer(), params :: map()) ::
+          {:ok, Character.t()} | {:error, Changeset.t()}
+  def assign_character_status(character_id, %{"health" => health, "sanity" => sanity}) do
+    {health, sanity} = {extract_number(health), extract_number(sanity)}
+
+    case get_character(character_id) do
+      nil ->
+        {:error, Changeset.add_error(%Changeset{}, :character_id, "Il personaggio non esiste.")}
+
+      %{health: current_health} when current_health < health ->
+        {:error,
+         Changeset.add_error(
+           %Changeset{},
+           :health,
+           "Il valore specificato è maggiore della salute del personaggio."
+         )}
+
+      %{sanity: current_sanity} when current_sanity < sanity ->
+        {:error,
+         Changeset.add_error(
+           %Changeset{},
+           :sanity,
+           "Il valore specificato è maggiore della sanità del personaggio."
+         )}
+
+      %{health: current_health, sanity: current_sanity} = character ->
+        {lost_health, lost_sanity} = {
+          current_health - health,
+          current_sanity - sanity
+        }
+
+        character
+        |> Character.change_health_and_sanity_changeset(%{
+          "lost_health" => lost_health,
+          "lost_sanity" => lost_sanity
+        })
+        |> Repo.update()
+    end
+  end
+
+  defp extract_number(exp) when is_binary(exp), do: String.to_integer(exp)
+  defp extract_number(exp), do: exp
 end
