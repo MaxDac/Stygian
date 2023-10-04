@@ -69,7 +69,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
   end
 
   defp get_health_percentage(%{health: health, lost_health: lost_health})
-       when is_number(health) and is_number({lost_health}) do
+       when is_number(health) and is_number(lost_health) do
     (health - lost_health) / health * 100
   end
 
