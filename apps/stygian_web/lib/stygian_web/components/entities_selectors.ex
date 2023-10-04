@@ -119,7 +119,7 @@ defmodule StygianWeb.EntitiesSelectors do
     ~H"""
     <.async_result :let={skills} assign={@skills}>
       <:loading><.spinner /></:loading>
-      <:failed :let={_reason}>Errore nel caricare gli oggetti.</:failed>
+      <:failed :let={_reason}>Errore nel caricare gli attributi.</:failed>
 
       <.skill_selection skills={skills} field={@field} label={@label} />
     </.async_result>
@@ -146,7 +146,7 @@ defmodule StygianWeb.EntitiesSelectors do
         field={@field}
         label={@label}
         type="select"
-        prompt="Seleziona l'oggetto"
+        prompt="Seleziona l'attributo"
         options={@options}
       />
     </div>

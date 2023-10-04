@@ -28,12 +28,8 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
             label="Personaggio"
           />
 
-          <.input
-            :if={@health && @lost_health}
-            field={@form[:health]}
-            label="Salute"
-            type="number"
-          /> / <%= @health %>
+          <.input :if={@health && @lost_health} field={@form[:health]} label="Salute" type="number" />
+          / <%= @health %>
 
           <.input
             :if={@sanity && @lost_sanity}
@@ -59,7 +55,11 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
   end
 
   @impl true
-  def handle_event("validate", %{"character_status_form" => %{"character_id" => character_id}}, socket) do
+  def handle_event(
+        "validate",
+        %{"character_status_form" => %{"character_id" => character_id}},
+        socket
+      ) do
     {:noreply,
      socket
      |> assign_character(character_id)}
@@ -87,7 +87,13 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
 
   defp assign_character_status(socket, character \\ %{})
 
-  defp assign_character_status(socket, %{id: character_id, health: health, sanity: sanity, lost_health: lost_health, lost_sanity: lost_sanity}) do
+  defp assign_character_status(socket, %{
+         id: character_id,
+         health: health,
+         sanity: sanity,
+         lost_health: lost_health,
+         lost_sanity: lost_sanity
+       }) do
     socket
     |> assign(:health, health)
     |> assign(:sanity, sanity)
@@ -96,12 +102,18 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
     |> assign_form(%{
       "character_id" => character_id,
       "health" => health - lost_health,
-      "sanity" => sanity - lost_sanity,
+      "sanity" => sanity - lost_sanity
     })
   end
 
   defp assign_character_status(socket, _) do
-    assign_character_status(socket, %{id: nil, health: 0, sanity: 0, lost_health: 0, lost_sanity: 0})
+    assign_character_status(socket, %{
+      id: nil,
+      health: 0,
+      sanity: 0,
+      lost_health: 0,
+      lost_sanity: 0
+    })
   end
 
   defp assign_character(socket, character_id) do

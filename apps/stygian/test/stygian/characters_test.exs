@@ -272,6 +272,17 @@ defmodule Stygian.CharactersTest do
       assert Characters.get_character_skill!(character_skill.id) == character_skill
     end
 
+    test "get_character_skill/2 returns the character_skill when existent" do
+      character_skill = character_skill_fixture()
+
+      found =
+        Characters.get_character_skill(character_skill.character_id, character_skill.skill_id)
+
+      assert character_skill.id == found.id
+      assert character_skill.character_id == found.character_id
+      assert character_skill.skill_id == found.skill_id
+    end
+
     test "get_character_skill_by_skill_name/2 returns the correct skill value for the given character" do
       skill = skill_fixture(%{name: "some skill"})
 
@@ -344,6 +355,23 @@ defmodule Stygian.CharactersTest do
       assert {:ok, _} = Characters.create_npc(valid_character, skills)
       assert [npcs] = Characters.list_npcs()
       assert "some_name" == npcs.name
+    end
+
+    test "update_character_skill/1 correctly updates the character skill" do
+      %{character_id: character_id, skill_id: skill_id, value: original_value} = character_skill_fixture()
+
+      new_value = original_value + 1
+
+      update_attrs = %{
+        "character_id" => character_id,
+        "skill_id" => skill_id,
+        "new_value" => new_value,
+      }
+
+      assert {:ok, %CharacterSkill{} = character_skill} =
+               Characters.update_character_skill_form(update_attrs)
+
+      assert character_skill.value == new_value
     end
 
     test "update_character_skill/2 with valid data updates the character_skill" do
@@ -421,17 +449,22 @@ defmodule Stygian.CharactersTest do
     end
 
     test "assign_character_status/2 correctly assign the right health and sanity loss to the character" do
-      %{id: character_id} = character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+      %{id: character_id} =
+        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
 
-      assert {:ok, _} = Characters.assign_character_status(character_id, %{"health" => 70, "sanity" => 40})
+      assert {:ok, _} =
+               Characters.assign_character_status(character_id, %{"health" => 70, "sanity" => 40})
 
-      assert %{health: 100, sanity: 50, lost_health: 30, lost_sanity: 10} = Characters.get_character!(character_id)
+      assert %{health: 100, sanity: 50, lost_health: 30, lost_sanity: 10} =
+               Characters.get_character!(character_id)
     end
 
     test "assign_character_status/2 does not assign the health when the specified value is greater than the character's health" do
-      %{id: character_id} = character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+      %{id: character_id} =
+        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
 
-      assert {:error, changeset} = Characters.assign_character_status(character_id, %{"health" => 110, "sanity" => 40})
+      assert {:error, changeset} =
+               Characters.assign_character_status(character_id, %{"health" => 110, "sanity" => 40})
 
       assert %{
                errors: [
@@ -441,9 +474,11 @@ defmodule Stygian.CharactersTest do
     end
 
     test "assign_character_status/2 does not assign the sanity when the specified value is greater than the character's sanity" do
-      %{id: character_id} = character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+      %{id: character_id} =
+        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
 
-      assert {:error, changeset} = Characters.assign_character_status(character_id, %{"health" => 90, "sanity" => 60})
+      assert {:error, changeset} =
+               Characters.assign_character_status(character_id, %{"health" => 90, "sanity" => 60})
 
       assert %{
                errors: [
