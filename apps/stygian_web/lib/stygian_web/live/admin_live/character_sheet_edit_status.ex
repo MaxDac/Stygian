@@ -28,15 +28,19 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
             label="Personaggio"
           />
 
-          <.input :if={@health && @lost_health} field={@form[:health]} label="Salute" type="number" />
-          / <%= @health %>
+          <.input
+            :if={@health && @lost_health}
+            field={@form[:health]}
+            label={"Salute (massimo: #{@health})"}
+            type="number"
+          />
 
           <.input
             :if={@sanity && @lost_sanity}
             field={@form[:sanity]}
-            label="Sanità Mentale"
+            label={"Sanità Mentale (massimo: #{@sanity})"}
             type="number"
-          /> / <%= @sanity %>
+          />
         </div>
 
         <.button type="submit">Aggiorna</.button>

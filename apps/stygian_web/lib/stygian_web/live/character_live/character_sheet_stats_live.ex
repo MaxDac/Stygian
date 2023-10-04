@@ -68,13 +68,19 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
     |> assign(:skills, skills)
   end
 
-  defp get_health_percentage(%{health: health, lost_health: lost_health}) do
+  defp get_health_percentage(%{health: health, lost_health: lost_health})
+       when is_number(health) and is_number({lost_health}) do
     (health - lost_health) / health * 100
   end
 
-  defp get_sanity_percentage(%{sanity: sanity, lost_sanity: lost_sanity}) do
+  defp get_health_percentage(_), do: 0
+
+  defp get_sanity_percentage(%{sanity: sanity, lost_sanity: lost_sanity})
+       when is_number(sanity) and is_number(lost_sanity) do
     (sanity - lost_sanity) / sanity * 100
   end
+
+  defp get_sanity_percentage(_), do: 0
 
   defp get_change_sheet_mode_link(current_character, character_id, mode) do
     if is_own_character?(current_character, character_id) do

@@ -858,6 +858,20 @@ defmodule StygianWeb.CoreComponents do
   end
 
   @doc """
+  The default `hr` component.
+  """
+  attr :class, :string,
+    required: false,
+    default: "",
+    doc: "the custom class to apply to the hr tag"
+
+  def hr(assigns) do
+    ~H"""
+    <hr class={"my-1 border-2 border-brand shadow-md shadow-brand-inactive #{@class}"} />
+    """
+  end
+
+  @doc """
   The spinner. This component will be used to represent a loading component.
   """
   attr :class, :string,
