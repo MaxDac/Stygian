@@ -585,6 +585,54 @@ defmodule StygianWeb.CoreComponents do
   end
 
   @doc """
+  The link for the buttons in a table.
+  """
+  attr :navigate, :string,
+    required: false,
+    default: nil,
+    doc: """
+    Navigates from a LiveView to a new LiveView.
+    The browser page is kept, but a new LiveView process is mounted and its content on the page
+    is reloaded. It is only possible to navigate between LiveViews declared under the same router
+    `Phoenix.LiveView.Router.live_session/3`. Otherwise, a full browser redirect is used.
+    """
+
+  attr :patch, :string,
+    required: false,
+    default: nil,
+    doc: """
+    Patches the current LiveView.
+    The `handle_params` callback of the current LiveView will be invoked and the minimum content
+    will be sent over the wire, as any other LiveView diff.
+    """
+
+  attr :rest, :global,
+    include: ~w(download hreflang referrerpolicy rel target type),
+    doc: """
+    Additional HTML attributes added to the `a` tag.
+    """
+
+  attr :class, :string,
+    required: false,
+    default: nil,
+    doc: "The custom class to apply to the link"
+
+  slot :inner_block, required: true
+
+  def table_link(assigns) do
+    ~H"""
+      <.link
+        navigate={@navigate}
+        patch={@patch}
+        class={"focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent #{@class}"}
+        {@rest}
+      >
+        <%= render_slot(@inner_block) %>
+      </.link>
+    """
+  end
+
+  @doc """
   Renders a data list.
 
   ## Examples

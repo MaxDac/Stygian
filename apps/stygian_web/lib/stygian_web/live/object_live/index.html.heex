@@ -27,29 +27,28 @@
   <:col :let={{_id, object}} label="Image url"><%= object.image_url %></:col>
   <:col :let={{_id, object}} label="Usages"><%= object.usages %></:col>
   <:action :let={{_id, object}}>
-    <.link
+    <.table_link
       patch={~p"/admin/objects/#{object}"}
-      class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-l-lg text-sm p-2 border border-transparent border-r-zinc-900"
+      class="brounded-l-lg border-r-zinc-900"
     >
       Show
-    </.link>
+    </.table_link>
   </:action>
   <:action :let={{_id, object}}>
-    <.link
+    <.table_link
       patch={~p"/admin/objects/#{object}/edit"}
-      class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent"
     >
       Edit
-    </.link>
+    </.table_link>
   </:action>
   <:action :let={{id, object}}>
-    <.link
+    <.table_link
       phx-click={JS.push("delete", value: %{id: object.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
-      class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-r-lg text-sm p-2 border border-transparent border-l-zinc-900"
+      class="border-l-zinc-900 rounded-r-lg"
     >
       Delete
-    </.link>
+    </.table_link>
   </:action>
 </.table>
 
