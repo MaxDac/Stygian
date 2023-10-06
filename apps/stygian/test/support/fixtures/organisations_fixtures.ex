@@ -24,21 +24,32 @@ defmodule Stygian.OrganisationsFixtures do
   end
 
   @doc """
-  Generate a charcters_organisations.
+  Generate a characters_organisations.
   """
-  def charcters_organisations_fixture(attrs \\ %{}) do
-    %{id: character_id} = character_fixture()
-    %{id: organisation_id} = organisation_fixture()
-
-    {:ok, charcters_organisations} =
+  def characters_organisations_fixture(attrs \\ %{}) do
+    {:ok, characters_organisations} =
       attrs
+      |> add_character_fixture()
+      |> add_organisation_fixture()
       |> Enum.into(%{
-        character_id: character_id,
-        organisation_id: organisation_id,
         last_salary_withdraw: ~N[2023-10-04 20:46:00]
       })
-      |> Stygian.Organisations.create_charcters_organisations()
+      |> Stygian.Organisations.create_characters_organisations()
 
-    charcters_organisations
+    characters_organisations
+  end
+
+  defp add_character_fixture(%{character_id: _} = attrs), do: attrs
+
+  defp add_character_fixture(attrs) do
+    %{id: character_id} = character_fixture()
+    Map.put(attrs, :character_id, character_id)
+  end
+
+  defp add_organisation_fixture(%{organisation_id: _} = attrs), do: attrs
+
+  defp add_organisation_fixture(attrs) do
+    %{id: organisation_id} = organisation_fixture()
+    Map.put(attrs, :organisation_id, organisation_id)
   end
 end

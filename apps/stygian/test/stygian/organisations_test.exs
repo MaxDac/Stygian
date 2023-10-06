@@ -82,7 +82,7 @@ defmodule Stygian.OrganisationsTest do
   end
 
   describe "characters_rel_organisations" do
-    alias Stygian.Organisations.CharctersOrganisations
+    alias Stygian.Organisations.CharactersOrganisations
 
     import Stygian.OrganisationsFixtures
     import Stygian.CharactersFixtures
@@ -90,15 +90,15 @@ defmodule Stygian.OrganisationsTest do
     @invalid_attrs %{last_salary_withdraw: nil}
 
     test "list_characters_rel_organisations/0 returns all characters_rel_organisations" do
-      charcters_organisations = charcters_organisations_fixture()
-      assert Organisations.list_characters_rel_organisations() == [charcters_organisations]
+      characters_organisations = characters_organisations_fixture()
+      assert Organisations.list_characters_rel_organisations() == [characters_organisations]
     end
 
-    test "get_charcters_organisations!/1 returns the charcters_organisations with given id" do
-      charcters_organisations = charcters_organisations_fixture()
+    test "get_characters_organisations!/1 returns the characters_organisations with given id" do
+      characters_organisations = characters_organisations_fixture()
 
-      assert Organisations.get_charcters_organisations!(charcters_organisations.id) ==
-               charcters_organisations
+      assert Organisations.get_characters_organisations!(characters_organisations.id) ==
+               characters_organisations
     end
 
     test "get_character_organisation/2 returns the character job with the right organisation" do
@@ -106,9 +106,9 @@ defmodule Stygian.OrganisationsTest do
         character_id: character_id,
         organisation_id: organisation_id,
         last_salary_withdraw: last_salary_withdraw
-      } = charcters_organisations_fixture()
+      } = characters_organisations_fixture()
 
-      characters_organisations = Organisations.get_character_organisation(character_id, organisation_id)
+      characters_organisations = Organisations.get_character_organisation(character_id)
 
       assert characters_organisations.character_id == character_id
       assert characters_organisations.organisation_id == organisation_id
@@ -119,13 +119,13 @@ defmodule Stygian.OrganisationsTest do
       %{id: character_id} = character_fixture()
       %{id: organisation_id} = organisation_fixture()
 
-      assert is_nil Organisations.get_character_organisation(character_id, organisation_id)
+      assert is_nil Organisations.get_character_organisation(character_id)
     end
 
     test "has_character_organisation?/1 returns true when the character has an organisation job." do
       %{
         character_id: character_id,
-      } = charcters_organisations_fixture()
+      } = characters_organisations_fixture()
 
       assert Organisations.has_character_organisation?(character_id)
     end
@@ -137,7 +137,15 @@ defmodule Stygian.OrganisationsTest do
       refute Organisations.has_character_organisation?(character_id)
     end
 
-    test "create_charcters_organisations/1 with valid data creates a charcters_organisations" do
+    test "has_character_organisation?/1 returns true when the character previously revoked the organisation job." do
+      %{
+        character_id: character_id,
+      } = characters_organisations_fixture(%{end_date: NaiveDateTime.utc_now()})
+
+      refute Organisations.has_character_organisation?(character_id)
+    end
+
+    test "create_characters_organisations/1 with valid data creates a characters_organisations" do
       %{id: character_id} = character_fixture()
       %{id: organisation_id} = organisation_fixture()
 
@@ -147,56 +155,169 @@ defmodule Stygian.OrganisationsTest do
         last_salary_withdraw: ~N[2023-10-04 20:46:00]
       }
 
-      assert {:ok, %CharctersOrganisations{} = charcters_organisations} =
-               Organisations.create_charcters_organisations(valid_attrs)
+      assert {:ok, %CharactersOrganisations{} = characters_organisations} =
+               Organisations.create_characters_organisations(valid_attrs)
 
-      assert charcters_organisations.last_salary_withdraw == ~N[2023-10-04 20:46:00]
+      assert characters_organisations.last_salary_withdraw == ~N[2023-10-04 20:46:00]
     end
 
-    test "create_charcters_organisations/1 with invalid data returns error changeset" do
+    test "create_characters_organisations/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} =
-               Organisations.create_charcters_organisations(@invalid_attrs)
+               Organisations.create_characters_organisations(@invalid_attrs)
     end
 
-    test "update_charcters_organisations/2 with valid data updates the charcters_organisations" do
-      charcters_organisations = charcters_organisations_fixture()
+    test "update_characters_organisations/2 with valid data updates the characters_organisations" do
+      characters_organisations = characters_organisations_fixture()
       update_attrs = %{last_salary_withdraw: ~N[2023-10-05 20:46:00]}
 
-      assert {:ok, %CharctersOrganisations{} = charcters_organisations} =
-               Organisations.update_charcters_organisations(charcters_organisations, update_attrs)
+      assert {:ok, %CharactersOrganisations{} = characters_organisations} =
+               Organisations.update_characters_organisations(characters_organisations, update_attrs)
 
-      assert charcters_organisations.last_salary_withdraw == ~N[2023-10-05 20:46:00]
+      assert characters_organisations.last_salary_withdraw == ~N[2023-10-05 20:46:00]
     end
 
-    test "update_charcters_organisations/2 with invalid data returns error changeset" do
-      charcters_organisations = charcters_organisations_fixture()
+    test "assign_character_organisation/2 correctly assigns the organisation to the given character" do
+      %{id: character_id} = character_fixture() 
+      %{id: organisation_id} = organisation_fixture()
 
-      assert {:error, %Ecto.Changeset{}} =
-               Organisations.update_charcters_organisations(
-                 charcters_organisations,
-                 @invalid_attrs
-               )
+      assert {:ok, %CharactersOrganisations{id: id} = characters_organisations} =
+               Organisations.assign_character_organisation(character_id, organisation_id)
 
-      assert charcters_organisations ==
-               Organisations.get_charcters_organisations!(charcters_organisations.id)
+      characters_organisations = Organisations.get_characters_organisations!(id)
+
+      assert characters_organisations.character_id == character_id
+      assert characters_organisations.organisation_id == organisation_id
+      refute nil = characters_organisations.end_date
+      refute nil = characters_organisations.last_salary_withdraw
     end
 
-    test "delete_charcters_organisations/1 deletes the charcters_organisations" do
-      charcters_organisations = charcters_organisations_fixture()
+    test "assign_character_organisation/2 does not assign the organisation to a character that is already associated with another" do
+      %{id: character_id} = character_fixture() 
+      %{id: organisation_id_1} = organisation_fixture(%{name: "some name"})
+      %{id: organisation_id_2} = organisation_fixture(%{name: "some other name"})
 
-      assert {:ok, %CharctersOrganisations{}} =
-               Organisations.delete_charcters_organisations(charcters_organisations)
+      Organisations.assign_character_organisation(character_id, organisation_id_1)
+
+      assert {:error, "Il personaggio appartiene già ad un'organizzazione."} =
+        Organisations.assign_character_organisation(character_id, organisation_id_2)
+    end
+
+    test "assign_character_organisation/2 does not assign a non-existent organisation to a character" do
+      %{id: character_id} = character_fixture() 
+
+      assert {:error, "Personaggio o organizzazione inesistenti."} =
+        Organisations.assign_character_organisation(character_id, 42)
+    end
+
+    test "assign_character_organisation/2 does not assign the organisation to a non-existent character" do
+      %{id: organisation_id} = organisation_fixture()
+
+      assert {:error, "Personaggio o organizzazione inesistenti."} =
+        Organisations.assign_character_organisation(42, organisation_id)
+    end
+
+    test "revoke_character_organisation/1 correctly revokes the organisation link" do
+      %{id: character_id} = character_fixture() 
+      %{id: organisation_id} = organisation_fixture()
+
+      assert {:ok, _} =
+               Organisations.assign_character_organisation(character_id, organisation_id)
+
+      assert {:ok, _} = Organisations.revoke_character_organisation(character_id)
+
+      refute Organisations.has_character_organisation?(character_id)
+    end
+
+    test "revoke_character_organisation/1 does not revoke the link because there are none active" do
+      %{character_id: character_id, organisation_id: organisation_id} = 
+        characters_organisations_fixture(%{end_date: NaiveDateTime.utc_now()})
+
+      assert {:error, "Il personaggio non appartiene a nessuna organizzazione."} = 
+        Organisations.revoke_character_organisation(character_id)
+    end
+
+    test "delete_characters_organisations/1 deletes the characters_organisations" do
+      characters_organisations = characters_organisations_fixture()
+
+      assert {:ok, %CharactersOrganisations{}} =
+               Organisations.delete_characters_organisations(characters_organisations)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Organisations.get_charcters_organisations!(charcters_organisations.id)
+        Organisations.get_characters_organisations!(characters_organisations.id)
       end
     end
 
-    test "change_charcters_organisations/1 returns a charcters_organisations changeset" do
-      charcters_organisations = charcters_organisations_fixture()
+    test "change_characters_organisations/1 returns a characters_organisations changeset" do
+      characters_organisations = characters_organisations_fixture()
 
       assert %Ecto.Changeset{} =
-               Organisations.change_charcters_organisations(charcters_organisations)
+               Organisations.change_characters_organisations(characters_organisations)
+    end
+  end
+
+  describe "Character withdrawalrs" do
+    alias Stygian.Characters
+    alias Stygian.Organisations.CharactersOrganisations
+
+    import Stygian.OrganisationsFixtures
+    import Stygian.CharactersFixtures
+
+    test "can_withdraw_salary?/1 returns true when the character can withdraw the daily salary" do
+      last_withdraw = NaiveDateTime.add(NaiveDateTime.utc_now(), -25 * 60 * 60, :second)
+      %{character_id: character_id} = characters_organisations_fixture(%{last_salary_withdraw: last_withdraw})
+      
+      assert Organisations.can_withdraw_salary?(character_id)
+    end
+
+    test "can_withdraw_salary?/1 returns false when the character cannot withdraw the daily salary" do
+      last_withdraw = NaiveDateTime.add(NaiveDateTime.utc_now(), -23 * 60 * 60, :second)
+      %{character_id: character_id} = characters_organisations_fixture(%{last_salary_withdraw: last_withdraw})
+      
+      refute Organisations.can_withdraw_salary?(character_id)
+    end
+
+    test "withdraw_salary/1 correctly updates the character cigs with the salary when the withdraw was performed more than 1 day ago" do
+      %{id: character_id} = character_fixture_complete(%{cigs: 21})
+      %{id: organisation_id} = organisation_fixture(%{base_salary: 21})
+      
+      characters_organisations_fixture(%{
+        character_id: character_id, 
+        organisation_id: organisation_id, 
+        last_salary_withdraw: NaiveDateTime.add(NaiveDateTime.utc_now(), -25 * 60 * 60, :second)
+      })
+
+      assert {:ok, _} = Organisations.withdraw_salary(character_id)
+
+      character = Characters.get_character!(character_id)
+      character_organisation = Organisations.get_character_organisation(character_id)
+
+      assert 42 = character.cigs
+
+      # Setting the limit time to 1 hour ago, so the test can prove that the 
+      # last date has been updated at least one hour ago.
+      inferior_limit = NaiveDateTime.add(NaiveDateTime.utc_now(), -1 * 60 * 60, :second)
+      assert character_organisation.last_salary_withdraw > inferior_limit
+    end
+
+    test "withdraw_salary/1 does not update the character cigs when the withdraw was performed less than 1 day ago" do
+      %{id: character_id} = character_fixture_complete(%{cigs: 21})
+      %{id: organisation_id} = organisation_fixture(%{base_salary: 21})
+      
+      %{last_salary_withdraw: last_withdraw} = characters_organisations_fixture(%{
+        character_id: character_id, 
+        organisation_id: organisation_id, 
+        last_salary_withdraw: NaiveDateTime.add(NaiveDateTime.utc_now(), -23 * 60 * 60, :second)
+      })
+
+      assert {:error, "Non puoi ancora ritirare lo stipendio, devi aspettare un giorno."} = 
+        Organisations.withdraw_salary(character_id)
+
+      character = Characters.get_character!(character_id)
+      character_organisation = Organisations.get_character_organisation(character_id)
+
+      assert 21 = character.cigs
+
+      assert character_organisation.last_salary_withdraw == last_withdraw
     end
   end
 end

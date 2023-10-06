@@ -5,7 +5,7 @@ defmodule Stygian.Repo.Migrations.CreateCharactersRelOrganisations do
     create table(:characters_rel_organisations) do
       add :character_id, references(:characters, on_delete: :nothing)
       add :organisation_id, references(:organisations, on_delete: :nothing)
-      add :last_salary_withdraw, :naive_datetime
+      add :last_salary_withdraw, :naive_datetime, default: fragment("now()")
       add :end_date, :naive_datetime
 
       timestamps()
