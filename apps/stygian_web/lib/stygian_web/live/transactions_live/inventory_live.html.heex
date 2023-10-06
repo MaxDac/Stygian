@@ -25,29 +25,28 @@
       </span>
     </:col>
     <:action :let={%{id: id}}>
-      <.link
+      <.table_link
         patch={~p"/inventory/#{id}/use"}
-        class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-l-lg text-sm p-2 border border-transparent border-r-zinc-900"
+        class="rounded-l-lg border-r-zinc-900"
       >
         Usa
-      </.link>
+      </.table_link>
     </:action>
     <:action :let={%{id: id}}>
-      <.link
+      <.table_link
         patch={~p"/inventory/#{id}/give"}
-        class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent"
       >
         Cedi
-      </.link>
+      </.table_link>
     </:action>
     <:action :let={%{id: id}}>
-      <.link
+      <.table_link
         phx-click={JS.push("delete", value: %{id: id}) |> hide("##{id}")}
         data-confirm="Sei sicuro di voler buttare quest'oggetto?"
-        class="focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium rounded-r-lg text-sm p-2 border border-transparent border-l-zinc-900"
+        class="rounded-r-lg border-l-zinc-900"
       >
         Getta
-      </.link>
+      </.table_link>
     </:action>
   </.table>
 </.async_result>
