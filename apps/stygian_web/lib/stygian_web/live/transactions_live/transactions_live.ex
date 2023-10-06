@@ -3,6 +3,7 @@ defmodule StygianWeb.TransactionsLive.TransactionsLive do
   This page allows cigs transactions between characters.
   """
 
+  alias Stygian.Organisations
   use StygianWeb, :container_live_view
 
   alias Ecto.Changeset
@@ -17,6 +18,7 @@ defmodule StygianWeb.TransactionsLive.TransactionsLive do
     {:ok,
      socket
      |> assign_all_characters()
+     |> assign_has_character_job(current_character.id)
      |> assign_form()}
   end
 
@@ -60,6 +62,11 @@ defmodule StygianWeb.TransactionsLive.TransactionsLive do
            |> Enum.filter(&(&1.id != current_character_id))
        }}
     end)
+  end
+
+  defp assign_has_character_job(socket, character_id) do
+    character_has_job? = Organisations.has_character_organisation?(character_id)
+    assign(socket, :character_has_job?, character_has_job?)
   end
 
   defp assign_form(

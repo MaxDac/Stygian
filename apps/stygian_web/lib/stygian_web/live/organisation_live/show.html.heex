@@ -17,7 +17,12 @@
 
 <.link navigate={~p"/admin/organisations"}>Back to organisations</.link>
 
-<.modal :if={@live_action == :edit} id="organisation-modal" show on_cancel={JS.patch(~p"/admin/organisations/#{@organisation}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="organisation-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/organisations/#{@organisation}")}
+>
   <.live_component
     module={StygianWeb.OrganisationLive.FormComponent}
     id={@organisation.id}

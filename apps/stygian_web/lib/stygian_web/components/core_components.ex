@@ -621,14 +621,14 @@ defmodule StygianWeb.CoreComponents do
 
   def table_link(assigns) do
     ~H"""
-      <.link
-        navigate={@navigate}
-        patch={@patch}
-        class={"focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent #{@class}"}
-        {@rest}
-      >
-        <%= render_slot(@inner_block) %>
-      </.link>
+    <.link
+      navigate={@navigate}
+      patch={@patch}
+      class={"focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent #{@class}"}
+      {@rest}
+    >
+      <%= render_slot(@inner_block) %>
+    </.link>
     """
   end
 

@@ -17,7 +17,7 @@
   <:col :let={{_id, organisation}} label="Base salary"><%= organisation.base_salary %></:col>
   <:col :let={{_id, organisation}} label="Image"><%= organisation.image %></:col>
   <:action :let={{_id, organisation}}>
-    <.table_link 
+    <.table_link
       navigate={~p"/admin/organisations/#{organisation}"}
       class="brounded-l-lg border-r-zinc-900"
     >
@@ -25,9 +25,7 @@
     </.table_link>
   </:action>
   <:action :let={{_id, organisation}}>
-    <.table_link 
-      patch={~p"/admin/organisations/#{organisation}/edit"}
-    >
+    <.table_link patch={~p"/admin/organisations/#{organisation}/edit"}>
       Edit
     </.table_link>
   </:action>
@@ -42,7 +40,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="organisation-modal" show on_cancel={JS.patch(~p"/admin/organisations")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="organisation-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/organisations")}
+>
   <.live_component
     module={StygianWeb.OrganisationLive.FormComponent}
     id={@organisation.id || :new}

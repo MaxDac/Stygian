@@ -5,8 +5,18 @@ defmodule StygianWeb.OrganisationLiveTest do
   import Stygian.OrganisationsFixtures
   import Stygian.AccountsFixtures
 
-  @create_attrs %{name: "some name", description: "some description", image: "some image", base_salary: 42}
-  @update_attrs %{name: "some updated name", description: "some updated description", image: "some updated image", base_salary: 43}
+  @create_attrs %{
+    name: "some name",
+    description: "some description",
+    image: "some image",
+    base_salary: 42
+  }
+  @update_attrs %{
+    name: "some updated name",
+    description: "some updated description",
+    image: "some updated image",
+    base_salary: 43
+  }
   @invalid_attrs %{name: nil, description: nil, image: nil, base_salary: nil}
 
   defp create_organisation(_) do
@@ -23,7 +33,7 @@ defmodule StygianWeb.OrganisationLiveTest do
     setup [:create_organisation, :create_admin_user]
 
     test "lists all organisations", %{conn: conn, organisation: organisation, user: user} do
-      {:ok, _index_live, html} = 
+      {:ok, _index_live, html} =
         conn
         |> log_in_user(user)
         |> live(~p"/admin/organisations")
@@ -64,7 +74,9 @@ defmodule StygianWeb.OrganisationLiveTest do
         |> log_in_user(user)
         |> live(~p"/admin/organisations")
 
-      assert index_live |> element("#organisations-#{organisation.id} a", "Edit") |> render_click() =~
+      assert index_live
+             |> element("#organisations-#{organisation.id} a", "Edit")
+             |> render_click() =~
                "Edit Organisation"
 
       assert_patch(index_live, ~p"/admin/organisations/#{organisation}/edit")
@@ -90,7 +102,10 @@ defmodule StygianWeb.OrganisationLiveTest do
         |> log_in_user(user)
         |> live(~p"/admin/organisations")
 
-      assert index_live |> element("#organisations-#{organisation.id} a", "Delete") |> render_click()
+      assert index_live
+             |> element("#organisations-#{organisation.id} a", "Delete")
+             |> render_click()
+
       refute has_element?(index_live, "#organisations-#{organisation.id}")
     end
   end
@@ -108,7 +123,11 @@ defmodule StygianWeb.OrganisationLiveTest do
       assert html =~ organisation.name
     end
 
-    test "updates organisation within modal", %{conn: conn, organisation: organisation, user: user} do
+    test "updates organisation within modal", %{
+      conn: conn,
+      organisation: organisation,
+      user: user
+    } do
       {:ok, show_live, _html} =
         conn
         |> log_in_user(user)

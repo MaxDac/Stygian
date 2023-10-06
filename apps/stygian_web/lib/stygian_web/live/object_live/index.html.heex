@@ -27,17 +27,12 @@
   <:col :let={{_id, object}} label="Image url"><%= object.image_url %></:col>
   <:col :let={{_id, object}} label="Usages"><%= object.usages %></:col>
   <:action :let={{_id, object}}>
-    <.table_link
-      patch={~p"/admin/objects/#{object}"}
-      class="brounded-l-lg border-r-zinc-900"
-    >
+    <.table_link patch={~p"/admin/objects/#{object}"} class="brounded-l-lg border-r-zinc-900">
       Show
     </.table_link>
   </:action>
   <:action :let={{_id, object}}>
-    <.table_link
-      patch={~p"/admin/objects/#{object}/edit"}
-    >
+    <.table_link patch={~p"/admin/objects/#{object}/edit"}>
       Edit
     </.table_link>
   </:action>
