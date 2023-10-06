@@ -16,16 +16,18 @@ defmodule StygianWeb.TransactionsLive.OrganisationsJobSelectionLive do
   end
 
   @impl true
-  def handle_event("select_job", %{"id" => job_id}, socket) do
-    case Organisations.assign_job_to_character(socket.assigns.current_character.id, job_id) do
+  def handle_event("select_job", %{"id" => job_id}, %{assigns: %{current_character: current_character}} = socket) do
+    case Organisations.assign_character_organisation(current_character.id, job_id) do
       {:ok, _} ->
-        socket
-        |> put_flash(:info, "Hai scelto un lavoro.")
-        |> push_patch(to: ~p"/organisations")
+        {:noreply, 
+         socket
+         |> put_flash(:info, "Lavoro assegnato correttamente al personaggio..")
+         |> push_patch(to: ~p"/organisations")}
       {:error, _} ->
-        socket
-        |> put_flash(:error, "Non è stato possibile assegnare il lavoro.")
-        |> push_patch(to: ~p"/organisations")
+        {:noreply,
+         socket
+         |> put_flash(:error, "Non è stato possibile assegnare il lavoro al personaggio.")
+         |> push_patch(to: ~p"/organisations")}
     end
   end
 
