@@ -11,16 +11,15 @@ defmodule Stygian.Organisations.CharactersOrganisations do
   alias Stygian.Organisations.Organisation
 
   @type t() :: %__MODULE__{
-    last_salary_withdraw: NaiveDateTime.t(),
-    end_date: NaiveDateTime.t(),
-    character_id: non_neg_integer(),
-    organisation_id: non_neg_integer(),
-    character: Character.t(),
-    organisation: Organisation.t(),
-
-    inserted_at: NaiveDateTime.t(),
-    updated_at: NaiveDateTime.t()
-  }
+          last_salary_withdraw: NaiveDateTime.t(),
+          end_date: NaiveDateTime.t(),
+          character_id: non_neg_integer(),
+          organisation_id: non_neg_integer(),
+          character: Character.t(),
+          organisation: Organisation.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
 
   schema "characters_rel_organisations" do
     field :last_salary_withdraw, :naive_datetime

@@ -396,7 +396,7 @@ defmodule StygianWeb.CoreComponents do
           @errors == [] && "border-brand focus:border-brand",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
-     />
+      />
       <label
         for={@id}
         class={[

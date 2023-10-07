@@ -2,27 +2,32 @@ defmodule StygianWeb.TransactionsLive.OrganisationsJobSelectionLive do
   @moduledoc """
   Form to select a job for the character.
   """
-  
+
   use StygianWeb, :container_live_view
 
   alias Stygian.Organisations
 
   @impl true
   def mount(_, _, %{assigns: %{current_character: current_character}} = socket) do
-    {:ok, 
-      socket
-      |> check_character_job(current_character.id)
-      |> stream(:organisations, Organisations.list_organisations())}
+    {:ok,
+     socket
+     |> check_character_job(current_character.id)
+     |> stream(:organisations, Organisations.list_organisations())}
   end
 
   @impl true
-  def handle_event("acquire_job", %{"id" => job_id}, %{assigns: %{current_character: current_character}} = socket) do
+  def handle_event(
+        "acquire_job",
+        %{"id" => job_id},
+        %{assigns: %{current_character: current_character}} = socket
+      ) do
     case Organisations.assign_character_organisation(current_character.id, job_id) do
       {:ok, _} ->
-        {:noreply, 
+        {:noreply,
          socket
          |> put_flash(:info, "Lavoro assegnato correttamente al personaggio..")
          |> push_navigate(to: ~p"/organisations")}
+
       {:error, _} ->
         {:noreply,
          socket

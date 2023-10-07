@@ -25,17 +25,12 @@
       </span>
     </:col>
     <:action :let={%{id: id}}>
-      <.table_link
-        patch={~p"/inventory/#{id}/use"}
-        class="rounded-l-lg border-r-zinc-900"
-      >
+      <.table_link patch={~p"/inventory/#{id}/use"} class="rounded-l-lg border-r-zinc-900">
         Usa
       </.table_link>
     </:action>
     <:action :let={%{id: id}}>
-      <.table_link
-        patch={~p"/inventory/#{id}/give"}
-      >
+      <.table_link patch={~p"/inventory/#{id}/give"}>
         Cedi
       </.table_link>
     </:action>

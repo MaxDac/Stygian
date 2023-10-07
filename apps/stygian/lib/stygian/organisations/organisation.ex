@@ -1,16 +1,20 @@
 defmodule Stygian.Organisations.Organisation do
+  @moduledoc """
+  The Organisation schema.
+  """
+
   use Ecto.Schema
+
   import Ecto.Changeset
 
   @type t() :: %__MODULE__{
-    name: String.t(),
-    description: String.t(),
-    image: String.t(),
-    base_salary: non_neg_integer(),
-
-    inserted_at: NaiveDateTime.t(),
-    updated_at: NaiveDateTime.t()
-  }
+          name: String.t(),
+          description: String.t(),
+          image: String.t(),
+          base_salary: non_neg_integer(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
 
   schema "organisations" do
     field :name, :string

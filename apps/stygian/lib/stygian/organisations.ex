@@ -9,8 +9,8 @@ defmodule Stygian.Organisations do
 
   alias Stygian.Characters
   alias Stygian.Characters.Character
-  alias Stygian.Organisations.Organisation
   alias Stygian.Organisations.CharactersOrganisations
+  alias Stygian.Organisations.Organisation
 
   @withdraw_time_limit_in_seconds 24 * 60 * 60
 
@@ -219,7 +219,10 @@ defmodule Stygian.Organisations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_characters_organisations(%CharactersOrganisations{} = characters_organisations, attrs) do
+  def update_characters_organisations(
+        %CharactersOrganisations{} = characters_organisations,
+        attrs
+      ) do
     characters_organisations
     |> CharactersOrganisations.changeset(attrs)
     |> Repo.update()
@@ -229,20 +232,24 @@ defmodule Stygian.Organisations do
   Helper method to assign an organisation to a character.
   The association will not take place if the character is already associated with another organisation.
   """
-  @spec assign_character_organisation(character_id :: non_neg_integer(), organisation_id :: non_neg_integer()) ::
+  @spec assign_character_organisation(
+          character_id :: non_neg_integer(),
+          organisation_id :: non_neg_integer()
+        ) ::
           {:ok, CharactersOrganisations.t()} | {:error, String.t()} | {:error, Ecto.Changeset.t()}
   def assign_character_organisation(character_id, organisation_id) do
     with false <- has_character_organisation?(character_id),
          %Character{} = character <- Characters.get_character(character_id),
          %Organisation{} = organisation <- get_organisation(organisation_id) do
       create_characters_organisations(%{
-           character_id: character.id,
-           organisation_id: organisation.id
+        character_id: character.id,
+        organisation_id: organisation.id
       })
     else
       true ->
         {:error, "Il personaggio appartiene già ad un'organizzazione."}
-      _ -> 
+
+      _ ->
         {:error, "Personaggio o organizzazione inesistenti."}
     end
   end
@@ -293,19 +300,23 @@ defmodule Stygian.Organisations do
       ) do
     CharactersOrganisations.changeset(characters_organisations, attrs)
   end
-  
+
   @doc """
   Determines whether the character can withdraw the salary from the organisation for the work done.
   """
   @spec can_withdraw_salary?(character_id :: non_neg_integer()) :: boolean()
   def can_withdraw_salary?(character_id) do
-    limit = 
-      NaiveDateTime.utc_now() 
+    limit =
+      NaiveDateTime.utc_now()
       |> NaiveDateTime.add(@withdraw_time_limit_in_seconds * -1, :second)
 
     CharactersOrganisations
     |> from()
-    |> where([co], co.character_id == ^character_id and co.last_salary_withdraw < ^limit and is_nil(co.end_date))
+    |> where(
+      [co],
+      co.character_id == ^character_id and co.last_salary_withdraw < ^limit and
+        is_nil(co.end_date)
+    )
     |> Repo.exists?()
   end
 
@@ -313,7 +324,8 @@ defmodule Stygian.Organisations do
   Allows the character to withdraw the salary from the organisation for the work done.
   The salary can be withdrawn only once per day.
   """
-  @spec withdraw_salary(character_id :: non_neg_integer()) :: {:ok, CharactersOrganisations.t()} | {:error, String.t()} | {:error, Ecto.Changeset.t()}
+  @spec withdraw_salary(character_id :: non_neg_integer()) ::
+          {:ok, CharactersOrganisations.t()} | {:error, String.t()} | {:error, Ecto.Changeset.t()}
   def withdraw_salary(character_id) do
     if can_withdraw_salary?(character_id) do
       perform_withdrawal(character_id)
@@ -326,7 +338,7 @@ defmodule Stygian.Organisations do
     %{organisation: %{base_salary: base_salary}} = get_character_organisation(character_id)
     %{cigs: cigs} = character = Characters.get_character(character_id)
 
-    job_changeset = 
+    job_changeset =
       get_character_organisation(character_id)
       |> CharactersOrganisations.changeset(%{last_salary_withdraw: NaiveDateTime.utc_now()})
 

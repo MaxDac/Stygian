@@ -3,14 +3,14 @@ defmodule StygianWeb.TransactionsLive.OrganisationsJobLive do
   Page that shows the current job and allows the character to withdraw the 
   daily money from it.
   """
-  
+
   use StygianWeb, :container_live_view
 
   alias Stygian.Organisations
 
   @impl true
   def mount(_, _, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> check_character_work()
      |> assign_character_withdrawal_status()
@@ -21,7 +21,7 @@ defmodule StygianWeb.TransactionsLive.OrganisationsJobLive do
   def handle_event("withdraw", _, %{assigns: %{current_character: current_character}} = socket) do
     case Organisations.withdraw_salary(current_character.id) do
       {:ok, _} ->
-        {:noreply, 
+        {:noreply,
          socket
          |> put_flash(:info, "Hai ritirato il tuo salario giornaliero.")
          |> push_navigate(to: ~p"/organisations")}
@@ -38,7 +38,7 @@ defmodule StygianWeb.TransactionsLive.OrganisationsJobLive do
   def handle_event("resign", _, %{assigns: %{current_character: current_character}} = socket) do
     case Organisations.revoke_character_organisation(current_character.id) do
       {:ok, _} ->
-        {:noreply, 
+        {:noreply,
          socket
          |> put_flash(:info, "Hai correttamente licenziato il personaggio.")
          |> push_navigate(to: ~p"/transactions")}
@@ -46,7 +46,10 @@ defmodule StygianWeb.TransactionsLive.OrganisationsJobLive do
       {:error, _} ->
         {:noreply,
          socket
-         |> put_flash(:error, "Non è stato possibile licenziare il tuo personaggio dal lavoro attuale.")
+         |> put_flash(
+           :error,
+           "Non è stato possibile licenziare il tuo personaggio dal lavoro attuale."
+         )
          |> push_navigate(to: ~p"/organisations")}
     end
   end
@@ -61,7 +64,9 @@ defmodule StygianWeb.TransactionsLive.OrganisationsJobLive do
     end
   end
 
-  defp assign_character_withdrawal_status(%{assigns: %{current_character: current_character}} = socket) do
+  defp assign_character_withdrawal_status(
+         %{assigns: %{current_character: current_character}} = socket
+       ) do
     status = Organisations.can_withdraw_salary?(current_character.id)
     assign(socket, :can_withdraw, status)
   end

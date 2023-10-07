@@ -30,7 +30,7 @@
       </.link>
     </div>
 
-    <div :if={not(@character_has_job?)} class="w-full pt-5 text-center">
+    <div :if={not @character_has_job?} class="w-full pt-5 text-center">
       <.link patch={~p"/organisations/job/selection"}>
         <.button type="button" class="w-full">Seleziona Lavoro</.button>
       </.link>

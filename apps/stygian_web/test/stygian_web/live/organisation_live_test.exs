@@ -6,17 +6,19 @@ defmodule StygianWeb.OrganisationLiveTest do
   import Stygian.AccountsFixtures
 
   @create_attrs %{
-    name: "some name",
+    name: "some nonfixture name",
     description: "some description",
     image: "some image",
     base_salary: 42
   }
+
   @update_attrs %{
     name: "some updated name",
     description: "some updated description",
     image: "some updated image",
     base_salary: 43
   }
+
   @invalid_attrs %{name: nil, description: nil, image: nil, base_salary: nil}
 
   defp create_organisation(_) do
