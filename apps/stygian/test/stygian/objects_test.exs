@@ -230,4 +230,58 @@ defmodule Stygian.ObjectsTest do
       assert {:error, _} = Objects.give_object(character_object, 42)
     end
   end
+
+  describe "object_effects" do
+    alias Stygian.Objects.Effect
+
+    import Stygian.ObjectsFixtures
+
+    @invalid_attrs %{value: nil}
+
+    test "list_object_effects/0 returns all object_effects" do
+      effect = effect_fixture()
+      assert Objects.list_object_effects() == [effect]
+    end
+
+    test "get_effect!/1 returns the effect with given id" do
+      effect = effect_fixture()
+      assert Objects.get_effect!(effect.id) == effect
+    end
+
+    test "create_effect/1 with valid data creates a effect" do
+      valid_attrs = %{value: 42}
+
+      assert {:ok, %Effect{} = effect} = Objects.create_effect(valid_attrs)
+      assert effect.value == 42
+    end
+
+    test "create_effect/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Objects.create_effect(@invalid_attrs)
+    end
+
+    test "update_effect/2 with valid data updates the effect" do
+      effect = effect_fixture()
+      update_attrs = %{value: 43}
+
+      assert {:ok, %Effect{} = effect} = Objects.update_effect(effect, update_attrs)
+      assert effect.value == 43
+    end
+
+    test "update_effect/2 with invalid data returns error changeset" do
+      effect = effect_fixture()
+      assert {:error, %Ecto.Changeset{}} = Objects.update_effect(effect, @invalid_attrs)
+      assert effect == Objects.get_effect!(effect.id)
+    end
+
+    test "delete_effect/1 deletes the effect" do
+      effect = effect_fixture()
+      assert {:ok, %Effect{}} = Objects.delete_effect(effect)
+      assert_raise Ecto.NoResultsError, fn -> Objects.get_effect!(effect.id) end
+    end
+
+    test "change_effect/1 returns a effect changeset" do
+      effect = effect_fixture()
+      assert %Ecto.Changeset{} = Objects.change_effect(effect)
+    end
+  end
 end

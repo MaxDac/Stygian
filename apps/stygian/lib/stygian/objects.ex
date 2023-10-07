@@ -271,4 +271,100 @@ defmodule Stygian.Objects do
         |> Repo.transaction()
     end
   end
+
+  alias Stygian.Objects.Effect
+
+  @doc """
+  Returns the list of object_effects.
+
+  ## Examples
+
+      iex> list_object_effects()
+      [%Effect{}, ...]
+
+  """
+  def list_object_effects do
+    Repo.all(Effect)
+  end
+
+  @doc """
+  Gets a single effect.
+
+  Raises `Ecto.NoResultsError` if the Effect does not exist.
+
+  ## Examples
+
+      iex> get_effect!(123)
+      %Effect{}
+
+      iex> get_effect!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_effect!(id), do: Repo.get!(Effect, id)
+
+  @doc """
+  Creates a effect.
+
+  ## Examples
+
+      iex> create_effect(%{field: value})
+      {:ok, %Effect{}}
+
+      iex> create_effect(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_effect(attrs \\ %{}) do
+    %Effect{}
+    |> Effect.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a effect.
+
+  ## Examples
+
+      iex> update_effect(effect, %{field: new_value})
+      {:ok, %Effect{}}
+
+      iex> update_effect(effect, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_effect(%Effect{} = effect, attrs) do
+    effect
+    |> Effect.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a effect.
+
+  ## Examples
+
+      iex> delete_effect(effect)
+      {:ok, %Effect{}}
+
+      iex> delete_effect(effect)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_effect(%Effect{} = effect) do
+    Repo.delete(effect)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking effect changes.
+
+  ## Examples
+
+      iex> change_effect(effect)
+      %Ecto.Changeset{data: %Effect{}}
+
+  """
+  def change_effect(%Effect{} = effect, attrs \\ %{}) do
+    Effect.changeset(effect, attrs)
+  end
 end

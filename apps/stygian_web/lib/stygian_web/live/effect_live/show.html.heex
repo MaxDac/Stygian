@@ -1,0 +1,26 @@
+<.header>
+  Effect <%= @effect.id %>
+  <:subtitle>This is a effect record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/admin/object_effects/#{@effect}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit effect</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Value"><%= @effect.value %></:item>
+</.list>
+
+<.link navigate={~p"/admin/object_effects"}>Back to object_effects</.link>
+
+<.modal :if={@live_action == :edit} id="effect-modal" show on_cancel={JS.patch(~p"/admin/object_effects/#{@effect}")}>
+  <.live_component
+    module={StygianWeb.EffectLive.FormComponent}
+    id={@effect.id}
+    title={@page_title}
+    action={@live_action}
+    effect={@effect}
+    patch={~p"/admin/object_effects/#{@effect}"}
+  />
+</.modal>

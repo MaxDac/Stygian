@@ -52,4 +52,18 @@ defmodule Stygian.ObjectsFixtures do
     object = object_fixture()
     Map.put(attrs, :object_id, object.id)
   end
+
+  @doc """
+  Generate a effect.
+  """
+  def effect_fixture(attrs \\ %{}) do
+    {:ok, effect} =
+      attrs
+      |> Enum.into(%{
+        value: 42
+      })
+      |> Stygian.Objects.create_effect()
+
+    effect
+  end
 end
