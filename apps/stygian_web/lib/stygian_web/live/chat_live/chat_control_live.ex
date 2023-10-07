@@ -57,11 +57,11 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
     {:noreply, assign(socket, :form, form)}
   end
 
-  defp assign_form(socket, %{map: map, current_character: current_character} = assigns) do
+  defp assign_form(socket, %{map: map, current_character: current_character}) do
     assign_form(socket, map, current_character)
   end
 
-  defp assign_form(%{assigns: %{map: map, current_character: current_character}} = socket, assigns) do
+  defp assign_form(%{assigns: %{map: map, current_character: current_character}} = socket, _) do
     assign_form(socket, map, current_character)
   end
 
