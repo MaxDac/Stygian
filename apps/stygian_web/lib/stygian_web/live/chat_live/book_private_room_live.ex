@@ -15,7 +15,7 @@ defmodule StygianWeb.ChatLive.BookPrivateRoomLive do
      socket
      |> assign_map(String.to_integer(map_id))
      |> assign_form()
-     |> assign_charcters()}
+     |> assign_characters()}
   end
 
   @impl true
@@ -99,7 +99,7 @@ defmodule StygianWeb.ChatLive.BookPrivateRoomLive do
     |> assign(:form, form)
   end
 
-  defp assign_charcters(%{assigns: %{current_character: %{id: current_character_id}}} = socket) do
+  defp assign_characters(%{assigns: %{current_character: %{id: current_character_id}}} = socket) do
     assign_async(socket, :characters, fn ->
       characters =
         Characters.list_characters()

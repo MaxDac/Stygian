@@ -468,7 +468,7 @@ defmodule Stygian.Maps do
   end
 
   @doc """
-  Determines whether the charcter is hosting another private room.
+  Determines whether the character is hosting another private room.
   """
   @spec character_is_already_host?(character_id :: non_neg_integer()) :: boolean()
   def character_is_already_host?(character_id) do

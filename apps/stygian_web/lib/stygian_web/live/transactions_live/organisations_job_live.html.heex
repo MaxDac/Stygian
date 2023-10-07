@@ -1,0 +1,26 @@
+<.h1>Lavoro: <%= @job.organisation.name %></.h1>
+
+<div class="flex flex-row justify-center pb-2">
+  <.link navigate={~p"/transactions"}>
+    Torna al portafoglio
+  </.link>
+</div>
+
+<section class="font-typewriter text-sm p-3 border-2 border-brand-inactive rounded-md shadow-md shadow-brand-inactive">
+  <%= @job.organisation.description %>
+</section>
+
+<div :if={@can_withdraw} class="w-full pt-5 text-center">
+  <.link phx-click={JS.push("withdraw", value: %{id: @job.id}) |> hide("##{@job.id}")}>
+    <.button type="button" class="w-full">Ricevi stipendio</.button>
+  </.link>
+</div>
+
+<div class="w-full pt-5 text-center">
+  <.link
+    phx-click={JS.push("resign", value: %{id: @job.id}) |> hide("##{@job.id}")}
+    data-confirm="Sei sicuro di voler licenziare il personaggio da questo lavoro? Il nuovo stipendio potrà essere prelevato solo tra 24 ore."
+  >
+    <.button type="button" class="w-full">Licenziati</.button>
+  </.link>
+</div>

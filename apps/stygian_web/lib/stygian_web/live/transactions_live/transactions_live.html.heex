@@ -16,9 +16,23 @@
       <.button type="submit">Trasferisci</.button>
     </.simple_form>
 
+    <.hr />
+
     <div class="w-full pt-5 text-center">
       <.link patch={~p"/inventory"}>
         <.button type="button" class="w-full">Inventario</.button>
+      </.link>
+    </div>
+
+    <div :if={@character_has_job?} class="w-full pt-5 text-center">
+      <.link patch={~p"/organisations"}>
+        <.button type="button" class="w-full">Lavoro</.button>
+      </.link>
+    </div>
+
+    <div :if={not @character_has_job?} class="w-full pt-5 text-center">
+      <.link patch={~p"/organisations/job/selection"}>
+        <.button type="button" class="w-full">Seleziona Lavoro</.button>
       </.link>
     </div>
   </div>

@@ -153,6 +153,8 @@ defmodule StygianWeb.Router do
       live "/inventory/:id/use", InventoryLive, :use
       live "/inventory/:id/give", InventoryLive, :give
       live "/inventory/:id/throw", InventoryLive, :delete
+      live "/organisations/job/selection", OrganisationsJobSelectionLive, :index
+      live "/organisations", OrganisationsJobLive, :index
     end
   end
 
@@ -188,6 +190,13 @@ defmodule StygianWeb.Router do
       live "/transactions", AdminLive.TransactionsListLive, :index
 
       live "/character", AdminLive.CharacterSheetEditLive, :edit
+
+      live "/organisations", OrganisationLive.Index, :index
+      live "/organisations/new", OrganisationLive.Index, :new
+      live "/organisations/:id/edit", OrganisationLive.Index, :edit
+
+      live "/organisations/:id", OrganisationLive.Show, :show
+      live "/organisations/:id/show/edit", OrganisationLive.Show, :edit
     end
   end
 end

@@ -1,0 +1,25 @@
+<.h1>Seleziona il lavoro</.h1>
+
+<div class="flex flex-row justify-center pb-2">
+  <.link navigate={~p"/transactions"}>
+    Torna al portafoglio
+  </.link>
+</div>
+
+<.table id="organisations" rows={@streams.organisations}>
+  <:col :let={{_, o}} label="Name"><%= o.name %></:col>
+  <:col :let={{_, o}} label="Name"><%= o.description %></:col>
+  <:col :let={{_, o}} label="Name"><%= o.base_salary %> $</:col>
+  <:col :let={{_, o}} label="Name">
+    <img alt={"#{o.name} logo"} src={o.image} />
+  </:col>
+  <:action :let={{_, o}}>
+    <.table_link
+      phx-click={JS.push("acquire_job", value: %{id: o.id}) |> hide("##{o.id}")}
+      data-confirm="Sei sicuro di voler prendere questo lavoro?"
+      class="rounded-lg border-l-zinc-900"
+    >
+      Prendi lavoro
+    </.table_link>
+  </:action>
+</.table>
