@@ -26,5 +26,6 @@ defmodule Stygian.Organisations.Organisation do
     organisation
     |> cast(attrs, [:name, :description, :base_salary, :image])
     |> validate_required([:name, :base_salary])
+    |> unique_constraint(:name, name: :organisations_name_index)
   end
 end

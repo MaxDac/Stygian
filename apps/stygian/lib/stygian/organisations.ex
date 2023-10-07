@@ -61,6 +61,17 @@ defmodule Stygian.Organisations do
   def get_organisation(id), do: Repo.get(Organisation, id)
 
   @doc """
+  Gets a single organisation by name.
+  """
+  @spec get_organisation_by_name(organisation_name :: String.t()) :: Organisation.t() | nil
+  def get_organisation_by_name(organisation_name) do
+    Organisation
+    |> from()
+    |> where([o], o.name == ^organisation_name)
+    |> Repo.one()
+  end
+
+  @doc """
   Creates a organisation.
 
   ## Examples

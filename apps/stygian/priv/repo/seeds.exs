@@ -12,6 +12,7 @@
 
 alias Stygian.Accounts
 alias Stygian.Characters
+alias Stygian.Organisations
 alias Stygian.Skills
 alias Stygian.Maps
 
@@ -104,6 +105,20 @@ defmodule CharacterHelpers do
   """
   def associate_skills_to_character(character, skills) do
     Characters.create_character_skills_internal(skills, character.id)
+  end
+end
+
+defmodule OrganisationsHelpers do
+  def create_organisation(%{name: name} = attrs) do
+    case Organisations.get_organisation_by_name(name) do
+      nil ->
+        with {:ok, organisation} <- Organisations.create_organisation(attrs) do
+          Organisations.update_organisation(organisation, attrs)
+        end
+
+      organisation ->
+        Organisations.update_organisation(organisation, attrs)
+    end
   end
 end
 
@@ -527,4 +542,31 @@ MapHelpers.add_map(%{
 MapHelpers.add_map(%{
   name: "Stanza Privata 3",
   private: true
+})
+
+OrganisationsHelpers.create_organisation(%{
+  name: "St. Andrew Hostpital",
+  description: """
+  Ciò che rimane dell'Ospedale di Saint Andrew, alla periferia della French Hill, richiede a tutti i cittadini 
+  e ai forestieri che sono capitati a Rochester in questo duro momento di crisi di unirsi e dare il proprio apporto
+  per accudire i malati e dare dignità ai deceduti.
+  Personale con conoscenze in medicina sono desiderabili, ma tutti i cittadini di buona volontà possono partecipare
+  allo sforzo, e ricevere gratuitamente un addestramento base in medicina.
+  """,
+  image: "/images/organisations/st_andrew_hospital.webp",
+  base_salary: 10
+})
+
+OrganisationsHelpers.create_organisation(%{
+  name: "Rochester Police Department",
+  description: """
+  La Rochester che conoscevamo, la tranquilla cittadina sull'Atlantico, ospitale nei confronti dei turisti e solidale
+  nei confronti dei suoi abitanti, non c'è più. La città sopravvissuta al cataclisma è un luogo desolato, pieno di 
+  pericoli, ma la legge non può abdicare, ed a maggior ragione in questo momento di crisi, l'RPD chiama a raccolta 
+  tutte le persone di buona volontà per aiutare la popolazione e mantenere l'ordine.
+  Tutti i cittadini sono i benvenuti, e per coloro che non sono esperti nell'utilizzo di armi da fuoco o da mischia,
+  sarà offerto un lavoro in logistica, o un addestramento gratuito al poligono di tiro.
+  """,
+  image: "/images/organisations/rochester_police_department.webp",
+  base_salary: 10
 })

@@ -1,5 +1,11 @@
 <.h1>Seleziona il lavoro</.h1>
 
+<div class="flex flex-row justify-center pb-2">
+  <.link navigate={~p"/transactions"}>
+    Torna al portafoglio
+  </.link>
+</div>
+
 <.table id="organisations" rows={@streams.organisations}>
   <:col :let={{_, o}} label="Name"><%= o.name %></:col>
   <:col :let={{_, o}} label="Name"><%= o.description %></:col>

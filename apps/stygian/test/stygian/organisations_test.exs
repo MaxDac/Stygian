@@ -20,6 +20,22 @@ defmodule Stygian.OrganisationsTest do
       assert Organisations.get_organisation!(organisation.id) == organisation
     end
 
+    test "get_organisation_by_name/1 correctly returns the organisation with that name" do
+      %{name: organisation_name} = organisation_fixture()
+
+      assert organisation = Organisations.get_organisation_by_name(organisation_name)
+      
+      refute is_nil(organisation)
+      assert organisation_name = organisation.name
+    end
+
+    test "get_organisation_by_name/1 returns nil if there are no organisation with the specified name" do
+      %{name: organisation_name} = organisation_fixture()
+      inexistent_organisation_name = "#{organisation_name}inexistent"
+
+      assert is_nil(Organisations.get_organisation_by_name(inexistent_organisation_name))
+    end
+
     test "create_organisation/1 with valid data creates a organisation" do
       valid_attrs = %{
         name: "some name",

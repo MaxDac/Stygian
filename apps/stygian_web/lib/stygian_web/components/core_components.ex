@@ -396,7 +396,7 @@ defmodule StygianWeb.CoreComponents do
           @errors == [] && "border-brand focus:border-brand",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
-      />
+     />
       <label
         for={@id}
         class={[
@@ -915,7 +915,7 @@ defmodule StygianWeb.CoreComponents do
 
   def hr(assigns) do
     ~H"""
-    <hr class={"my-1 border-2 border-brand shadow-md shadow-brand-inactive #{@class}"} />
+    <hr class={"border-2 border-brand shadow-md shadow-brand-inactive #{@class}"} />
     """
   end
 
