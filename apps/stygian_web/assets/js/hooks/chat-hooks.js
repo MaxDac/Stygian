@@ -15,11 +15,12 @@ export function addChatHooks(Hooks) {
   Hooks.ChatInput = {
     mounted() {
       this.el.focus()
-      this.el.onkeyup = (e) => {
+      this.el.onkeydown = (e) => {
         if (e.key === "Enter") {
-          // Simulating pressing the button because submitting the form would result in 
-          // messing with liveview internal behaviour
-          this.el.form.querySelector("#chat-input-sender").click()
+          console.debug("Enter pressed")
+          // Dispatching the event, that will bubble up to the form
+          const event = new Event("submit", { bubbles: true, cancelable: true })
+          this.el.form.dispatchEvent(event)
         }
       } 
     }
