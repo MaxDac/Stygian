@@ -7,8 +7,8 @@ defmodule Stygian.Objects.Effect do
 
   import Ecto.Changeset
 
-  alias Stygian.Skills.Skill
   alias Stygian.Objects.Object
+  alias Stygian.Skills.Skill
 
   @type t() :: %__MODULE__{
           id: non_neg_integer(),

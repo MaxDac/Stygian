@@ -276,7 +276,21 @@ defmodule Stygian.ObjectsTest do
 
     test "get_effect!/1 returns the effect with given id" do
       effect = effect_fixture()
-      assert Objects.get_effect!(effect.id) == effect
+      assert strip_effects_fk(Objects.get_effect!(effect.id)) == strip_effects_fk(effect)
+    end
+
+    test "get_complete_effect/1 correctly returns the effect with object and skill preloaded" do
+      %{id: effect_id, object_id: object_id, skill_id: skill_id} = effect_fixture()
+
+      effect = Objects.get_complete_effect(effect_id)
+
+      assert not is_nil(effect)
+      assert not is_nil(effect.skill)
+      assert not is_nil(effect.object)
+
+      assert effect.id == effect_id
+      assert effect.object.id == object_id
+      assert effect.skill.id == skill_id
     end
 
     test "create_effect/1 with valid data creates a effect" do
@@ -291,6 +305,10 @@ defmodule Stygian.ObjectsTest do
 
       assert {:ok, %Effect{} = effect} = Objects.create_effect(valid_attrs)
       assert effect.value == 42
+
+      # Verifying that the struct comes with preloaded associations
+      assert effect.object.id == object_id
+      assert effect.skill.id == skill_id
     end
 
     test "create_effect/1 with invalid data returns error changeset" do
@@ -298,17 +316,21 @@ defmodule Stygian.ObjectsTest do
     end
 
     test "update_effect/2 with valid data updates the effect" do
-      effect = effect_fixture()
+      %{object_id: object_id, skill_id: skill_id} = effect = effect_fixture()
       update_attrs = %{value: 43}
 
       assert {:ok, %Effect{} = effect} = Objects.update_effect(effect, update_attrs)
       assert effect.value == 43
+
+      # Verifying that the struct comes with preloaded associations
+      assert effect.object.id == object_id
+      assert effect.skill.id == skill_id
     end
 
     test "update_effect/2 with invalid data returns error changeset" do
       effect = effect_fixture()
       assert {:error, %Ecto.Changeset{}} = Objects.update_effect(effect, @invalid_attrs)
-      assert effect == Objects.get_effect!(effect.id)
+      assert strip_effects_fk(effect) == strip_effects_fk(Objects.get_effect!(effect.id))
     end
 
     test "delete_effect/1 deletes the effect" do

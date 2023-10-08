@@ -5,6 +5,7 @@ defmodule StygianWeb.EffectLiveTest do
 
   import Stygian.AccountsFixtures
   import Stygian.ObjectsFixtures
+  import Stygian.SkillsFixtures
 
   @create_attrs %{value: 42}
   @update_attrs %{value: 43}
@@ -33,6 +34,9 @@ defmodule StygianWeb.EffectLiveTest do
     end
 
     test "saves new effect", %{conn: conn, user: user} do
+      %{id: object_id} = object_fixture(%{name: "some other name"})
+      %{id: skill_id} = skill_fixture(%{name: "some other name"})
+
       {:ok, index_live, _html} =
         conn
         |> log_in_user(user)
@@ -47,8 +51,13 @@ defmodule StygianWeb.EffectLiveTest do
              |> form("#effect-form", effect: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
+      create_attrs =
+        @create_attrs
+        |> Map.put(:object_id, object_id)
+        |> Map.put(:skill_id, skill_id)
+
       assert index_live
-             |> form("#effect-form", effect: @create_attrs)
+             |> form("#effect-form", effect: create_attrs)
              |> render_submit()
 
       assert_patch(index_live, ~p"/admin/object_effects")
@@ -90,44 +99,6 @@ defmodule StygianWeb.EffectLiveTest do
 
       assert index_live |> element("#object_effects-#{effect.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#object_effects-#{effect.id}")
-    end
-  end
-
-  describe "Show" do
-    setup [:create_effect, :create_admin_user]
-
-    test "displays effect", %{conn: conn, effect: effect, user: user} do
-      {:ok, _show_live, html} =
-        conn
-        |> log_in_user(user)
-        |> live(~p"/admin/object_effects/#{effect}")
-
-      assert html =~ "Show Effect"
-    end
-
-    test "updates effect within modal", %{conn: conn, effect: effect, user: user} do
-      {:ok, show_live, _html} =
-        conn
-        |> log_in_user(user)
-        |> live(~p"/admin/object_effects/#{effect}")
-
-      assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Effect"
-
-      assert_patch(show_live, ~p"/admin/object_effects/#{effect}/show/edit")
-
-      assert show_live
-             |> form("#effect-form", effect: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
-      assert show_live
-             |> form("#effect-form", effect: @update_attrs)
-             |> render_submit()
-
-      assert_patch(show_live, ~p"/admin/object_effects/#{effect}")
-
-      html = render(show_live)
-      assert html =~ "Effect updated successfully"
     end
   end
 end

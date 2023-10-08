@@ -61,8 +61,7 @@ defmodule StygianWeb.EffectLive.FormComponent do
   end
 
   defp save_effect(socket, :edit, effect_params) do
-    case Objects.update_effect(socket.assigns.effect, effect_params)
-         |> IO.inspect(label: "save result") do
+    case Objects.update_effect(socket.assigns.effect, effect_params) do
       {:ok, effect} ->
         notify_parent({:saved, effect})
 

@@ -2,7 +2,7 @@ defmodule StygianWeb.EffectLive.LiteIndex do
   @moduledoc """
   A light index to resume all the effects for a particular object
   """
-  
+
   use StygianWeb, :live_component
 
   alias Stygian.Objects
@@ -12,8 +12,7 @@ defmodule StygianWeb.EffectLive.LiteIndex do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_effects(object_id)
-    }
+     |> assign_effects(object_id)}
   end
 
   @impl true

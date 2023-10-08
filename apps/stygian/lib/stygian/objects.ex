@@ -321,6 +321,19 @@ defmodule Stygian.Objects do
   def get_effect!(id), do: Repo.get!(Effect, id)
 
   @doc """
+  Gets a single effect, preloading the object and the skill.
+  """
+  @spec get_complete_effect(id :: non_neg_integer()) :: Effect.t() | nil
+  def get_complete_effect(id) do
+    Effect
+    |> from()
+    |> where([e], e.id == ^id)
+    |> preload(:object)
+    |> preload(:skill)
+    |> Repo.one()
+  end
+
+  @doc """
   Creates a effect.
 
   ## Examples
@@ -333,9 +346,10 @@ defmodule Stygian.Objects do
 
   """
   def create_effect(attrs \\ %{}) do
-    %Effect{}
-    |> Effect.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, %{id: saved_effect_id}} <- %Effect{} |> Effect.changeset(attrs) |> Repo.insert() do
+      effect = get_complete_effect(saved_effect_id)
+      {:ok, effect}
+    end
   end
 
   @doc """
@@ -351,9 +365,10 @@ defmodule Stygian.Objects do
 
   """
   def update_effect(%Effect{} = effect, attrs) do
-    effect
-    |> Effect.changeset(attrs)
-    |> Repo.update()
+    with {:ok, %{id: saved_effect_id}} <- effect |> Effect.changeset(attrs) |> Repo.update() do
+      effect = get_complete_effect(saved_effect_id)
+      {:ok, effect}
+    end
   end
 
   @doc """
@@ -373,6 +388,7 @@ defmodule Stygian.Objects do
   end
 
   @doc """
+    |> IO.inspect(label: "update effect")
   Returns an `%Ecto.Changeset{}` for tracking effect changes.
 
   ## Examples
