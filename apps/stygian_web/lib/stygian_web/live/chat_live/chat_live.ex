@@ -38,6 +38,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign_chat_entries(Maps.list_map_chats(map_id))
      |> ChatHelpers.subscribe_to_chat_events(map_id)
      |> assign_textarea_id()
+     |> assign_random_update()
      |> assign_dice_button_id()
      |> check_private_room_allowance()}
   end
@@ -82,6 +83,18 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign(:show_dice_thrower, true)}
   end
 
+  @impl true
+  def handle_params(%{"map_id" => map_id}, uri, socket) do
+    {:noreply,
+     socket
+     |> assign_map(map_id)
+    # Updates the random number passed down to the live component to force it to update.
+    # The random number assign will then be used as a transparent condition to verify the button disable condition,
+    # again to force the update of the button state.
+     |> assign_random_update()
+     |> assign(:show_dice_thrower, false)}
+  end
+
   defp assign_new_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do
     assign_chat_entries(socket, chat_entries ++ [chat_entry])
   end
@@ -93,6 +106,12 @@ defmodule StygianWeb.ChatLive.ChatLive do
   defp assign_map(socket, map_id) do
     map = Maps.get_map!(map_id)
     assign(socket, map: map)
+  end
+
+  # This assigns a random number to force the update of the live component.
+  # This number will then be used as an input to the dices button, to force its disabled state update.
+  defp assign_random_update(socket) do
+    assign(socket, :force_update_number, :rand.uniform(1000)) 
   end
 
   defp assign_textarea_id(socket) do

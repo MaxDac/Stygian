@@ -388,7 +388,6 @@ defmodule Stygian.Objects do
   end
 
   @doc """
-    |> IO.inspect(label: "update effect")
   Returns an `%Ecto.Changeset{}` for tracking effect changes.
 
   ## Examples

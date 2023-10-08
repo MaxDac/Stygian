@@ -29,7 +29,7 @@
           id={@dice_button_id}
           type="button"
           phx-disable-with="..."
-          disabled={not dices_active?(@current_character)}
+          disabled={@force_update_number && dices_button_disabled?(@current_character)}
           phx-click="open_dices"
           class="w-full"
         >
