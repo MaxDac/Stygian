@@ -17,6 +17,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
   alias StygianWeb.ChatLive.ChatControlLive
   alias StygianWeb.ChatLive.ChatDiceThrowerLive
   alias StygianWeb.ChatLive.ChatHelpers
+  alias StygianWeb.ChatLive.ObjectUsageLive
   alias StygianWeb.Presence
 
   import StygianWeb.ChatLive.ChatEntryLive
@@ -34,12 +35,13 @@ defmodule StygianWeb.ChatLive.ChatLive do
      socket
      |> assign_map(map_id)
      |> assign(:show_dice_thrower, false)
+     |> assign(:show_object_usage, false)
      |> update_presence()
      |> assign_chat_entries(Maps.list_map_chats(map_id))
      |> ChatHelpers.subscribe_to_chat_events(map_id)
      |> assign_textarea_id()
-     |> assign_random_update()
      |> assign_dice_button_id()
+     |> assign_use_object_id()
      |> check_private_room_allowance()}
   end
 
@@ -61,7 +63,9 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:noreply,
      socket
      |> assign(:show_dice_thrower, false)
-     |> assign_dice_button_id()}
+     |> assign(:show_object_usage, false)
+     |> assign_dice_button_id()
+     |> assign_use_object_id()}
   end
 
   # This is called when the dice thrower modal is closed
@@ -72,6 +76,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:noreply,
      socket
      |> assign(:show_dice_thrower, false)
+     |> assign(:show_object_usage, false)
      |> assign_dice_button_id()}
   end
 
@@ -83,16 +88,24 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign(:show_dice_thrower, true)}
   end
 
+  # Object button clicked
+  @impl true
+  def handle_event("open_objects", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_object_usage, true)}
+  end
+
   @impl true
   def handle_params(%{"map_id" => map_id}, uri, socket) do
     {:noreply,
      socket
      |> assign_map(map_id)
-    # Updates the random number passed down to the live component to force it to update.
-    # The random number assign will then be used as a transparent condition to verify the button disable condition,
-    # again to force the update of the button state.
-     |> assign_random_update()
-     |> assign(:show_dice_thrower, false)}
+    # Updates the random number passed down with the component id to the live component to force it to update.
+     |> assign_dice_button_id()
+     |> assign_use_object_id()
+     |> assign(:show_dice_thrower, false)
+     |> assign(:show_object_usage, false)}
   end
 
   defp assign_new_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do
@@ -108,18 +121,16 @@ defmodule StygianWeb.ChatLive.ChatLive do
     assign(socket, map: map)
   end
 
-  # This assigns a random number to force the update of the live component.
-  # This number will then be used as an input to the dices button, to force its disabled state update.
-  defp assign_random_update(socket) do
-    assign(socket, :force_update_number, :rand.uniform(1000)) 
-  end
-
   defp assign_textarea_id(socket) do
     assign(socket, :textarea_id, new_textarea_id())
   end
 
   defp assign_dice_button_id(socket) do
     assign(socket, :dice_button_id, new_dice_button_id())
+  end
+
+  defp assign_use_object_id(socket) do
+    assign(socket, :use_object_id, new_use_object_id())
   end
 
   defp check_private_room_allowance(%{assigns: %{current_user: %{admin: true}}} = socket),
@@ -147,6 +158,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
   defp new_textarea_id, do: "textarea-id-#{:rand.uniform(10)}"
 
   defp new_dice_button_id, do: "dice-button-id-#{:rand.uniform(10)}"
+
+  defp new_use_object_id, do: "use-object-button-id-#{:rand.uniform(10)}"
 
   defp update_presence(
          %{

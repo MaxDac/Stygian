@@ -113,7 +113,7 @@ defmodule StygianWeb.ChatLive.ChatControlLive do
       attrs
       |> Map.put("type", :text)
 
-  defp dices_button_disabled?(character)
-  defp dices_button_disabled?(nil), do: true
-  defp dices_button_disabled?(_), do: false
+  defp buttons_disabled?(character) do
+    is_nil(character)
+  end
 end

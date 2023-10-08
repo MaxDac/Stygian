@@ -354,7 +354,7 @@ defmodule StygianWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@name} class="h-24">
       <.label for={@id}><%= @label %></.label>
       <textarea
         id={@id}
@@ -362,7 +362,7 @@ defmodule StygianWeb.CoreComponents do
         data-tooltip-target="textarea-error-tooltip"
         class={[
           "mt-2 block w-full rounded-md font-typewriter text-brand text-md focus:ring-0 sm:text-sm sm:leading-6",
-          "min-h-[6rem] phx-no-feedback:border-brand-inavtive phx-no-feedback:focus:border-brand-inactive",
+          "min-h-24 h-24 phx-no-feedback:border-brand-inavtive phx-no-feedback:focus:border-brand-inactive",
           "bg-black",
           @errors == [] && "border-brand-inactive focus:border-brand",
           @errors != [] && "border-rose-400 focus:border-rose-400"

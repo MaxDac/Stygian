@@ -9,8 +9,8 @@
   >
     <.input type="hidden" field={@form[:map_id]} />
     <.input type="hidden" field={@form[:character_id]} />
-    <div class="flex flex-row justify-between">
-      <div class="w-full p-3">
+    <div class="flex flex-row justify-between h-24">
+      <div class="h-24 w-full pr-2">
         <.input
           id={@textarea_id}
           field={@form[:text]}
@@ -21,20 +21,38 @@
         />
       </div>
 
-      <div class="flex flex-col max-w-10 justify-evenly">
-        <.button id="chat-input-sender" phx-disable-with="Inviando..." class="w-full">
-          Invia
-        </.button>
-        <.button
-          id={@dice_button_id}
-          type="button"
-          phx-disable-with="..."
-          disabled={@force_update_number && dices_button_disabled?(@current_character)}
-          phx-click="open_dices"
-          class="w-full"
-        >
-          Dadi
-        </.button>
+      <div class="flex justify-center mt-2">
+        <div class="flex flex-row space-x-1 justify-center">
+          <div class="flex flex-col max-w-10 space-y-1 justify-between">
+            <.button
+              id={@dice_button_id}
+              type="button"
+              phx-disable-with="..."
+              disabled={buttons_disabled?(@current_character)}
+              phx-click="open_dices"
+              class="w-full"
+            >
+              Dadi
+            </.button>
+            <.button
+              id={@use_object_id}
+              type="button"
+              phx-disable-with="..."
+              disabled={buttons_disabled?(@current_character)}
+              phx-click="open_objects"
+              class="w-full"
+            >
+              Oggetti
+            </.button>
+          </div>
+          <.button 
+            id="chat-input-sender" 
+            phx-disable-with="Inviando..." 
+            class="w-full h-full"
+          >
+            Invia
+          </.button>
+        </div>
       </div>
     </div>
   </.simple_form>
