@@ -3,8 +3,8 @@ defmodule Stygian.Repo.Migrations.CreatePrivateMapRelCharacters do
 
   def change do
     create table(:private_map_rel_characters) do
-      add :character_id, references(:characters, on_delete: :nothing)
-      add :map_id, references(:maps, on_delete: :nothing)
+      add :character_id, references(:characters, on_delete: :delete_all)
+      add :map_id, references(:maps, on_delete: :delete_all)
       add :host, :boolean, default: false, null: false
 
       timestamps()

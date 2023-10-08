@@ -4,8 +4,8 @@ defmodule Stygian.Repo.Migrations.CreateObjectEffects do
   def change do
     create table(:object_effects) do
       add :value, :integer
-      add :object_id, references(:objects, on_delete: :nothing)
-      add :skill_id, references(:skills, on_delete: :nothing)
+      add :object_id, references(:objects, on_delete: :delete_all)
+      add :skill_id, references(:skills, on_delete: :delete_all)
 
       timestamps()
     end

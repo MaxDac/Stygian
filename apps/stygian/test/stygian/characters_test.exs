@@ -488,4 +488,57 @@ defmodule Stygian.CharactersTest do
              } = changeset
     end
   end
+
+  describe "character_effects" do
+    alias Stygian.Characters.CharacterEffect
+
+    import Stygian.CharactersFixtures
+    import Stygian.ObjectsFixtures
+
+    @invalid_attrs %{}
+
+    test "list_character_effects/0 returns all character_effects" do
+      character_effect = character_effect_fixture()
+      assert Characters.list_character_effects() == [character_effect]
+    end
+
+    test "get_character_effect!/1 returns the character_effect with given id" do
+      character_effect = character_effect_fixture()
+      assert Characters.get_character_effect!(character_effect.id) == character_effect
+    end
+
+    test "create_character_effect/1 with valid data creates a character_effect" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id} = object_fixture()
+
+      valid_attrs = %{
+        character_id: character_id,
+        object_id: object_id
+      }
+
+      assert {:ok, %CharacterEffect{} = _} = Characters.create_character_effect(valid_attrs)
+    end
+
+    test "create_character_effect/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Characters.create_character_effect(@invalid_attrs)
+    end
+
+    test "update_character_effect/2 with valid data updates the character_effect" do
+      character_effect = character_effect_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %CharacterEffect{} = _} = Characters.update_character_effect(character_effect, update_attrs)
+    end
+
+    test "delete_character_effect/1 deletes the character_effect" do
+      character_effect = character_effect_fixture()
+      assert {:ok, %CharacterEffect{}} = Characters.delete_character_effect(character_effect)
+      assert_raise Ecto.NoResultsError, fn -> Characters.get_character_effect!(character_effect.id) end
+    end
+
+    test "change_character_effect/1 returns a character_effect changeset" do
+      character_effect = character_effect_fixture()
+      assert %Ecto.Changeset{} = Characters.change_character_effect(character_effect)
+    end
+  end
 end

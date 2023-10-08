@@ -835,4 +835,100 @@ defmodule Stygian.Characters do
 
   defp extract_number(exp) when is_binary(exp), do: String.to_integer(exp)
   defp extract_number(exp), do: exp
+
+  alias Stygian.Characters.CharacterEffect
+
+  @doc """
+  Returns the list of character_effects.
+
+  ## Examples
+
+      iex> list_character_effects()
+      [%CharacterEffect{}, ...]
+
+  """
+  def list_character_effects do
+    Repo.all(CharacterEffect)
+  end
+
+  @doc """
+  Gets a single character_effect.
+
+  Raises `Ecto.NoResultsError` if the Character effect does not exist.
+
+  ## Examples
+
+      iex> get_character_effect!(123)
+      %CharacterEffect{}
+
+      iex> get_character_effect!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_character_effect!(id), do: Repo.get!(CharacterEffect, id)
+
+  @doc """
+  Creates a character_effect.
+
+  ## Examples
+
+      iex> create_character_effect(%{field: value})
+      {:ok, %CharacterEffect{}}
+
+      iex> create_character_effect(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_character_effect(attrs \\ %{}) do
+    %CharacterEffect{}
+    |> CharacterEffect.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a character_effect.
+
+  ## Examples
+
+      iex> update_character_effect(character_effect, %{field: new_value})
+      {:ok, %CharacterEffect{}}
+
+      iex> update_character_effect(character_effect, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_character_effect(%CharacterEffect{} = character_effect, attrs) do
+    character_effect
+    |> CharacterEffect.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a character_effect.
+
+  ## Examples
+
+      iex> delete_character_effect(character_effect)
+      {:ok, %CharacterEffect{}}
+
+      iex> delete_character_effect(character_effect)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_character_effect(%CharacterEffect{} = character_effect) do
+    Repo.delete(character_effect)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking character_effect changes.
+
+  ## Examples
+
+      iex> change_character_effect(character_effect)
+      %Ecto.Changeset{data: %CharacterEffect{}}
+
+  """
+  def change_character_effect(%CharacterEffect{} = character_effect, attrs \\ %{}) do
+    CharacterEffect.changeset(character_effect, attrs)
+  end
 end

@@ -175,8 +175,8 @@ defmodule Stygian.ObjectsTest do
 
     test "list_character_objects/1 returns all the character objects" do
       %{id: character_id} = character_fixture()
-      %{id: object_id_1} = object_fixture()
-      %{id: object_id_2} = object_fixture()
+      %{id: object_id_1} = object_fixture(%{name: "object 1"})
+      %{id: object_id_2} = object_fixture(%{name: "object 2"})
 
       character_object_fixture(%{character_id: character_id, object_id: object_id_1})
       character_object_fixture(%{character_id: character_id, object_id: object_id_2})

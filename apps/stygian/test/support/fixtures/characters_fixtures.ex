@@ -5,6 +5,7 @@ defmodule Stygian.CharactersFixtures do
   """
 
   import Stygian.AccountsFixtures
+  import Stygian.ObjectsFixtures
   import Stygian.SkillsFixtures
 
   @doc """
@@ -84,28 +85,52 @@ defmodule Stygian.CharactersFixtures do
   Generate a character_skill.
   """
   def character_skill_fixture(attrs \\ %{}) do
-    # Adding the character and skill for FK constraints.
-    character_id =
-      case attrs do
-        %{character_id: character_id} -> character_id
-        _ -> character_fixture() |> Map.get(:id)
-      end
-
-    skill_id =
-      case attrs do
-        %{skill_id: skill_id} -> skill_id
-        _ -> skill_fixture() |> Map.get(:id)
-      end
-
     {:ok, character_skill} =
       attrs
+      |> check_character()
+      |> check_skill()
       |> Enum.into(%{
         value: 42,
-        character_id: character_id,
-        skill_id: skill_id
       })
       |> Stygian.Characters.create_character_skill()
 
     character_skill
+  end
+
+  @doc """
+  Generate a character_effect.
+  """
+  def character_effect_fixture(attrs \\ %{}) do
+    {:ok, character_effect} =
+      attrs
+      |> check_character()
+      |> check_object()
+      |> Enum.into(%{
+
+      })
+      |> Stygian.Characters.create_character_effect()
+
+    character_effect
+  end
+
+  defp check_character(%{character_id: _} = attrs), do: attrs
+
+  defp check_character(attrs) do
+    %{id: character_id} = character_fixture()
+    Map.put(attrs, :character_id, character_id)
+  end
+
+  defp check_skill(%{skill_id: _} = attrs), do: attrs
+
+  defp check_skill(attrs) do
+    %{id: skill_id} = skill_fixture()
+    Map.put(attrs, :skill_id, skill_id)
+  end
+
+  defp check_object(%{object_id: _} = attrs), do: attrs
+
+  defp check_object(attrs) do
+    %{id: object_id} = object_fixture()
+    Map.put(attrs, :object_id, object_id)
   end
 end
