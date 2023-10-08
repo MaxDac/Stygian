@@ -22,6 +22,14 @@
   <:item title="Usages"><%= @object.usages %></:item>
 </.list>
 
+<div class="my-3">
+  <.live_component
+    module={StygianWeb.EffectLive.LiteIndex}
+    id={"#{@object.id}-effects"}
+    object_id={@object.id}
+  />
+</div>
+
 <div class="mt-5 text-center">
   <.link
     navigate={~p"/admin/objects"}

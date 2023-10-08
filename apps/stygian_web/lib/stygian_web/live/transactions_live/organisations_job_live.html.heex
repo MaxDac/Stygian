@@ -1,10 +1,8 @@
 <.h1>Lavoro: <%= @job.organisation.name %></.h1>
 
-<div class="flex flex-row justify-center pb-2">
-  <.link navigate={~p"/transactions"}>
-    Torna al portafoglio
-  </.link>
-</div>
+<.return_link navigate={~p"/transactions"}>
+  Torna al portafoglio
+</.return_link>
 
 <section class="font-typewriter text-sm p-3 border-2 border-brand-inactive rounded-md shadow-md shadow-brand-inactive">
   <%= @job.organisation.description %>

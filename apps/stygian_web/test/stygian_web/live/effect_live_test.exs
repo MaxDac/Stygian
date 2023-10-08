@@ -24,7 +24,7 @@ defmodule StygianWeb.EffectLiveTest do
     setup [:create_effect, :create_admin_user]
 
     test "lists all object_effects", %{conn: conn, user: user} do
-      {:ok, _index_live, html} = 
+      {:ok, _index_live, html} =
         conn
         |> log_in_user(user)
         |> live(~p"/admin/object_effects")

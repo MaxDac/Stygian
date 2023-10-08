@@ -284,7 +284,24 @@ defmodule Stygian.Objects do
 
   """
   def list_object_effects do
-    Repo.all(Effect)
+    Effect
+    |> from()
+    |> preload(:object)
+    |> preload(:skill)
+    |> Repo.all()
+  end
+
+  @doc """
+  Lists all the effects for a specific object.
+  """
+  @spec list_object_effects(object_id :: non_neg_integer()) :: list(Effect.t())
+  def list_object_effects(object_id) do
+    Effect
+    |> from()
+    |> where([e], e.object_id == ^object_id)
+    |> preload(:object)
+    |> preload(:skill)
+    |> Repo.all()
   end
 
   @doc """

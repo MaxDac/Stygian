@@ -2,6 +2,7 @@ defmodule StygianWeb.EffectLive.FormComponent do
   use StygianWeb, :live_component
 
   alias Stygian.Objects
+  alias Stygian.Skills
 
   @impl true
   def render(assigns) do
@@ -19,9 +20,14 @@ defmodule StygianWeb.EffectLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
+        <.object_selection objects={@objects} field={@form[:object_id]} label="Oggetto" />
+
+        <.skill_selection skills={@skills} field={@form[:skill_id]} label="Skill" />
+
         <.input field={@form[:value]} type="number" label="Value" />
+
         <:actions>
-          <.button phx-disable-with="Saving...">Save Effect</.button>
+          <.button phx-disable-with="Salvando...">Salva effetto</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -35,6 +41,8 @@ defmodule StygianWeb.EffectLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign_objects()
+     |> assign_skills()
      |> assign_form(changeset)}
   end
 
@@ -53,7 +61,8 @@ defmodule StygianWeb.EffectLive.FormComponent do
   end
 
   defp save_effect(socket, :edit, effect_params) do
-    case Objects.update_effect(socket.assigns.effect, effect_params) do
+    case Objects.update_effect(socket.assigns.effect, effect_params)
+         |> IO.inspect(label: "save result") do
       {:ok, effect} ->
         notify_parent({:saved, effect})
 
@@ -84,6 +93,24 @@ defmodule StygianWeb.EffectLive.FormComponent do
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, :form, to_form(changeset))
+  end
+
+  defp assign_objects(socket) do
+    assign_async(socket, :objects, fn ->
+      {:ok,
+       %{
+         objects: Objects.list_objects()
+       }}
+    end)
+  end
+
+  defp assign_skills(socket) do
+    assign_async(socket, :skills, fn ->
+      {:ok,
+       %{
+         skills: Skills.list_skills()
+       }}
+    end)
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})

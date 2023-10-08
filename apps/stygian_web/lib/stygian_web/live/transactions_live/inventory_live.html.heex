@@ -25,9 +25,9 @@
       </span>
     </:col>
     <:action :let={%{id: id}}>
-      <.table_link patch={~p"/inventory/#{id}/use"} class="rounded-l-lg border-r-zinc-900">
+      <.table_link_left patch={~p"/inventory/#{id}/use"}>
         Usa
-      </.table_link>
+      </.table_link_left>
     </:action>
     <:action :let={%{id: id}}>
       <.table_link patch={~p"/inventory/#{id}/give"}>
@@ -35,13 +35,12 @@
       </.table_link>
     </:action>
     <:action :let={%{id: id}}>
-      <.table_link
+      <.table_link_right
         phx-click={JS.push("delete", value: %{id: id}) |> hide("##{id}")}
         data-confirm="Sei sicuro di voler buttare quest'oggetto?"
-        class="rounded-r-lg border-l-zinc-900"
       >
         Getta
-      </.table_link>
+      </.table_link_right>
     </:action>
   </.table>
 </.async_result>

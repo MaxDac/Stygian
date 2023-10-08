@@ -235,12 +235,43 @@ defmodule Stygian.ObjectsTest do
     alias Stygian.Objects.Effect
 
     import Stygian.ObjectsFixtures
+    import Stygian.SkillsFixtures
 
     @invalid_attrs %{value: nil}
 
     test "list_object_effects/0 returns all object_effects" do
       effect = effect_fixture()
-      assert Objects.list_object_effects() == [effect]
+
+      assert [strip_effects_fk(effect)] ==
+               Objects.list_object_effects()
+               |> Enum.map(&strip_effects_fk/1)
+    end
+
+    test "list_object_effects/1 returns all the effects of a specific object" do
+      %{id: object_id} = object_fixture()
+      %{id: skill_id_1} = skill_fixture()
+      %{id: skill_id_2} = skill_fixture()
+
+      effect_fixture(%{object_id: object_id, skill_id: skill_id_1})
+      effect_fixture(%{object_id: object_id, skill_id: skill_id_2})
+
+      effects = Objects.list_object_effects(object_id)
+
+      assert 2 == Enum.count(effects)
+
+      [first] = Enum.filter(effects, &(&1.skill.id == skill_id_1))
+      [second] = Enum.filter(effects, &(&1.skill.id == skill_id_2))
+
+      assert ^object_id = first.object.id
+      assert ^object_id = second.object.id
+
+      assert ^skill_id_1 = first.skill.id
+      assert ^skill_id_2 = second.skill.id
+    end
+
+    test "list_object_effects/1 returns an empty list when no effect is associated with an object" do
+      %{id: object_id} = object_fixture()
+      assert [] == Objects.list_object_effects(object_id)
     end
 
     test "get_effect!/1 returns the effect with given id" do
@@ -249,7 +280,14 @@ defmodule Stygian.ObjectsTest do
     end
 
     test "create_effect/1 with valid data creates a effect" do
-      valid_attrs = %{value: 42}
+      %{id: object_id} = object_fixture()
+      %{id: skill_id} = skill_fixture()
+
+      valid_attrs = %{
+        object_id: object_id,
+        skill_id: skill_id,
+        value: 42
+      }
 
       assert {:ok, %Effect{} = effect} = Objects.create_effect(valid_attrs)
       assert effect.value == 42

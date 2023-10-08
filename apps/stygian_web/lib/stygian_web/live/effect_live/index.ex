@@ -9,6 +9,11 @@ defmodule StygianWeb.EffectLive.Index do
   alias Stygian.Objects.Effect
 
   @impl true
+  def mount(%{"object_id" => object_id}, _session, socket) do
+    {:ok, stream(socket, :object_effects, Objects.list_object_effects(object_id))}
+  end
+
+  @impl true
   def mount(_params, _session, socket) do
     {:ok, stream(socket, :object_effects, Objects.list_object_effects())}
   end

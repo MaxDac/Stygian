@@ -7,29 +7,33 @@
   </:actions>
 </.header>
 
-<.table
-  id="object_effects"
-  rows={@streams.object_effects}
-  row_click={fn {_id, effect} -> JS.navigate(~p"/admin/object_effects/#{effect}") end}
->
-  <:col :let={{_id, effect}} label="Value"><%= effect.value %></:col>
+<.return_link navigate={~p"/admin"}>
+  Torna alla dashboard
+</.return_link>
+
+<.table id="object_effects" rows={@streams.object_effects}>
+  <:col :let={{_id, %{object: object}}} label="Oggetto"><%= object.name %></:col>
+  <:col :let={{_id, %{skill: skill}}} label="Skill"><%= skill.name %></:col>
+  <:col :let={{_id, effect}} label="Valore"><%= effect.value %></:col>
   <:action :let={{_id, effect}}>
-    <div class="sr-only">
-      <.link navigate={~p"/admin/object_effects/#{effect}"}>Show</.link>
-    </div>
-    <.link patch={~p"/admin/object_effects/#{effect}/edit"}>Edit</.link>
+    <.table_link_left patch={~p"/admin/object_effects/#{effect}/edit"}>Edit</.table_link_left>
   </:action>
   <:action :let={{id, effect}}>
-    <.link
+    <.table_link_right
       phx-click={JS.push("delete", value: %{id: effect.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
       Delete
-    </.link>
+    </.table_link_right>
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="effect-modal" show on_cancel={JS.patch(~p"/admin/object_effects")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="effect-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/object_effects")}
+>
   <.live_component
     module={StygianWeb.EffectLive.FormComponent}
     id={@effect.id || :new}

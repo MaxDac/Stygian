@@ -13,12 +13,10 @@ defmodule Stygian.Objects.Effect do
   @type t() :: %__MODULE__{
           id: non_neg_integer(),
           value: integer(),
-
           object_id: non_neg_integer(),
           skill_id: non_neg_integer(),
           object: Object.t(),
           skill: Skill.t(),
-
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
         }
@@ -35,7 +33,9 @@ defmodule Stygian.Objects.Effect do
   @doc false
   def changeset(effect, attrs) do
     effect
-    |> cast(attrs, [:value])
-    |> validate_required([:value])
+    |> cast(attrs, [:object_id, :skill_id, :value])
+    |> validate_required([:object_id, :skill_id, :value])
+    |> foreign_key_constraint(:object_id)
+    |> foreign_key_constraint(:skill_id)
   end
 end

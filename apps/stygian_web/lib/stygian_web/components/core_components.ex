@@ -638,6 +638,78 @@ defmodule StygianWeb.CoreComponents do
   end
 
   @doc """
+  The left link for the buttons in a table, positioned at the right-hand side.
+  """
+  attr :class, :string,
+    required: false,
+    default: nil,
+    doc: "The custom class to apply to the link"
+
+  attr :rest, :global,
+    include: ~w(navigate patch download hreflang referrerpolicy rel target type),
+    doc: """
+    Additional HTML attributes added to the `a` tag.
+    """
+
+  slot :inner_block, required: true
+
+  def table_link_right(assigns) do
+    ~H"""
+    <.table_link class={"border-l-zinc-900 rounded-r-lg #{@class}"} {@rest}>
+      <%= render_slot(@inner_block) %>
+    </.table_link>
+    """
+  end
+
+  @doc """
+  The right link for the buttons in a table.
+  """
+  attr :class, :string,
+    required: false,
+    default: nil,
+    doc: "The custom class to apply to the link"
+
+  attr :rest, :global,
+    include: ~w(navigate patch download hreflang referrerpolicy rel target type),
+    doc: """
+    Additional HTML attributes added to the `a` tag.
+    """
+
+  slot :inner_block, required: true
+
+  def table_link_left(assigns) do
+    ~H"""
+    <.table_link class={"rounded-l-lg border-r-zinc-900 #{@class}"} {@rest}>
+      <%= render_slot(@inner_block) %>
+    </.table_link>
+    """
+  end
+
+  @doc """
+  The standalone link for the buttons in a table.
+  """
+  attr :class, :string,
+    required: false,
+    default: nil,
+    doc: "The custom class to apply to the link"
+
+  attr :rest, :global,
+    include: ~w(navigate patch download hreflang referrerpolicy rel target type),
+    doc: """
+    Additional HTML attributes added to the `a` tag.
+    """
+
+  slot :inner_block, required: true
+
+  def table_link_standalone(assigns) do
+    ~H"""
+    <.table_link class={"rounded-lg border-r-zinc-900 #{@class}"} {@rest}>
+      <%= render_slot(@inner_block) %>
+    </.table_link>
+    """
+  end
+
+  @doc """
   Renders a data list.
 
   ## Examples
@@ -911,6 +983,24 @@ defmodule StygianWeb.CoreComponents do
   end
 
   @doc """
+  The default `h3` component.
+  """
+  attr :class, :string,
+    required: false,
+    default: "",
+    doc: "the custom class to apply to the h1 tag"
+
+  slot :inner_block, doc: "the title to render"
+
+  def h3(assigns) do
+    ~H"""
+    <h3 class={"text-center font-berolina #{@class}"}>
+      <%= render_slot(@inner_block) %>
+    </h3>
+    """
+  end
+
+  @doc """
   The default `hr` component.
   """
   attr :class, :string,
@@ -921,6 +1011,32 @@ defmodule StygianWeb.CoreComponents do
   def hr(assigns) do
     ~H"""
     <hr class={"border-2 border-brand shadow-md shadow-brand-inactive #{@class}"} />
+    """
+  end
+
+  @doc """
+  The default link at the top of the page to return to the previous page.
+  """
+  attr :class, :string,
+    required: false,
+    default: "",
+    doc: "the custom class to apply to the h1 tag"
+
+  attr :rest, :global,
+    include: ~w(navigate patch download hreflang referrerpolicy rel target type),
+    doc: """
+    Additional HTML attributes added to the `a` tag.
+    """
+
+  slot :inner_block, doc: "the title to render"
+
+  def return_link(assigns) do
+    ~H"""
+    <div class="flex flex-row justify-center">
+      <.link class={"font-typewriter text-md #{@class}"} {@rest}>
+        <%= render_slot(@inner_block) %>
+      </.link>
+    </div>
     """
   end
 
