@@ -2,9 +2,9 @@ defmodule StygianWeb.ChatLive.ObjectUsageLive do
   @moduledoc """
   Live Component that allows the character to use an object.
   """
-  
+
   use StygianWeb, :live_component
-  
+
   alias Stygian.Objects
 
   @impl true
@@ -12,15 +12,16 @@ defmodule StygianWeb.ChatLive.ObjectUsageLive do
     ~H"""
     <div>
       <.h2>Usa Oggetto</.h2>
-      
-      <.table
-        id="character_objects"
-        rows={@streams.character_objects}
-      >
+
+      <.table id="character_objects" rows={@streams.character_objects}>
         <:col :let={{_id, %{object: object}}} label="Nome"><%= object.name %></:col>
         <:col :let={{_id, %{object: object}}} label="Descr."><%= object.description %></:col>
         <:col :let={{_id, %{object: object}}} label="Immagine">
-          <img alt={object.name} src={object.image_url} class="max-w-[100px] max-h-[100px] h-auto w-auto" />
+          <img
+            alt={object.name}
+            src={object.image_url}
+            class="max-w-[100px] max-h-[100px] h-auto w-auto"
+          />
         </:col>
         <:col :let={{_id, %{object: object}}} label="Usi rimasti"><%= object.usages %></:col>
         <:action :let={{_, object}}>

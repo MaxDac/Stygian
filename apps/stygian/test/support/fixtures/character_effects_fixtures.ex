@@ -4,7 +4,7 @@ defmodule Stygian.CharacterEffectsFixtures do
   entities via the `Stygian.Characters` context, only for the 
   character effects.
   """
-  
+
   import Stygian.CharactersFixtures
   import Stygian.ObjectsFixtures
 
@@ -16,10 +16,8 @@ defmodule Stygian.CharacterEffectsFixtures do
       attrs
       |> check_character()
       |> check_object()
-      |> Enum.into(%{
-
-      })
-      |> Stygian.Characters.create_character_effect()
+      |> Enum.into(%{})
+      |> Stygian.Characters.create_character_effect_test()
 
     character_effect
   end

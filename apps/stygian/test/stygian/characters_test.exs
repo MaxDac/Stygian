@@ -508,8 +508,42 @@ defmodule Stygian.CharactersTest do
       %{id: object_id_1} = object_fixture(%{name: "object 1"})
       %{id: object_id_2} = object_fixture(%{name: "object 2"})
 
-      character_effect_fixture(%{character_id: character_id, object_id: object_id_1})
+      before_limit =
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.add(-1 * 4, :hour)
+
+      character_effect_fixture(%{
+        character_id: character_id,
+        object_id: object_id_1,
+        inserted_at: before_limit
+      })
+
       character_effect_fixture(%{character_id: character_id, object_id: object_id_2})
+
+      assert [got_character_effect] = Characters.list_active_character_effects(character_id)
+
+      assert got_character_effect.object_id == object_id_2
+    end
+
+    test "list_active_character_effects/1 returns an empty list when no active effect exists for the character" do
+      %{id: character_id} = character_fixture()
+      assert [] = Characters.list_active_character_effects(character_id)
+    end
+
+    test "character_has_effect?/2 returns true when the character has the effects given by the object" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id} = object_fixture(%{name: "object"})
+
+      character_effect_fixture(%{character_id: character_id, object_id: object_id})
+
+      assert Characters.character_has_effect?(character_id, object_id)
+    end
+
+    test "character_has_effect?/2 returns false when the character has no effects given by the object" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id} = object_fixture(%{name: "object"})
+
+      refute Characters.character_has_effect?(character_id, object_id)
     end
 
     test "get_character_effect!/1 returns the character_effect with given id" do
@@ -537,18 +571,52 @@ defmodule Stygian.CharactersTest do
       character_effect = character_effect_fixture()
       update_attrs = %{}
 
-      assert {:ok, %CharacterEffect{} = _} = Characters.update_character_effect(character_effect, update_attrs)
+      assert {:ok, %CharacterEffect{} = _} =
+               Characters.update_character_effect(character_effect, update_attrs)
     end
 
     test "delete_character_effect/1 deletes the character_effect" do
       character_effect = character_effect_fixture()
       assert {:ok, %CharacterEffect{}} = Characters.delete_character_effect(character_effect)
-      assert_raise Ecto.NoResultsError, fn -> Characters.get_character_effect!(character_effect.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Characters.get_character_effect!(character_effect.id)
+      end
     end
 
     test "change_character_effect/1 returns a character_effect changeset" do
       character_effect = character_effect_fixture()
       assert %Ecto.Changeset{} = Characters.change_character_effect(character_effect)
+    end
+
+    test "use_object/1 correctly creates an effect for the character" do
+      %{id: character_object_id, character_id: character_id, object_id: object_id} = character_object_fixture()
+
+      assert {:ok, _} = Characters.use_object(character_object_id)
+
+      assert Characters.character_has_effect?(character_id, object_id)
+    end
+
+    test "use_object/1 returns an error when the character does not own the object" do
+      assert {:error, "Il personaggio non possiede l'oggetto selezionato."} = Characters.use_object(42)
+    end
+
+    test "use_object/1 returns an error when the character tries to use the same object" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id} = object_fixture()
+
+      %{id: character_object_id_1} = character_object_fixture(%{
+        character_id: character_id,
+        object_id: object_id
+      })
+
+      %{id: character_object_id_2} = character_object_fixture(%{
+        character_id: character_id,
+        object_id: object_id
+      })
+
+      assert {:ok, _} = Characters.use_object(character_object_id_1)
+      assert {:error, _} = Characters.use_object(character_object_id_2)
     end
   end
 end

@@ -98,7 +98,6 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   @impl true
   def handle_event("use_object", %{"id" => id}, socket) do
-    IO.inspect(id, label: "using object")
     {:noreply, socket}
   end
 
@@ -107,7 +106,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:noreply,
      socket
      |> assign_map(map_id)
-    # Updates the random number passed down with the component id to the live component to force it to update.
+     # Updates the random number passed down with the component id to the live component to force it to update.
      |> assign_dice_button_id()
      |> assign_use_object_id()
      |> assign(:show_dice_thrower, false)

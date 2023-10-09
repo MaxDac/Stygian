@@ -89,7 +89,7 @@ defmodule Stygian.CharactersFixtures do
       |> check_character()
       |> check_skill()
       |> Enum.into(%{
-        value: 42,
+        value: 42
       })
       |> Stygian.Characters.create_character_skill()
 

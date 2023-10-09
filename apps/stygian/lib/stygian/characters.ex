@@ -44,7 +44,7 @@ defmodule Stygian.Characters do
   @rest_sanity_recovery 5
   @rest_cost 5
 
-  @character_effect_time_in_hour 24
+  @character_effect_time_in_hour 3
 
   @spec get_max_available_attribute_points(character :: Character.t()) :: non_neg_integer()
   def get_max_available_attribute_points(character)
@@ -864,14 +864,26 @@ defmodule Stygian.Characters do
   @spec list_active_character_effects(character_id :: non_neg_integer()) ::
           list(CharacterEffect.t())
   def list_active_character_effects(character_id) do
-    limit = 
-      NaiveDateTime.utc_now() 
+    limit =
+      NaiveDateTime.utc_now()
       |> NaiveDateTime.add(-1 * @character_effect_time_in_hour, :hour)
 
     CharacterEffect
     |> from()
     |> where([ce], ce.character_id == ^character_id and ce.inserted_at > ^limit)
     |> Repo.all()
+  end
+
+  @doc """
+  Determines whether the character has the effect of the object or not.
+  """
+  @spec character_has_effect?(character_id :: non_neg_integer(), object_id :: non_neg_integer()) ::
+          boolean()
+  def character_has_effect?(character_id, object_id) do
+    CharacterEffect
+    |> from()
+    |> where([ce], ce.character_id == ^character_id and ce.object_id == ^object_id)
+    |> Repo.exists?()
   end
 
   @doc """
@@ -905,6 +917,15 @@ defmodule Stygian.Characters do
   def create_character_effect(attrs \\ %{}) do
     %CharacterEffect{}
     |> CharacterEffect.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Use this function only in unit tests, as it changes the inserted_at field.
+  """
+  def create_character_effect_test(attrs \\ %{}) do
+    %CharacterEffect{}
+    |> CharacterEffect.changeset_test(attrs)
     |> Repo.insert()
   end
 
@@ -960,9 +981,10 @@ defmodule Stygian.Characters do
   If the object has no more usages, it won't be possible to furtherly use it.
   """
   @spec use_object(character_object_id :: non_neg_integer()) ::
-    {:ok, CharacterObject.t()} | {:error, String.t()} | {:error, any()}
+          {:ok, CharacterObject.t()} | {:error, String.t()} | {:error, any()}
   def use_object(character_object_id) do
-    with {:ok, character_object} <- check_character_object(character_object_id) do
+    with {:ok, character_object} <- check_character_object(character_object_id),
+         {:ok, character_object} <- check_character_effects(character_object) do
       Ecto.Multi.new()
       |> update_usages(character_object)
       |> create_character_effect(character_object)
@@ -980,6 +1002,18 @@ defmodule Stygian.Characters do
 
       character_object ->
         {:ok, character_object}
+    end
+  end
+
+  defp check_character_effects(
+         %{character_id: character_id, object_id: object_id} = character_effect
+       ) do
+    case character_has_effect?(character_id, object_id) do
+      true ->
+        {:error, "Il personaggio ha già l'effetto dell'oggetto selezionato."}
+
+      false ->
+        {:ok, character_effect}
     end
   end
 
