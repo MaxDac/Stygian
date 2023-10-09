@@ -97,7 +97,13 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
-  def handle_params(%{"map_id" => map_id}, uri, socket) do
+  def handle_event("use_object", %{"id" => id}, socket) do
+    IO.inspect(id, label: "using object")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_params(%{"map_id" => map_id}, _, socket) do
     {:noreply,
      socket
      |> assign_map(map_id)

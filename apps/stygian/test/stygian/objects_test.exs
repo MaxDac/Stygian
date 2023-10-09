@@ -95,6 +95,17 @@ defmodule Stygian.ObjectsTest do
                Map.delete(character_object, :object)
     end
 
+    test "get_character_object/1 returns the character_object with given id" do
+      character_object = character_object_fixture()
+
+      assert Map.delete(Objects.get_character_object(character_object.id), :object) ==
+               Map.delete(character_object, :object)
+    end
+
+    test "get_character_object/1 returns nil if the character_object with given id does not exist" do
+      assert is_nil(Objects.get_character_object(42))
+    end
+
     test "create_character_object/1 with valid data creates a character_object" do
       %{id: character_id} = character_fixture()
       %{id: object_id} = object_fixture()

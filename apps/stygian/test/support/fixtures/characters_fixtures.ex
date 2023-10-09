@@ -5,7 +5,6 @@ defmodule Stygian.CharactersFixtures do
   """
 
   import Stygian.AccountsFixtures
-  import Stygian.ObjectsFixtures
   import Stygian.SkillsFixtures
 
   @doc """
@@ -98,39 +97,12 @@ defmodule Stygian.CharactersFixtures do
   end
 
   @doc """
-  Generate a character_effect.
+  Checks whether the character exists in the attribute map or not. 
   """
-  def character_effect_fixture(attrs \\ %{}) do
-    {:ok, character_effect} =
-      attrs
-      |> check_character()
-      |> check_object()
-      |> Enum.into(%{
+  def check_character(%{character_id: _} = attrs), do: attrs
 
-      })
-      |> Stygian.Characters.create_character_effect()
-
-    character_effect
-  end
-
-  defp check_character(%{character_id: _} = attrs), do: attrs
-
-  defp check_character(attrs) do
+  def check_character(attrs) do
     %{id: character_id} = character_fixture()
     Map.put(attrs, :character_id, character_id)
-  end
-
-  defp check_skill(%{skill_id: _} = attrs), do: attrs
-
-  defp check_skill(attrs) do
-    %{id: skill_id} = skill_fixture()
-    Map.put(attrs, :skill_id, skill_id)
-  end
-
-  defp check_object(%{object_id: _} = attrs), do: attrs
-
-  defp check_object(attrs) do
-    %{id: object_id} = object_fixture()
-    Map.put(attrs, :object_id, object_id)
   end
 end

@@ -142,6 +142,16 @@ defmodule Stygian.Objects do
       |> Repo.get!(id)
 
   @doc """
+  Gets a single character_object, preloading the object. Returns nil if the item does not exist.
+  """
+  @spec get_character_object(id :: non_neg_integer()) :: CharacterObject.t() | nil
+  def get_character_object(id) do
+    CharacterObject
+    |> preload(:object)
+    |> Repo.get(id)
+  end
+
+  @doc """
   Creates a character_object.
 
   ## Examples

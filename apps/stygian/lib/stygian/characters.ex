@@ -12,8 +12,13 @@ defmodule Stygian.Characters do
   alias Stygian.Accounts
   alias Stygian.Accounts.User
   alias Stygian.Characters.Character
+  alias Stygian.Characters.CharacterEffect
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Characters.CharacterSkillForm
+
+  alias Stygian.Objects
+  alias Stygian.Objects.CharacterObject
+
   alias Stygian.Skills.Skill
 
   @max_attribute_points 9
@@ -38,6 +43,8 @@ defmodule Stygian.Characters do
   @rest_limit_hours 24
   @rest_sanity_recovery 5
   @rest_cost 5
+
+  @character_effect_time_in_hour 24
 
   @spec get_max_available_attribute_points(character :: Character.t()) :: non_neg_integer()
   def get_max_available_attribute_points(character)
@@ -564,7 +571,7 @@ defmodule Stygian.Characters do
   end
 
   @doc """
-  Updates a character skill from the character form data to change the skill, 
+  Updates a character skill from the character form data to change the skill,
   the CharacterSkillForm struct.
   """
   @spec update_character_skill_form(attrs :: map()) ::
@@ -852,6 +859,22 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Returns the list of active character effects.
+  """
+  @spec list_active_character_effects(character_id :: non_neg_integer()) ::
+          list(CharacterEffect.t())
+  def list_active_character_effects(character_id) do
+    limit = 
+      NaiveDateTime.utc_now() 
+      |> NaiveDateTime.add(-1 * @character_effect_time_in_hour, :hour)
+
+    CharacterEffect
+    |> from()
+    |> where([ce], ce.character_id == ^character_id and ce.inserted_at > ^limit)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single character_effect.
 
   Raises `Ecto.NoResultsError` if the Character effect does not exist.
@@ -930,5 +953,54 @@ defmodule Stygian.Characters do
   """
   def change_character_effect(%CharacterEffect{} = character_effect, attrs \\ %{}) do
     CharacterEffect.changeset(character_effect, attrs)
+  end
+
+  @doc """
+  Applies the usage request for an object owned by the charcter, and register its effect.
+  If the object has no more usages, it won't be possible to furtherly use it.
+  """
+  @spec use_object(character_object_id :: non_neg_integer()) ::
+    {:ok, CharacterObject.t()} | {:error, String.t()} | {:error, any()}
+  def use_object(character_object_id) do
+    with {:ok, character_object} <- check_character_object(character_object_id) do
+      Ecto.Multi.new()
+      |> update_usages(character_object)
+      |> create_character_effect(character_object)
+      |> Repo.transaction()
+    end
+  end
+
+  defp check_character_object(character_object_id) do
+    case Objects.get_character_object(character_object_id) do
+      nil ->
+        {:error, "Il personaggio non possiede l'oggetto selezionato."}
+
+      %{usages: 0} ->
+        {:error, "L'oggetto non ha più utilizzi disponibili."}
+
+      character_object ->
+        {:ok, character_object}
+    end
+  end
+
+  defp update_usages(transaction, %{usages: usages} = character_object) do
+    changeset =
+      character_object
+      |> CharacterObject.changeset(%{usages: usages - 1})
+
+    transaction
+    |> Ecto.Multi.update(:character_object, changeset)
+  end
+
+  defp create_character_effect(transaction, %{character_id: character_id, object_id: object_id}) do
+    character_effect =
+      %CharacterEffect{}
+      |> CharacterEffect.changeset(%{
+        character_id: character_id,
+        object_id: object_id
+      })
+
+    transaction
+    |> Ecto.Multi.insert(:character_effect, character_effect)
   end
 end

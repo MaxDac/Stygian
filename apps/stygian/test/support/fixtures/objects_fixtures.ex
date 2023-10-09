@@ -62,24 +62,10 @@ defmodule Stygian.ObjectsFixtures do
     |> Map.delete(:skill)
   end
 
-  defp check_character(%{character_id: _} = attrs), do: attrs
+  def check_object(%{object_id: _} = attrs), do: attrs
 
-  defp check_character(attrs) do
-    character = character_fixture()
-    Map.put(attrs, :character_id, character.id)
-  end
-
-  defp check_object(%{object_id: _} = attrs), do: attrs
-
-  defp check_object(attrs) do
+  def check_object(attrs) do
     object = object_fixture()
     Map.put(attrs, :object_id, object.id)
-  end
-
-  defp check_skill(%{skill_id: _} = attrs), do: attrs
-
-  defp check_skill(attrs) do
-    skill = skill_fixture()
-    Map.put(attrs, :skill_id, skill.id)
   end
 end

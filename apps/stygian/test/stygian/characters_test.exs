@@ -492,6 +492,7 @@ defmodule Stygian.CharactersTest do
   describe "character_effects" do
     alias Stygian.Characters.CharacterEffect
 
+    import Stygian.CharacterEffectsFixtures
     import Stygian.CharactersFixtures
     import Stygian.ObjectsFixtures
 
@@ -500,6 +501,15 @@ defmodule Stygian.CharactersTest do
     test "list_character_effects/0 returns all character_effects" do
       character_effect = character_effect_fixture()
       assert Characters.list_character_effects() == [character_effect]
+    end
+
+    test "list_active_character_effects/1 lists all the active effects for the character" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id_1} = object_fixture(%{name: "object 1"})
+      %{id: object_id_2} = object_fixture(%{name: "object 2"})
+
+      character_effect_fixture(%{character_id: character_id, object_id: object_id_1})
+      character_effect_fixture(%{character_id: character_id, object_id: object_id_2})
     end
 
     test "get_character_effect!/1 returns the character_effect with given id" do

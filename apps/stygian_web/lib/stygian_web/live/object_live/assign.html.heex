@@ -1,5 +1,9 @@
 <.h1>Assegnazione oggetto</.h1>
 
+<.return_link navigate={~p"/admin/objects"}>
+  Lista degli Oggetti
+</.return_link>
+
 <.simple_form for={@form} id="assign_object" phx-submit="save" phx-change="validate">
   <.character_selection field={@form[:character_id]} label="Personaggio" characters={@characters} />
 
