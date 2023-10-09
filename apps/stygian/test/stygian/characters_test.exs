@@ -241,9 +241,10 @@ defmodule Stygian.CharactersTest do
     alias Stygian.Characters.CharacterSkill
     alias Stygian.Skills
 
-    import Stygian.CharactersFixtures
     import Stygian.AccountsFixtures
+    import Stygian.CharactersFixtures
     import Stygian.SkillsFixtures
+    import Stygian.ObjectsFixtures
 
     @invalid_attrs %{value: nil}
 
@@ -300,6 +301,19 @@ defmodule Stygian.CharactersTest do
     test "get_character_skill_by_skill_name/2 returns nil if the character does not have the skill" do
       character = character_fixture()
       assert nil == Characters.get_character_skill_by_skill_name(character, "some skill")
+    end
+
+    test "get_character_skill_effect_value/2 returns the skill value for the character with the right effects" do
+      %{id: character_id} = character_fixture()
+      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      %{id: object_id} = object_fixture(%{name: "some object"})
+      %{id: character_object_id} = character_object_fixture(%{character_id: character_id, object_id: object_id})
+      character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 4})
+      effect_fixture(%{object_id: object_id, skill_id: skill_id, value: 2})
+      effect_fixture(%{object_id: object_id, skill_id: skill_id, value: -1})
+      Characters.use_object(character_object_id)
+
+      assert 5 == Characters.get_character_skill_effect_value(character_id, skill_id)
     end
 
     test "create_character_skill/1 with valid data creates a character_skill" do
@@ -529,6 +543,31 @@ defmodule Stygian.CharactersTest do
     test "list_active_character_effects/1 returns an empty list when no active effect exists for the character" do
       %{id: character_id} = character_fixture()
       assert [] = Characters.list_active_character_effects(character_id)
+    end
+
+    test "list_active_character_skill_effects/1 lists all the active skill effects for the character" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id_1} = object_fixture(%{name: "object 1"})
+      %{id: object_id_2} = object_fixture(%{name: "object 2"})
+
+      %{id: _} = effect_fixture(%{name: "effect 1", object_id: object_id_1})
+      %{id: effect_id_2} = effect_fixture(%{name: "effect 2", object_id: object_id_2})
+
+      before_limit =
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.add(-1 * 4, :hour)
+
+      character_effect_fixture(%{
+        character_id: character_id,
+        object_id: object_id_1,
+        inserted_at: before_limit
+      })
+
+      character_effect_fixture(%{character_id: character_id, object_id: object_id_2})
+
+      assert [got_effect] = Characters.list_active_character_skill_effects(character_id)
+
+      assert got_effect.id == effect_id_2
     end
 
     test "character_has_effect?/2 returns true when the character has the effects given by the object" do

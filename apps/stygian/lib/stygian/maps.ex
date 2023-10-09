@@ -8,6 +8,7 @@ defmodule Stygian.Maps do
   alias Ecto.Changeset
   alias Stygian.Repo
 
+  alias Stygian.Characters
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Maps.Map, as: LandMap
@@ -305,6 +306,18 @@ defmodule Stygian.Maps do
       end
 
     "Ha effettuato un tiro di #{attribute_name} + #{skill_name}#{modifier_text} con Diff. #{difficulty}"
+  end
+
+  @doc """
+  Gets the character skill value, considering the effects as well.
+  """
+  def get_character_skill(character_id, skill) do
+    effects = Characters.list_character_effects()
+    CharacterSkill
+    |> from()
+    |> where([cs], cs.character_id == ^character_id and cs.skill_id == ^skill.id)
+    |> preload(:effects)
+    |> Repo.one()
   end
 
   @doc """
