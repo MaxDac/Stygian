@@ -989,7 +989,6 @@ defmodule Stygian.Characters do
       |> update_usages(character_object)
       |> create_character_effect(character_object)
       |> Repo.transaction()
-      |> IO.inspect(label: "use object result")
     end
   end
 

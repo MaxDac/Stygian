@@ -47,6 +47,22 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
     """
   end
 
+  def chat_entry(%{chat: %{type: :special}} = assigns) do
+    ~H"""
+    <div class="text-medium text-brand text-[1rem] flex justify-start space-x-5 mb-5">
+      <.chat_avatar chat={@chat} />
+      <div class="w-full">
+        <div class="font-report">
+          <%= chat_time(@chat.inserted_at) %> - <%= @chat.character.name %>
+        </div>
+        <div class="font-typewriter text-brand not-format">
+          <%= raw(Earmark.as_html!(@chat.text)) %>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
   def chat_entry(assigns) do
     ~H"""
     <div class="text-medium text-brand text-[1rem] flex justify-start space-x-5 mb-5">

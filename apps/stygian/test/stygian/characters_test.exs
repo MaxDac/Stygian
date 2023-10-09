@@ -591,7 +591,8 @@ defmodule Stygian.CharactersTest do
     end
 
     test "use_object/1 correctly creates an effect for the character" do
-      %{id: character_object_id, character_id: character_id, object_id: object_id, usages: usages} = character_object_fixture()
+      %{id: character_object_id, character_id: character_id, object_id: object_id, usages: usages} =
+        character_object_fixture()
 
       assert {:ok, _} = Characters.use_object(character_object_id)
 
@@ -603,20 +604,24 @@ defmodule Stygian.CharactersTest do
     end
 
     test "use_object/1 returns an error when the character does not own the object" do
-      assert {:error, "Il personaggio non possiede l'oggetto selezionato."} = Characters.use_object(42)
+      assert {:error, "Il personaggio non possiede l'oggetto selezionato."} =
+               Characters.use_object(42)
     end
 
     test "use_object/1 returns an error when the character tries to use the same object" do
       %{id: character_id} = character_fixture()
       %{id: object_id} = object_fixture()
 
-      %{id: character_object_id, usages: usages} = character_object_fixture(%{
-        character_id: character_id,
-        object_id: object_id
-      })
+      %{id: character_object_id, usages: usages} =
+        character_object_fixture(%{
+          character_id: character_id,
+          object_id: object_id
+        })
 
       assert {:ok, _} = Characters.use_object(character_object_id)
-      assert {:error, "Il personaggio ha già l'effetto dell'oggetto selezionato."} = Characters.use_object(character_object_id)
+
+      assert {:error, "Il personaggio ha già l'effetto dell'oggetto selezionato."} =
+               Characters.use_object(character_object_id)
 
       character_object = Objects.get_character_object!(character_object_id)
 
@@ -627,18 +632,22 @@ defmodule Stygian.CharactersTest do
       %{id: character_id} = character_fixture()
       %{id: object_id} = object_fixture()
 
-      %{id: character_object_id_1, usages: usages_1} = character_object_fixture(%{
-        character_id: character_id,
-        object_id: object_id
-      })
+      %{id: character_object_id_1, usages: usages_1} =
+        character_object_fixture(%{
+          character_id: character_id,
+          object_id: object_id
+        })
 
-      %{id: character_object_id_2, usages: usages_2} = character_object_fixture(%{
-        character_id: character_id,
-        object_id: object_id
-      })
+      %{id: character_object_id_2, usages: usages_2} =
+        character_object_fixture(%{
+          character_id: character_id,
+          object_id: object_id
+        })
 
       assert {:ok, _} = Characters.use_object(character_object_id_1)
-      assert {:error, "Il personaggio ha già l'effetto dell'oggetto selezionato."} = Characters.use_object(character_object_id_2)
+
+      assert {:error, "Il personaggio ha già l'effetto dell'oggetto selezionato."} =
+               Characters.use_object(character_object_id_2)
 
       character_object_1 = Objects.get_character_object!(character_object_id_1)
       character_object_2 = Objects.get_character_object!(character_object_id_2)
@@ -648,11 +657,13 @@ defmodule Stygian.CharactersTest do
     end
 
     test "use_object/1 does not allow object usage when the usages are 0" do
-      %{id: character_object_id} = character_object_fixture(%{
-        usages: 0
-      })
+      %{id: character_object_id} =
+        character_object_fixture(%{
+          usages: 0
+        })
 
-      assert {:error, "L'oggetto non ha più utilizzi disponibili."} = Characters.use_object(character_object_id)
+      assert {:error, "L'oggetto non ha più utilizzi disponibili."} =
+               Characters.use_object(character_object_id)
     end
   end
 end

@@ -55,8 +55,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
-  def handle_info({:chat_input_sent, _}, socket) do
-    send_update(ChatControlLive, id: socket.assigns.map.id, textarea_id: new_textarea_id())
+  def handle_info({:chat_input_sent, _}, %{assigns: %{map: %{id: map_id}}} = socket) do
+    send_update(ChatControlLive, id: map_id, textarea_id: new_textarea_id())
     {:noreply, socket}
   end
 
@@ -72,8 +72,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   # This is called when the dice thrower modal is closed
   @impl true
-  def handle_info({:chat, _}, socket) do
-    send_update(ChatControlLive, id: socket.assigns.map.id)
+  def handle_info({:chat, _}, %{assigns: %{map: %{id: map_id}}} = socket) do
+    send_update(ChatControlLive, id: map_id)
 
     {:noreply,
      socket
@@ -99,11 +99,15 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
-  def handle_event("use_object", %{"id" => id}, socket) do
+  def handle_event("use_object", %{"id" => id}, %{assigns: %{map: %{id: map_id}}} = socket) do
     with {:ok, %{character_object: character_object}} <- Characters.use_object(id),
          {:ok, socket} <- add_use_object_chat(socket, character_object) do
-      send_update(ChatControlLive, id: socket.assigns.map.id, textarea_id: new_textarea_id())
-      {:noreply, socket}
+      send_update(ChatControlLive, id: map_id, textarea_id: new_textarea_id())
+
+      {:noreply,
+       socket
+       |> assign(:show_object_usage, false)
+       |> assign_use_object_id()}
     else
       {:error, error} when is_binary(error) ->
         {:noreply,
@@ -158,20 +162,26 @@ defmodule StygianWeb.ChatLive.ChatLive do
     assign(socket, :use_object_id, new_use_object_id())
   end
 
-  defp add_use_object_chat(%{assigns: %{
-    current_character: %{
-      id: character_id
-    }, 
-    map: %{
-      id: map_id
-    }
-  }} = socket, character_object) do
-    with {:ok, chat_entry} <- Maps.create_chat(%{
-      map_id: socket.assigns.map.id,
-      character_id: character_id,
-      text: "Ha usato #{character_object.object.name}",
-      type: :special
-    }) do
+  defp add_use_object_chat(
+         %{
+           assigns: %{
+             current_character: %{
+               id: character_id
+             },
+             map: %{
+               id: map_id
+             }
+           }
+         } = socket,
+         character_object
+       ) do
+    with {:ok, chat_entry} <-
+           Maps.create_chat(%{
+             map_id: map_id,
+             character_id: character_id,
+             text: "Ha usato #{character_object.object.name}",
+             type: :special
+           }) do
       {:ok, ChatHelpers.handle_chat_created(socket, chat_entry)}
     end
   end
