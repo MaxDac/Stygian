@@ -13,7 +13,9 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   use StygianWeb, :container_live_view
 
+  alias Stygian.Characters
   alias Stygian.Maps
+
   alias StygianWeb.ChatLive.ChatControlLive
   alias StygianWeb.ChatLive.ChatDiceThrowerLive
   alias StygianWeb.ChatLive.ChatHelpers
@@ -98,7 +100,25 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   @impl true
   def handle_event("use_object", %{"id" => id}, socket) do
-    {:noreply, socket}
+    with {:ok, %{character_object: character_object}} <- Characters.use_object(id),
+         {:ok, socket} <- add_use_object_chat(socket, character_object) do
+      send_update(ChatControlLive, id: socket.assigns.map.id, textarea_id: new_textarea_id())
+      {:noreply, socket}
+    else
+      {:error, error} when is_binary(error) ->
+        {:noreply,
+         socket
+         |> put_flash(:error, error)
+         |> assign(:show_object_usage, false)
+         |> assign_use_object_id()}
+
+      _ ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "C'è stato un errore durante l'utilizzo dell'oggetto.")
+         |> assign(:show_object_usage, false)
+         |> assign_use_object_id()}
+    end
   end
 
   @impl true
@@ -136,6 +156,24 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   defp assign_use_object_id(socket) do
     assign(socket, :use_object_id, new_use_object_id())
+  end
+
+  defp add_use_object_chat(%{assigns: %{
+    current_character: %{
+      id: character_id
+    }, 
+    map: %{
+      id: map_id
+    }
+  }} = socket, character_object) do
+    with {:ok, chat_entry} <- Maps.create_chat(%{
+      map_id: socket.assigns.map.id,
+      character_id: character_id,
+      text: "Ha usato #{character_object.object.name}",
+      type: :special
+    }) do
+      {:ok, ChatHelpers.handle_chat_created(socket, chat_entry)}
+    end
   end
 
   defp check_private_room_allowance(%{assigns: %{current_user: %{admin: true}}} = socket),

@@ -23,7 +23,7 @@ defmodule StygianWeb.ChatLive.ObjectUsageLive do
             class="max-w-[100px] max-h-[100px] h-auto w-auto"
           />
         </:col>
-        <:col :let={{_id, %{object: object}}} label="Usi rimasti"><%= object.usages %></:col>
+        <:col :let={{_id, %{usages: usages}}} label="Usi rimasti"><%= usages %></:col>
         <:action :let={{_, object}}>
           <.table_link_standalone
             phx-click={JS.push("use_object", value: %{id: object.id})}
