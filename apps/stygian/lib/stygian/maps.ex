@@ -254,13 +254,18 @@ defmodule Stygian.Maps do
         %{
           character: %{id: character_id},
           map: %{id: map_id},
-          attribute: %{value: attribute_value},
-          skill: %{value: skill_value},
+          attribute: %{skill_id: attribute_id},
+          skill: %{skill_id: skill_id},
           modifier: modifier,
           difficulty: difficulty
         } = request,
         dice_thrower
       ) do
+    {attribute_value, skill_value} = {
+      Characters.get_character_skill_effect_value(character_id, attribute_id),
+      Characters.get_character_skill_effect_value(character_id, skill_id)
+    }
+
     chat_explanation = get_chat_explanation(request)
     base = attribute_value + skill_value + modifier
     dice_result = dice_thrower.(20)
@@ -306,18 +311,6 @@ defmodule Stygian.Maps do
       end
 
     "Ha effettuato un tiro di #{attribute_name} + #{skill_name}#{modifier_text} con Diff. #{difficulty}"
-  end
-
-  @doc """
-  Gets the character skill value, considering the effects as well.
-  """
-  def get_character_skill(character_id, skill) do
-    effects = Characters.list_character_effects()
-    CharacterSkill
-    |> from()
-    |> where([cs], cs.character_id == ^character_id and cs.skill_id == ^skill.id)
-    |> preload(:effects)
-    |> Repo.one()
   end
 
   @doc """
