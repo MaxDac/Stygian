@@ -354,7 +354,7 @@ defmodule StygianWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name} class="h-24">
+    <div phx-feedback-for={@name} class="h-28">
       <.label for={@id}><%= @label %></.label>
       <textarea
         id={@id}
