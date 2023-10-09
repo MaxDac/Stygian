@@ -307,7 +307,10 @@ defmodule Stygian.CharactersTest do
       %{id: character_id} = character_fixture()
       %{id: skill_id} = skill_fixture(%{name: "some skill"})
       %{id: object_id} = object_fixture(%{name: "some object"})
-      %{id: character_object_id} = character_object_fixture(%{character_id: character_id, object_id: object_id})
+
+      %{id: character_object_id} =
+        character_object_fixture(%{character_id: character_id, object_id: object_id})
+
       character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 4})
       effect_fixture(%{object_id: object_id, skill_id: skill_id, value: 2})
       effect_fixture(%{object_id: object_id, skill_id: skill_id, value: -1})

@@ -539,11 +539,11 @@ defmodule Stygian.Characters do
   Returns the character skill value, modified by the existing effects on the character.
   """
   def get_character_skill_effect_value(character_id, skill_id) do
-    %{value: value} = get_character_skill(character_id, skill_id) |> IO.inspect(label: "base value")
+    %{value: value} =
+      get_character_skill(character_id, skill_id)
 
     list_active_character_skill_effects(character_id)
-    |> Enum.filter(& &1.skill_id == skill_id)
-    |> IO.inspect(label: "effects")
+    |> Enum.filter(&(&1.skill_id == skill_id))
     |> Enum.reduce(value, fn %{value: value}, acc -> acc + value end)
   end
 
@@ -880,7 +880,7 @@ defmodule Stygian.Characters do
     list_active_character_effects_query(character_id)
     |> Repo.all()
   end
-  
+
   @doc """
   Lists all the effects on the character given by the consumed objects.
   """
