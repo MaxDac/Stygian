@@ -32,6 +32,8 @@
     />
   </:col>
   <:col :let={{_id, object}} label="Usages"><%= object.usages %></:col>
+  <:col :let={{_id, object}} label="Salute"><%= object.health %></:col>
+  <:col :let={{_id, object}} label="Sanità"><%= object.sanity %></:col>
   <:action :let={{_id, object}}>
     <.table_link_left patch={~p"/admin/objects/#{object}"}>
       Show

@@ -17,7 +17,9 @@ defmodule Stygian.ObjectsFixtures do
         description: "some description",
         image_url: "some image_url",
         name: "some name",
-        usages: 42
+        usages: 42,
+        health: 0,
+        sanity: 0
       })
       |> Stygian.Objects.create_object()
 
