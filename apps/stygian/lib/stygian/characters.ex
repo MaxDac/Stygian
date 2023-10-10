@@ -1008,7 +1008,7 @@ defmodule Stygian.Characters do
   If the object has no more usages, it won't be possible to furtherly use it.
   """
   @spec use_object(character_object_id :: non_neg_integer()) ::
-          {:ok, CharacterObject.t()} | {:error, String.t()} | {:error, any()}
+          {:ok, %{character_object: CharacterObject.t()}} | {:error, String.t()} | {:error, any()}
   def use_object(character_object_id) do
     with {:ok, character_object} <- check_character_object(character_object_id),
          {:ok, character_object} <- check_character_effects(character_object) do
