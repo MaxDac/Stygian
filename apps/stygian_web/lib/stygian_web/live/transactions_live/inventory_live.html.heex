@@ -1,50 +1,39 @@
 <.h1>Inventario</.h1>
 
-<.async_result :let={inventory} assign={@inventory}>
-  <:loading><.spinner /></:loading>
-  <:failed :let={_reason}>Errore nel caricare l'inventario .</:failed>
-
-  <.table id="objects" rows={inventory}>
-    <:col :let={%{object: object}} label="Nome"><%= object.name %></:col>
-    <:col :let={%{object: object}} label="Descrizione">
-      <span class="max-w-[150px] inline-block">
-        <%= object.description %>
-      </span>
-    </:col>
-    <:col :let={%{object: object}} label="Immagine">
-      <img
-        alt={object.name}
-        aria-label={object.name}
-        src={object.image_url}
-        class="max-w-[150px] h-auto"
-      />
-    </:col>
-    <:col :let={%{object: object}} label="Utilizzi">
-      <span class="text-lg">
-        <%= object.usages %>
-      </span>
-    </:col>
-    <:action :let={%{id: id}}>
-      <.table_link patch={~p"/inventory/#{id}/use"} class="rounded-l-lg border-r-zinc-900">
-        Usa
-      </.table_link>
-    </:action>
-    <:action :let={%{id: id}}>
-      <.table_link patch={~p"/inventory/#{id}/give"}>
-        Cedi
-      </.table_link>
-    </:action>
-    <:action :let={%{id: id}}>
-      <.table_link
-        phx-click={JS.push("delete", value: %{id: id}) |> hide("##{id}")}
-        data-confirm="Sei sicuro di voler buttare quest'oggetto?"
-        class="rounded-r-lg border-l-zinc-900"
-      >
-        Getta
-      </.table_link>
-    </:action>
-  </.table>
-</.async_result>
+<.table id="objects" rows={@streams.inventory}>
+  <:col :let={{_, %{object: object}}} label="Nome"><%= object.name %></:col>
+  <:col :let={{_, %{object: object}}} label="Descrizione">
+    <span class="max-w-[150px] inline-block">
+      <%= object.description %>
+    </span>
+  </:col>
+  <:col :let={{_, %{object: object}}} label="Immagine">
+    <img
+      alt={object.name}
+      aria-label={object.name}
+      src={object.image_url}
+      class="max-w-[150px] h-auto"
+    />
+  </:col>
+  <:col :let={{_, %{object: object}}} label="Utilizzi">
+    <span class="text-lg">
+      <%= object.usages %>
+    </span>
+  </:col>
+  <:action :let={{_, %{id: id}}}>
+    <.table_link_left patch={~p"/inventory/#{id}/give"}>
+      Cedi
+    </.table_link_left>
+  </:action>
+  <:action :let={{_, %{id: id}}}>
+    <.table_link_right
+      phx-click={JS.push("delete", value: %{id: id}) |> hide("##{id}")}
+      data-confirm="Sei sicuro di voler buttare quest'oggetto?"
+    >
+      Getta
+    </.table_link_right>
+  </:action>
+</.table>
 
 <.modal :if={@live_action in [:give]} id="give-modal" show on_cancel={JS.patch(~p"/inventory")}>
   <.live_component

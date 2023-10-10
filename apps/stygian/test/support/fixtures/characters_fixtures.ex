@@ -84,28 +84,25 @@ defmodule Stygian.CharactersFixtures do
   Generate a character_skill.
   """
   def character_skill_fixture(attrs \\ %{}) do
-    # Adding the character and skill for FK constraints.
-    character_id =
-      case attrs do
-        %{character_id: character_id} -> character_id
-        _ -> character_fixture() |> Map.get(:id)
-      end
-
-    skill_id =
-      case attrs do
-        %{skill_id: skill_id} -> skill_id
-        _ -> skill_fixture() |> Map.get(:id)
-      end
-
     {:ok, character_skill} =
       attrs
+      |> check_character()
+      |> check_skill()
       |> Enum.into(%{
-        value: 42,
-        character_id: character_id,
-        skill_id: skill_id
+        value: 42
       })
       |> Stygian.Characters.create_character_skill()
 
     character_skill
+  end
+
+  @doc """
+  Checks whether the character exists in the attribute map or not. 
+  """
+  def check_character(%{character_id: _} = attrs), do: attrs
+
+  def check_character(attrs) do
+    %{id: character_id} = character_fixture()
+    Map.put(attrs, :character_id, character_id)
   end
 end

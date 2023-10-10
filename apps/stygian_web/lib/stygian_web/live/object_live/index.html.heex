@@ -24,12 +24,18 @@
 >
   <:col :let={{_id, object}} label="Name"><%= object.name %></:col>
   <:col :let={{_id, object}} label="Description"><%= object.description %></:col>
-  <:col :let={{_id, object}} label="Image url"><%= object.image_url %></:col>
+  <:col :let={{_id, object}} label="Image url">
+    <img
+      src={object.image_url}
+      alt={object.name}
+      class="max-w-[100px] max-h-[100px] h-auto w-auto"
+    />
+  </:col>
   <:col :let={{_id, object}} label="Usages"><%= object.usages %></:col>
   <:action :let={{_id, object}}>
-    <.table_link patch={~p"/admin/objects/#{object}"} class="brounded-l-lg border-r-zinc-900">
+    <.table_link_left patch={~p"/admin/objects/#{object}"}>
       Show
-    </.table_link>
+    </.table_link_left>
   </:action>
   <:action :let={{_id, object}}>
     <.table_link patch={~p"/admin/objects/#{object}/edit"}>
@@ -37,13 +43,12 @@
     </.table_link>
   </:action>
   <:action :let={{id, object}}>
-    <.table_link
+    <.table_link_right
       phx-click={JS.push("delete", value: %{id: object.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
-      class="border-l-zinc-900 rounded-r-lg"
     >
       Delete
-    </.table_link>
+    </.table_link_right>
   </:action>
 </.table>
 

@@ -13,10 +13,13 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   use StygianWeb, :container_live_view
 
+  alias Stygian.Characters
   alias Stygian.Maps
+
   alias StygianWeb.ChatLive.ChatControlLive
   alias StygianWeb.ChatLive.ChatDiceThrowerLive
   alias StygianWeb.ChatLive.ChatHelpers
+  alias StygianWeb.ChatLive.ObjectUsageLive
   alias StygianWeb.Presence
 
   import StygianWeb.ChatLive.ChatEntryLive
@@ -34,11 +37,13 @@ defmodule StygianWeb.ChatLive.ChatLive do
      socket
      |> assign_map(map_id)
      |> assign(:show_dice_thrower, false)
+     |> assign(:show_object_usage, false)
      |> update_presence()
      |> assign_chat_entries(Maps.list_map_chats(map_id))
      |> ChatHelpers.subscribe_to_chat_events(map_id)
      |> assign_textarea_id()
      |> assign_dice_button_id()
+     |> assign_use_object_id()
      |> check_private_room_allowance()}
   end
 
@@ -50,8 +55,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
-  def handle_info({:chat_input_sent, _}, socket) do
-    send_update(ChatControlLive, id: socket.assigns.map.id, textarea_id: new_textarea_id())
+  def handle_info({:chat_input_sent, _}, %{assigns: %{map: %{id: map_id}}} = socket) do
+    send_update(ChatControlLive, id: map_id, textarea_id: new_textarea_id())
     {:noreply, socket}
   end
 
@@ -60,17 +65,20 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:noreply,
      socket
      |> assign(:show_dice_thrower, false)
-     |> assign_dice_button_id()}
+     |> assign(:show_object_usage, false)
+     |> assign_dice_button_id()
+     |> assign_use_object_id()}
   end
 
   # This is called when the dice thrower modal is closed
   @impl true
-  def handle_info({:chat, _}, socket) do
-    send_update(ChatControlLive, id: socket.assigns.map.id)
+  def handle_info({:chat, _}, %{assigns: %{map: %{id: map_id}}} = socket) do
+    send_update(ChatControlLive, id: map_id)
 
     {:noreply,
      socket
      |> assign(:show_dice_thrower, false)
+     |> assign(:show_object_usage, false)
      |> assign_dice_button_id()}
   end
 
@@ -80,6 +88,53 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:noreply,
      socket
      |> assign(:show_dice_thrower, true)}
+  end
+
+  # Object button clicked
+  @impl true
+  def handle_event("open_objects", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_object_usage, true)}
+  end
+
+  @impl true
+  def handle_event("use_object", %{"id" => id}, %{assigns: %{map: %{id: map_id}}} = socket) do
+    with {:ok, %{character_object: character_object}} <- Characters.use_object(id),
+         {:ok, socket} <- add_use_object_chat(socket, character_object) do
+      send_update(ChatControlLive, id: map_id, textarea_id: new_textarea_id())
+
+      {:noreply,
+       socket
+       |> assign(:show_object_usage, false)
+       |> assign_use_object_id()}
+    else
+      {:error, error} when is_binary(error) ->
+        {:noreply,
+         socket
+         |> put_flash(:error, error)
+         |> assign(:show_object_usage, false)
+         |> assign_use_object_id()}
+
+      _ ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "C'è stato un errore durante l'utilizzo dell'oggetto.")
+         |> assign(:show_object_usage, false)
+         |> assign_use_object_id()}
+    end
+  end
+
+  @impl true
+  def handle_params(%{"map_id" => map_id}, _, socket) do
+    {:noreply,
+     socket
+     |> assign_map(map_id)
+     # Updates the random number passed down with the component id to the live component to force it to update.
+     |> assign_dice_button_id()
+     |> assign_use_object_id()
+     |> assign(:show_dice_thrower, false)
+     |> assign(:show_object_usage, false)}
   end
 
   defp assign_new_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do
@@ -101,6 +156,34 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   defp assign_dice_button_id(socket) do
     assign(socket, :dice_button_id, new_dice_button_id())
+  end
+
+  defp assign_use_object_id(socket) do
+    assign(socket, :use_object_id, new_use_object_id())
+  end
+
+  defp add_use_object_chat(
+         %{
+           assigns: %{
+             current_character: %{
+               id: character_id
+             },
+             map: %{
+               id: map_id
+             }
+           }
+         } = socket,
+         character_object
+       ) do
+    with {:ok, chat_entry} <-
+           Maps.create_chat(%{
+             map_id: map_id,
+             character_id: character_id,
+             text: "Ha usato #{character_object.object.name}",
+             type: :special
+           }) do
+      {:ok, ChatHelpers.handle_chat_created(socket, chat_entry)}
+    end
   end
 
   defp check_private_room_allowance(%{assigns: %{current_user: %{admin: true}}} = socket),
@@ -128,6 +211,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
   defp new_textarea_id, do: "textarea-id-#{:rand.uniform(10)}"
 
   defp new_dice_button_id, do: "dice-button-id-#{:rand.uniform(10)}"
+
+  defp new_use_object_id, do: "use-object-button-id-#{:rand.uniform(10)}"
 
   defp update_presence(
          %{

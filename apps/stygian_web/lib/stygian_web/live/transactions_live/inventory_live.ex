@@ -43,9 +43,7 @@ defmodule StygianWeb.TransactionsLive.InventoryLive do
     character_object = Objects.get_character_object!(id)
     {:ok, _} = Objects.delete_character_object(character_object)
 
-    {:noreply,
-     socket
-     |> assign_character_inventory()}
+    {:noreply, stream_delete(socket, :inventory, character_object)}
   end
 
   defp assign_inventory_character(socket, character_id) do
@@ -53,11 +51,6 @@ defmodule StygianWeb.TransactionsLive.InventoryLive do
   end
 
   defp assign_character_inventory(%{assigns: %{inventory_character_id: character_id}} = socket) do
-    assign_async(socket, :inventory, fn ->
-      {:ok,
-       %{
-         inventory: Objects.list_character_objects(character_id)
-       }}
-    end)
+    stream(socket, :inventory, Objects.list_character_objects(character_id))
   end
 end

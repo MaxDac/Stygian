@@ -28,5 +28,6 @@ defmodule Stygian.Objects.Object do
     object
     |> cast(attrs, [:name, :description, :image_url, :usages])
     |> validate_required([:name, :description, :image_url, :usages])
+    |> unique_constraint(:name, name: :objects_name_index)
   end
 end

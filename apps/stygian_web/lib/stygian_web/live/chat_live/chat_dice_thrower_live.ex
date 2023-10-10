@@ -24,7 +24,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   def render(assigns) do
     ~H"""
     <div>
-      <.h1>ChatDiceThrowerLive</.h1>
+      <.h2>Tiro dei Dadi</.h2>
 
       <div class="flex flex-col justify-evenly">
         <.simple_form for={@form} phx-target={@myself} phx-submit="submit" class="space-y-3">

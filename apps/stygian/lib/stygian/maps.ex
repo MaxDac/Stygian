@@ -8,6 +8,7 @@ defmodule Stygian.Maps do
   alias Ecto.Changeset
   alias Stygian.Repo
 
+  alias Stygian.Characters
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Maps.Map, as: LandMap
@@ -253,13 +254,18 @@ defmodule Stygian.Maps do
         %{
           character: %{id: character_id},
           map: %{id: map_id},
-          attribute: %{value: attribute_value},
-          skill: %{value: skill_value},
+          attribute: %{skill_id: attribute_id},
+          skill: %{skill_id: skill_id},
           modifier: modifier,
           difficulty: difficulty
         } = request,
         dice_thrower
       ) do
+    {attribute_value, skill_value} = {
+      Characters.get_character_skill_effect_value(character_id, attribute_id),
+      Characters.get_character_skill_effect_value(character_id, skill_id)
+    }
+
     chat_explanation = get_chat_explanation(request)
     base = attribute_value + skill_value + modifier
     dice_result = dice_thrower.(20)

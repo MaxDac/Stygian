@@ -142,6 +142,16 @@ defmodule Stygian.Objects do
       |> Repo.get!(id)
 
   @doc """
+  Gets a single character_object, preloading the object. Returns nil if the item does not exist.
+  """
+  @spec get_character_object(id :: non_neg_integer()) :: CharacterObject.t() | nil
+  def get_character_object(id) do
+    CharacterObject
+    |> preload(:object)
+    |> Repo.get(id)
+  end
+
+  @doc """
   Creates a character_object.
 
   ## Examples
@@ -270,5 +280,133 @@ defmodule Stygian.Objects do
         |> Ecto.Multi.insert(:transaction, object_transaction_changeset)
         |> Repo.transaction()
     end
+  end
+
+  alias Stygian.Objects.Effect
+
+  @doc """
+  Returns the list of object_effects.
+
+  ## Examples
+
+      iex> list_object_effects()
+      [%Effect{}, ...]
+
+  """
+  def list_object_effects do
+    Effect
+    |> from()
+    |> preload(:object)
+    |> preload(:skill)
+    |> Repo.all()
+  end
+
+  @doc """
+  Lists all the effects for a specific object.
+  """
+  @spec list_object_effects(object_id :: non_neg_integer()) :: list(Effect.t())
+  def list_object_effects(object_id) do
+    Effect
+    |> from()
+    |> where([e], e.object_id == ^object_id)
+    |> preload(:object)
+    |> preload(:skill)
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets a single effect.
+
+  Raises `Ecto.NoResultsError` if the Effect does not exist.
+
+  ## Examples
+
+      iex> get_effect!(123)
+      %Effect{}
+
+      iex> get_effect!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_effect!(id), do: Repo.get!(Effect, id)
+
+  @doc """
+  Gets a single effect, preloading the object and the skill.
+  """
+  @spec get_complete_effect(id :: non_neg_integer()) :: Effect.t() | nil
+  def get_complete_effect(id) do
+    Effect
+    |> from()
+    |> where([e], e.id == ^id)
+    |> preload(:object)
+    |> preload(:skill)
+    |> Repo.one()
+  end
+
+  @doc """
+  Creates a effect.
+
+  ## Examples
+
+      iex> create_effect(%{field: value})
+      {:ok, %Effect{}}
+
+      iex> create_effect(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_effect(attrs \\ %{}) do
+    with {:ok, %{id: saved_effect_id}} <- %Effect{} |> Effect.changeset(attrs) |> Repo.insert() do
+      effect = get_complete_effect(saved_effect_id)
+      {:ok, effect}
+    end
+  end
+
+  @doc """
+  Updates a effect.
+
+  ## Examples
+
+      iex> update_effect(effect, %{field: new_value})
+      {:ok, %Effect{}}
+
+      iex> update_effect(effect, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_effect(%Effect{} = effect, attrs) do
+    with {:ok, %{id: saved_effect_id}} <- effect |> Effect.changeset(attrs) |> Repo.update() do
+      effect = get_complete_effect(saved_effect_id)
+      {:ok, effect}
+    end
+  end
+
+  @doc """
+  Deletes a effect.
+
+  ## Examples
+
+      iex> delete_effect(effect)
+      {:ok, %Effect{}}
+
+      iex> delete_effect(effect)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_effect(%Effect{} = effect) do
+    Repo.delete(effect)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking effect changes.
+
+  ## Examples
+
+      iex> change_effect(effect)
+      %Ecto.Changeset{data: %Effect{}}
+
+  """
+  def change_effect(%Effect{} = effect, attrs \\ %{}) do
+    Effect.changeset(effect, attrs)
   end
 end

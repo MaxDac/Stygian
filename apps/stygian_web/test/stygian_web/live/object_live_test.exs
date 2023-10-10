@@ -11,12 +11,14 @@ defmodule StygianWeb.ObjectLiveTest do
     name: "some name",
     usages: 42
   }
+
   @update_attrs %{
     description: "some updated description",
     image_url: "some updated image_url",
     name: "some updated name",
     usages: 43
   }
+
   @invalid_attrs %{description: nil, image_url: nil, name: nil, usages: nil}
 
   defp create_object(_) do
@@ -57,8 +59,11 @@ defmodule StygianWeb.ObjectLiveTest do
              |> form("#object-form", object: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
+      # Substituting the name for the unique constraint
+      create_attrs = Map.put(@create_attrs, :name, "some other name")
+
       assert index_live
-             |> form("#object-form", object: @create_attrs)
+             |> form("#object-form", object: create_attrs)
              |> render_submit()
 
       assert_patch(index_live, ~p"/admin/objects")

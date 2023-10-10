@@ -4,8 +4,8 @@ defmodule Stygian.Repo.Migrations.CreateTransactions do
   def change do
     create table(:transactions) do
       add :cigs, :integer
-      add :sender_id, references(:characters, on_delete: :nothing)
-      add :receiver_id, references(:characters, on_delete: :nothing)
+      add :sender_id, references(:characters, on_delete: :delete_all)
+      add :receiver_id, references(:characters, on_delete: :delete_all)
 
       timestamps()
     end

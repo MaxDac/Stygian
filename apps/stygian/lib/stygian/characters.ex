@@ -12,8 +12,14 @@ defmodule Stygian.Characters do
   alias Stygian.Accounts
   alias Stygian.Accounts.User
   alias Stygian.Characters.Character
+  alias Stygian.Characters.CharacterEffect
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Characters.CharacterSkillForm
+
+  alias Stygian.Objects
+  alias Stygian.Objects.CharacterObject
+  alias Stygian.Objects.Effect
+
   alias Stygian.Skills.Skill
 
   @max_attribute_points 9
@@ -38,6 +44,8 @@ defmodule Stygian.Characters do
   @rest_limit_hours 24
   @rest_sanity_recovery 5
   @rest_cost 5
+
+  @character_effect_time_in_hour 3
 
   @spec get_max_available_attribute_points(character :: Character.t()) :: non_neg_integer()
   def get_max_available_attribute_points(character)
@@ -528,6 +536,18 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Returns the character skill value, modified by the existing effects on the character.
+  """
+  def get_character_skill_effect_value(character_id, skill_id) do
+    %{value: value} =
+      get_character_skill(character_id, skill_id)
+
+    list_active_character_skill_effects(character_id)
+    |> Enum.filter(&(&1.skill_id == skill_id))
+    |> Enum.reduce(value, fn %{value: value}, acc -> acc + value end)
+  end
+
+  @doc """
   Creates a character_skill.
 
   ## Examples
@@ -564,7 +584,7 @@ defmodule Stygian.Characters do
   end
 
   @doc """
-  Updates a character skill from the character form data to change the skill, 
+  Updates a character skill from the character form data to change the skill,
   the CharacterSkillForm struct.
   """
   @spec update_character_skill_form(attrs :: map()) ::
@@ -835,4 +855,213 @@ defmodule Stygian.Characters do
 
   defp extract_number(exp) when is_binary(exp), do: String.to_integer(exp)
   defp extract_number(exp), do: exp
+
+  alias Stygian.Characters.CharacterEffect
+
+  @doc """
+  Returns the list of character_effects.
+
+  ## Examples
+
+      iex> list_character_effects()
+      [%CharacterEffect{}, ...]
+
+  """
+  def list_character_effects do
+    Repo.all(CharacterEffect)
+  end
+
+  @doc """
+  Returns the list of active character effects.
+  """
+  @spec list_active_character_effects(character_id :: non_neg_integer()) ::
+          list(CharacterEffect.t())
+  def list_active_character_effects(character_id) do
+    list_active_character_effects_query(character_id)
+    |> Repo.all()
+  end
+
+  @doc """
+  Lists all the effects on the character given by the consumed objects.
+  """
+  def list_active_character_skill_effects(character_id) do
+    list_active_character_effects_query(character_id)
+    |> join(:inner, [ce], e in Effect, on: ce.object_id == e.object_id)
+    |> select([_, e], e)
+    |> Repo.all()
+  end
+
+  defp list_active_character_effects_query(character_id) do
+    limit =
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.add(-1 * @character_effect_time_in_hour, :hour)
+
+    CharacterEffect
+    |> from()
+    |> where([ce], ce.character_id == ^character_id and ce.inserted_at > ^limit)
+  end
+
+  @doc """
+  Determines whether the character has the effect of the object or not.
+  """
+  @spec character_has_effect?(character_id :: non_neg_integer(), object_id :: non_neg_integer()) ::
+          boolean()
+  def character_has_effect?(character_id, object_id) do
+    CharacterEffect
+    |> from()
+    |> where([ce], ce.character_id == ^character_id and ce.object_id == ^object_id)
+    |> Repo.exists?()
+  end
+
+  @doc """
+  Gets a single character_effect.
+
+  Raises `Ecto.NoResultsError` if the Character effect does not exist.
+
+  ## Examples
+
+      iex> get_character_effect!(123)
+      %CharacterEffect{}
+
+      iex> get_character_effect!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_character_effect!(id), do: Repo.get!(CharacterEffect, id)
+
+  @doc """
+  Creates a character_effect.
+
+  ## Examples
+
+      iex> create_character_effect(%{field: value})
+      {:ok, %CharacterEffect{}}
+
+      iex> create_character_effect(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_character_effect(attrs \\ %{}) do
+    %CharacterEffect{}
+    |> CharacterEffect.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Use this function only in unit tests, as it changes the inserted_at field.
+  """
+  def create_character_effect_test(attrs \\ %{}) do
+    %CharacterEffect{}
+    |> CharacterEffect.changeset_test(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a character_effect.
+
+  ## Examples
+
+      iex> update_character_effect(character_effect, %{field: new_value})
+      {:ok, %CharacterEffect{}}
+
+      iex> update_character_effect(character_effect, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_character_effect(%CharacterEffect{} = character_effect, attrs) do
+    character_effect
+    |> CharacterEffect.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a character_effect.
+
+  ## Examples
+
+      iex> delete_character_effect(character_effect)
+      {:ok, %CharacterEffect{}}
+
+      iex> delete_character_effect(character_effect)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_character_effect(%CharacterEffect{} = character_effect) do
+    Repo.delete(character_effect)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking character_effect changes.
+
+  ## Examples
+
+      iex> change_character_effect(character_effect)
+      %Ecto.Changeset{data: %CharacterEffect{}}
+
+  """
+  def change_character_effect(%CharacterEffect{} = character_effect, attrs \\ %{}) do
+    CharacterEffect.changeset(character_effect, attrs)
+  end
+
+  @doc """
+  Applies the usage request for an object owned by the charcter, and register its effect.
+  If the object has no more usages, it won't be possible to furtherly use it.
+  """
+  @spec use_object(character_object_id :: non_neg_integer()) ::
+          {:ok, %{character_object: CharacterObject.t()}} | {:error, String.t()} | {:error, any()}
+  def use_object(character_object_id) do
+    with {:ok, character_object} <- check_character_object(character_object_id),
+         {:ok, character_object} <- check_character_effects(character_object) do
+      Ecto.Multi.new()
+      |> update_usages(character_object)
+      |> create_character_effect(character_object)
+      |> Repo.transaction()
+    end
+  end
+
+  defp check_character_object(character_object_id) do
+    case Objects.get_character_object(character_object_id) do
+      nil ->
+        {:error, "Il personaggio non possiede l'oggetto selezionato."}
+
+      %{usages: 0} ->
+        {:error, "L'oggetto non ha più utilizzi disponibili."}
+
+      character_object ->
+        {:ok, character_object}
+    end
+  end
+
+  defp check_character_effects(
+         %{character_id: character_id, object_id: object_id} = character_effect
+       ) do
+    case character_has_effect?(character_id, object_id) do
+      true ->
+        {:error, "Il personaggio ha già l'effetto dell'oggetto selezionato."}
+
+      false ->
+        {:ok, character_effect}
+    end
+  end
+
+  defp update_usages(transaction, %{usages: usages} = character_object) do
+    changeset =
+      character_object
+      |> CharacterObject.changeset(%{usages: usages - 1})
+
+    transaction
+    |> Ecto.Multi.update(:character_object, changeset)
+  end
+
+  defp create_character_effect(transaction, %{character_id: character_id, object_id: object_id}) do
+    character_effect =
+      %CharacterEffect{}
+      |> CharacterEffect.changeset(%{
+        character_id: character_id,
+        object_id: object_id
+      })
+
+    transaction
+    |> Ecto.Multi.insert(:character_effect, character_effect)
+  end
 end

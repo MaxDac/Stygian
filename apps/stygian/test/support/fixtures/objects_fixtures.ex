@@ -4,6 +4,9 @@ defmodule Stygian.ObjectsFixtures do
   entities via the `Stygian.Objects` context.
   """
 
+  import Stygian.CharactersFixtures
+  import Stygian.SkillsFixtures
+
   @doc """
   Generate a object.
   """
@@ -21,8 +24,6 @@ defmodule Stygian.ObjectsFixtures do
     object
   end
 
-  import Stygian.CharactersFixtures
-
   @doc """
   Generate a character_object.
   """
@@ -39,16 +40,31 @@ defmodule Stygian.ObjectsFixtures do
     character_object
   end
 
-  defp check_character(%{character_id: _} = attrs), do: attrs
+  @doc """
+  Generate a effect.
+  """
+  def effect_fixture(attrs \\ %{}) do
+    {:ok, effect} =
+      attrs
+      |> check_object()
+      |> check_skill()
+      |> Enum.into(%{
+        value: 42
+      })
+      |> Stygian.Objects.create_effect()
 
-  defp check_character(attrs) do
-    character = character_fixture()
-    Map.put(attrs, :character_id, character.id)
+    effect
   end
 
-  defp check_object(%{object_id: _} = attrs), do: attrs
+  def strip_effects_fk(effect) do
+    effect
+    |> Map.delete(:object)
+    |> Map.delete(:skill)
+  end
 
-  defp check_object(attrs) do
+  def check_object(%{object_id: _} = attrs), do: attrs
+
+  def check_object(attrs) do
     object = object_fixture()
     Map.put(attrs, :object_id, object.id)
   end
