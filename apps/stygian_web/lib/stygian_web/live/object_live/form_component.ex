@@ -22,7 +22,9 @@ defmodule StygianWeb.ObjectLive.FormComponent do
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:description]} type="text" label="Description" />
         <.input field={@form[:image_url]} type="text" label="Image url" />
-        <.input field={@form[:usages]} type="number" label="Usages" />
+        <.input field={@form[:usages]} type="number" label="Utilizzi" />
+        <.input field={@form[:health]} type="number" label="Salute" />
+        <.input field={@form[:sanity]} type="number" label="Sanità" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Object</.button>
         </:actions>

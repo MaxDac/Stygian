@@ -1,5 +1,5 @@
 <.header>
-  Object <%= @object.id %>
+  <%= @object.name %>
   <:subtitle>This is a object record from your database.</:subtitle>
   <:actions>
     <.link patch={~p"/admin/objects/#{@object}/show/edit"} phx-click={JS.push_focus()}>
@@ -9,9 +9,8 @@
 </.header>
 
 <.list>
-  <:item title="Name"><%= @object.name %></:item>
-  <:item title="Description"><%= @object.description %></:item>
-  <:item title="Image url">
+  <:item title="Descrizione"><%= @object.description %></:item>
+  <:item title="Immagine">
     <img
       alt="Object image"
       aria-label="Object image"
@@ -19,7 +18,9 @@
       class="max-w-[200px] h-auto"
     />
   </:item>
-  <:item title="Usages"><%= @object.usages %></:item>
+  <:item title="Utilizzi"><%= @object.usages %></:item>
+  <:item title="Salute"><%= @object.health %></:item>
+  <:item title="Sanità"><%= @object.sanity %></:item>
 </.list>
 
 <div class="my-3">
