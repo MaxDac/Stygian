@@ -1011,10 +1011,12 @@ defmodule Stygian.Characters do
           {:ok, %{character_object: CharacterObject.t()}} | {:error, String.t()} | {:error, any()}
   def use_object(character_object_id) do
     with {:ok, character_object} <- check_character_object(character_object_id),
-         {:ok, character_object} <- check_character_effects(character_object) do
+         {:ok, character_object} <- check_character_effects(character_object),
+         {:ok, character_object} <- check_character_status(character_object) do
       Ecto.Multi.new()
       |> update_usages(character_object)
       |> create_character_effect(character_object)
+      |> update_character_status(character_object)
       |> Repo.transaction()
     end
   end
@@ -1044,6 +1046,32 @@ defmodule Stygian.Characters do
     end
   end
 
+  defp check_character_status(
+         %{character_id: character_id, object: %{health: health, sanity: sanity}} =
+           character_object
+       ) do
+    character = get_character(character_id)
+
+    case {character, health, sanity} do
+      {nil, _, _} ->
+        {:ezrror, "Il personaggio non esiste."}
+
+      {_, 0, 0} ->
+        {:ok, character_object}
+
+      {%{lost_health: lost_health, health: character_health}, health, _}
+      when character_health - lost_health <= -1 * health ->
+        {:error, "Il personaggio non può perdere più salute."}
+
+      {%{lost_sanity: lost_sanity, sanity: character_sanity}, _, sanity}
+      when character_sanity - lost_sanity <= -1 * sanity ->
+        {:error, "Il personaggio non può perdere più sanità mentale."}
+
+      _ ->
+        {:ok, character_object}
+    end
+  end
+
   defp update_usages(transaction, %{usages: usages} = character_object) do
     changeset =
       character_object
@@ -1063,5 +1091,25 @@ defmodule Stygian.Characters do
 
     transaction
     |> Ecto.Multi.insert(:character_effect, character_effect)
+  end
+
+  defp update_character_status(transaction, %{
+         character_id: character_id,
+         object: %{health: health, sanity: sanity}
+       }) do
+    character = get_character!(character_id)
+
+    case {character, health, sanity} do
+      {%{lost_health: lost_health, lost_sanity: lost_sanity}, health, sanity} ->
+        status_changeset =
+          character
+          |> Character.change_health_and_sanity_changeset(%{
+            "lost_health" => max(lost_health - health, 0),
+            "lost_sanity" => max(lost_sanity - sanity, 0)
+          })
+
+        transaction
+        |> Ecto.Multi.update(:character, status_changeset)
+    end
   end
 end

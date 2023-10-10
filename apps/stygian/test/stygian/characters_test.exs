@@ -707,5 +707,65 @@ defmodule Stygian.CharactersTest do
       assert {:error, "L'oggetto non ha più utilizzi disponibili."} =
                Characters.use_object(character_object_id)
     end
+
+    test "use_object/1 correctly updates the health and sanity of the character" do
+      %{id: object_id} = object_fixture(%{health: -5, sanity: 10})
+
+      %{id: character_id} =
+        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 10, lost_sanity: 20})
+
+      %{id: character_object_id} =
+        character_object_fixture(%{character_id: character_id, object_id: object_id})
+
+      assert {:ok, _} = Characters.use_object(character_object_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert 15 == character.lost_health
+      assert 10 == character.lost_sanity
+    end
+
+    test "use_object/1 does not update the health of the character when it would remove all of it" do
+      %{id: object_id} = object_fixture(%{health: -15, sanity: 10})
+
+      %{id: character_id} =
+        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 90, lost_sanity: 20})
+
+      %{id: character_object_id} =
+        character_object_fixture(%{character_id: character_id, object_id: object_id})
+
+      assert {:error, "Il personaggio non può perdere più salute."} =
+               Characters.use_object(character_object_id)
+    end
+
+    test "use_object/1 does not update the sanity of the character when it would remove all of it" do
+      %{id: object_id} = object_fixture(%{health: -15, sanity: -10})
+
+      %{id: character_id} =
+        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 10, lost_sanity: 45})
+
+      %{id: character_object_id} =
+        character_object_fixture(%{character_id: character_id, object_id: object_id})
+
+      assert {:error, "Il personaggio non può perdere più sanità mentale."} =
+               Characters.use_object(character_object_id)
+    end
+
+    test "use_object/1 correctly updates the health and sanity of the character to the maximum" do
+      %{id: object_id} = object_fixture(%{health: 20, sanity: 20})
+
+      %{id: character_id} =
+        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 10, lost_sanity: 10})
+
+      %{id: character_object_id} =
+        character_object_fixture(%{character_id: character_id, object_id: object_id})
+
+      assert {:ok, _} = Characters.use_object(character_object_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert 0 == character.lost_health
+      assert 0 == character.lost_sanity
+    end
   end
 end
