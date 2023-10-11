@@ -19,6 +19,7 @@ defmodule Stygian.Characters do
   alias Stygian.Objects
   alias Stygian.Objects.CharacterObject
   alias Stygian.Objects.Effect
+  alias Stygian.Objects.Object
 
   alias Stygian.Skills.Skill
 
@@ -870,6 +871,25 @@ defmodule Stygian.Characters do
   def list_character_effects do
     Repo.all(CharacterEffect)
   end
+  
+  @doc """
+  Lists all the active effects for all the characters. It will preload chracter and the effect information.
+  """
+  @spec list_active_character_effects() :: list({Character.t(), Effect.t()})
+  def list_active_character_effects() do
+    limit = character_effect_active_limit()
+
+    CharacterEffect
+    |> from()
+    |> where([ce], ce.inserted_at > ^limit)
+    |> join(:inner, [ce], c in Character, on: ce.character_id == c.id)
+    |> join(:inner, [ce], o in Object, on: ce.object_id == o.id)
+    |> join(:inner, [_, _, o], e in Effect, on: o.id == e.object_id)
+    |> join(:inner, [_, _, _, e], s in Skill, on: e.skill_id == s.id)
+    |> select([ce, c, o, e, s], %{id: ce.id, character: c, object: o, effect: e, skill: s})
+    |> Repo.all()
+    |> Enum.map(fn %{effect: effect, skill: skill} = item -> Map.put(item, :effect, Map.put(effect, :skill, skill)) end)
+  end
 
   @doc """
   Returns the list of active character effects.
@@ -892,13 +912,16 @@ defmodule Stygian.Characters do
   end
 
   defp list_active_character_effects_query(character_id) do
-    limit =
-      NaiveDateTime.utc_now()
-      |> NaiveDateTime.add(-1 * @character_effect_time_in_hour, :hour)
+    limit = character_effect_active_limit()
 
     CharacterEffect
     |> from()
     |> where([ce], ce.character_id == ^character_id and ce.inserted_at > ^limit)
+  end
+
+  defp character_effect_active_limit() do
+    NaiveDateTime.utc_now()
+    |> NaiveDateTime.add(-1 * @character_effect_time_in_hour, :hour)
   end
 
   @doc """
@@ -907,9 +930,11 @@ defmodule Stygian.Characters do
   @spec character_has_effect?(character_id :: non_neg_integer(), object_id :: non_neg_integer()) ::
           boolean()
   def character_has_effect?(character_id, object_id) do
+    limit = character_effect_active_limit()
+
     CharacterEffect
     |> from()
-    |> where([ce], ce.character_id == ^character_id and ce.object_id == ^object_id)
+    |> where([ce], ce.character_id == ^character_id and ce.object_id == ^object_id and ce.inserted_at > ^limit)
     |> Repo.exists?()
   end
 

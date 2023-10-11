@@ -243,8 +243,8 @@ defmodule Stygian.CharactersTest do
 
     import Stygian.AccountsFixtures
     import Stygian.CharactersFixtures
-    import Stygian.SkillsFixtures
     import Stygian.ObjectsFixtures
+    import Stygian.SkillsFixtures
 
     @invalid_attrs %{value: nil}
 
@@ -513,6 +513,7 @@ defmodule Stygian.CharactersTest do
     import Stygian.CharacterEffectsFixtures
     import Stygian.CharactersFixtures
     import Stygian.ObjectsFixtures
+    import Stygian.SkillsFixtures
 
     @invalid_attrs %{}
 
@@ -548,6 +549,52 @@ defmodule Stygian.CharactersTest do
       assert [] = Characters.list_active_character_effects(character_id)
     end
 
+    test "list_active_character_effects/0 returns the list of active effects" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id_1} = object_fixture(%{name: "object 1"})
+      %{id: object_id_2} = object_fixture(%{name: "object 2"})
+
+      %{id: skill_id} = skill_fixture(%{name: "skill 1"})
+      effect_fixture(%{object_id: object_id_1, skill_id: skill_id})
+      %{id: effect_id} = effect_fixture(%{object_id: object_id_2, skill_id: skill_id})
+
+      before_limit =
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.add(-1 * 4, :hour)
+
+      character_effect_fixture(%{
+        character_id: character_id,
+        object_id: object_id_1,
+        inserted_at: before_limit
+      })
+
+      character_effect_fixture(%{character_id: character_id, object_id: object_id_2})
+
+      assert [%{character: character, effect: effect}] = Characters.list_active_character_effects()
+
+      assert character.id == character_id
+      assert effect.id == effect_id
+    end
+
+    test "list_active_character_effects/0 returns an empty list when no active effects are present" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id_1} = object_fixture(%{name: "object 1"})
+      %{id: skill_id} = skill_fixture(%{name: "skill 1"})
+      effect_fixture(%{object_id: object_id_1, skill_id: skill_id})
+
+      before_limit =
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.add(-1 * 4, :hour)
+
+      character_effect_fixture(%{
+        character_id: character_id,
+        object_id: object_id_1,
+        inserted_at: before_limit
+      })
+
+      assert [] = Characters.list_active_character_effects()
+    end
+
     test "list_active_character_skill_effects/1 lists all the active skill effects for the character" do
       %{id: character_id} = character_fixture()
       %{id: object_id_1} = object_fixture(%{name: "object 1"})
@@ -580,6 +627,19 @@ defmodule Stygian.CharactersTest do
       character_effect_fixture(%{character_id: character_id, object_id: object_id})
 
       assert Characters.character_has_effect?(character_id, object_id)
+    end
+
+    test "character_has_effect?/2 returns false when the character has the effects given by the object, but it's expired" do
+      %{id: character_id} = character_fixture()
+      %{id: object_id} = object_fixture(%{name: "object"})
+
+      before_limit =
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.add(-1 * 4, :hour)
+
+      character_effect_fixture(%{character_id: character_id, object_id: object_id, inserted_at: before_limit})
+
+      refute Characters.character_has_effect?(character_id, object_id)
     end
 
     test "character_has_effect?/2 returns false when the character has no effects given by the object" do
