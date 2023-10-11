@@ -15,7 +15,6 @@ defmodule StygianWeb.ChatLive.ObjectUsageLive do
 
       <.table id="character_objects" rows={@streams.character_objects}>
         <:col :let={{_id, %{object: object}}} label="Nome"><%= object.name %></:col>
-        <:col :let={{_id, %{object: object}}} label="Descr."><%= object.description %></:col>
         <:col :let={{_id, %{object: object}}} label="Immagine">
           <img
             alt={object.name}
