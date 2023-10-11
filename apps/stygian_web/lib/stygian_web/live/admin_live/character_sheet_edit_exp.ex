@@ -58,7 +58,7 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditExp do
 
   @impl true
   def handle_event("save", %{"character_exp_form" => params}, socket) do
-    changeset = 
+    changeset =
       %CharacterExpForm{}
       |> CharacterExpForm.changeset(params)
 

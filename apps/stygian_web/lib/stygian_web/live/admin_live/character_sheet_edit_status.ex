@@ -76,7 +76,7 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
 
   @impl true
   def handle_event("save", %{"character_status_form" => params}, socket) do
-    changeset = 
+    changeset =
       %CharacterStatusForm{}
       |> CharacterStatusForm.changeset(params)
 
