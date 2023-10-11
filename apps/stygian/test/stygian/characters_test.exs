@@ -570,7 +570,8 @@ defmodule Stygian.CharactersTest do
 
       character_effect_fixture(%{character_id: character_id, object_id: object_id_2})
 
-      assert [%{character: character, effect: effect}] = Characters.list_active_character_effects()
+      assert [%{character: character, effect: effect}] =
+               Characters.list_active_character_effects()
 
       assert character.id == character_id
       assert effect.id == effect_id
@@ -637,7 +638,11 @@ defmodule Stygian.CharactersTest do
         NaiveDateTime.utc_now()
         |> NaiveDateTime.add(-1 * 4, :hour)
 
-      character_effect_fixture(%{character_id: character_id, object_id: object_id, inserted_at: before_limit})
+      character_effect_fixture(%{
+        character_id: character_id,
+        object_id: object_id,
+        inserted_at: before_limit
+      })
 
       refute Characters.character_has_effect?(character_id, object_id)
     end

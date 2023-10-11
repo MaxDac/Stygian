@@ -871,7 +871,7 @@ defmodule Stygian.Characters do
   def list_character_effects do
     Repo.all(CharacterEffect)
   end
-  
+
   @doc """
   Lists all the active effects for all the characters. It will preload chracter and the effect information.
   """
@@ -888,7 +888,9 @@ defmodule Stygian.Characters do
     |> join(:inner, [_, _, _, e], s in Skill, on: e.skill_id == s.id)
     |> select([ce, c, o, e, s], %{id: ce.id, character: c, object: o, effect: e, skill: s})
     |> Repo.all()
-    |> Enum.map(fn %{effect: effect, skill: skill} = item -> Map.put(item, :effect, Map.put(effect, :skill, skill)) end)
+    |> Enum.map(fn %{effect: effect, skill: skill} = item ->
+      Map.put(item, :effect, Map.put(effect, :skill, skill))
+    end)
   end
 
   @doc """
@@ -934,7 +936,10 @@ defmodule Stygian.Characters do
 
     CharacterEffect
     |> from()
-    |> where([ce], ce.character_id == ^character_id and ce.object_id == ^object_id and ce.inserted_at > ^limit)
+    |> where(
+      [ce],
+      ce.character_id == ^character_id and ce.object_id == ^object_id and ce.inserted_at > ^limit
+    )
     |> Repo.exists?()
   end
 
