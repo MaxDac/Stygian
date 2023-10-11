@@ -1,0 +1,17 @@
+<.h1>Lista Effetti Attivi</.h1>
+
+<.table id="active_character_effects" rows={@streams.effects}>
+  <:col :let={{_id, %{character: character}}} label="Nome Personaggio">
+    <%= character.name %>
+  </:col>
+  <:col :let={{_id, %{object: object}}} label="Nome Oggetto"><%= object.name %></:col>
+  <:col :let={{_id, %{effects: effects}}} label="Effetti"><%= effects %></:col>
+  <:action :let={{dom_id, %{id: id}}}>
+    <.table_link_standalone
+      phx-click={JS.push("delete_effect", value: %{id: id, dom_id: dom_id}) |> hide("##{id}")}
+      data-confirm="Sei sicuro di voler annullare gli effetti dell'oggetto?"
+    >
+      Annulla Effetto
+    </.table_link_standalone>
+  </:action>
+</.table>
