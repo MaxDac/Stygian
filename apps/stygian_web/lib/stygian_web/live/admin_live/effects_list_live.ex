@@ -15,19 +15,20 @@ defmodule StygianWeb.AdminLive.EffectsListLive do
   @impl true
   def handle_event("delete_effect", %{"id" => id}, socket) do
     character_effect = Characters.get_character_effect!(id)
+
     case Characters.delete_character_effect(character_effect) do
       {:ok, _} ->
-        {:noreply, 
+        {:noreply,
          socket
          |> put_flash(:info, "Effetto del personaggio correttamente rimosso.")
-        # Reloading the page as the item in the stream is not easily removable
-         |> push_patch(~p"/admin/effects")}
-        
+         |> stream_delete(:effects, %{id: id})}
+
       {:error, _} ->
-        {:noreply, 
+        {:noreply,
          socket
          |> put_flash(:error, "Errore durante la rimozione dell'effetto del personaggio.")}
     end
+
     {:noreply, socket}
   end
 
@@ -68,8 +69,6 @@ defmodule StygianWeb.AdminLive.EffectsListLive do
   end
 
   defp map_effect_visualisation(effects) do
-    effects
-    |> Enum.map(&"#{&1.skill.name}: #{&1.value}")
-    |> Enum.join(", ")
+    Enum.map_join(effects, ", ", &"#{&1.skill.name}: #{&1.value}")
   end
 end

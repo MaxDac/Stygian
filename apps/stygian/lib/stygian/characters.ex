@@ -876,7 +876,7 @@ defmodule Stygian.Characters do
   Lists all the active effects for all the characters. It will preload chracter and the effect information.
   """
   @spec list_active_character_effects() :: list({Character.t(), Effect.t()})
-  def list_active_character_effects() do
+  def list_active_character_effects do
     limit = character_effect_active_limit()
 
     CharacterEffect
@@ -921,7 +921,7 @@ defmodule Stygian.Characters do
     |> where([ce], ce.character_id == ^character_id and ce.inserted_at > ^limit)
   end
 
-  defp character_effect_active_limit() do
+  defp character_effect_active_limit do
     NaiveDateTime.utc_now()
     |> NaiveDateTime.add(-1 * @character_effect_time_in_hour, :hour)
   end
