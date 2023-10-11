@@ -44,7 +44,7 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditLive do
 
   @impl true
   def handle_info({:update_status, %{"character_id" => character_id} = params}, socket) do
-    case Characters.assign_experience_points(character_id, params) do
+    case Characters.assign_character_status(character_id, params) do
       {:ok, _} ->
         {:noreply,
          socket
