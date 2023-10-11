@@ -42,6 +42,17 @@ defmodule Stygian.Objects do
   def get_object!(id), do: Repo.get!(Object, id)
 
   @doc """
+  Gets an object by its name.
+  """
+  @spec get_object_by_name(object_name :: String.t()) :: Object.t() | nil
+  def get_object_by_name(object_name) do
+    Object
+    |> from()
+    |> where([o], o.name == ^object_name)
+    |> Repo.one()
+  end
+
+  @doc """
   Creates a object.
 
   ## Examples
@@ -330,6 +341,18 @@ defmodule Stygian.Objects do
 
   """
   def get_effect!(id), do: Repo.get!(Effect, id)
+
+  @doc """
+  Returns the effect for a specific object and skill, or nil if none exists.
+  """
+  @spec get_effect(object_id :: non_neg_integer(), skill_id :: non_neg_integer()) ::
+          Effect.t() | nil
+  def get_effect(object_id, skill_id) do
+    Effect
+    |> from()
+    |> where([e], e.object_id == ^object_id and e.skill_id == ^skill_id)
+    |> Repo.one()
+  end
 
   @doc """
   Gets a single effect, preloading the object and the skill.
