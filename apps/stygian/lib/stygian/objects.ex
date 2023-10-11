@@ -248,6 +248,7 @@ defmodule Stygian.Objects do
     |> from()
     |> where([co], co.character_id == ^character_id)
     |> preload(:object)
+    |> preload(:character)
     |> Repo.all()
   end
 

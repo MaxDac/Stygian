@@ -1,5 +1,9 @@
 <.h1>Lista Effetti Attivi</.h1>
 
+<.return_link navigate={~p"/admin"}>
+  Torna alla dashboard
+</.return_link>
+
 <.table id="active_character_effects" rows={@streams.effects}>
   <:col :let={{_id, %{character: character}}} label="Nome Personaggio">
     <%= character.name %>
