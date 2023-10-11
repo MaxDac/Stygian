@@ -20,6 +20,18 @@ defmodule Stygian.ObjectsTest do
       assert Objects.get_object!(object.id) == object
     end
 
+    test "get_object_by_name/1 correctly returns the object with the given name" do
+      object_name = "some name"
+      object_fixture(%{name: object_name})
+      assert object = Objects.get_object_by_name(object_name)
+      assert object.name == object_name
+    end
+
+    test "get_object_by_name/1 returns nil when the object with the given name does not exist" do
+      object_name = "some name"
+      assert is_nil Objects.get_object_by_name(object_name)
+    end
+
     test "create_object/1 with valid data creates a object" do
       valid_attrs = %{
         description: "some description",
@@ -288,6 +300,22 @@ defmodule Stygian.ObjectsTest do
     test "get_effect!/1 returns the effect with given id" do
       effect = effect_fixture()
       assert strip_effects_fk(Objects.get_effect!(effect.id)) == strip_effects_fk(effect)
+    end
+
+    test "get_effect/2 returns the effect registered for the selected object and skill" do
+      %{id: object_id} = object_fixture()
+      %{id: skill_id} = skill_fixture()
+      %{value: effect_value} = effect_fixture(%{object_id: object_id, skill_id: skill_id})
+
+      assert effect = Objects.get_effect(object_id, skill_id)
+
+      assert effect.object_id == object_id
+      assert effect.skill_id == skill_id
+      assert effect.value == effect_value
+    end
+
+    test "get_effect/2 returns nil if the effect registered for the selected object and skill does not exist" do
+      assert is_nil Objects.get_effect(42, 42)
     end
 
     test "get_complete_effect/1 correctly returns the effect with object and skill preloaded" do

@@ -12,6 +12,7 @@
 
 alias Stygian.Accounts
 alias Stygian.Characters
+alias Stygian.Objects
 alias Stygian.Organisations
 alias Stygian.Skills
 alias Stygian.Maps
@@ -118,6 +119,32 @@ defmodule OrganisationsHelpers do
 
       organisation ->
         Organisations.update_organisation(organisation, attrs)
+    end
+  end
+end
+
+defmodule ObjectsHelpers do
+  def create_object(%{name: name} = attrs) do
+    case Objects.get_object_by_name(name) do
+      nil ->
+        with {:ok, object} <- Objects.create_object(attrs) do
+          Objects.update_object(object, attrs)
+        end
+
+      object ->
+        Objects.update_object(object, attrs)
+    end
+  end
+
+  def create_effect(%{object_id: object_id, skill_id: skill_id} = attrs) do
+    case Objects.get_effect(object_id, skill_id) do
+      nil ->
+        with {:ok, effect} <- Objects.create_effect(attrs) do
+          Objects.update_effect(effect, attrs)
+        end
+
+      effect ->
+        Objects.update_effect(effect, attrs)
     end
   end
 end
@@ -569,4 +596,76 @@ OrganisationsHelpers.create_organisation(%{
   """,
   image: "/images/organisations/rochester_police_department.webp",
   base_salary: 10
+})
+
+{:ok, %{id: moonshine_id}} = ObjectsHelpers.create_object(%{
+  name: "Moonshine",
+  description: """
+  Una bottiglia di Moonshine, un distillato artigianale di dubbia provenienza, realizzato dai bootleggers 
+  come alternativa ad alcolici più costosi e di qualità. Ripristina un po' di sanità mentale, ed aiuta
+  a perdere inibizioni, ma rende molto difficile concentrarsi. Il rischio di sviluppare una dipendenza
+  da questa sostanza è moderato.
+  """,
+  image: "/images/objects/moonshine.webp",
+  usages: 10,
+  sanity: 10,
+  health: -5
+})
+
+ObjectsHelpers.create_effect(%{object_id: moonshine_id, skill_id: carisma_id, value: 1})
+ObjectsHelpers.create_effect(%{object_id: moonshine_id, skill_id: mente_id, value: -1})
+
+{:ok, %{id: morphine_id}} = ObjectsHelpers.create_object(%{
+  name: "Morfina",
+  description: """
+  Una siringa di oppiaceo, morfina o un altro derivato. Estremamente rara, poiché la maggior parte delle 
+  scorte sono state saccheggiate dalla criminalità organizzata. Nonostante sia conosciuto come un potente antidolorifico,
+  il suo principale utilizzo è quello di alleviare la sofferenza mentale. Il rischio di svluppare una dipendenza
+  dalla sostanza è molto alto.
+  """,
+  image: "/images/objects/morphine.webp",
+  usages: 1,
+  sanity: 20,
+  health: 0
+})
+
+ObjectsHelpers.create_effect(%{object_id: morphine_id, skill_id: mente_id, value: 1})
+ObjectsHelpers.create_effect(%{object_id: morphine_id, skill_id: sensi_id, value: -1})
+
+{:ok, %{id: whiskey_id}} = ObjectsHelpers.create_object(%{
+  name: "Whiskey",
+  description: """
+  Una bottiglia di whiskey, un distillato decisamente di maggiore qualità rispetto al Moonshine distillato dai 
+  bootleggers. Ripristina un po' di sanità mentale, ed aiuta a perdere inibizioni, ma rende molto difficile concentrarsi. 
+  Il rischio di sviluppare una dipendenza da questa sostanza è moderato.
+  """,
+  image: "/images/objects/whiskey.webp",
+  usages: 10,
+  sanity: 10,
+  health: 0
+})
+
+ObjectsHelpers.create_effect(%{object_id: whiskey_id, skill_id: carisma_id, value: 1})
+ObjectsHelpers.create_effect(%{object_id: whiskey_id, skill_id: mente_id, value: -1})
+
+{:ok, %{id: cigars_id}} = ObjectsHelpers.create_object(%{
+  name: "Sigari",
+  description: """
+  Un pacchetto di sigari. Aiutano a recuperare un po' di sanità mentale, ma non sono particolarmente efficaci.
+  """,
+  image: "/images/objects/cigars.webp",
+  usages: 10,
+  sanity: 5,
+  health: 0
+})
+
+{:ok, %{id: first_aid_id}} = ObjectsHelpers.create_object(%{
+  name: "Kit di Pronto Soccorso",
+  description: """
+  Un kit di pronto soccorso, equipaggiato per tamponare e medicare ferite di varia natura.
+  """,
+  image: "/images/objects/first-aid-kit.webp",
+  usages: 2,
+  sanity: 0,
+  health: 50
 })
