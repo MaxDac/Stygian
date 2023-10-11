@@ -345,7 +345,8 @@ defmodule Stygian.Objects do
   @doc """
   Returns the effect for a specific object and skill, or nil if none exists.
   """
-  @spec get_effect(object_id :: non_neg_integer(), skill_id :: non_neg_integer()) :: Effect.t() | nil
+  @spec get_effect(object_id :: non_neg_integer(), skill_id :: non_neg_integer()) ::
+          Effect.t() | nil
   def get_effect(object_id, skill_id) do
     Effect
     |> from()

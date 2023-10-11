@@ -29,7 +29,7 @@ defmodule Stygian.ObjectsTest do
 
     test "get_object_by_name/1 returns nil when the object with the given name does not exist" do
       object_name = "some name"
-      assert is_nil Objects.get_object_by_name(object_name)
+      assert is_nil(Objects.get_object_by_name(object_name))
     end
 
     test "create_object/1 with valid data creates a object" do
@@ -315,7 +315,7 @@ defmodule Stygian.ObjectsTest do
     end
 
     test "get_effect/2 returns nil if the effect registered for the selected object and skill does not exist" do
-      assert is_nil Objects.get_effect(42, 42)
+      assert is_nil(Objects.get_effect(42, 42))
     end
 
     test "get_complete_effect/1 correctly returns the effect with object and skill preloaded" do
