@@ -1,0 +1,25 @@
+<.h1>Inventario</.h1>
+
+<.return_link navigate={~p"/admin"}>
+  Torna alla dashboard
+</.return_link>
+
+<.simple_form for={@form} id="reset_password_form" phx-change="changed_filters">
+  <.character_selection field={@form[:character_id]} label="Personaggio" characters={@characters} />
+</.simple_form>
+
+<.hr />
+
+<.table id="character_inventory" rows={@streams.inventory}>
+  <:col :let={{_id, %{object: object}}} label="Nome"><%= object.name %></:col>
+  <:col :let={{_id, %{object: object}}} label="Descr."><%= object.description %></:col>
+  <:col :let={{_id, %{usages: usages}}} label="Usi rimasti"><%= usages %></:col>
+  <:action :let={{_, object}}>
+    <.table_link_standalone
+      phx-click={JS.push("remove_object", value: %{id: object.id})}
+      data-confirm="Sei sicuro di voler rimuovere questo oggetto dall'inventario del personaggio?"
+    >
+      Rimouvi
+    </.table_link_standalone>
+  </:action>
+</.table>
