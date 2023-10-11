@@ -4,6 +4,10 @@
   Lista degli Oggetti
 </.return_link>
 
+<.return_link navigate={~p"/admin/inventories"}>
+  Lista degli oggetti assegnati
+</.return_link>
+
 <.simple_form for={@form} id="assign_object" phx-submit="save" phx-change="validate">
   <.character_selection field={@form[:character_id]} label="Personaggio" characters={@characters} />
 
