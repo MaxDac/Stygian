@@ -126,6 +126,43 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
+  def handle_event(
+        "smoke_cig",
+        _params,
+        %{
+          assigns: %{
+            map: %{id: map_id},
+            current_character: %{id: character_id}
+          }
+        } = socket
+      ) do
+    with {:ok, _} <- Characters.smoke_cig(character_id),
+         {:ok, socket} <- add_smoke_cig_chat(socket) do
+      send_update(ChatControlLive, id: map_id, textarea_id: new_textarea_id())
+
+      {:noreply,
+       socket
+       |> assign(:show_object_usage, false)
+       |> assign_use_object_id()
+       |> push_navigate(to: ~p"/chat/#{map_id}")}
+    else
+      {:error, error} when is_binary(error) ->
+        {:noreply,
+         socket
+         |> put_flash(:error, error)
+         |> assign(:show_object_usage, false)
+         |> assign_use_object_id()}
+
+      _ ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "C'è stato un errore nell'attuare l'azione selezionata.")
+         |> assign(:show_object_usage, false)
+         |> assign_use_object_id()}
+    end
+  end
+
+  @impl true
   def handle_params(%{"map_id" => map_id}, _, socket) do
     {:noreply,
      socket
@@ -180,6 +217,29 @@ defmodule StygianWeb.ChatLive.ChatLive do
              map_id: map_id,
              character_id: character_id,
              text: "Ha usato #{character_object.object.name}",
+             type: :special
+           }) do
+      {:ok, ChatHelpers.handle_chat_created(socket, chat_entry)}
+    end
+  end
+
+  defp add_smoke_cig_chat(
+         %{
+           assigns: %{
+             current_character: %{
+               id: character_id
+             },
+             map: %{
+               id: map_id
+             }
+           }
+         } = socket
+       ) do
+    with {:ok, chat_entry} <-
+           Maps.create_chat(%{
+             map_id: map_id,
+             character_id: character_id,
+             text: "Si è acceso una sigaretta.",
              type: :special
            }) do
       {:ok, ChatHelpers.handle_chat_created(socket, chat_entry)}

@@ -832,5 +832,50 @@ defmodule Stygian.CharactersTest do
       assert 0 == character.lost_health
       assert 0 == character.lost_sanity
     end
+
+    test "smoke_cig/1 updates the character smoking a cig" do
+      %{id: character_id} = character_fixture_complete(%{cigs: 10, sanity: 40, lost_sanity: 10})
+
+      assert {:ok, _} = Characters.smoke_cig(character_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert 9 == character.cigs
+      assert 7 == character.lost_sanity
+    end
+
+    test "smoke_cig/1 updates the character smoking a cig but not the status when last update in less than 3 hours" do
+      %{id: character_id} = character_fixture_complete(%{cigs: 10, sanity: 40, lost_sanity: 10})
+
+      assert {:ok, _} = Characters.smoke_cig(character_id)
+      assert {:ok, _} = Characters.smoke_cig(character_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert 8 == character.cigs
+      assert 7 == character.lost_sanity
+    end
+
+    test "smoke_cig/1 does not allow change the character status if the character does not have cigs" do
+      %{id: character_id} = character_fixture_complete(%{cigs: 0, sanity: 40, lost_sanity: 10})
+
+      assert {:error, _} = Characters.smoke_cig(character_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert 0 == character.cigs
+      assert 10 == character.lost_sanity
+    end
+
+    test "smoke_cig/1 does not update the character sanity below 0" do
+      %{id: character_id} = character_fixture_complete(%{cigs: 10, sanity: 40, lost_sanity: 3})
+
+      assert {:ok, _} = Characters.smoke_cig(character_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert 9 == character.cigs
+      assert 0 == character.lost_sanity
+    end
   end
 end
