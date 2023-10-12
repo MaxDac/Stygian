@@ -47,6 +47,7 @@ defmodule Stygian.Characters do
   @rest_cost 5
 
   @character_effect_time_in_hour 3
+  @character_sanity_from_cig 3
 
   @spec get_max_available_attribute_points(character :: Character.t()) :: non_neg_integer()
   def get_max_available_attribute_points(character)
@@ -1140,6 +1141,75 @@ defmodule Stygian.Characters do
 
         transaction
         |> Ecto.Multi.update(:character, status_changeset)
+    end
+  end
+
+  @doc """
+  Applies the effect of a character smoking a cig.
+  """
+  @spec smoke_cig(character_id :: non_neg_integer()) ::
+          {:ok, Character.t()} | {:error, String.t()} | {:error, any()}
+  def smoke_cig(character_id) do
+    with {:ok, character} <- check_character(character_id),
+         {:ok, character} <- check_character_cigs(character) do
+      Ecto.Multi.new()
+      |> update_character_cigs(character)
+      |> update_character_cig_status(character)
+      |> Repo.transaction()
+    end
+  end
+
+  defp check_character(character_id) do
+    case get_character(character_id) do
+      nil ->
+        {:error, "Il personaggio non esiste."}
+
+      character ->
+        {:ok, character}
+    end
+  end
+
+  defp check_character_cigs(%{cigs: cigs} = character) do
+    case cigs do
+      0 ->
+        {:error, "Il personaggio non ha più sigarette."}
+
+      _ ->
+        {:ok, character}
+    end
+  end
+
+  defp update_character_cigs(transaction, %{cigs: cigs} = character) do
+    changeset =
+      character
+      |> Character.change_cigs_changeset(%{cigs: cigs - 1})
+
+    transaction
+    |> Ecto.Multi.update(:character_cig, changeset)
+  end
+
+  defp update_character_cig_status(
+         transaction,
+         %{last_cigs_effect: last_cigs_effect, lost_sanity: lost_sanity} = character
+       ) do
+    limit =
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.add(@character_effect_time_in_hour * -1, :hour)
+
+    if is_nil(last_cigs_effect) || NaiveDateTime.compare(last_cigs_effect, limit) == :lt do
+      lost_sanity = max(lost_sanity - @character_sanity_from_cig, 0)
+
+      changeset =
+        character
+        |> Character.change_health_and_sanity_changeset(%{
+          lost_sanity: lost_sanity,
+          last_cigs_effect: NaiveDateTime.utc_now()
+        })
+
+      transaction
+      |> Ecto.Multi.update(:character_status, changeset)
+    else
+      transaction
     end
   end
 end

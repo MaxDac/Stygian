@@ -26,6 +26,7 @@ defmodule Stygian.Characters.Character do
           sin: String.t(),
           npc: boolean(),
           rest_timer: NaiveDateTime.t(),
+          last_cigs_effect: NaiveDateTime.t(),
           user_id: integer(),
           user: User.t(),
           inserted_at: NaiveDateTime.t(),
@@ -52,6 +53,7 @@ defmodule Stygian.Characters.Character do
     field :sin, :string
     field :npc, :boolean
     field :rest_timer, :naive_datetime
+    field :last_cigs_effect, :naive_datetime
 
     belongs_to :user, User
 
@@ -116,7 +118,7 @@ defmodule Stygian.Characters.Character do
 
   def change_health_and_sanity_changeset(character, attrs) do
     character
-    |> cast(attrs, [:lost_health, :lost_sanity])
+    |> cast(attrs, [:lost_health, :lost_sanity, :last_cigs_effect])
     |> validate_required([:lost_health, :lost_sanity])
   end
 

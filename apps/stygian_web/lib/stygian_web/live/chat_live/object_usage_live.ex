@@ -32,6 +32,10 @@ defmodule StygianWeb.ChatLive.ObjectUsageLive do
           </.table_link_standalone>
         </:action>
       </.table>
+
+      <.button phx-click={JS.push("smoke_cig")} class="mt-4">
+        Fuma una sigaretta
+      </.button>
     </div>
     """
   end
