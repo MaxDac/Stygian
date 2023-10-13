@@ -607,7 +607,7 @@ OrganisationsHelpers.create_organisation(%{
     a perdere inibizioni, ma rende molto difficile concentrarsi. Il rischio di sviluppare una dipendenza
     da questa sostanza è moderato.
     """,
-    image: "/images/objects/moonshine.webp",
+    image_url: "/images/objects/moonshine.webp",
     usages: 10,
     sanity: 10,
     health: -5
@@ -625,7 +625,7 @@ ObjectsHelpers.create_effect(%{object_id: moonshine_id, skill_id: mente_id, valu
     il suo principale utilizzo è quello di alleviare la sofferenza mentale. Il rischio di svluppare una dipendenza
     dalla sostanza è molto alto.
     """,
-    image: "/images/objects/morphine.webp",
+    image_url: "/images/objects/morphine.webp",
     usages: 1,
     sanity: 20,
     health: 0
@@ -642,7 +642,7 @@ ObjectsHelpers.create_effect(%{object_id: morphine_id, skill_id: sensi_id, value
     bootleggers. Ripristina un po' di sanità mentale, ed aiuta a perdere inibizioni, ma rende molto difficile concentrarsi. 
     Il rischio di sviluppare una dipendenza da questa sostanza è moderato.
     """,
-    image: "/images/objects/whiskey.webp",
+    image_url: "/images/objects/whiskey.webp",
     usages: 10,
     sanity: 10,
     health: 0
@@ -657,7 +657,7 @@ ObjectsHelpers.create_effect(%{object_id: whiskey_id, skill_id: mente_id, value:
     description: """
     Un pacchetto di sigari. Aiutano a recuperare un po' di sanità mentale, ma non sono particolarmente efficaci.
     """,
-    image: "/images/objects/cigars.webp",
+    image_url: "/images/objects/cigars.webp",
     usages: 10,
     sanity: 5,
     health: 0
@@ -669,7 +669,7 @@ ObjectsHelpers.create_effect(%{object_id: whiskey_id, skill_id: mente_id, value:
     description: """
     Un kit di pronto soccorso, equipaggiato per tamponare e medicare ferite di varia natura.
     """,
-    image: "/images/objects/first-aid-kit.webp",
+    image_url: "/images/objects/first-aid-kit.webp",
     usages: 2,
     sanity: 0,
     health: 50
