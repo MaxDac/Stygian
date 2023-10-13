@@ -17,10 +17,13 @@ export function addChatHooks(Hooks) {
       this.el.focus()
       this.el.onkeydown = (e) => {
         if (e.key === "Enter") {
-          console.debug("Enter pressed")
           // Dispatching the event, that will bubble up to the form
           const event = new Event("submit", { bubbles: true, cancelable: true })
           this.el.form.dispatchEvent(event)
+          
+          // Clearing the input manually because it can happen that the form
+          // from the back end gets stuck and it doesn't remove the chat input.
+          this.el.value = ""
         }
       } 
     }

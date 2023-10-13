@@ -236,9 +236,8 @@ defmodule StygianWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-md font-report bg-transparent active:bg-brand-inactive hover:bg-brand py-2 px-3",
-        "text-md font-semibold leading-6 text-brand hover:text-black active:text-black/80",
-        "border border-brand hover:border-brand-inactive active:border-brand/80",
+        "phx-submit-loading:opacity-75 rounded-md font-typewriter bg-controls bg-repeat",
+        "text-md font-semibold leading-6 text-black hover:drop-shadow-lg active:text-black/80 py-2 px-3",
         @class
       ]}
       {@rest}
@@ -323,7 +322,7 @@ defmodule StygianWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="w-4 h-4 border border-brand rounded bg-gray-50 focus:ring-3 focus:ring-brand dark:bg-gray-700 dark:border-brand dark:focus:ring-brand dark:ring-offset-brand dark:focus:ring-offset-brand"
+          class="w-4 h-4 rounded bg-gray-50 focus:ring-3 focus:ring-brand dark:bg-gray-700 dark:border-brand dark:focus:ring-brand dark:ring-offset-brand dark:focus:ring-offset-brand"
           {@rest}
         />
       </div>
@@ -340,7 +339,7 @@ defmodule StygianWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full text-lg font-typewriter rounded-md border border-brand bg-container-background shadow-sm focus:border-brand focus:ring-0"
+        class="mt-2 block w-full text-lg font-typewriter text-black bg-controls rounded-md shadow-sm focus:ring-0"
         multiple={@multiple}
         {@rest}
       >
@@ -359,12 +358,12 @@ defmodule StygianWeb.CoreComponents do
       <textarea
         id={@id}
         name={@name}
+        placeholder={@placeholder}
         data-tooltip-target="textarea-error-tooltip"
         class={[
-          "mt-2 block w-full rounded-md font-typewriter text-brand text-md focus:ring-0 sm:text-sm sm:leading-6",
-          "min-h-24 h-24 phx-no-feedback:border-brand-inavtive phx-no-feedback:focus:border-brand-inactive",
-          "bg-black",
-          @errors == [] && "border-brand-inactive focus:border-brand",
+          "mt-2 block w-full rounded-md font-typewriter text-black text-md focus:ring-0 sm:text-sm sm:leading-6",
+          "min-h-24 h-24 phx-no-feedback:border-brand-inactive phx-no-feedback:focus:border-brand-inactive",
+          "bg-controls drop-shadow-[0_35px_35px_rgba(255,255,255,0.25)]",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
@@ -391,18 +390,17 @@ defmodule StygianWeb.CoreComponents do
         value={Form.normalize_value(@type, @value)}
         placeholder=" "
         class={[
-          "block px-2.5 pb-2.5 pt-4 w-full font-typewriter text-md text-brand bg-transparent rounded-md",
-          "border-1 border-brand appearance-none focus:outline-none focus:ring-0 focus:border-brand peer",
-          @errors == [] && "border-brand focus:border-brand",
+          "block px-2.5 pb-2.5 pt-4 w-full font-typewriter text-md text-black bg-controls rounded-md",
+          "appearance-none focus:outline-none focus:ring-0 peer",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
       />
       <label
         for={@id}
         class={[
-          "absolute font-typewriter text-sm text-brand-inactive duration-300 transform",
-          "-translate-y-4 scale-75 top-2 z-10 origin-[0] bg-container-background px-2",
-          "peer-focus:px-2 peer-focus:text-brand peer-placeholder-shown:scale-100",
+          "absolute font-typewriter text-sm text-black duration-300 transform",
+          "-translate-y-4 scale-75 top-2 z-10 origin-[0] bg-controls px-2 rounded-2xl",
+          "peer-focus:px-2 peer-focus:text-black peer-placeholder-shown:scale-100",
           "peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2",
           "peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
         ]}
@@ -425,10 +423,7 @@ defmodule StygianWeb.CoreComponents do
         id={@id}
         value={Form.normalize_value(@type, @value)}
         class={[
-          "font-typewriter text-md font-medium bg-zinc-900/50 border border-brand",
-          "text-brand rounded-md focus:ring-brand focus:border-brand",
-          "block w-full p-2.5 phx-no-feedback:border-brand phx-no-feedback:focus:border-brand",
-          @errors == [] && "border-brand focus:border-brand",
+          "font-typewriter text-md font-medium bg-controls text-black rounded-md block w-full p-2.5",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
@@ -551,8 +546,8 @@ defmodule StygianWeb.CoreComponents do
 
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0 rounded-lg">
-      <table class="w-full">
-        <thead class="text-ls text-zinc-900 bg-brand-inactive text-left">
+      <table class="w-full bg-controls rounded-lg">
+        <thead class="text-ls text-zinc-900 text-left">
           <tr>
             <th :for={col <- @col} class="pt-4 pl-1 font-typewriter"><%= col[:label] %></th>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
@@ -561,7 +556,7 @@ defmodule StygianWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-brand border-t border-brand text-sm leading-6 text-brand font-typewriter"
+          class="relative divide-y divide-black border-t border-black text-sm leading-6 text-zinc-900 font-typewriter"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group not-format">
             <td
@@ -570,7 +565,7 @@ defmodule StygianWeb.CoreComponents do
               class="relative p-0"
             >
               <div class="block py-4 pr-6 pl-1">
-                <span class={["relative", i == 0 && "font-semibold text-brand"]}>
+                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -629,7 +624,7 @@ defmodule StygianWeb.CoreComponents do
     <.link
       navigate={@navigate}
       patch={@patch}
-      class={"focus:outline-none text-zinc-900 bg-brand-inactive hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-transparent #{@class}"}
+      class={"focus:outline-none text-zinc-900 bg-controls hover:bg-brand focus:ring-4 focus:ring-green-300 font-medium text-sm p-2 border border-zinc-900 #{@class}"}
       {@rest}
     >
       <%= render_slot(@inner_block) %>
