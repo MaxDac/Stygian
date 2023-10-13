@@ -24,6 +24,7 @@ module.exports = {
       backgroundImage: {
         "login": "url('/images/LoginFrame.webp')",
         "main": "url('/images/HomeWallpaper.webp')",
+        "controls": "url('/images/paper_background.webp')",
       },
       colors: {
         brand: "#33a01b",
