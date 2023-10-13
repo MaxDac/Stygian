@@ -1,9 +1,7 @@
 // See the Tailwind configuration guide for advanced usage
 // https://tailwindcss.com/docs/configuration
 
-const plugin = require("tailwindcss/plugin")
-const fs = require("fs")
-const path = require("path")
+import * as plugin from "tailwindcss/plugin"
 
 module.exports = {
   content: [
