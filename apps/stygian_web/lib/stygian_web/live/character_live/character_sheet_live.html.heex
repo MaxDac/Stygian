@@ -28,7 +28,7 @@
 
   <div class="absolute top-[160px] left-[220px] -rotate-2 font-typewriter w-[440px] h-[510px] overflow-x-hidden overflow-y-auto">
     <p>Name: <%= @character.name %></p>
-    <p>Age: Not provided</p>
+    <p>Age: <%= get_character_age_label(@character) %></p>
     <p>Description: <%= @character.description %></p>
   </div>
 

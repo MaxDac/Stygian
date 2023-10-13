@@ -89,4 +89,8 @@ defmodule StygianWeb.CharacterLive.CharacterSheetLive do
 
   defp is_own_character?(%{id: current_character_id}, current_character_id), do: true
   defp is_own_character?(_, _), do: false
+
+  defp get_character_age_label(%{age: :young}), do: "Young man"
+  defp get_character_age_label(%{age: :adult}), do: "Adult"
+  defp get_character_age_label(%{age: :old}), do: "Sir"
 end
