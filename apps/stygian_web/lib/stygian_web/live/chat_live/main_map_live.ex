@@ -2,7 +2,10 @@ defmodule StygianWeb.ChatLive.MainMapLive do
   use StygianWeb, :live_view
 
   alias Stygian.Maps
+
   alias StygianWeb.Presence
+
+  import StygianWeb.ChatLive.MapHelpers
 
   @impl true
   def mount(_params, _session, socket) do

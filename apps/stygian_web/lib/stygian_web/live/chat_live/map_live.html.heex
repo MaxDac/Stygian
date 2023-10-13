@@ -1,19 +1,31 @@
-<div class="relative w-full flex justify-center">
-  <img
-    src={"/images/location/#{@map.image_name}.webp"}
-    aria-label={@map.name}
-    usemap="#localmap"
-    class="w-[700px] h-auto min-w-[700px]"
-  />
+<div class="hidden xl:block">
+  <div class="relative w-full flex justify-center">
+    <img
+      src={"/images/location/#{@map.image_name}.webp"}
+      aria-label={@map.name}
+      usemap="#localmap"
+      class="w-[700px] h-auto min-w-[700px]"
+    />
+  </div>
+
+  <map name="localmap">
+    <%= for child <- @map.children do %>
+      <.area
+        navigate={~p"/chat/#{child.id}"}
+        coords={child.coords}
+        shape={child.coords_type}
+        alt={child.name}
+      />
+    <% end %>
+  </map>
 </div>
 
-<map name="localmap">
-  <%= for child <- @map.children do %>
-    <.area
-      navigate={~p"/chat/#{child.id}"}
-      coords={child.coords}
-      shape={child.coords_type}
-      alt={child.name}
+<div class="xl:hidden bg-zinc-900 w-screen h-screen not-format flex justify-center">
+  <div class="flex flex-col space-y-2 justify-start align-middle z-20">
+    <.h1 class="text-xl text-brand">Locazioni</.h1>
+    <.small_screen_map_selector 
+      maps={@map.children} 
+      base_link={"/chat"}
     />
-  <% end %>
-</map>
+  </div>
+</div>
