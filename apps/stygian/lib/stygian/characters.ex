@@ -141,6 +141,27 @@ defmodule Stygian.Characters do
   def get_character(id), do: Repo.get(Character, id)
 
   @doc """
+  Gets a single character with a smaller set of information for the character resume.
+  """
+  @spec get_character_slim(id :: non_neg_integer()) :: Character.t() | nil
+  def get_character_slim(id) do
+    Character
+    |> from()
+    |> where([c], c.id == ^id)
+    |> select([c], %Character{
+      id: c.id, 
+      name: c.name, 
+      avatar: c.avatar, 
+      description: c.description,
+      health: c.health,
+      sanity: c.sanity,
+      lost_health: c.lost_health,
+      lost_sanity: c.lost_sanity
+    })
+    |> Repo.one()
+  end
+
+  @doc """
   Gets the character by name, if exists, otherwise returns nil.
   """
   @spec get_character_by_name(character_name :: String.t()) :: Character.t() | nil

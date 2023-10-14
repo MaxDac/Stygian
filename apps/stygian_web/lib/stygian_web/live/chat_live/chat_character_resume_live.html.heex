@@ -1,0 +1,11 @@
+<div>
+  <.h1><%= @character.name %></.h1>
+
+  <div class="flex flex-row space-x-3">
+    <img src={@character.avatar} alt={"#{@character.name} avatar"} />
+    
+    <section class="font-typewriter text-md">
+      <%= @character.description %>
+    </section>
+  </div>
+</div>

@@ -59,6 +59,22 @@ defmodule Stygian.CharactersTest do
       assert Characters.get_character_by_name("some name") == nil
     end
 
+    test "get_character_slim/1 gets only the required character inforamtion" do
+      character = character_fixture_complete()
+      found = Characters.get_character_slim(character.id)
+
+      assert found.id == character.id
+      assert found.name == character.name
+      assert found.avatar == character.avatar
+      assert found.description == character.description
+      assert found.health == character.health
+      assert found.sanity == character.sanity
+      assert found.lost_health == character.lost_health
+      assert found.lost_sanity == character.lost_sanity
+
+      assert is_nil(found.biography)
+    end
+
     test "character_belongs_to_user?/2 returns true when the character belongs to the user" do
       %{id: character_id, user_id: user_id} = character_fixture()
       assert Characters.character_belongs_to_user?(character_id, user_id) == true

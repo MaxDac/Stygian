@@ -51,5 +51,18 @@
         map={@map}
       />
     </.modal>
+
+    <.modal
+      :if={@show_character_resume}
+      id="character-resume-modal"
+      show
+      on_cancel={JS.patch(~p"/chat/#{@map.id}")}
+    >
+      <.live_component
+        module={ChatCharacterResumeLive}
+        id={@current_character.id}
+        character_id={@resume_character_id}
+      />
+    </.modal>
   <% end %>
 </div>

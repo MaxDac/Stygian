@@ -18,6 +18,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
   alias Stygian.Characters
   alias Stygian.Maps
 
+  alias StygianWeb.ChatLive.ChatCharacterResumeLive
   alias StygianWeb.ChatLive.ChatControlLive
   alias StygianWeb.ChatLive.ChatDiceThrowerLive
   alias StygianWeb.ChatLive.ChatHelpers
@@ -40,6 +41,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign_map(map_id)
      |> assign(:show_dice_thrower, false)
      |> assign(:show_object_usage, false)
+     |> assign(:show_character_resume, false)
      |> update_presence()
      |> assign_chat_entries(Maps.list_map_chats(map_id))
      |> assign_character_skills()
@@ -47,6 +49,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign_textarea_id()
      |> assign_dice_button_id()
      |> assign_use_object_id()
+     |> assign_character_resume_id()
      |> check_private_room_allowance()}
   end
 
@@ -69,8 +72,10 @@ defmodule StygianWeb.ChatLive.ChatLive do
      socket
      |> assign(:show_dice_thrower, false)
      |> assign(:show_object_usage, false)
+     |> assign(:show_character_resume, false)
      |> assign_dice_button_id()
-     |> assign_use_object_id()}
+     |> assign_use_object_id()
+     |> assign_character_resume_id()}
   end
 
   # This is called when the dice thrower modal is closed
@@ -81,8 +86,10 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> add_dice_chat(params)
      |> assign(:show_dice_thrower, false)
      |> assign(:show_object_usage, false)
+     |> assign(:show_character_resume, false)
      |> assign_dice_button_id()
-     |> assign_use_object_id()}
+     |> assign_use_object_id()
+     |> assign_character_resume_id()}
   end
 
   # Dice button clicked
@@ -96,6 +103,14 @@ defmodule StygianWeb.ChatLive.ChatLive do
   # Object button clicked
   @impl true
   def handle_event("open_objects", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_object_usage, true)}
+  end
+
+  # Character resume link clicked
+  @impl true
+  def handle_event("open_objects", %{"character_id" => character_id}, socket) do
     {:noreply,
      socket
      |> assign(:show_object_usage, true)}
@@ -166,6 +181,14 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
+  def handle_event("open_character_resume", %{"character_id" => character_id}, socket) do
+    {:noreply,
+     socket
+     |> assign_updated_resume_character_id(character_id)
+     |> assign(:show_character_resume, true)}
+  end
+
+  @impl true
   def handle_params(%{"map_id" => map_id}, _, socket) do
     {:noreply,
      socket
@@ -173,6 +196,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
      # Updates the random number passed down with the component id to the live component to force it to update.
      |> assign_dice_button_id()
      |> assign_use_object_id()
+     |> assign_character_resume_id()
      |> assign(:show_dice_thrower, false)
      |> assign(:show_object_usage, false)}
   end
@@ -209,6 +233,14 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   defp assign_use_object_id(socket) do
     assign(socket, :use_object_id, new_use_object_id())
+  end
+
+  defp assign_character_resume_id(socket) do
+    assign(socket, :character_resume_id, new_character_resume_id())
+  end
+
+  defp assign_updated_resume_character_id(socket, character_id) do
+    assign(socket, :resume_character_id, character_id)
   end
 
   defp add_dice_chat(
@@ -330,6 +362,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
   defp new_dice_button_id, do: "dice-button-id-#{:rand.uniform(10)}"
 
   defp new_use_object_id, do: "use-object-button-id-#{:rand.uniform(10)}"
+
+  defp new_character_resume_id, do: "character-resume-id-#{:rand.uniform(10)}"
 
   defp update_presence(
          %{
