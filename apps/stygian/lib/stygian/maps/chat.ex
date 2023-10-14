@@ -21,7 +21,7 @@ defmodule Stygian.Maps.Chat do
 
   schema "chats" do
     field :text, :string
-    field :type, Ecto.Enum, values: [:text, :master, :dices, :special, :off]
+    field :type, Ecto.Enum, values: [:text, :master, :dices, :failed_dices, :special, :off]
     belongs_to :character, Character
     belongs_to :map, Map
 
