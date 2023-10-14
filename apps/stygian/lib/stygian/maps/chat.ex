@@ -10,7 +10,7 @@ defmodule Stygian.Maps.Chat do
   @type t() :: %__MODULE__{
           id: integer(),
           text: String.t(),
-          type: :text | :master | :dices | :special | :off,
+          type: :text | :master | :dices | :failed_dices | :special | :off,
           character_id: integer(),
           character: Character.t(),
           map_id: integer(),
@@ -21,7 +21,7 @@ defmodule Stygian.Maps.Chat do
 
   schema "chats" do
     field :text, :string
-    field :type, Ecto.Enum, values: [:text, :master, :dices, :special, :off]
+    field :type, Ecto.Enum, values: [:text, :master, :dices, :failed_dices, :special, :off]
     belongs_to :character, Character
     belongs_to :map, Map
 

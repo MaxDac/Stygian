@@ -13,6 +13,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   use StygianWeb, :container_live_view
 
+  require Logger
+
   alias Stygian.Characters
   alias Stygian.Maps
 
@@ -40,6 +42,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign(:show_object_usage, false)
      |> update_presence()
      |> assign_chat_entries(Maps.list_map_chats(map_id))
+     |> assign_character_skills()
      |> ChatHelpers.subscribe_to_chat_events(map_id)
      |> assign_textarea_id()
      |> assign_dice_button_id()
@@ -72,14 +75,14 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   # This is called when the dice thrower modal is closed
   @impl true
-  def handle_info({:chat, _}, %{assigns: %{map: %{id: map_id}}} = socket) do
-    send_update(ChatControlLive, id: map_id)
-
+  def handle_info({:chat_dices, params}, socket) do
     {:noreply,
      socket
+     |> add_dice_chat(params)
      |> assign(:show_dice_thrower, false)
      |> assign(:show_object_usage, false)
-     |> assign_dice_button_id()}
+     |> assign_dice_button_id()
+     |> assign_use_object_id()}
   end
 
   # Dice button clicked
@@ -187,6 +190,15 @@ defmodule StygianWeb.ChatLive.ChatLive do
     assign(socket, map: map)
   end
 
+  defp assign_character_skills(%{assigns: %{current_character: character}} = socket) do
+    {attributes, skills} =
+      Characters.list_character_attributes_skills(character)
+
+    socket
+    |> assign(:attributes, attributes)
+    |> assign(:skills, skills)
+  end
+
   defp assign_textarea_id(socket) do
     assign(socket, :textarea_id, new_textarea_id())
   end
@@ -197,6 +209,51 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   defp assign_use_object_id(socket) do
     assign(socket, :use_object_id, new_use_object_id())
+  end
+
+  defp add_dice_chat(
+         %{
+           assigns: %{
+             current_character: character,
+             map: map,
+             attributes: attributes,
+             skills: skills
+           }
+         } = socket,
+         %{
+           attribute_id: attribute_id,
+           skill_id: skill_id,
+           modifier: modifier,
+           difficulty: difficulty
+         } = _params
+       ) do
+    attribute = Enum.find(attributes, fn a -> a.id == attribute_id end)
+    skill = Enum.find(skills, fn s -> s.id == skill_id end)
+
+    request = %{
+      character: character,
+      map: map,
+      attribute: attribute,
+      skill: skill,
+      modifier: modifier,
+      difficulty: difficulty
+    }
+
+    dice_thrower = &:rand.uniform/1
+
+    case Maps.create_dice_throw_chat_entry(request, dice_thrower) do
+      {:ok, chat} ->
+        send_update(ChatControlLive, id: map.id)
+
+        socket
+        |> ChatHelpers.handle_chat_created(chat)
+
+      error ->
+        Logger.error("Error while registering chat: #{inspect(error)}")
+
+        socket
+        |> put_flash(:error, "Errore durante l'inserimento del messaggio.")
+    end
   end
 
   defp add_use_object_chat(
