@@ -272,19 +272,19 @@ defmodule Stygian.Maps do
 
     result = base + dice_result
 
-    text =
+    {result_type, text} =
       case {dice_result, result} do
         {1, _} ->
-          "ottenendo un fallimento critico"
+          {:failed_dices, "ottenendo un fallimento critico"}
 
         {20, _} ->
-          "ottenendo un successo critico"
+          {:dices, "ottenendo un successo critico"}
 
         {_, n} when n < difficulty ->
-          "ottenendo un fallimento"
+          {:failed_dices, "ottenendo un fallimento"}
 
         _ ->
-          "ottenendo un successo"
+          {:dices, "ottenendo un successo"}
       end
 
     chat_text = "#{chat_explanation} #{text} (#{base} + #{dice_result})."
@@ -293,7 +293,7 @@ defmodule Stygian.Maps do
       character_id: character_id,
       map_id: map_id,
       text: chat_text,
-      type: :dices
+      type: result_type
     })
   end
 
