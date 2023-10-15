@@ -418,8 +418,10 @@ defmodule Stygian.CharactersTest do
       ]
 
       assert {:ok, _} = Characters.create_npc(valid_character, skills)
-      assert [npcs] = Characters.list_npcs()
-      assert "some_name" == npcs.name
+      assert [npc] = Characters.list_npcs()
+      assert "some_name" == npc.name
+      refute is_nil(npc.health)
+      refute is_nil(npc.sanity)
     end
 
     test "update_character_skill/1 correctly updates the character skill" do
