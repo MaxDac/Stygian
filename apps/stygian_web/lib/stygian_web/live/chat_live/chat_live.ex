@@ -110,7 +110,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   # Character resume link clicked
   @impl true
-  def handle_event("open_objects", %{"character_id" => character_id}, socket) do
+  def handle_event("open_objects", _params, socket) do
     {:noreply,
      socket
      |> assign(:show_object_usage, true)}
