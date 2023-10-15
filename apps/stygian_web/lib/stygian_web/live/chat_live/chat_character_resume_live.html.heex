@@ -12,4 +12,33 @@
       <%= @character.description %>
     </section>
   </div>
+
+  <div :if={@is_admin}>
+    <.simple_form
+      class="mt-10"
+      for={@form}
+      id="email_form"
+      phx-target={@myself}
+      phx-change="verify"
+      phx-submit="update"
+    >
+      <.input type="hidden" field={@form[:character_id]} />
+
+      <.input
+        type="number"
+        label={"Salute (massimo: #{@character.health})"}
+        field={@form[:health]}
+        class="w-full"
+      />
+
+      <.input
+        type="number"
+        label={"Sanità mentale (massimo: #{@character.sanity}))"}
+        field={@form[:sanity]}
+        class="w-full"
+      />
+
+      <.button type="submit" class="mt-5">Aggiorna</.button>
+    </.simple_form>
+  </div>
 </div>

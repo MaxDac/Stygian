@@ -491,9 +491,14 @@ defmodule Stygian.Characters do
 
   @doc """
   Returns the list of character skills, split between attributes and skills.
+  If the character passed in input is nil, it will return two empty lists.
   """
   @spec list_character_attributes_skills(character :: Character.t()) ::
           {attributes :: list(CharacterSkill.t()), skills :: list(CharacterSkill.t())}
+  def list_character_attributes_skills(character)
+
+  def list_character_attributes_skills(nil), do: {[], []}
+
   def list_character_attributes_skills(character) do
     case list_character_skills(character) do
       nil ->
