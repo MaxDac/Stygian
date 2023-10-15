@@ -297,9 +297,11 @@ defmodule Stygian.CharactersTest do
       character_skill_1 =
         %{character_id: character_id} = character_skill_fixture(%{skill_id: skill_1.id})
 
-      character_skill_2 = character_skill_fixture(%{character_id: character_id, skill_id: skill_2.id})
+      character_skill_2 =
+        character_skill_fixture(%{character_id: character_id, skill_id: skill_2.id})
 
-      assert {attributes, skills} = Characters.list_character_attributes_skills(%{id: character_id})
+      assert {attributes, skills} =
+               Characters.list_character_attributes_skills(%{id: character_id})
 
       assert 1 == length(attributes)
       assert 1 == length(skills)

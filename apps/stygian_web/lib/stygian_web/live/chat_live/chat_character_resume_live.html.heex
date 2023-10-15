@@ -28,13 +28,15 @@
         type="number"
         label={"Salute (massimo: #{@character.health})"}
         field={@form[:health]}
-        class="w-full" />
+        class="w-full"
+      />
 
       <.input
         type="number"
         label={"Sanità mentale (massimo: #{@character.sanity}))"}
         field={@form[:sanity]}
-        class="w-full" />
+        class="w-full"
+      />
 
       <.button type="submit" class="mt-5">Aggiorna</.button>
     </.simple_form>

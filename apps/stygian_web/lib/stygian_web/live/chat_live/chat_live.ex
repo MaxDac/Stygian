@@ -218,7 +218,10 @@ defmodule StygianWeb.ChatLive.ChatLive do
     assign(socket, map: map)
   end
 
-  defp assign_character_skills(%{assigns: %{current_character: %{id: character_id} = character}} = socket) when not is_nil(character_id) do
+  defp assign_character_skills(
+         %{assigns: %{current_character: %{id: character_id} = character}} = socket
+       )
+       when not is_nil(character_id) do
     {attributes, skills} =
       Characters.list_character_attributes_skills(character)
 
@@ -366,6 +369,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
     end
   end
 
+  defp check_private_room_allowance(socket), do: socket
+
   defp assign_resetted_modal_state(socket) do
     socket
     |> assign(:show_dice_thrower, false)
@@ -375,8 +380,6 @@ defmodule StygianWeb.ChatLive.ChatLive do
     |> assign_use_object_id()
     |> assign_character_resume_id()
   end
-
-  defp check_private_room_allowance(socket), do: socket
 
   defp new_textarea_id, do: "textarea-id-#{:rand.uniform(10)}"
 

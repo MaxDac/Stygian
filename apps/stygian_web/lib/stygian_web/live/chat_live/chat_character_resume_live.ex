@@ -21,7 +21,7 @@ defmodule StygianWeb.ChatLive.ChatCharacterResumeLive do
 
   @impl true
   def handle_event("verify", %{"character_status_form" => params}, socket) do
-    {:noreply, 
+    {:noreply,
      socket
      |> assign_form(params)}
   end
@@ -45,13 +45,20 @@ defmodule StygianWeb.ChatLive.ChatCharacterResumeLive do
     assign(socket, :character, character)
   end
 
-  defp assign_form(%{assigns: %{character: %{
-    id: character_id,
-    health: health,
-    sanity: sanity,
-    lost_health: lost_health,
-    lost_sanity: lost_sanity
-  }}} = socket, attrs \\ %{}) do
+  defp assign_form(
+         %{
+           assigns: %{
+             character: %{
+               id: character_id,
+               health: health,
+               sanity: sanity,
+               lost_health: lost_health,
+               lost_sanity: lost_sanity
+             }
+           }
+         } = socket,
+         attrs \\ %{}
+       ) do
     form =
       %CharacterStatusForm{
         character_id: character_id,
@@ -64,11 +71,10 @@ defmodule StygianWeb.ChatLive.ChatCharacterResumeLive do
     assign(socket, :form, form)
   end
 
-  defp assign_is_admin(socket), do: 
-    assign(socket, :is_admin, is_admin?(socket))
+  defp assign_is_admin(socket), do: assign(socket, :is_admin, is_admin?(socket))
 
-  defp is_admin?(%{assigns: %{current_user: %{admin: true}}} = _socket), do: true 
-  defp is_admin?(_socket), do: false 
+  defp is_admin?(%{assigns: %{current_user: %{admin: true}}} = _socket), do: true
+  defp is_admin?(_socket), do: false
 
   defp send_form(params) do
     send(self(), {:update_status, params})
