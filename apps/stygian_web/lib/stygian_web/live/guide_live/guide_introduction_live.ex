@@ -30,7 +30,7 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     <hr class="brand" />
 
     <.guide_p>
-      Stygian &egrave; un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo "Stygian: Reign of the Old Ones" e alle novelle di H. P. Lovecraft, ambientato nella città di finzione di Rochester, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico. È opinione comune che l'anno sia il 1930, durante il proibizionismo, anche se è impossibile da determinare con esattezza, poiché la città, da un anno circa secondo alcuni, almeno due per altri, è stata sottratta dal normale scorrere del tempo, dello spazio, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
+      Stygian è un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo <b>Stygian: Reign of the Old Ones</b> e alle novelle di H. P. Lovecraft, ambientato nella città di finzione di Rochester, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico. È opinione comune che l'anno sia il 1930, durante il proibizionismo, anche se è impossibile da determinare con esattezza, poiché la città, da un anno circa secondo alcuni, almeno due per altri, è stata sottratta dal normale scorrere del tempo, dello spazio, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
     </.guide_p>
 
     <.guide_p>
@@ -42,7 +42,7 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     </.guide_p>
 
     <.guide_p>
-      La vita della cittadina, stretta all'interno delle vecchie mura coloniali costruite dai francesi rafforzate con costruzioni di fortuna, è gestita dalla <i>Mob</i>, la mafia statunitense, che si è liberata dalla presenza della scarsa e già corrotta forza di polizia quasi subito dopo il <b>Cataclisma</b>, il giorno in cui tutto è cambiato, ed ha di fatto assunto il controllo. L'unico argine ad uno stato di costante minaccia e sopruso è la presenza di due organizzazioni criminali differenti: una, composta da elementi di origine italiana, e l'altra, composta per la maggior parte di immigrati di origine irlandese; la precaria situazione di tregua armata creatasi tra le due organizzazioni fa sì che entrambe tendano a non trattare le persone comuni come strumenti su cui sfogare le loro pulsioni e frustrazioni, cercando di garantirsene l'alleanza, o l'obbedienza.
+      La vita della cittadina, stretta all'interno delle vecchie mura coloniali costruite dai francesi rafforzate con costruzioni di fortuna, è gestita da ciò che rimane delle infrastrutture cittadine dopo il <b>Cataclisma</b>, il giorno in cui tutto è cambiato, ed ha di fatto assunto il controllo: tre sono state le organizzazioni che hanno evitato un inesorabile e totale discesa nel caos, nella confusione, nella morte: il <b>Rochester Police Department</b>, che lotta con i pericoli sia esterni, sia interni, di corruzione, il <b>St. Andrew's Hospital</b>, l'unica struttura ospedaliera di Rochester che cerca di barcamenarsi con le risorse rimaste, e il <b>Rochester Town Hall</b>, che cerca di organizzare il lavoro e sostenere l'economia di guerra della cittadina.
     </.guide_p>
 
     <.guide_p>
