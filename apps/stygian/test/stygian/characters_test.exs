@@ -265,23 +265,53 @@ defmodule Stygian.CharactersTest do
     @invalid_attrs %{value: nil}
 
     test "list_character_skills/1 returns all character_skills" do
-      skill_type1 = skill_type_fixture(%{name: "Skill type 1"})
-      skill_type2 = skill_type_fixture(%{name: "Skill type 2"})
+      skill_type_1 = skill_type_fixture(%{name: "Skill type 1"})
+      skill_type_2 = skill_type_fixture(%{name: "Skill type 2"})
 
-      skill1 = skill_fixture(%{name: "skill1"})
+      skill_1 = skill_fixture(%{name: "skill_1"})
 
-      Skills.add_skill_type_to_skill(skill1, skill_type1)
-      Skills.add_skill_type_to_skill(skill1, skill_type2)
+      Skills.add_skill_type_to_skill(skill_1, skill_type_1)
+      Skills.add_skill_type_to_skill(skill_1, skill_type_2)
 
       character_skill =
-        %{character_id: character_id} = character_skill_fixture(%{skill_id: skill1.id})
+        %{character_id: character_id} = character_skill_fixture(%{skill_id: skill_1.id})
 
       assert [got_character_skill] = Characters.list_character_skills(%{id: character_id})
       assert character_skill.skill_id == got_character_skill.skill_id
       assert character_skill.character_id == got_character_skill.character_id
       assert character_skill.value == got_character_skill.value
-      assert Enum.member?(got_character_skill.skill.skill_types, skill_type1)
-      assert Enum.member?(got_character_skill.skill.skill_types, skill_type2)
+      assert Enum.member?(got_character_skill.skill.skill_types, skill_type_1)
+      assert Enum.member?(got_character_skill.skill.skill_types, skill_type_2)
+    end
+
+    test "list_character_attributes_skills/1 returns attributes and characters on two different lists" do
+      skill_type_1 = skill_type_fixture(%{name: "Attribute"})
+      skill_type_2 = skill_type_fixture(%{name: "Skill"})
+
+      skill_1 = skill_fixture(%{name: "skill1"})
+      skill_2 = skill_fixture(%{name: "skill2"})
+
+      Skills.add_skill_type_to_skill(skill_1, skill_type_1)
+      Skills.add_skill_type_to_skill(skill_2, skill_type_2)
+
+      character_skill_1 =
+        %{character_id: character_id} = character_skill_fixture(%{skill_id: skill_1.id})
+
+      character_skill_2 = character_skill_fixture(%{character_id: character_id, skill_id: skill_2.id})
+
+      assert {attributes, skills} = Characters.list_character_attributes_skills(%{id: character_id})
+
+      assert 1 == length(attributes)
+      assert 1 == length(skills)
+
+      {character_skill_id_1, character_skill_id_2} = {character_skill_1.id, character_skill_2.id}
+
+      assert [%{id: ^character_skill_id_1}] = attributes
+      assert [%{id: ^character_skill_id_2}] = skills
+    end
+
+    test "list_character_attributes_skills/1 returns two empty lists when character is nil" do
+      assert {[], []} = Characters.list_character_attributes_skills(nil)
     end
 
     test "get_character_skill!/1 returns the character_skill with given id" do

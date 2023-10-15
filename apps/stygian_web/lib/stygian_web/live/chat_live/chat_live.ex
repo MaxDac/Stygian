@@ -84,12 +84,24 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:noreply,
      socket
      |> add_dice_chat(params)
-     |> assign(:show_dice_thrower, false)
-     |> assign(:show_object_usage, false)
-     |> assign(:show_character_resume, false)
-     |> assign_dice_button_id()
-     |> assign_use_object_id()
-     |> assign_character_resume_id()}
+     |> assign_resetted_modal_state()}
+  end
+
+  @impl true
+  def handle_info({:update_status, %{"character_id" => character_id} = params}, socket) do
+    case Characters.assign_character_status(character_id, params) do
+      {:ok, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Status cambiato con successo.")
+         |> assign_resetted_modal_state()}
+
+      {:error, _changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "C'è stato un errore nel cambio dello status del personaggio.")
+         |> assign_resetted_modal_state()}
+    end
   end
 
   # Dice button clicked
@@ -206,13 +218,20 @@ defmodule StygianWeb.ChatLive.ChatLive do
     assign(socket, map: map)
   end
 
-  defp assign_character_skills(%{assigns: %{current_character: character}} = socket) do
+  defp assign_character_skills(%{assigns: %{current_character: %{id: character_id} = character}} = socket) when not is_nil(character_id) do
     {attributes, skills} =
       Characters.list_character_attributes_skills(character)
 
     socket
     |> assign(:attributes, attributes)
     |> assign(:skills, skills)
+  end
+
+  # This clause matches the admins that didn't select a NPC
+  defp assign_character_skills(socket) do
+    socket
+    |> assign(:attributes, [])
+    |> assign(:skills, [])
   end
 
   defp assign_textarea_id(socket) do
@@ -345,6 +364,16 @@ defmodule StygianWeb.ChatLive.ChatLive do
       |> put_flash(:error, "Non puoi accedere a questa stanza")
       |> push_navigate(to: ~p"/")
     end
+  end
+
+  defp assign_resetted_modal_state(socket) do
+    socket
+    |> assign(:show_dice_thrower, false)
+    |> assign(:show_object_usage, false)
+    |> assign(:show_character_resume, false)
+    |> assign_dice_button_id()
+    |> assign_use_object_id()
+    |> assign_character_resume_id()
   end
 
   defp check_private_room_allowance(socket), do: socket
