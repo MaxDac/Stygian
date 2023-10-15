@@ -3,7 +3,7 @@ defmodule StygianWeb.ChatLive.ChatCharacterResumeLive do
   This component will show the character resume.
   If the current user is an admin, it will allow them to edit the character status.
   """
-  
+
   use StygianWeb, :live_component
 
   alias Stygian.Characters

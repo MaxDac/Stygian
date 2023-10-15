@@ -105,10 +105,11 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
   @doc """
   The chat entry time.
   """
-  def chat_time(chat_time), do: 
-    chat_time
-    |> NaiveDateTime.add(2, :hour)
-    |> Calendar.strftime("%d/%m/%y %I:%M")
+  def chat_time(chat_time),
+    do:
+      chat_time
+      |> NaiveDateTime.add(2, :hour)
+      |> Calendar.strftime("%d/%m/%y %I:%M")
 
   @doc """
   The line with the time and the character name.
@@ -116,9 +117,7 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
   def chat_character_line(assigns) do
     ~H"""
     <div class="font-report">
-      <.link
-        phx-click={JS.push("open_character_resume", value: %{character_id: @chat.character.id})}
-      >
+      <.link phx-click={JS.push("open_character_resume", value: %{character_id: @chat.character.id})}>
         <%= chat_time(@chat.inserted_at) %> - <%= @chat.character.name %>
       </.link>
     </div>

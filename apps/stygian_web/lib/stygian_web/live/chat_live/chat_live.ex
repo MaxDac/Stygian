@@ -108,14 +108,6 @@ defmodule StygianWeb.ChatLive.ChatLive do
      |> assign(:show_object_usage, true)}
   end
 
-  # Character resume link clicked
-  @impl true
-  def handle_event("open_objects", _params, socket) do
-    {:noreply,
-     socket
-     |> assign(:show_object_usage, true)}
-  end
-
   @impl true
   def handle_event("use_object", %{"id" => id}, %{assigns: %{map: %{id: map_id}}} = socket) do
     with {:ok, %{character_object: character_object}} <- Characters.use_object(id),

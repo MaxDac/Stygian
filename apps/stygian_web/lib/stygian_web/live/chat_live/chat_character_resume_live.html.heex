@@ -2,12 +2,12 @@
   <.h1><%= @character.name %></.h1>
 
   <div class="flex flex-row space-x-3 not-format">
-    <img 
+    <img
       src={@character.avatar}
       alt={"#{@character.name} avatar"}
       class="max-w-[200px] max-h-[300px] w-auto h-auto"
     />
-    
+
     <section class="font-typewriter text-sm max-h-[300px] overflow-y-auto overflow-x-hidden">
       <%= @character.description %>
     </section>

@@ -149,9 +149,9 @@ defmodule Stygian.Characters do
     |> from()
     |> where([c], c.id == ^id)
     |> select([c], %Character{
-      id: c.id, 
-      name: c.name, 
-      avatar: c.avatar, 
+      id: c.id,
+      name: c.name,
+      avatar: c.avatar,
       description: c.description,
       health: c.health,
       sanity: c.sanity,
