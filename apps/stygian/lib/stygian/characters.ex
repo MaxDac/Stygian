@@ -292,7 +292,9 @@ defmodule Stygian.Characters do
       |> Repo.insert()
 
     with {:ok, %Character{id: character_id}} <- character,
-         {:ok, _} <- create_character_skills_internal(skills, character_id) do
+         {:ok, _} <- create_character_skills_internal(skills, character_id),
+         character <- get_character!(character_id),
+         {:ok, _} <- complete_character(character) do
       {:ok, character}
     end
   end
