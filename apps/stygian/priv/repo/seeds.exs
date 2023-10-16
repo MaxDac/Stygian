@@ -12,10 +12,11 @@
 
 alias Stygian.Accounts
 alias Stygian.Characters
+alias Stygian.Maps
 alias Stygian.Objects
 alias Stygian.Organisations
+alias Stygian.Rest
 alias Stygian.Skills
-alias Stygian.Maps
 
 alias Stygian.Characters.CharacterSkill
 
@@ -159,6 +160,20 @@ defmodule ObjectsHelpers do
 
       effect ->
         Objects.update_effect(effect, attrs)
+    end
+  end
+end
+
+defmodule RestActionsHelpers do
+  def create_rest_action(%{name: name} = attrs) do
+    case Rest.get_rest_action_by_name(name) do
+      nil ->
+        with {:ok, rest_action} <- Rest.create_rest_action(attrs) do
+          Rest.update_rest_action(rest_action, attrs)
+        end
+
+      rest_action ->
+        Rest.update_rest_action(rest_action, attrs)
     end
   end
 end
@@ -960,3 +975,38 @@ ObjectsHelpers.create_effect(%{object_id: whiskey_id, skill_id: mente_id, value:
     sanity: 0,
     health: 50
   })
+
+RestActionsHelpers.create_rest_action(%{
+  name: "Lettura di un libro",
+  description: """
+  Il personaggio si siede e legge un libro, recuperando un po' di sanità mentale.
+  """,
+  sanity: 10,
+  health: 0,
+  research_points: 0,
+  slots: 2
+})
+
+RestActionsHelpers.create_rest_action(%{
+  name: "Cura",
+  description: """
+  Il personaggio riesce a pulire le proprie ferite, se ne ha.
+  """,
+  sanity: 0,
+  health: 10,
+  research_points: 0,
+  slots: 2
+})
+
+RestActionsHelpers.create_rest_action(%{
+  name: "Studio",
+  description: """
+  Il personaggio impiega parte del suo tempo studiando. Lo studio può riguardare la fisica e le sue applicazioni,
+  oppure elementi di occulto.
+  """,
+  sanity: 0,
+  health: 0,
+  research_points: 3,
+  slots: 3
+})
+
