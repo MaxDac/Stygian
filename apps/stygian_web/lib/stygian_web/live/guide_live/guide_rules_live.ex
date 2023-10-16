@@ -100,6 +100,10 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
       La fase di ricerca consisterà nella scrittura di almeno dieci azioni solitarie del personaggio in qualsiasi locazione pubblica, in cui il personaggio potrà interpretare lo svolgimento della sperimentazione che ha in mente: in queste azioni, il giocatore se lo riterrà opportuno potrà andare in deroga alla regola di non manifestare i pensieri del suo personaggio, ma questo potrà influire a discrezione del Narratore nel computo dei punti esperienza assegnati, quindi andranno ben ponderati. Alla fine delle dieci azioni, il personaggio potrà avvisare un Narratore della sua giocata, allegando l'orario; il Narratore, poi, chiederà di effettuare un tiro per determinare la riuscita dello studio: il tiro potrà essere effettuato in chat in qualsiasi orario, ma dovrà essere comunicato al Narratore. Il Narratore, a seconda della riuscita del tiro e dell'interpretazione, potrà assegnare un numero di punti esperienza variabili, ed alcuni oggetti al personaggio. Se un altro personaggio vorrà giocare approfittando della vostra presenza, la ricerca sarà interrotta, ma potrete "riutilizzare" il numero di turni in solitaria già interpretati in un'altra giocata: se quindi ad esempio avrete già interpretato in solitaria cinque azioni di ricerca, e decidete di cominciare una giocata (cosa estremamente consigliata), potrete ricominciare la ricerca in un secondo momento, ed a quel punto basteranno cinque azioni per terminare la sessione di studio.
     </.guide_p>
 
+    <.guide_p>
+      <span class="italic"><b>Nota</b>: è attualmente in fase di sviluppo un meccanismo che consentirà di ricercare oggetti e il funzionamento di questi durante il riposo.</span>
+    </.guide_p>
+
     <.guide_h1>Esperienza</.guide_h1>
 
     <.guide_p>
