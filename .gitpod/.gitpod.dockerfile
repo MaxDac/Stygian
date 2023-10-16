@@ -1,4 +1,4 @@
-FROM maxdac/gitpod-elixir:1.15.6-otp-26
+FROM maxdac/gitpod-elixir:1.15.7-otp-26
 
 USER gitpod
 

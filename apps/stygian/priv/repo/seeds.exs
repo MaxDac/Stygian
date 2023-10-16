@@ -598,6 +598,19 @@ OrganisationsHelpers.create_organisation(%{
   base_salary: 10
 })
 
+OrganisationsHelpers.create_organisation(%{
+  name: "Rochester Town Hall",
+  description: """
+  Quello che rimane del municipio di Rochester è il Town Hall, un austero palazzo in stile neo gotico che ospita ciò
+  che rimane dell'amministrazione cittadina. Molte delle cariche pubbliche hanno perso la vita durante il Cataclisma
+  o nelle immediate conseguenze, ma gli uffici sono riusciti a mantenersi organizzati e funzionanti. I lavori
+  disponibili alla cittadinanza sono molteplici, di archivio, o direttamente relazionati con l'amministrazione dei 
+  lavori nelle altre organizzazioni.
+  """,
+  image: "/images/organisations/rochester_town_hall.webp",
+  base_salary: 10
+})
+
 {:ok, %{id: moonshine_id}} =
   ObjectsHelpers.create_object(%{
     name: "Moonshine",

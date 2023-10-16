@@ -21,13 +21,15 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
     </.guide_p>
 
     <.guide_p>
-      Nel giro di pochi giorni, ogni parvenza di governo centrale è caduta vittima dei gruppi criminali che agivano nell'ombra prima del <b>Cataclisma</b>: i pochi poliziotti che non erano nel libro paga della
-      <i>Mob</i>
-      sono stati sbrigativamente uccisi, gli altri sono direttamente entrati a far parte delle organizzazioni criminali che commerciavano in alcolici al confine, i <i>bootleggers</i>. Dopo un periodo di violenza senza controllo, la situazione si è normalizzata: una volta capito che la fine del mondo sarebbe durata più di qualche giorno, una strana forma di ragione di stato ha fatto in modo che le due organizzazioni criminali nella città, una composta da elementi prevalentemente di origine italiana capeggiata da <b>Johnny Fontana</b>, l'altra di stampo irlandese guidata da <b>Eogham O'Flaherty</b>, raggiungessero quello che si potrebbe chiamare un accordo di non belligeranza.
+      I giorni immediatamente successivi al fenomeno hanno visto un altissimo numero di omicidi, furti e saccheggi, approfittando del momentaneo stato di confusione e disorganizzazione delle forze dell'ordine. Anche quando, dopo due settimane, il
+      <b>Rochester Police Department</b>
+      riuscì a riprendere il controllo della situazione all'interno della città, circoscrivendo una zona di controllo dove garantire una relativa sicurezza, molti abitanti si suicidarono, non vedendo nessuna speranza nella notte eterna in cui Rochester era piombata.
     </.guide_p>
 
     <.guide_p>
-      L'instabile tregua è l'unico argine alla completa autodistruzione dei pochi superstiti: i due gruppi hanno concesso la creazione di altre organizzazioni "disarmate", ed hanno di comune accordo deciso di usare le sigarette, le <i>Cigs</i>, come valuta per regolare le transazioni. Le armi sarebbero state permesse solo da componenti dei gruppi malavitosi, le altre organizzazioni avrebbero dovuto gestire lavori più servili, come la costruzione di mura, o la gestione dei rifugi e dei negozi per il riciclaggio delle scorte disponibili.
+      Messa in sicurezza la zona della cittadina, la polizia è stata l'unica forza in grado di garantire un minimo di ordine: ha consentito l'organizzazione del <b>Saint Andrew Hospital</b>, ed ha conentito anche la rimessa in funzione del
+      <b>Town Hall</b>
+      bonificando l'edificio da entità aliene. Questi successi non sarebbero stati possibili senza la gestione capace, carismatica ed autoritaria di <b>Jack Morgan</b>, un ex investigatore che è riuscito a serrare i ranghi dei suoi colleghi, un burbero e sbrigativo figlio di emigrati irlandesi; la relativa sicurezza e ordine è però pagata dai residenti loro malgrado di Rochester con una sostanziale dittatura poliziesca: i poliziotti, molto spesso, si arrogano diritti ben oltre ciò che la loro posizione normalmente gli garantirebbe, includendo molestie di vario genere, altrettanto spesso coperte dai colleghi.
     </.guide_p>
 
     <.guide_h1>Organizzazioni</.guide_h1>
@@ -38,8 +40,22 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
       giornaliero.
     </.guide_p>
 
+    <.guide_h2>Rochester Police Department</.guide_h2>
+
     <.guide_p>
-      (Todo - le organizzazioni devono ancora essere definite, anche se sarà possibile far parte di una delle due organizzazioni criminali)
+      La Rochester che conoscevamo, la tranquilla cittadina sull'Atlantico, ospitale nei confronti dei turisti e solidale nei confronti dei suoi abitanti, non c'è più. La città sopravvissuta al cataclisma è un luogo desolato, pieno di pericoli, ma la legge non può abdicare, ed a maggior ragione in questo momento di crisi, l'RPD chiama a raccolta tutte le persone di buona volontà per aiutare la popolazione e mantenere l'ordine. Tutti i cittadini sono i benvenuti, e per coloro che non sono esperti nell'utilizzo di armi da fuoco o da mischia, sarà offerto un lavoro in logistica, o un addestramento gratuito al poligono di tiro.
+    </.guide_p>
+
+    <.guide_h2>St. Andrew's Hospital</.guide_h2>
+
+    <.guide_p>
+      Ciò che rimane dell'Ospedale di Saint Andrew, alla periferia della French Hill, richiede a tutti i cittadini e ai forestieri che sono capitati a Rochester in questo duro momento di crisi di unirsi e dare il proprio apporto per accudire i malati e dare dignità ai deceduti. Personale con conoscenze in medicina sono desiderabili, ma tutti i cittadini di buona volontà possono partecipare allo sforzo, e ricevere gratuitamente un addestramento base in medicina.
+    </.guide_p>
+
+    <.guide_h2>Rochester Town Hall</.guide_h2>
+
+    <.guide_p>
+      Quello che rimane del municipio di Rochester è il Town Hall, un austero palazzo in stile neo gotico che ospita ciò che rimane dell'amministrazione cittadina. Molte delle cariche pubbliche hanno perso la vita durante il Cataclisma o nelle immediate conseguenze, ma gli uffici sono riusciti a mantenersi organizzati e funzionanti. I lavori disponibili alla cittadinanza sono molteplici, di archivio, o direttamente relazionati con l'amministrazione dei lavori nelle altre organizzazioni.
     </.guide_p>
 
     <.guide_h1>Luoghi di ritrovo</.guide_h1>
@@ -52,7 +68,7 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
         </li>
 
         <li class="font-normal text-md">
-          <b>Moshe's shop</b>: Moshe è un ebreo Ashkenazi di origine polacca, che prima del Cataclisma gestiva un negozio di antiquariato. Dopo il Cataclisma, Moshe ha deciso di aprire un negozio, acquistando oggetti antichi in cambio di provviste o di utensili. Moshe non è un personaggio molto amichevole, a meno che non abbiate a disposizione delle chiavi di natura ignota, per le quali sembra nutrire un desiderio morboso. Il negozio di Moshe può essere considerato un luogo di ritrovo per tutti i personaggi, e gode della tolleranza, se non della protezione, delle organizzazioni criminali, che temono più che altro il malocchio che ha più volte minacciato di poter lanciare; per qualche ragione, nessuno dei fenomeni paranormali che tutti notano nella cittadina ha mai avuto luogo nel negozio di Moshe, il che ha dato corpo alle credenze dei mafiosi sulle conoscenze soprannaturali del mercante. Il negozio di Moshe si trova nella <i>French Hill</i>, nei <i>Georgian Apartments</i>.
+          <b>Moshe's shop</b>: Moshe è un ebreo Ashkenazi di origine polacca, che prima del Cataclisma gestiva un negozio di antiquariato. Dopo il Cataclisma, Moshe ha deciso di aprire un negozio, acquistando oggetti antichi in cambio di provviste o di utensili. Moshe non è un personaggio molto amichevole, a meno che non abbiate a disposizione delle chiavi di natura ignota, per le quali sembra nutrire un desiderio morboso. Il negozio di Moshe può essere considerato un luogo di ritrovo per tutti i personaggi, e gode di una relativa indipendenza dal ferreo controllo del <b>RPD</b>, che temono più che altro il malocchio che ha più volte minacciato di poter lanciare; per qualche ragione, nessuno dei fenomeni paranormali che tutti notano nella cittadina ha mai avuto luogo nel negozio di Moshe, il che ha dato corpo alle credenze degli abitanti sulle conoscenze soprannaturali del mercante. Il negozio di Moshe si trova nella <i>French Hill</i>, nei <i>Georgian Apartments</i>.
         </li>
 
         <li class="font-normal text-md">
