@@ -116,7 +116,7 @@ defmodule CharacterHelpers do
         with {:ok, character} <- Characters.create_npc(attrs, skills) do
           Characters.update_character(character, attrs)
         end
-        
+
       character ->
         Characters.update_character(character, attrs)
     end
@@ -454,29 +454,32 @@ moshe_skill_set = [
 ]
 
 {:ok, _moshe} =
-  CharacterHelpers.create_npc?(%{
-    name: "Moshe Rothstein",
-    admin_notes: "Some admin_notes",
-    avatar: "/images/avatars/moshe-rothstein.webp",
-    chat_avatar: "/images/avatars/moshe-rothstein.webp",
-    biography: "Some biography",
-    cigs: 1500,
-    description: """
-    Un uomo di mezza età, con un fisico snello, leggermente incurvato. Porta una kippah blu scura in testa, che copre
-    i capelli ormai quasi completamente canuti. Indossa sempre abiti molto umili, camicie bianche con gilet di lana
-    fina. L'espressione è sempre severa, attenta, i suoi occhi sempre in movimento.
-    """,
-    experience: 0,
-    health: 55,
-    age: :adult,
-    sin: "Non è riuscito a salvare la figlia dal Cataclisma",
-    lost_health: 0,
-    lost_sanity: 0,
-    npc: true,
-    notes: "Some notes",
-    sanity: 60,
-    step: 2,
-  }, moshe_skill_set)
+  CharacterHelpers.create_npc?(
+    %{
+      name: "Moshe Rothstein",
+      admin_notes: "Some admin_notes",
+      avatar: "/images/avatars/moshe-rothstein.webp",
+      chat_avatar: "/images/avatars/moshe-rothstein.webp",
+      biography: "Some biography",
+      cigs: 1500,
+      description: """
+      Un uomo di mezza età, con un fisico snello, leggermente incurvato. Porta una kippah blu scura in testa, che copre
+      i capelli ormai quasi completamente canuti. Indossa sempre abiti molto umili, camicie bianche con gilet di lana
+      fina. L'espressione è sempre severa, attenta, i suoi occhi sempre in movimento.
+      """,
+      experience: 0,
+      health: 55,
+      age: :adult,
+      sin: "Non è riuscito a salvare la figlia dal Cataclisma",
+      lost_health: 0,
+      lost_sanity: 0,
+      npc: true,
+      notes: "Some notes",
+      sanity: 60,
+      step: 2
+    },
+    moshe_skill_set
+  )
 
 # Jack Morgan
 
@@ -502,29 +505,32 @@ morgan_skill_set = [
 ]
 
 {:ok, _morgan} =
-  CharacterHelpers.create_npc?(%{
-    name: "Jack Morgan",
-    admin_notes: "Some admin_notes",
-    avatar: "/images/avatars/jack-morgan.webp",
-    chat_avatar: "/images/avatars/jack-morgan.webp",
-    biography: "Some biography",
-    cigs: 500,
-    description: """
-    Un burbero ufficiale di polizia sorprendentemente alto, poco meno di un metro e ottanta, estremamente robusto, 
-    con un collo taurino e tratti del viso e del naso tipici da pugile. Gli stretti occhi chiari riescono comunque
-    a trasmettere un preciso senso di inquietudine, se non proprio di tensione, di aggressività. 
-    """,
-    experience: 0,
-    health: 100,
-    age: :adult,
-    sin: "Ha ucciso diversi suoi colleghi durante il Cataclisma",
-    lost_health: 0,
-    lost_sanity: 0,
-    npc: true,
-    notes: "Some notes",
-    sanity: 70,
-    step: 2,
-  }, morgan_skill_set)
+  CharacterHelpers.create_npc?(
+    %{
+      name: "Jack Morgan",
+      admin_notes: "Some admin_notes",
+      avatar: "/images/avatars/jack-morgan.webp",
+      chat_avatar: "/images/avatars/jack-morgan.webp",
+      biography: "Some biography",
+      cigs: 500,
+      description: """
+      Un burbero ufficiale di polizia sorprendentemente alto, poco meno di un metro e ottanta, estremamente robusto, 
+      con un collo taurino e tratti del viso e del naso tipici da pugile. Gli stretti occhi chiari riescono comunque
+      a trasmettere un preciso senso di inquietudine, se non proprio di tensione, di aggressività. 
+      """,
+      experience: 0,
+      health: 100,
+      age: :adult,
+      sin: "Ha ucciso diversi suoi colleghi durante il Cataclisma",
+      lost_health: 0,
+      lost_sanity: 0,
+      npc: true,
+      notes: "Some notes",
+      sanity: 70,
+      step: 2
+    },
+    morgan_skill_set
+  )
 
 # Frankie Masiello
 
@@ -550,30 +556,33 @@ frankie_skill_set = [
 ]
 
 {:ok, _frankie} =
-  CharacterHelpers.create_npc?(%{
-    name: "Frankie Masiello",
-    admin_notes: "Some admin_notes",
-    avatar: "/images/avatars/frankie-masiello.webp",
-    chat_avatar: "/images/avatars/frankie-masiello.webp",
-    biography: "Some biography",
-    cigs: 500,
-    description: """
-    Un guitto sufficientemente alto da mostrare tutto il busto oltre il bancone, secco ma all'apparenza comunque in 
-    forma. Coltiva un aspetto molto curato, i lunghi baffi sono evidentemente tagliati con cura, la barba
-    quotidianamente rasata. Indossa sempre l'uniforme da lavoro, inamidata alla bell'e meglio. Con gli occhi segue 
-    sempre tutti i clienti, più che per controllarli, pare, per approfittare del momento propizio per derubarli.
-    """,
-    experience: 0,
-    health: 60,
-    age: :adult,
-    sin: "Ha ucciso lasciato morire diverse durante il Cataclisma preda dei mostri",
-    lost_health: 0,
-    lost_sanity: 0,
-    npc: true,
-    notes: "Some notes",
-    sanity: 40,
-    step: 2,
-  }, frankie_skill_set)
+  CharacterHelpers.create_npc?(
+    %{
+      name: "Frankie Masiello",
+      admin_notes: "Some admin_notes",
+      avatar: "/images/avatars/frankie-masiello.webp",
+      chat_avatar: "/images/avatars/frankie-masiello.webp",
+      biography: "Some biography",
+      cigs: 500,
+      description: """
+      Un guitto sufficientemente alto da mostrare tutto il busto oltre il bancone, secco ma all'apparenza comunque in 
+      forma. Coltiva un aspetto molto curato, i lunghi baffi sono evidentemente tagliati con cura, la barba
+      quotidianamente rasata. Indossa sempre l'uniforme da lavoro, inamidata alla bell'e meglio. Con gli occhi segue 
+      sempre tutti i clienti, più che per controllarli, pare, per approfittare del momento propizio per derubarli.
+      """,
+      experience: 0,
+      health: 60,
+      age: :adult,
+      sin: "Ha ucciso lasciato morire diverse durante il Cataclisma preda dei mostri",
+      lost_health: 0,
+      lost_sanity: 0,
+      npc: true,
+      notes: "Some notes",
+      sanity: 40,
+      step: 2
+    },
+    frankie_skill_set
+  )
 
 # The Nameless
 
@@ -599,31 +608,34 @@ nameless_skill_set = [
 ]
 
 {:ok, _nameless} =
-  CharacterHelpers.create_npc?(%{
-    name: "The Nameless",
-    admin_notes: "Some admin_notes",
-    avatar: "/images/avatars/the-nameless.webp",
-    chat_avatar: "/images/avatars/the-nameless.webp",
-    biography: "Some biography",
-    cigs: 200,
-    description: """
-    Un essere ripugnante: allampanato e contorto, piegato su se stesso da quelli che sembrano anni di studi forsennato,
-    il volto è completamente coperto da una lerci bendaggi macchiati di sangue rappreso, i pochi capelli che ne 
-    fuoriescono sono simili a setole di animale troppo cresciute, più che a capelli umani. Indossa una camicia a sbuffo
-    ingiallita, di un'altra epoca distante, un lungo cappotto violaceo impolverato e scarpe che sarebbero state fuori
-    moda anche un secolo prima. 
-    """,
-    experience: 0,
-    health: 40,
-    age: :adult,
-    sin: "Ha ucciso lasciato morire diverse durante il Cataclisma preda dei mostri",
-    lost_health: 0,
-    lost_sanity: 0,
-    npc: true,
-    notes: "Some notes",
-    sanity: 100,
-    step: 2,
-  }, nameless_skill_set)
+  CharacterHelpers.create_npc?(
+    %{
+      name: "The Nameless",
+      admin_notes: "Some admin_notes",
+      avatar: "/images/avatars/the-nameless.webp",
+      chat_avatar: "/images/avatars/the-nameless.webp",
+      biography: "Some biography",
+      cigs: 200,
+      description: """
+      Un essere ripugnante: allampanato e contorto, piegato su se stesso da quelli che sembrano anni di studi forsennato,
+      il volto è completamente coperto da una lerci bendaggi macchiati di sangue rappreso, i pochi capelli che ne 
+      fuoriescono sono simili a setole di animale troppo cresciute, più che a capelli umani. Indossa una camicia a sbuffo
+      ingiallita, di un'altra epoca distante, un lungo cappotto violaceo impolverato e scarpe che sarebbero state fuori
+      moda anche un secolo prima. 
+      """,
+      experience: 0,
+      health: 40,
+      age: :adult,
+      sin: "Ha ucciso lasciato morire diverse durante il Cataclisma preda dei mostri",
+      lost_health: 0,
+      lost_sanity: 0,
+      npc: true,
+      notes: "Some notes",
+      sanity: 100,
+      step: 2
+    },
+    nameless_skill_set
+  )
 
 # The Nameless
 
@@ -649,29 +661,32 @@ moreau_skill_set = [
 ]
 
 {:ok, _moreau} =
-  CharacterHelpers.create_npc?(%{
-    name: "Anthony Moreau",
-    admin_notes: "Some admin_notes",
-    avatar: "/images/avatars/anthony-moreau.webp",
-    chat_avatar: "/images/avatars/anthony-moreau.webp",
-    biography: "Some biography",
-    cigs: 500,
-    description: """
-    Un signore sulla quarantina dai modi estremamente ricercati, veste sempre con completi più unici che rari dopo il 
-    Cataclisma. La pelle è insolitamente pallida, i capelli ben pettinati erano neri, ora quasi completamente 
-    imbiancati. Nonostante l'età, il fisico è ancora asciutto e atletico, e il viso è privo di rughe. 
-    """,
-    experience: 0,
-    health: 80,
-    age: :adult,
-    sin: "Ha provocato il Cataclisma",
-    lost_health: 0,
-    lost_sanity: 0,
-    npc: true,
-    notes: "Some notes",
-    sanity: 800,
-    step: 2,
-  }, moreau_skill_set)
+  CharacterHelpers.create_npc?(
+    %{
+      name: "Anthony Moreau",
+      admin_notes: "Some admin_notes",
+      avatar: "/images/avatars/anthony-moreau.webp",
+      chat_avatar: "/images/avatars/anthony-moreau.webp",
+      biography: "Some biography",
+      cigs: 500,
+      description: """
+      Un signore sulla quarantina dai modi estremamente ricercati, veste sempre con completi più unici che rari dopo il 
+      Cataclisma. La pelle è insolitamente pallida, i capelli ben pettinati erano neri, ora quasi completamente 
+      imbiancati. Nonostante l'età, il fisico è ancora asciutto e atletico, e il viso è privo di rughe. 
+      """,
+      experience: 0,
+      health: 80,
+      age: :adult,
+      sin: "Ha provocato il Cataclisma",
+      lost_health: 0,
+      lost_sanity: 0,
+      npc: true,
+      notes: "Some notes",
+      sanity: 800,
+      step: 2
+    },
+    moreau_skill_set
+  )
 
 #
 # Creating maps
