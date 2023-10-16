@@ -21,13 +21,11 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
     </.guide_p>
 
     <.guide_p>
-      Nel giro di pochi giorni, ogni parvenza di governo centrale è caduta vittima dei gruppi criminali che agivano nell'ombra prima del <b>Cataclisma</b>: i pochi poliziotti che non erano nel libro paga della
-      <i>Mob</i>
-      sono stati sbrigativamente uccisi, gli altri sono direttamente entrati a far parte delle organizzazioni criminali che commerciavano in alcolici al confine, i <i>bootleggers</i>. Dopo un periodo di violenza senza controllo, la situazione si è normalizzata: una volta capito che la fine del mondo sarebbe durata più di qualche giorno, una strana forma di ragione di stato ha fatto in modo che le due organizzazioni criminali nella città, una composta da elementi prevalentemente di origine italiana capeggiata da <b>Johnny Fontana</b>, l'altra di stampo irlandese guidata da <b>Eogham O'Flaherty</b>, raggiungessero quello che si potrebbe chiamare un accordo di non belligeranza.
+      I giorni immediatamente successivi al fenomeno hanno visto un altissimo numero di omicidi, furti e saccheggi, approfittando del momentaneo stato di confusione e disorganizzazione delle forze dell'ordine. Anche quando, dopo due settimane, il <b>Rochester Police Department</b> riuscì a riprendere il controllo della situazione all'interno della città, circoscrivendo una zona di controllo dove garantire una relativa sicurezza, molti abitanti si suicidarono, non vedendo nessuna speranza nella notte eterna in cui Rochester era piombata.
     </.guide_p>
 
     <.guide_p>
-      L'instabile tregua è l'unico argine alla completa autodistruzione dei pochi superstiti: i due gruppi hanno concesso la creazione di altre organizzazioni "disarmate", ed hanno di comune accordo deciso di usare le sigarette, le <i>Cigs</i>, come valuta per regolare le transazioni. Le armi sarebbero state permesse solo da componenti dei gruppi malavitosi, le altre organizzazioni avrebbero dovuto gestire lavori più servili, come la costruzione di mura, o la gestione dei rifugi e dei negozi per il riciclaggio delle scorte disponibili.
+      Messa in sicurezza la zona della cittadina, la polizia è stata l'unica forza in grado di garantire un minimo di ordine: ha consentito l'organizzazione del <b>Saint Andrew Hospital</b>, ed ha conentito anche la rimessa in funzione del <b>Town Hall</b> bonificando l'edificio da entità aliene. Questi successi non sarebbero stati possibili senza la gestione capace, carismatica ed autoritaria di <b>Jack Morgan</b>, un ex investigatore che è riuscito a serrare i ranghi dei suoi colleghi, un burbero e sbrigativo figlio di emigrati irlandesi; la relativa sicurezza e ordine è però pagata dai residenti loro malgrado di Rochester con una sostanziale dittatura poliziesca: i poliziotti, molto spesso, si arrogano diritti ben oltre ciò che la loro posizione normalmente gli garantirebbe, includendo molestie di vario genere, altrettanto spesso coperte dai colleghi. 
     </.guide_p>
 
     <.guide_h1>Organizzazioni</.guide_h1>
@@ -37,6 +35,8 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
       <i>Cigs</i>
       giornaliero.
     </.guide_p>
+
+    <.guide_h2>Rochester Police Department</.guide_h2>
 
     <.guide_p>
       (Todo - le organizzazioni devono ancora essere definite, anche se sarà possibile far parte di una delle due organizzazioni criminali)
