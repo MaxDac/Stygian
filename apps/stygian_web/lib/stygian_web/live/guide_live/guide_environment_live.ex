@@ -39,7 +39,19 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
     <.guide_h2>Rochester Police Department</.guide_h2>
 
     <.guide_p>
-      (Todo - le organizzazioni devono ancora essere definite, anche se sarà possibile far parte di una delle due organizzazioni criminali)
+      La Rochester che conoscevamo, la tranquilla cittadina sull'Atlantico, ospitale nei confronti dei turisti e solidale nei confronti dei suoi abitanti, non c'è più. La città sopravvissuta al cataclisma è un luogo desolato, pieno di pericoli, ma la legge non può abdicare, ed a maggior ragione in questo momento di crisi, l'RPD chiama a raccolta tutte le persone di buona volontà per aiutare la popolazione e mantenere l'ordine. Tutti i cittadini sono i benvenuti, e per coloro che non sono esperti nell'utilizzo di armi da fuoco o da mischia, sarà offerto un lavoro in logistica, o un addestramento gratuito al poligono di tiro.
+    </.guide_p>
+
+    <.guide_h2>St. Andrew's Hospital</.guide_h2>
+
+    <.guide_p>
+      Ciò che rimane dell'Ospedale di Saint Andrew, alla periferia della French Hill, richiede a tutti i cittadini e ai forestieri che sono capitati a Rochester in questo duro momento di crisi di unirsi e dare il proprio apporto per accudire i malati e dare dignità ai deceduti. Personale con conoscenze in medicina sono desiderabili, ma tutti i cittadini di buona volontà possono partecipare allo sforzo, e ricevere gratuitamente un addestramento base in medicina.
+    </.guide_p>
+
+    <.guide_h2>Rochester Town Hall</.guide_h2>
+
+    <.guide_p>
+      Quello che rimane del municipio di Rochester è il Town Hall, un austero palazzo in stile neo gotico che ospita ciò che rimane dell'amministrazione cittadina. Molte delle cariche pubbliche hanno perso la vita durante il Cataclisma o nelle immediate conseguenze, ma gli uffici sono riusciti a mantenersi organizzati e funzionanti. I lavori disponibili alla cittadinanza sono molteplici, di archivio, o direttamente relazionati con l'amministrazione dei lavori nelle altre organizzazioni.
     </.guide_p>
 
     <.guide_h1>Luoghi di ritrovo</.guide_h1>
@@ -52,7 +64,7 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
         </li>
 
         <li class="font-normal text-md">
-          <b>Moshe's shop</b>: Moshe è un ebreo Ashkenazi di origine polacca, che prima del Cataclisma gestiva un negozio di antiquariato. Dopo il Cataclisma, Moshe ha deciso di aprire un negozio, acquistando oggetti antichi in cambio di provviste o di utensili. Moshe non è un personaggio molto amichevole, a meno che non abbiate a disposizione delle chiavi di natura ignota, per le quali sembra nutrire un desiderio morboso. Il negozio di Moshe può essere considerato un luogo di ritrovo per tutti i personaggi, e gode della tolleranza, se non della protezione, delle organizzazioni criminali, che temono più che altro il malocchio che ha più volte minacciato di poter lanciare; per qualche ragione, nessuno dei fenomeni paranormali che tutti notano nella cittadina ha mai avuto luogo nel negozio di Moshe, il che ha dato corpo alle credenze dei mafiosi sulle conoscenze soprannaturali del mercante. Il negozio di Moshe si trova nella <i>French Hill</i>, nei <i>Georgian Apartments</i>.
+          <b>Moshe's shop</b>: Moshe è un ebreo Ashkenazi di origine polacca, che prima del Cataclisma gestiva un negozio di antiquariato. Dopo il Cataclisma, Moshe ha deciso di aprire un negozio, acquistando oggetti antichi in cambio di provviste o di utensili. Moshe non è un personaggio molto amichevole, a meno che non abbiate a disposizione delle chiavi di natura ignota, per le quali sembra nutrire un desiderio morboso. Il negozio di Moshe può essere considerato un luogo di ritrovo per tutti i personaggi, e gode di una relativa indipendenza dal ferreo controllo del <b>RPD</b>, che temono più che altro il malocchio che ha più volte minacciato di poter lanciare; per qualche ragione, nessuno dei fenomeni paranormali che tutti notano nella cittadina ha mai avuto luogo nel negozio di Moshe, il che ha dato corpo alle credenze degli abitanti sulle conoscenze soprannaturali del mercante. Il negozio di Moshe si trova nella <i>French Hill</i>, nei <i>Georgian Apartments</i>.
         </li>
 
         <li class="font-normal text-md">
