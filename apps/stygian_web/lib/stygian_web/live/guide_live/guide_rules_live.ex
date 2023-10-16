@@ -101,7 +101,9 @@ defmodule StygianWeb.GuideLive.GuideRulesLive do
     </.guide_p>
 
     <.guide_p>
-      <span class="italic"><b>Nota</b>: è attualmente in fase di sviluppo un meccanismo che consentirà di ricercare oggetti e il funzionamento di questi durante il riposo.</span>
+      <span class="italic">
+        <b>Nota</b>: è attualmente in fase di sviluppo un meccanismo che consentirà di ricercare oggetti e il funzionamento di questi durante il riposo.
+      </span>
     </.guide_p>
 
     <.guide_h1>Esperienza</.guide_h1>

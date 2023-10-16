@@ -30,7 +30,9 @@ defmodule StygianWeb.GuideLive.GuideIntroductionLive do
     <hr class="brand" />
 
     <.guide_p>
-      Stygian è un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo <b>Stygian: Reign of the Old Ones</b> e alle novelle di H. P. Lovecraft, ambientato nella città di finzione di Rochester, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico. È opinione comune che l'anno sia il 1930, durante il proibizionismo, anche se è impossibile da determinare con esattezza, poiché la città, da un anno circa secondo alcuni, almeno due per altri, è stata sottratta dal normale scorrere del tempo, dello spazio, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
+      Stygian è un gioco di ruolo via chat liberamente ispirato al videogioco di ruolo
+      <b>Stygian: Reign of the Old Ones</b>
+      e alle novelle di H. P. Lovecraft, ambientato nella città di finzione di Rochester, nello stato del Maine, molto vicino al confine col Canada, affacciata sull'Oceano Atlantico. È opinione comune che l'anno sia il 1930, durante il proibizionismo, anche se è impossibile da determinare con esattezza, poiché la città, da un anno circa secondo alcuni, almeno due per altri, è stata sottratta dal normale scorrere del tempo, dello spazio, inghiottita da una notte eterna, afflitta da un orribile tanfo di urina, marcio, cosparsa di sangue e ruggine.
     </.guide_p>
 
     <.guide_p>

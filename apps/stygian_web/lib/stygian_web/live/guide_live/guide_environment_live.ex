@@ -21,11 +21,15 @@ defmodule StygianWeb.GuideLive.GuideEnvironmentLive do
     </.guide_p>
 
     <.guide_p>
-      I giorni immediatamente successivi al fenomeno hanno visto un altissimo numero di omicidi, furti e saccheggi, approfittando del momentaneo stato di confusione e disorganizzazione delle forze dell'ordine. Anche quando, dopo due settimane, il <b>Rochester Police Department</b> riuscì a riprendere il controllo della situazione all'interno della città, circoscrivendo una zona di controllo dove garantire una relativa sicurezza, molti abitanti si suicidarono, non vedendo nessuna speranza nella notte eterna in cui Rochester era piombata.
+      I giorni immediatamente successivi al fenomeno hanno visto un altissimo numero di omicidi, furti e saccheggi, approfittando del momentaneo stato di confusione e disorganizzazione delle forze dell'ordine. Anche quando, dopo due settimane, il
+      <b>Rochester Police Department</b>
+      riuscì a riprendere il controllo della situazione all'interno della città, circoscrivendo una zona di controllo dove garantire una relativa sicurezza, molti abitanti si suicidarono, non vedendo nessuna speranza nella notte eterna in cui Rochester era piombata.
     </.guide_p>
 
     <.guide_p>
-      Messa in sicurezza la zona della cittadina, la polizia è stata l'unica forza in grado di garantire un minimo di ordine: ha consentito l'organizzazione del <b>Saint Andrew Hospital</b>, ed ha conentito anche la rimessa in funzione del <b>Town Hall</b> bonificando l'edificio da entità aliene. Questi successi non sarebbero stati possibili senza la gestione capace, carismatica ed autoritaria di <b>Jack Morgan</b>, un ex investigatore che è riuscito a serrare i ranghi dei suoi colleghi, un burbero e sbrigativo figlio di emigrati irlandesi; la relativa sicurezza e ordine è però pagata dai residenti loro malgrado di Rochester con una sostanziale dittatura poliziesca: i poliziotti, molto spesso, si arrogano diritti ben oltre ciò che la loro posizione normalmente gli garantirebbe, includendo molestie di vario genere, altrettanto spesso coperte dai colleghi. 
+      Messa in sicurezza la zona della cittadina, la polizia è stata l'unica forza in grado di garantire un minimo di ordine: ha consentito l'organizzazione del <b>Saint Andrew Hospital</b>, ed ha conentito anche la rimessa in funzione del
+      <b>Town Hall</b>
+      bonificando l'edificio da entità aliene. Questi successi non sarebbero stati possibili senza la gestione capace, carismatica ed autoritaria di <b>Jack Morgan</b>, un ex investigatore che è riuscito a serrare i ranghi dei suoi colleghi, un burbero e sbrigativo figlio di emigrati irlandesi; la relativa sicurezza e ordine è però pagata dai residenti loro malgrado di Rochester con una sostanziale dittatura poliziesca: i poliziotti, molto spesso, si arrogano diritti ben oltre ciò che la loro posizione normalmente gli garantirebbe, includendo molestie di vario genere, altrettanto spesso coperte dai colleghi.
     </.guide_p>
 
     <.guide_h1>Organizzazioni</.guide_h1>
