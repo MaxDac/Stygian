@@ -273,7 +273,7 @@ defmodule Stygian.Characters do
   @doc """
   Creates an NPC.
   """
-  @spec create_npc(params :: map(), skills :: list(Skill.t())) ::
+  @spec create_npc(params :: map(), skills :: list(CharacterSkill.t())) ::
           {:ok, Character.t()} | {:error, Changeset.t()}
   def create_npc(params, skills) do
     %{id: admin_user_id} = Accounts.get_admin_user()
