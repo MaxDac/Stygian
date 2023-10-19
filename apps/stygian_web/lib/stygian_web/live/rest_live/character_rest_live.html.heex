@@ -1,0 +1,21 @@
+<.h1>Riposo</.h1>
+
+<.p>
+  Ogni personaggio ha a disposizione due differenti opzioni per il riposo. Può prenotare una stanza all'
+  <b>Old Eel Hotel</b> per il tempo sufficiente a recuperare un po' della propria energia, oppure può affitare la stanza
+  per più tempo, per dedicarlo allo sviluppo di attività che richiedono tranquillità, come lo studio, la lettura, o la
+  cura efficace di alcune ferite riportate all'esterno. Il costo per poter rimanere più a lungo sarà ovviamente
+  maggiore.
+</.p>
+
+<.p>
+  In ogni caso, prima di poter riposare nuovamente il personaggio, dovrete aspettare almeno 24 ore.
+</.p>
+
+<.button class="w-full" phx-click={JS.push("simple-rest")}>
+  Riposo semplice (5 Cigs)
+</.button>
+
+<.hr />
+
+<.live_component id="rest-activities-selectors" module={CharacterRestSelectorLive} />

@@ -1009,4 +1009,3 @@ RestActionsHelpers.create_rest_action(%{
   research_points: 3,
   slots: 3
 })
-
