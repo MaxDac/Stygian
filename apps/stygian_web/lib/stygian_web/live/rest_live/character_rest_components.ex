@@ -5,78 +5,72 @@ defmodule StygianWeb.RestLive.CharacterRestComponents do
 
   use StygianWeb, :html
 
+  alias Phoenix.LiveView.AsyncResult
+
   @doc """
   A series of checkboxes that will represent the selected occupied slots.
   """
   def slots_resume(assigns) do
     ~H"""
-    <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Identification</h3>
-    <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-      <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-        <div class="flex items-center pl-3">
-          <input
-            id="vue-checkbox-list"
-            type="checkbox"
-            value=""
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-          />
-          <label
-            for="vue-checkbox-list"
-            class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Vue JS
-          </label>
-        </div>
-      </li>
-      <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-        <div class="flex items-center pl-3">
-          <input
-            id="react-checkbox-list"
-            type="checkbox"
-            value=""
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-          />
-          <label
-            for="react-checkbox-list"
-            class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            React
-          </label>
-        </div>
-      </li>
-      <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-        <div class="flex items-center pl-3">
-          <input
-            id="angular-checkbox-list"
-            type="checkbox"
-            value=""
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-          />
-          <label
-            for="angular-checkbox-list"
-            class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Angular
-          </label>
-        </div>
-      </li>
-      <li class="w-full dark:border-gray-600">
-        <div class="flex items-center pl-3">
-          <input
-            id="laravel-checkbox-list"
-            type="checkbox"
-            value=""
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-          />
-          <label
-            for="laravel-checkbox-list"
-            class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Laravel
-          </label>
-        </div>
+    <ul class="items-center w-full font-typewriter text-brand sm:flex">
+      <li 
+        class="w-full"
+        :for={_ <- 0..3}
+      >
+        <.slot_resume_item />
       </li>
     </ul>
+    """
+  end
+
+  @doc """
+  A checkbox that represents an occupied slot.
+  """
+  def slot_resume_item(assigns) do
+    ~H"""
+    <div class="flex items-center pl-3">
+      <input
+        id="vue-checkbox-list"
+        type="checkbox"
+        class="w-4 h-4 text-brand bg-gray-100 border-brand rounded"
+        disabled
+        checked={true}
+      />
+      <label
+        for="vue-checkbox-list"
+        class="w-full py-3 ml-2 text-sm font-medium text-brand"
+      >
+        Vue JS
+      </label>
+    </div>
+    """
+  end
+
+  @doc """
+  Exposes a list of rest actions.
+  """
+  attr :field, FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :label, :string, default: nil
+  attr :rest_actions, AsyncResult, required: true
+  attr :rest, :global
+
+  def rest_action_selection(assigns) do
+    ~H"""
+    <.async_result :let={rest_actions} assign={@rest_actions}>
+      <:loading><.spinner /></:loading>
+      <:failed :let={_reason}>Errore nel caricare le azioni di riposo.</:failed>
+
+      <.input
+        label={@label}
+        field={@field}
+        type="select"
+        prompt="Seleziona l'azione di riposo"
+        options={rest_actions}
+        {@rest}
+      />
+    </.async_result>
     """
   end
 end

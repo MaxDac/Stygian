@@ -8,4 +8,17 @@
   </.p>
 
   <.slots_resume />
+
+  <.simple_form
+    id="rest-actions-form"
+    phx-target={@myself}
+    for={@form}
+    phx-change="validate"
+    phx-submit="add">
+  >
+    <.rest_action_selection 
+      field={@form[:rest_action]}
+      label="Azioni durante il riposo"
+      rest_actions={@rest_actions} />
+  </.simple_form>
 </div>
