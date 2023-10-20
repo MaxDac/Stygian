@@ -7,18 +7,36 @@
     variabile di slot.
   </.p>
 
-  <.slots_resume />
+  <.slots_resume state={get_resume_state(@rest_action_state, @max_allowed_slots)} />
 
   <.simple_form
     id="rest-actions-form"
     phx-target={@myself}
     for={@form}
     phx-change="validate"
-    phx-submit="add">
+    phx-submit="add"
   >
-    <.rest_action_selection 
-      field={@form[:rest_action]}
-      label="Azioni durante il riposo"
-      rest_actions={@rest_actions} />
+    <div class="flex flex-row items-end w-full space-x-4">
+      <.rest_action_selection
+        field={@form[:rest_action_id]}
+        label="Azioni durante il riposo"
+        rest_actions={@options}
+      />
+
+      <.plus_button 
+        type="submit" 
+        phx-disable-with="..."
+        title="Aggiungi"
+      />
+    </div>
   </.simple_form>
+
+  <.button 
+    type="button" 
+    phx-click={JS.push("complex_rest", target: @myself)} 
+    phx-disable-with="..."
+    class="w-full mt-4"
+  >
+    Riposo (20 Cigs)
+  </.button>
 </div>

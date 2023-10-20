@@ -10,14 +10,13 @@ defmodule StygianWeb.RestLive.CharacterRestComponents do
   @doc """
   A series of checkboxes that will represent the selected occupied slots.
   """
+  attr :state, :list, required: true
+
   def slots_resume(assigns) do
     ~H"""
     <ul class="items-center w-full font-typewriter text-brand sm:flex">
-      <li 
-        class="w-full"
-        :for={_ <- 0..3}
-      >
-        <.slot_resume_item />
+      <li :for={name <- @state} class="w-full">
+        <.slot_resume_item name={name} />
       </li>
     </ul>
     """
@@ -26,6 +25,7 @@ defmodule StygianWeb.RestLive.CharacterRestComponents do
   @doc """
   A checkbox that represents an occupied slot.
   """
+  attr :name, :string, required: true
   def slot_resume_item(assigns) do
     ~H"""
     <div class="flex items-center pl-3">
@@ -34,13 +34,10 @@ defmodule StygianWeb.RestLive.CharacterRestComponents do
         type="checkbox"
         class="w-4 h-4 text-brand bg-gray-100 border-brand rounded"
         disabled
-        checked={true}
+        checked={not is_nil(@name)}
       />
-      <label
-        for="vue-checkbox-list"
-        class="w-full py-3 ml-2 text-sm font-medium text-brand"
-      >
-        Vue JS
+      <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-brand">
+        <%= @name %>
       </label>
     </div>
     """
@@ -71,6 +68,46 @@ defmodule StygianWeb.RestLive.CharacterRestComponents do
         {@rest}
       />
     </.async_result>
+    """
+  end
+
+  @doc """
+  Renders a button with the plus icon.
+
+  ## Examples
+
+      <.plus_button>Send!</.plus_button>
+      <.plus_button phx-click="go" class="ml-2">Send!</.plus_button>
+  """
+  attr :type, :string, default: nil
+  attr :class, :string, default: nil
+  attr :rest, :global, include: ~w(disabled form name value)
+  attr :title, :string, required: true
+
+  def plus_button(assigns) do
+    ~H"""
+    <.button type={@type} class={@class} {@rest}>
+      <div class="w-full flex justify-center">
+        <div class="flex flex-row items-center">
+          <svg
+            class="w-4 h-4 text-zinc-900 mr-2"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 18 18"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 1v16M1 9h16"
+            />
+          </svg>
+          <%= @title %>
+        </div>
+      </div>
+    </.button>
     """
   end
 end

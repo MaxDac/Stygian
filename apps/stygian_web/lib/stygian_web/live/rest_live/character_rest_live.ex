@@ -21,6 +21,11 @@ defmodule StygianWeb.RestLive.CharacterRestLive do
      |> handle_rest()}
   end
 
+  @impl true
+  def handle_info({:notification, message}, socket) do
+    {:noreply, put_flash(socket, :info, message)}
+  end
+
   defp handle_rest(%{assigns: %{current_character: current_character}} = socket) do
     case Characters.rest_character(current_character) do
       {:ok, character} ->

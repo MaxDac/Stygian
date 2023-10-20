@@ -10,10 +10,10 @@ defmodule Stygian.Rest.RestActionForm do
   alias Stygian.Rest.RestActionForm
 
   @type t() :: %__MODULE__{
-    rest_action_id: integer()
-  }
+          rest_action_id: integer()
+        }
 
-  embedded_schema do 
+  embedded_schema do
     field :rest_action_id, :id
   end
 
