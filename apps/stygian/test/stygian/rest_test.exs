@@ -89,4 +89,86 @@ defmodule Stygian.RestTest do
       assert %Ecto.Changeset{} = Rest.change_rest_action(rest_action)
     end
   end
+
+  describe "Character rest" do
+    alias Stygian.Characters
+    alias Stygian.Characters.Character
+
+    import Stygian.CharactersFixtures
+
+    test "rest_character/1 correctly restored lost sanity to the character" do
+      character = character_fixture_complete(%{lost_sanity: 6, cigs: 10})
+
+      assert {:ok, %Character{} = character} = Rest.rest_character(character)
+
+      assert character.lost_sanity == 1
+      assert character.cigs == 5
+    end
+
+    test "rest_character/1 correctly restored lost sanity to the character, but only the lost one" do
+      character = character_fixture_complete(%{lost_sanity: 2, cigs: 10})
+
+      assert {:ok, %Character{} = character} = Rest.rest_character(character)
+
+      assert character.lost_sanity == 0
+      assert character.cigs == 5
+    end
+
+    test "rest_character/1 does not restore sanity if sanity was already at its maximum, but subtracts the cigs" do
+      character = character_fixture_complete(%{lost_sanity: 0, cigs: 10})
+
+      assert {:ok, %Character{} = character} = Rest.rest_character(character)
+
+      assert character.lost_sanity == 0
+      assert character.cigs == 5
+    end
+
+    test "rest_character/1 does not restore the character if 24 hours haven't passed" do
+      character =
+        character_fixture_complete(%{
+          lost_sanity: 6,
+          cigs: 10,
+          rest_timer: NaiveDateTime.utc_now()
+        })
+
+      assert {:error, "Non puoi ancora far riposare il personaggio."} =
+               Rest.rest_character(character)
+
+      character = Characters.get_character!(character.id)
+      assert character.lost_sanity == 6
+      assert character.cigs == 10
+    end
+
+    test "rest_character/1 does not restore the character if it doesn't have enough cigs" do
+      character =
+        character_fixture_complete(%{
+          lost_sanity: 6,
+          cigs: 4,
+          rest_timer: NaiveDateTime.utc_now()
+        })
+
+      assert {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."} =
+               Rest.rest_character(character)
+
+      character = Characters.get_character!(character.id)
+      assert character.lost_sanity == 6
+      assert character.cigs == 4
+    end
+
+    test "rest_character/1 does not restore the character if it doesn't have enough cigs with custom cost" do
+      character =
+        character_fixture_complete(%{
+          lost_sanity: 6,
+          cigs: 7,
+          rest_timer: NaiveDateTime.utc_now()
+        })
+
+      assert {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."} =
+               Rest.rest_character(character, 20)
+
+      character = Characters.get_character!(character.id)
+      assert character.lost_sanity == 6
+      assert character.cigs == 7
+    end
+  end
 end

@@ -5,7 +5,7 @@ defmodule StygianWeb.RestLive.CharacterRestLive do
 
   use StygianWeb, :container_live_view
 
-  alias Stygian.Characters
+  alias Stygian.Rest
 
   alias StygianWeb.RestLive.CharacterRestSelectorLive
 
@@ -27,7 +27,7 @@ defmodule StygianWeb.RestLive.CharacterRestLive do
   end
 
   defp handle_rest(%{assigns: %{current_character: current_character}} = socket) do
-    case Characters.rest_character(current_character) do
+    case Rest.rest_character(current_character) do
       {:ok, character} ->
         socket
         |> assign(:current_character, character)

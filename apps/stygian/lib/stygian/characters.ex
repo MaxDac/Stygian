@@ -42,10 +42,6 @@ defmodule Stygian.Characters do
   @default_character_initial_cigs 200
   @default_character_initial_experience 0
 
-  @rest_limit_hours 24
-  @rest_sanity_recovery 5
-  @rest_cost 5
-
   @character_effect_time_in_hour 3
   @character_sanity_from_cig 3
 
@@ -425,51 +421,6 @@ defmodule Stygian.Characters do
     sanity = (mind + will) * 5
 
     {health, sanity}
-  end
-
-  @doc """
-  Perform the resting of the character.
-  This operation restores some of the characters characteristics, and sets the new timer.
-  It can be performed only once every 24 hours.
-  """
-  @spec rest_character(character :: Character.t()) ::
-          {:ok, Character.t()} | {:error, String.t()} | {:error, Changeset.t()}
-  def rest_character(character)
-
-  def rest_character(%{cigs: cigs}) when cigs < @rest_cost,
-    do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
-
-  def rest_character(character) do
-    limit =
-      NaiveDateTime.utc_now()
-      |> NaiveDateTime.add(@rest_limit_hours * -1, :hour)
-
-    case character.rest_timer do
-      nil ->
-        apply_rest_effect(character)
-
-      rest_timer ->
-        if NaiveDateTime.compare(rest_timer, limit) == :lt do
-          apply_rest_effect(character)
-        else
-          {:error, "Non puoi ancora far riposare il personaggio."}
-        end
-    end
-  end
-
-  defp apply_rest_effect(%{cigs: cigs} = _character) when cigs < @rest_cost,
-    do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
-
-  defp apply_rest_effect(%{lost_sanity: lost_sanity, cigs: cigs} = character) do
-    attrs = %{
-      lost_sanity: max(lost_sanity - @rest_sanity_recovery, 0),
-      rest_timer: NaiveDateTime.utc_now(),
-      cigs: cigs - @rest_cost
-    }
-
-    character
-    |> Character.changeset(attrs)
-    |> Repo.update()
   end
 
   alias Stygian.Characters.CharacterSkill

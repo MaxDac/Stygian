@@ -4,9 +4,17 @@ defmodule Stygian.Rest do
   """
 
   import Ecto.Query, warn: false
+
   alias Stygian.Repo
 
+  alias Stygian.Characters.Character
   alias Stygian.Rest.RestAction
+
+  @rest_limit_hours 24
+  @rest_sanity_recovery 5
+  @rest_cost 5
+  @complex_rest_cost 20
+
 
   @doc """
   Returns the list of rest_actions.
@@ -111,5 +119,50 @@ defmodule Stygian.Rest do
   """
   def change_rest_action(%RestAction{} = rest_action, attrs \\ %{}) do
     RestAction.changeset(rest_action, attrs)
+  end
+
+  @doc """
+  Perform the resting of the character.
+  This operation restores some of the characters characteristics, and sets the new timer.
+  It can be performed only once every 24 hours.
+  """
+  @spec rest_character(character :: Character.t(), rest_cost :: non_neg_integer()) ::
+          {:ok, Character.t()} | {:error, String.t()} | {:error, Changeset.t()}
+  def rest_character(character, rest_cost \\ @rest_cost)
+
+  def rest_character(%{cigs: cigs}, rest_cost) when cigs < rest_cost,
+    do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
+
+  def rest_character(character, rest_cost) do
+    limit =
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.add(@rest_limit_hours * -1, :hour)
+
+    case character.rest_timer do
+      nil ->
+        apply_rest_effect(character, rest_cost)
+
+      rest_timer ->
+        if NaiveDateTime.compare(rest_timer, limit) == :lt do
+          apply_rest_effect(character, rest_cost)
+        else
+          {:error, "Non puoi ancora far riposare il personaggio."}
+        end
+    end
+  end
+
+  defp apply_rest_effect(%{cigs: cigs} = _character, rest_cost) when cigs < rest_cost,
+    do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
+
+  defp apply_rest_effect(%{lost_sanity: lost_sanity, cigs: cigs} = character, rest_cost) do
+    attrs = %{
+      lost_sanity: max(lost_sanity - @rest_sanity_recovery, 0),
+      rest_timer: NaiveDateTime.utc_now(),
+      cigs: cigs - rest_cost
+    }
+
+    character
+    |> Character.changeset(attrs)
+    |> Repo.update()
   end
 end
