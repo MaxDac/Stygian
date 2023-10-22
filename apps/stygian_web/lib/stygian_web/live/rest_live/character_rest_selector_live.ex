@@ -78,7 +78,8 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
 
   defp assign_rest_action_state(%{assigns: %{
     rest_actions: %{ok?: true, result: result},
-    rest_action_state: rest_action_state
+    rest_action_state: rest_action_state,
+    max_allowed_slots: max_allowed_slots
   }} = socket, action_id) when not is_nil(action_id) do
     selected_action = 
       Enum.find(result, &(&1.id == action_id))
@@ -89,7 +90,7 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
       |> Enum.sum()
 
     case {selected_action, slot_sum} do
-      {%{slots: slots} = action, slot_sum} when slot_sum + slots <= @max_allowed_slots ->
+      {%{slots: slots} = action, slot_sum} when slot_sum + slots <= max_allowed_slots ->
         assign(socket, :rest_action_state, [action | rest_action_state])
 
       _ ->

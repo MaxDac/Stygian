@@ -4,6 +4,7 @@ defmodule Stygian.Rest do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Changeset
 
   alias Stygian.Repo
 
@@ -133,46 +134,47 @@ defmodule Stygian.Rest do
   """
   @spec rest_character(character :: Character.t(), rest_cost :: non_neg_integer()) ::
           {:ok, Character.t()} | {:error, String.t()} | {:error, Changeset.t()}
-  def rest_character(character, rest_cost \\ @rest_cost)
+  def rest_character(character, rest_cost \\ @rest_cost) do
+    with {:ok, changeset} <- rest_character_changeset(character, rest_cost) do
+      Repo.update(changeset)
+    end
+  end
 
-  def rest_character(%{cigs: cigs}, rest_cost) when cigs < rest_cost,
+  def rest_character_changeset(%{cigs: cigs}, rest_cost) when cigs < rest_cost,
     do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
 
-  def rest_character(character, rest_cost) do
+  def rest_character_changeset(character, rest_cost) do
     limit =
       NaiveDateTime.utc_now()
       |> NaiveDateTime.add(@rest_limit_hours * -1, :hour)
 
     case character.rest_timer do
       nil ->
-        apply_rest_effect(character, rest_cost)
+        apply_rest_effect_changeset(character, rest_cost)
 
       rest_timer ->
         if NaiveDateTime.compare(rest_timer, limit) == :lt do
-          apply_rest_effect(character, rest_cost)
+          apply_rest_effect_changeset(character, rest_cost)
         else
           {:error, "Non puoi ancora far riposare il personaggio."}
         end
     end
   end
-
-  defp apply_rest_effect(%{cigs: cigs} = _character, rest_cost) when cigs < rest_cost,
-    do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
-
-  defp apply_rest_effect(character, rest_cost) do
-    apply_rest_effct_changeset(character, rest_cost)
-    |> Repo.update()
-  end
   
-  defp apply_rest_effct_changeset(%{lost_sanity: lost_sanity, cigs: cigs} = character, rest_cost) do
+  defp apply_rest_effect_changeset(%{cigs: cigs} = _character, rest_cost) when cigs < rest_cost do
+    {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
+  end
+
+  defp apply_rest_effect_changeset(%{lost_sanity: lost_sanity, cigs: cigs} = character, rest_cost) do
     attrs = %{
       lost_sanity: max(lost_sanity - @rest_sanity_recovery, 0),
       rest_timer: NaiveDateTime.utc_now(),
       cigs: cigs - rest_cost
     }
 
-    character
-    |> Character.changeset(attrs)
+    {:ok, 
+     character
+     |> Character.changeset(attrs)}
   end
 
   @doc """
@@ -181,8 +183,21 @@ defmodule Stygian.Rest do
   @spec rest_character_complex(character :: Character.t(), actions :: list(RestAction.t())) ::
           {:ok, Character.t()} | {:error, String.t()} | {:error, Changeset.t()}
   def rest_character_complex(character, actions) do
-    with {:ok, _} <- rest_character(character, @complex_rest_cost),
-         {:ok, actions} <- check_slots(actions) do
+    with {:ok, rest_changeset} <- rest_character_changeset(character, @complex_rest_cost),
+         {:ok, actions} <- check_slots(actions),
+         {:ok, actions_changeset} <- apply_actions_changeset(character, actions) do
+      transaction = 
+        Ecto.Multi.new()
+        |> Ecto.Multi.update(:rest, rest_changeset)
+
+      {_, transaction} =
+        actions_changeset
+        |> Enum.reduce({0, transaction}, fn changeset, {count, transaction} ->
+          {count + 1, Ecto.Multi.update(transaction, String.to_atom("action#{count}"), changeset)}
+        end)
+
+      transaction
+      |> Repo.transaction()
     end
   end
 
@@ -198,4 +213,27 @@ defmodule Stygian.Rest do
       {:ok, actions}
     end
   end
+
+  defp apply_actions_changeset(character, actions) do
+    {:ok,
+     actions
+     |> Enum.map(&apply_action_changeset(character, &1))
+     |> Enum.filter(&(&1 != nil))}
+  end
+
+  defp apply_action_changeset(character, action)
+
+  defp apply_action_changeset(character, %{research_points: research_points}) when research_points > 0 do
+    Character.change_research_points_changeset(character, %{research_points: research_points})
+  end
+
+  defp apply_action_changeset(%{lost_health: lost_health} = character, %{health: health}) when health > 0 do
+    Character.change_health_and_sanity_changeset(character, %{lost_health: max(0, lost_health - health)})
+  end
+
+  defp apply_action_changeset(%{lost_sanity: lost_sanity} = character, %{sanity: sanity}) when sanity > 0 do
+    Character.change_health_and_sanity_changeset(character, %{lost_sanity: max(0, lost_sanity - sanity)})
+  end
+
+  defp apply_action_changeset(_, _), do: nil
 end

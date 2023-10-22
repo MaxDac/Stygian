@@ -13,9 +13,9 @@ defmodule Stygian.RestFixtures do
       |> Enum.into(%{
         name: "some name",
         description: "some description",
-        health: 42,
-        sanity: 42,
-        research_points: 42,
+        health: 20,
+        sanity: 0,
+        research_points: 0,
         slots: 1
       })
       |> Stygian.Rest.create_rest_action()

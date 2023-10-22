@@ -27,6 +27,7 @@ defmodule Stygian.Characters.Character do
           npc: boolean(),
           rest_timer: NaiveDateTime.t(),
           last_cigs_effect: NaiveDateTime.t(),
+          research_points: integer(),
           user_id: integer(),
           user: User.t(),
           inserted_at: NaiveDateTime.t(),
@@ -54,6 +55,7 @@ defmodule Stygian.Characters.Character do
     field :npc, :boolean
     field :rest_timer, :naive_datetime
     field :last_cigs_effect, :naive_datetime
+    field :research_points, :integer, default: 0
 
     belongs_to :user, User
 
@@ -122,6 +124,12 @@ defmodule Stygian.Characters.Character do
     |> validate_required([:lost_health, :lost_sanity])
   end
 
+  def change_research_points_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:research_points])
+    |> validate_required([:research_points])
+  end
+
   @doc false
   def changeset(character, attrs) do
     character
@@ -145,6 +153,8 @@ defmodule Stygian.Characters.Character do
       :sin,
       :npc,
       :rest_timer,
+      :last_cigs_effect,
+      :research_points,
       :user_id
     ])
     |> validate_required([

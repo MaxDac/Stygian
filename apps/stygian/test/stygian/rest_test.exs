@@ -94,9 +94,10 @@ defmodule Stygian.RestTest do
     alias Stygian.Characters
     alias Stygian.Characters.Character
 
+    import Stygian.RestFixtures
     import Stygian.CharactersFixtures
 
-    test "rest_character/1 correctly restored lost sanity to the character" do
+    test "rest_character/2 correctly restored lost sanity to the character" do
       character = character_fixture_complete(%{lost_sanity: 6, cigs: 10})
 
       assert {:ok, %Character{} = character} = Rest.rest_character(character)
@@ -105,7 +106,7 @@ defmodule Stygian.RestTest do
       assert character.cigs == 5
     end
 
-    test "rest_character/1 correctly restored lost sanity to the character, but only the lost one" do
+    test "rest_character/2 correctly restored lost sanity to the character, but only the lost one" do
       character = character_fixture_complete(%{lost_sanity: 2, cigs: 10})
 
       assert {:ok, %Character{} = character} = Rest.rest_character(character)
@@ -114,7 +115,7 @@ defmodule Stygian.RestTest do
       assert character.cigs == 5
     end
 
-    test "rest_character/1 does not restore sanity if sanity was already at its maximum, but subtracts the cigs" do
+    test "rest_character/2 does not restore sanity if sanity was already at its maximum, but subtracts the cigs" do
       character = character_fixture_complete(%{lost_sanity: 0, cigs: 10})
 
       assert {:ok, %Character{} = character} = Rest.rest_character(character)
@@ -123,7 +124,7 @@ defmodule Stygian.RestTest do
       assert character.cigs == 5
     end
 
-    test "rest_character/1 does not restore the character if 24 hours haven't passed" do
+    test "rest_character/2 does not restore the character if 24 hours haven't passed" do
       character =
         character_fixture_complete(%{
           lost_sanity: 6,
@@ -139,7 +140,7 @@ defmodule Stygian.RestTest do
       assert character.cigs == 10
     end
 
-    test "rest_character/1 does not restore the character if it doesn't have enough cigs" do
+    test "rest_character/2 does not restore the character if it doesn't have enough cigs" do
       character =
         character_fixture_complete(%{
           lost_sanity: 6,
@@ -155,7 +156,7 @@ defmodule Stygian.RestTest do
       assert character.cigs == 4
     end
 
-    test "rest_character/1 does not restore the character if it doesn't have enough cigs with custom cost" do
+    test "rest_character/2 does not restore the character if it doesn't have enough cigs with custom cost" do
       character =
         character_fixture_complete(%{
           lost_sanity: 6,
@@ -169,6 +170,97 @@ defmodule Stygian.RestTest do
       character = Characters.get_character!(character.id)
       assert character.lost_sanity == 6
       assert character.cigs == 7
+    end
+
+    test "rest_character_complex/2 correctly updates the character with the three selected actions" do
+      character =
+        character_fixture_complete(%{
+          lost_sanity: 6,
+          lost_health: 21,
+          research_points: 0,
+          cigs: 100,
+          rest_timer: nil
+        })
+
+      action1 = rest_action_fixture(%{name: "action 1", slots: 1, health: 20, sanity: 0, research_points: 0})
+      action2 = rest_action_fixture(%{name: "action 2", slots: 1, health: 0, sanity: 20, research_points: 0})
+      action3 = rest_action_fixture(%{name: "action 3", slots: 1, health: 0, sanity: 0, research_points: 3})
+
+      assert {:ok, _changeset} =
+               Rest.rest_character_complex(character, [action1, action2, action3])
+
+      character = Characters.get_character!(character.id)
+
+      assert 0 == character.lost_sanity
+      assert 1 == character.lost_health
+      assert 3 == character.research_points
+      assert 80 == character.cigs
+    end
+
+    test "rest_character_complex/2 does not update the character when the total slots are more than what is allowed" do
+      character =
+        character_fixture_complete(%{
+          lost_sanity: 6,
+          lost_health: 21,
+          research_points: 0,
+          cigs: 100,
+          rest_timer: nil
+        })
+
+      action1 = rest_action_fixture(%{name: "action 1", slots: 2, health: 20, sanity: 0, research_points: 0})
+      action2 = rest_action_fixture(%{name: "action 2", slots: 3, health: 0, sanity: 20, research_points: 0})
+      action3 = rest_action_fixture(%{name: "action 3", slots: 1, health: 0, sanity: 0, research_points: 3})
+
+      assert {:error, "Non puoi aggiungere questa azione, non hai sufficienti slot a disposizione."} =
+               Rest.rest_character_complex(character, [action1, action2, action3])
+
+      character = Characters.get_character!(character.id)
+
+      assert 100 == character.cigs
+    end
+
+    test "rest_character_complex/2 does not update a character that has already rested in the last 24 hours" do
+      character =
+        character_fixture_complete(%{
+          lost_sanity: 6,
+          lost_health: 21,
+          research_points: 0,
+          cigs: 100,
+          rest_timer: NaiveDateTime.utc_now()
+        })
+
+      action1 = rest_action_fixture(%{name: "action 1", slots: 2, health: 20, sanity: 0, research_points: 0})
+      action2 = rest_action_fixture(%{name: "action 2", slots: 3, health: 0, sanity: 20, research_points: 0})
+      action3 = rest_action_fixture(%{name: "action 3", slots: 1, health: 0, sanity: 0, research_points: 3})
+
+      assert {:error, "Non puoi ancora far riposare il personaggio."} =
+               Rest.rest_character_complex(character, [action1, action2, action3])
+
+      character = Characters.get_character!(character.id)
+
+      assert 100 == character.cigs
+    end
+
+    test "rest_character_complex/2 does not update a character that does not have enough cigs" do
+      character =
+        character_fixture_complete(%{
+          lost_sanity: 6,
+          lost_health: 21,
+          research_points: 0,
+          cigs: 10,
+          rest_timer: NaiveDateTime.utc_now()
+        })
+
+      action1 = rest_action_fixture(%{name: "action 1", slots: 2, health: 20, sanity: 0, research_points: 0})
+      action2 = rest_action_fixture(%{name: "action 2", slots: 3, health: 0, sanity: 20, research_points: 0})
+      action3 = rest_action_fixture(%{name: "action 3", slots: 1, health: 0, sanity: 0, research_points: 3})
+
+      assert {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."} =
+               Rest.rest_character_complex(character, [action1, action2, action3])
+
+      character = Characters.get_character!(character.id)
+
+      assert 10 == character.cigs
     end
   end
 end
