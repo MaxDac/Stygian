@@ -13,8 +13,13 @@ defmodule Stygian.Rest do
   @rest_limit_hours 24
   @rest_sanity_recovery 5
   @rest_cost 5
-  @complex_rest_cost 20
 
+  @complex_rest_cost 20
+  @max_allowed_slots 5
+
+  def get_rest_cost, do: @rest_cost
+  def get_complex_rest_cost, do: @complex_rest_cost
+  def get_max_allowed_slots, do: @max_allowed_slots
 
   @doc """
   Returns the list of rest_actions.
@@ -154,7 +159,12 @@ defmodule Stygian.Rest do
   defp apply_rest_effect(%{cigs: cigs} = _character, rest_cost) when cigs < rest_cost,
     do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
 
-  defp apply_rest_effect(%{lost_sanity: lost_sanity, cigs: cigs} = character, rest_cost) do
+  defp apply_rest_effect(character, rest_cost) do
+    apply_rest_effct_changeset(character, rest_cost)
+    |> Repo.update()
+  end
+  
+  defp apply_rest_effct_changeset(%{lost_sanity: lost_sanity, cigs: cigs} = character, rest_cost) do
     attrs = %{
       lost_sanity: max(lost_sanity - @rest_sanity_recovery, 0),
       rest_timer: NaiveDateTime.utc_now(),
@@ -163,6 +173,29 @@ defmodule Stygian.Rest do
 
     character
     |> Character.changeset(attrs)
-    |> Repo.update()
+  end
+
+  @doc """
+  Perform the resting of the character, with a custom cost and the possibility of performing actions. 
+  """
+  @spec rest_character_complex(character :: Character.t(), actions :: list(RestAction.t())) ::
+          {:ok, Character.t()} | {:error, String.t()} | {:error, Changeset.t()}
+  def rest_character_complex(character, actions) do
+    with {:ok, _} <- rest_character(character, @complex_rest_cost),
+         {:ok, actions} <- check_slots(actions) do
+    end
+  end
+
+  defp check_slots(actions) do
+    slots_count =
+      actions
+      |> Enum.map(&(&1.slots))
+      |> Enum.sum()
+
+    if slots_count > @max_allowed_slots do
+      {:error, "Non puoi aggiungere questa azione, non hai sufficienti slot a disposizione."}
+    else
+      {:ok, actions}
+    end
   end
 end

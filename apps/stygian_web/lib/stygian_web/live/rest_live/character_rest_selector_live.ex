@@ -12,8 +12,6 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
   import StygianWeb.RestLive.CharacterRestComponents
   import StygianWeb.RestLive.CharacterRestHelpers
 
-  @max_allowed_slots 5
-
   @impl true
   def update(assigns, socket) do
     {:ok,
@@ -59,7 +57,8 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
   end
 
   defp assign_max_allowed_slots(socket) do
-    assign(socket, :max_allowed_slots, @max_allowed_slots)
+    max_allowed_slots = Rest.get_max_allowed_slots()
+    assign(socket, :max_allowed_slots, max_allowed_slots)
   end
 
   defp assign_rest_actions(socket) do
