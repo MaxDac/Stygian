@@ -75,6 +75,7 @@ defmodule Stygian.Characters.Character do
       :sin,
       :lost_health,
       :lost_sanity,
+      :fatigue,
       :npc
     ])
     |> validate_required([

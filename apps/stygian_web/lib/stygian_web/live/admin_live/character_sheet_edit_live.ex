@@ -48,12 +48,12 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditLive do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Esperienza assegnata con successo.")}
+         |> put_flash(:info, "Status del personaggio aggiornato con successo.")}
 
       {:error, _changeset} ->
         {:noreply,
          socket
-         |> put_flash(:error, "C'è stato un errore nell'assegnazione dell'esperienza.")}
+         |> put_flash(:error, "C'è stato un errore nel modificare lo status del personaggio.")}
     end
   end
 

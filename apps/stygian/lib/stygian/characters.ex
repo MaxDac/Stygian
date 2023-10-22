@@ -800,8 +800,16 @@ defmodule Stygian.Characters do
 
   @spec assign_character_status(character_id :: non_neg_integer(), params :: map()) ::
           {:ok, Character.t()} | {:error, Changeset.t()}
-  def assign_character_status(character_id, %{"health" => health, "sanity" => sanity}) do
-    {health, sanity} = {extract_number(health), extract_number(sanity)}
+  def assign_character_status(character_id, %{
+        "health" => health,
+        "sanity" => sanity,
+        "fatigue" => fatigue
+      }) do
+    {health, sanity, fatigue} = {
+      extract_number(health),
+      extract_number(sanity),
+      min(extract_number(fatigue), 100)
+    }
 
     case get_character(character_id) do
       nil ->
@@ -832,7 +840,8 @@ defmodule Stygian.Characters do
         character
         |> Character.change_status_changeset(%{
           "lost_health" => lost_health,
-          "lost_sanity" => lost_sanity
+          "lost_sanity" => lost_sanity,
+          "fatigue" => fatigue
         })
         |> Repo.update()
     end

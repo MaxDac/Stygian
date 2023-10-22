@@ -2,7 +2,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsBarComponent do
   @moduledoc """
   Contains a functional component that renders the stats bar.
   """
-  
+
   use StygianWeb, :html
 
   @doc """
@@ -22,10 +22,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsBarComponent do
       </p>
 
       <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700 flex flex-row">
-        <div
-          class={"h-6 bg-#{@bar_color} rounded-full text-center"}
-          style={"width: #{@percentage}%"}
-        >
+        <div class={"h-6 bg-#{@bar_color} rounded-full text-center"} style={"width: #{@percentage}%"}>
           <span :if={@percentage >= 12.0} class={"text-#{@internal_text_color}"}>
             <%= @percentage %> %
           </span>
