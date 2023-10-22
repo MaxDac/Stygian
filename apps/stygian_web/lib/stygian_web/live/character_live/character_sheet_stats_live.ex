@@ -7,6 +7,8 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
 
   alias Stygian.Characters
 
+  import StygianWeb.CharacterLive.CharacterSheetStatsBarComponent
+
   @impl true
   def mount(%{"character_id" => character_id} = params, _session, socket) do
     {:ok,
@@ -81,6 +83,14 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
   end
 
   defp get_sanity_percentage(_), do: 0
+
+  defp get_fatigue_percentage(%{fatigue: fatigue})
+       when is_number(fatigue) do
+    max_fatigue = Characters.get_character_maximum_fatigue()
+    Float.ceil(fatigue / max_fatigue * 100, 0)
+  end
+
+  defp get_fatigue_percentage(_), do: 0
 
   defp get_change_sheet_mode_link(current_character, character_id, mode) do
     if is_own_character?(current_character, character_id) do

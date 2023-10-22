@@ -46,35 +46,23 @@
       </div>
 
       <div class="flex flex-col">
-        <div class="flex flex-col justify-center">
-          <p class="text-xl pt-3 font-report">
-            Physical Condition
-          </p>
+        <.stat_bar
+          stat_name="Physical Condition"
+          percentage={get_health_percentage(@character)}
+          bar_color="rose-700"
+        />
 
-          <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700">
-            <div
-              class="h-6 bg-rose-700 rounded-full text-center"
-              style={"width: #{get_health_percentage(@character)}%"}
-            >
-              <%= get_health_percentage(@character) %> %
-            </div>
-          </div>
-        </div>
+        <.stat_bar
+          stat_name="Psychological Condition"
+          percentage={get_sanity_percentage(@character)}
+          bar_color="brand-inactive"
+        />
 
-        <div class="flex flex-col justify-center">
-          <p class="text-xl pt-3 font-report">
-            Psychological Condition
-          </p>
-
-          <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700">
-            <div
-              class="h-6 bg-brand-inactive rounded-full text-center"
-              style={"width: #{get_sanity_percentage(@character)}%"}
-            >
-              <%= get_sanity_percentage(@character) %> %
-            </div>
-          </div>
-        </div>
+        <.stat_bar
+          stat_name="Fatigue"
+          percentage={get_fatigue_percentage(@character)}
+          bar_color="amber-900"
+        />
       </div>
     </div>
 

@@ -145,7 +145,7 @@ defmodule Stygian.Rest do
         |> apply_simple_rest_effect()
 
       character
-      |> Character.change_rest_stats(attrs)
+      |> Character.change_rest_stats_changeset(attrs)
       |> Repo.update()
     end
   end
@@ -167,7 +167,7 @@ defmodule Stygian.Rest do
         |> apply_actions(actions)
 
       character
-      |> Character.change_rest_stats(attrs)
+      |> Character.change_rest_stats_changeset(attrs)
       |> Repo.update()
     end
   end
