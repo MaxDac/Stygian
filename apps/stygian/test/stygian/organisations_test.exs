@@ -300,7 +300,7 @@ defmodule Stygian.OrganisationsTest do
     end
 
     test "withdraw_salary/1 correctly updates the character cigs with the salary when the withdraw was performed more than 1 day ago" do
-      %{id: character_id} = character_fixture_complete(%{cigs: 21})
+      %{id: character_id} = character_fixture_complete(%{cigs: 21, fatigue: 20})
       %{id: organisation_id} = organisation_fixture(%{base_salary: 21})
 
       characters_organisations_fixture(%{
@@ -315,6 +315,7 @@ defmodule Stygian.OrganisationsTest do
       character_organisation = Organisations.get_character_organisation(character_id)
 
       assert 42 = character.cigs
+      assert 50 = character.fatigue
 
       # Setting the limit time to 1 hour ago, so the test can prove that the
       # last date has been updated at least one hour ago.
@@ -322,8 +323,29 @@ defmodule Stygian.OrganisationsTest do
       assert character_organisation.last_salary_withdraw > inferior_limit
     end
 
+    test "withdraw_salary/1 does not allow salary withdrawal due to the character being too fatigued" do
+      %{id: character_id} = character_fixture_complete(%{cigs: 21, fatigue: 80})
+      %{id: organisation_id} = organisation_fixture(%{base_salary: 21})
+
+      %{last_salary_withdraw: last_withdraw} =
+        characters_organisations_fixture(%{
+          character_id: character_id,
+          organisation_id: organisation_id,
+          last_salary_withdraw: NaiveDateTime.add(NaiveDateTime.utc_now(), -25 * 60 * 60, :second)
+        })
+
+      assert {:error, _} = Organisations.withdraw_salary(character_id)
+
+      character = Characters.get_character!(character_id)
+      character_organisation = Organisations.get_character_organisation(character_id)
+
+      assert 21 = character.cigs
+      assert 80 = character.fatigue
+      assert character_organisation.last_salary_withdraw == last_withdraw
+    end
+
     test "withdraw_salary/1 does not update the character cigs when the withdraw was performed less than 1 day ago" do
-      %{id: character_id} = character_fixture_complete(%{cigs: 21})
+      %{id: character_id} = character_fixture_complete(%{cigs: 21, fatigue: 20})
       %{id: organisation_id} = organisation_fixture(%{base_salary: 21})
 
       %{last_salary_withdraw: last_withdraw} =
@@ -340,7 +362,7 @@ defmodule Stygian.OrganisationsTest do
       character_organisation = Organisations.get_character_organisation(character_id)
 
       assert 21 = character.cigs
-
+      assert 20 = character.fatigue
       assert character_organisation.last_salary_withdraw == last_withdraw
     end
   end

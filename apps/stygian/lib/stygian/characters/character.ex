@@ -151,6 +151,7 @@ defmodule Stygian.Characters.Character do
       :lost_health,
       :sanity,
       :lost_sanity,
+      :fatigue,
       :step,
       :age,
       :sin,
