@@ -457,43 +457,109 @@ defmodule Stygian.CharactersTest do
              } = changeset
     end
 
-    test "assign_character_status/2 correctly assign the right health and sanity loss to the character" do
+    test "assign_character_status/2 correctly assign the right health and sanity loss to the character, along with its fatigue" do
       %{id: character_id} =
-        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+        character_fixture_complete(%{
+          health: 100,
+          sanity: 50,
+          lost_health: 0,
+          lost_sanity: 0,
+          fatigue: 10
+        })
 
       assert {:ok, _} =
-               Characters.assign_character_status(character_id, %{"health" => 70, "sanity" => 40})
+               Characters.assign_character_status(character_id, %{
+                 "health" => 70,
+                 "sanity" => 40,
+                 "fatigue" => 20
+               })
 
-      assert %{health: 100, sanity: 50, lost_health: 30, lost_sanity: 10} =
+      assert %{health: 100, sanity: 50, lost_health: 30, lost_sanity: 10, fatigue: 20} =
                Characters.get_character!(character_id)
     end
 
     test "assign_character_status/2 does not assign the health when the specified value is greater than the character's health" do
       %{id: character_id} =
-        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+        character_fixture_complete(%{
+          health: 100,
+          sanity: 50,
+          lost_health: 0,
+          lost_sanity: 0,
+          fatigue: 10
+        })
 
       assert {:error, changeset} =
-               Characters.assign_character_status(character_id, %{"health" => 110, "sanity" => 40})
+               Characters.assign_character_status(character_id, %{
+                 "health" => 110,
+                 "sanity" => 40,
+                 "fatigue" => 20
+               })
 
       assert %{
                errors: [
                  health: {"Il valore specificato è maggiore della salute del personaggio.", _}
                ]
              } = changeset
+
+      character = Characters.get_character!(character_id)
+
+      assert 0 == character.lost_health
+      assert 0 == character.lost_sanity
+      assert 10 == character.fatigue
     end
 
     test "assign_character_status/2 does not assign the sanity when the specified value is greater than the character's sanity" do
       %{id: character_id} =
-        character_fixture_complete(%{health: 100, sanity: 50, lost_health: 0, lost_sanity: 0})
+        character_fixture_complete(%{
+          health: 100,
+          sanity: 50,
+          lost_health: 0,
+          lost_sanity: 0,
+          fatigue: 10
+        })
 
       assert {:error, changeset} =
-               Characters.assign_character_status(character_id, %{"health" => 90, "sanity" => 60})
+               Characters.assign_character_status(character_id, %{
+                 "health" => 90,
+                 "sanity" => 60,
+                 "fatigue" => 20
+               })
 
       assert %{
                errors: [
                  sanity: {"Il valore specificato è maggiore della sanità del personaggio.", _}
                ]
              } = changeset
+
+      character = Characters.get_character!(character_id)
+
+      assert 0 == character.lost_health
+      assert 0 == character.lost_sanity
+      assert 10 == character.fatigue
+    end
+
+    test "assign_character_status/2 assign fatigue to 100 when a greater number is assigned" do
+      %{id: character_id} =
+        character_fixture_complete(%{
+          health: 100,
+          sanity: 50,
+          lost_health: 0,
+          lost_sanity: 0,
+          fatigue: 10
+        })
+
+      assert {:ok, _} =
+               Characters.assign_character_status(character_id, %{
+                 "health" => 90,
+                 "sanity" => 20,
+                 "fatigue" => 120
+               })
+
+      character = Characters.get_character!(character_id)
+
+      assert 10 == character.lost_health
+      assert 30 == character.lost_sanity
+      assert 100 == character.fatigue
     end
   end
 

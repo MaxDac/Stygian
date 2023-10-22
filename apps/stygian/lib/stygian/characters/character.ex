@@ -21,6 +21,7 @@ defmodule Stygian.Characters.Character do
           notes: String.t(),
           sanity: integer(),
           lost_sanity: integer(),
+          fatigue: integer(),
           step: integer(),
           age: :young | :adult | :old,
           sin: String.t(),
@@ -49,6 +50,7 @@ defmodule Stygian.Characters.Character do
     field :notes, :string
     field :sanity, :integer
     field :lost_sanity, :integer
+    field :fatigue, :integer
     field :step, :integer
     field :age, Ecto.Enum, values: [:young, :adult, :old]
     field :sin, :string
@@ -73,6 +75,7 @@ defmodule Stygian.Characters.Character do
       :sin,
       :lost_health,
       :lost_sanity,
+      :fatigue,
       :npc
     ])
     |> validate_required([
@@ -118,16 +121,23 @@ defmodule Stygian.Characters.Character do
     |> validate_required([:experience])
   end
 
-  def change_health_and_sanity_changeset(character, attrs) do
+  def change_status_changeset(character, attrs) do
     character
-    |> cast(attrs, [:lost_health, :lost_sanity, :last_cigs_effect])
-    |> validate_required([:lost_health, :lost_sanity])
+    |> cast(attrs, [:lost_health, :lost_sanity, :last_cigs_effect, :fatigue])
+    |> validate_required([:lost_health, :lost_sanity, :fatigue])
   end
 
-  def change_rest_stats(character, attrs) do
+  def change_rest_stats_changeset(character, attrs) do
     character
-    |> cast(attrs, [:cigs, :lost_health, :lost_sanity, :research_points, :rest_timer])
-    |> validate_required([:cigs, :lost_health, :lost_sanity, :research_points, :rest_timer])
+    |> cast(attrs, [:cigs, :lost_health, :lost_sanity, :fatigue, :research_points, :rest_timer])
+    |> validate_required([
+      :cigs,
+      :lost_health,
+      :lost_sanity,
+      :fatigue,
+      :research_points,
+      :rest_timer
+    ])
   end
 
   @doc false
@@ -148,6 +158,7 @@ defmodule Stygian.Characters.Character do
       :lost_health,
       :sanity,
       :lost_sanity,
+      :fatigue,
       :step,
       :age,
       :sin,

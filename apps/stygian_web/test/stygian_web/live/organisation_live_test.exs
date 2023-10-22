@@ -9,14 +9,16 @@ defmodule StygianWeb.OrganisationLiveTest do
     name: "some nonfixture name",
     description: "some description",
     image: "some image",
-    base_salary: 42
+    base_salary: 42,
+    work_fatigue: 42
   }
 
   @update_attrs %{
     name: "some updated name",
     description: "some updated description",
     image: "some updated image",
-    base_salary: 43
+    base_salary: 43,
+    work_fatigue: 43
   }
 
   @invalid_attrs %{name: nil, description: nil, image: nil, base_salary: nil}

@@ -12,10 +12,11 @@
   rows={@streams.organisations}
   row_click={fn {_id, organisation} -> JS.navigate(~p"/admin/organisations/#{organisation}") end}
 >
-  <:col :let={{_id, organisation}} label="Name"><%= organisation.name %></:col>
-  <:col :let={{_id, organisation}} label="Description"><%= organisation.description %></:col>
-  <:col :let={{_id, organisation}} label="Base salary"><%= organisation.base_salary %></:col>
-  <:col :let={{_id, organisation}} label="Image"><%= organisation.image %></:col>
+  <:col :let={{_id, organisation}} label="Nome"><%= organisation.name %></:col>
+  <:col :let={{_id, organisation}} label="Descrizione"><%= organisation.description %></:col>
+  <:col :let={{_id, organisation}} label="Salario base"><%= organisation.base_salary %></:col>
+  <:col :let={{_id, organisation}} label="Fatica"><%= organisation.work_fatigue %></:col>
+  <:col :let={{_id, organisation}} label="Immagine"><%= organisation.image %></:col>
   <:action :let={{_id, organisation}}>
     <.table_link_left
       navigate={~p"/admin/organisations/#{organisation}"}

@@ -19,10 +19,11 @@ defmodule StygianWeb.OrganisationLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:description]} type="text" label="Description" />
-        <.input field={@form[:base_salary]} type="number" label="Base salary" />
-        <.input field={@form[:image]} type="text" label="Image" />
+        <.input field={@form[:name]} type="text" label="Nome" />
+        <.input field={@form[:description]} type="text" label="Descrizione" />
+        <.input field={@form[:base_salary]} type="number" label="Salario base" />
+        <.input field={@form[:work_fatigue]} type="number" label="Fatica" />
+        <.input field={@form[:image]} type="text" label="Immagine" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Organisation</.button>
         </:actions>

@@ -97,22 +97,24 @@ defmodule Stygian.RestTest do
     import Stygian.RestFixtures
     import Stygian.CharactersFixtures
 
-    test "rest_character/1 correctly restored lost sanity to the character" do
-      character = character_fixture_complete(%{lost_sanity: 6, cigs: 10})
+    test "rest_character/1 correctly restored lost sanity and fatigue to the character" do
+      character = character_fixture_complete(%{lost_sanity: 6, cigs: 10, fatigue: 70})
 
       assert {:ok, %Character{} = character} = Rest.rest_character(character)
 
-      assert character.lost_sanity == 1
-      assert character.cigs == 5
+      assert 1 == character.lost_sanity
+      assert 5 == character.cigs
+      assert 0 == character.fatigue
     end
 
     test "rest_character/1 correctly restored lost sanity to the character, but only the lost one" do
-      character = character_fixture_complete(%{lost_sanity: 2, cigs: 10})
+      character = character_fixture_complete(%{lost_sanity: 2, cigs: 10, fatigue: 70})
 
       assert {:ok, %Character{} = character} = Rest.rest_character(character)
 
-      assert character.lost_sanity == 0
-      assert character.cigs == 5
+      assert 0 == character.lost_sanity
+      assert 5 == character.cigs
+      assert 0 == character.fatigue
     end
 
     test "rest_character/1 does not restore sanity if sanity was already at its maximum, but subtracts the cigs" do
@@ -120,8 +122,19 @@ defmodule Stygian.RestTest do
 
       assert {:ok, %Character{} = character} = Rest.rest_character(character)
 
-      assert character.lost_sanity == 0
-      assert character.cigs == 5
+      assert 0 == character.lost_sanity
+      assert 5 == character.cigs
+      assert 0 == character.fatigue
+    end
+
+    test "rest_character/1 does not restore fatigue if it was already at its minimum, but subtracts the cigs" do
+      character = character_fixture_complete(%{lost_sanity: 0, cigs: 10, fatigue: 0})
+
+      assert {:ok, %Character{} = character} = Rest.rest_character(character)
+
+      assert 0 == character.lost_sanity
+      assert 5 == character.cigs
+      assert 0 == character.fatigue
     end
 
     test "rest_character/1 does not restore the character if 24 hours haven't passed" do
@@ -129,6 +142,7 @@ defmodule Stygian.RestTest do
         character_fixture_complete(%{
           lost_sanity: 6,
           cigs: 10,
+          fatigue: 70,
           rest_timer: NaiveDateTime.utc_now()
         })
 
@@ -136,8 +150,10 @@ defmodule Stygian.RestTest do
                Rest.rest_character(character)
 
       character = Characters.get_character!(character.id)
-      assert character.lost_sanity == 6
-      assert character.cigs == 10
+
+      assert 6 == character.lost_sanity
+      assert 10 == character.cigs
+      assert 70 == character.fatigue
     end
 
     test "rest_character/1 does not restore the character if it doesn't have enough cigs" do
@@ -145,6 +161,7 @@ defmodule Stygian.RestTest do
         character_fixture_complete(%{
           lost_sanity: 6,
           cigs: 4,
+          fatigue: 70,
           rest_timer: nil
         })
 
@@ -152,8 +169,10 @@ defmodule Stygian.RestTest do
                Rest.rest_character(character)
 
       character = Characters.get_character!(character.id)
-      assert character.lost_sanity == 6
-      assert character.cigs == 4
+
+      assert 6 == character.lost_sanity
+      assert 4 == character.cigs
+      assert 70 == character.fatigue
     end
 
     test "rest_character_complex/2 correctly updates the character with the three selected actions" do
@@ -161,6 +180,7 @@ defmodule Stygian.RestTest do
         character_fixture_complete(%{
           lost_sanity: 16,
           lost_health: 21,
+          fatigue: 70,
           research_points: 0,
           cigs: 100,
           rest_timer: nil
@@ -202,6 +222,7 @@ defmodule Stygian.RestTest do
       assert 11 == character.lost_health
       assert 3 == character.research_points
       assert 80 == character.cigs
+      assert 0 == character.fatigue
     end
 
     test "rest_character_complex/2 does not update the character when the total slots are more than what is allowed" do
@@ -211,6 +232,7 @@ defmodule Stygian.RestTest do
           lost_health: 21,
           research_points: 0,
           cigs: 100,
+          fatigue: 70,
           rest_timer: nil
         })
 
@@ -248,6 +270,7 @@ defmodule Stygian.RestTest do
       character = Characters.get_character!(character.id)
 
       assert 100 == character.cigs
+      assert 70 == character.fatigue
     end
 
     test "rest_character_complex/2 does not update a character that has already rested in the last 24 hours" do
@@ -255,6 +278,7 @@ defmodule Stygian.RestTest do
         character_fixture_complete(%{
           lost_sanity: 6,
           lost_health: 21,
+          fatigue: 70,
           research_points: 0,
           cigs: 100,
           rest_timer: NaiveDateTime.utc_now()
@@ -293,6 +317,7 @@ defmodule Stygian.RestTest do
       character = Characters.get_character!(character.id)
 
       assert 100 == character.cigs
+      assert 70 == character.fatigue
     end
 
     test "rest_character_complex/2 does not update a character that does not have enough cigs" do
@@ -300,6 +325,7 @@ defmodule Stygian.RestTest do
         character_fixture_complete(%{
           lost_sanity: 6,
           lost_health: 21,
+          fatigue: 70,
           research_points: 0,
           cigs: 10,
           rest_timer: nil
@@ -338,6 +364,7 @@ defmodule Stygian.RestTest do
       character = Characters.get_character!(character.id)
 
       assert 10 == character.cigs
+      assert 70 == character.fatigue
     end
   end
 end

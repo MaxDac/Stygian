@@ -16,7 +16,8 @@ defmodule Stygian.OrganisationsFixtures do
         name: "some name",
         description: "some description",
         image: "some image",
-        base_salary: 42
+        base_salary: 42,
+        work_fatigue: 42
       })
       |> Stygian.Organisations.create_organisation()
 

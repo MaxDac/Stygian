@@ -29,6 +29,7 @@ defmodule Stygian.CharactersFixtures do
         sin: "some awful sin",
         lost_health: 1,
         lost_sanity: 1,
+        fatigue: 42,
         npc: false,
         # notes: "some notes",
         # sanity: 42,
@@ -66,6 +67,7 @@ defmodule Stygian.CharactersFixtures do
         notes: "some notes",
         sanity: 42,
         step: 1,
+        fatigue: 42,
         user_id: user_id
       })
 

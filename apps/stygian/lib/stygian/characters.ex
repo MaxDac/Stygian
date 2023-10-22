@@ -45,6 +45,8 @@ defmodule Stygian.Characters do
   @character_effect_time_in_hour 3
   @character_sanity_from_cig 3
 
+  @character_maximum_fatigue 100
+
   @spec get_max_available_attribute_points(character :: Character.t()) :: non_neg_integer()
   def get_max_available_attribute_points(character)
   def get_max_available_attribute_points(%{age: :young}), do: @max_attribute_points + 1
@@ -80,6 +82,8 @@ defmodule Stygian.Characters do
   def get_creation_max_skill_value(_), do: @creation_max_skill_value
 
   def get_creation_min_skill_value, do: @creation_min_skill_value
+
+  def get_character_maximum_fatigue, do: @character_maximum_fatigue
 
   @doc """
   Returns the list of characters.
@@ -796,8 +800,16 @@ defmodule Stygian.Characters do
 
   @spec assign_character_status(character_id :: non_neg_integer(), params :: map()) ::
           {:ok, Character.t()} | {:error, Changeset.t()}
-  def assign_character_status(character_id, %{"health" => health, "sanity" => sanity}) do
-    {health, sanity} = {extract_number(health), extract_number(sanity)}
+  def assign_character_status(character_id, %{
+        "health" => health,
+        "sanity" => sanity,
+        "fatigue" => fatigue
+      }) do
+    {health, sanity, fatigue} = {
+      extract_number(health),
+      extract_number(sanity),
+      min(extract_number(fatigue), 100)
+    }
 
     case get_character(character_id) do
       nil ->
@@ -826,9 +838,10 @@ defmodule Stygian.Characters do
         }
 
         character
-        |> Character.change_health_and_sanity_changeset(%{
+        |> Character.change_status_changeset(%{
           "lost_health" => lost_health,
-          "lost_sanity" => lost_sanity
+          "lost_sanity" => lost_sanity,
+          "fatigue" => fatigue
         })
         |> Repo.update()
     end
@@ -1113,7 +1126,7 @@ defmodule Stygian.Characters do
       {%{lost_health: lost_health, lost_sanity: lost_sanity}, health, sanity} ->
         status_changeset =
           character
-          |> Character.change_health_and_sanity_changeset(%{
+          |> Character.change_status_changeset(%{
             "lost_health" => max(lost_health - health, 0),
             "lost_sanity" => max(lost_sanity - sanity, 0)
           })
@@ -1180,7 +1193,7 @@ defmodule Stygian.Characters do
 
       changeset =
         character
-        |> Character.change_health_and_sanity_changeset(%{
+        |> Character.change_status_changeset(%{
           lost_sanity: lost_sanity,
           last_cigs_effect: NaiveDateTime.utc_now()
         })

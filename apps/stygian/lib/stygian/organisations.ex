@@ -13,6 +13,7 @@ defmodule Stygian.Organisations do
   alias Stygian.Organisations.Organisation
 
   @withdraw_time_limit_in_seconds 24 * 60 * 60
+  @max_character_fatigue_to_withdraw 80
 
   @doc """
   Returns the list of organisations.
@@ -327,16 +328,27 @@ defmodule Stygian.Organisations do
   @spec withdraw_salary(character_id :: non_neg_integer()) ::
           {:ok, CharactersOrganisations.t()} | {:error, String.t()} | {:error, Ecto.Changeset.t()}
   def withdraw_salary(character_id) do
-    if can_withdraw_salary?(character_id) do
-      perform_withdrawal(character_id)
-    else
-      {:error, "Non puoi ancora ritirare lo stipendio, devi aspettare un giorno."}
+    character = Characters.get_character(character_id)
+
+    case {can_withdraw_salary?(character_id), can_character_work?(character)} do
+      {false, _} ->
+        {:error, "Non puoi ancora ritirare lo stipendio, devi aspettare un giorno."}
+
+      {_, false} ->
+        {:error, "Il personaggio è troppo stanco per lavorare."}
+
+      _ ->
+        perform_withdrawal(character)
     end
   end
 
-  defp perform_withdrawal(character_id) do
-    %{organisation: %{base_salary: base_salary}} = get_character_organisation(character_id)
-    %{cigs: cigs} = character = Characters.get_character(character_id)
+  defp can_character_work?(%{fatigue: fatigue}) do
+    fatigue < @max_character_fatigue_to_withdraw
+  end
+
+  defp perform_withdrawal(%{id: character_id, cigs: cigs, fatigue: fatigue} = character) do
+    %{organisation: %{base_salary: base_salary, work_fatigue: work_fatigue}} =
+      get_character_organisation(character_id)
 
     job_changeset =
       get_character_organisation(character_id)
@@ -344,7 +356,10 @@ defmodule Stygian.Organisations do
 
     character_changeset =
       character
-      |> Characters.change_character(%{cigs: cigs + base_salary})
+      |> Characters.change_character(%{
+        cigs: cigs + base_salary,
+        fatigue: fatigue + work_fatigue
+      })
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:job, job_changeset)

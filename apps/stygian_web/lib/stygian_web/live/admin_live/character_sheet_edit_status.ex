@@ -41,6 +41,13 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
             label={"Sanità Mentale (massimo: #{@sanity})"}
             type="number"
           />
+
+          <.input
+            :if={@fatigue}
+            field={@form[:fatigue]}
+            label={"Fatica (massimo: #{@max_fatigue})"}
+            type="number"
+          />
         </div>
 
         <.button type="submit">Aggiorna</.button>
@@ -55,6 +62,7 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
      socket
      |> assign(assigns)
      |> assign_character_status()
+     |> assign_max_fatigue()
      |> assign_form()}
   end
 
@@ -104,17 +112,20 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
          health: health,
          sanity: sanity,
          lost_health: lost_health,
-         lost_sanity: lost_sanity
+         lost_sanity: lost_sanity,
+         fatigue: fatigue
        }) do
     socket
     |> assign(:health, health)
     |> assign(:sanity, sanity)
     |> assign(:lost_health, lost_health)
     |> assign(:lost_sanity, lost_sanity)
+    |> assign(:fatigue, fatigue)
     |> assign_form(%{
       "character_id" => character_id,
       "health" => health - lost_health,
-      "sanity" => sanity - lost_sanity
+      "sanity" => sanity - lost_sanity,
+      "fatigue" => fatigue
     })
   end
 
@@ -124,7 +135,8 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
       health: 0,
       sanity: 0,
       lost_health: 0,
-      lost_sanity: 0
+      lost_sanity: 0,
+      fatigue: 0
     })
   end
 
@@ -137,6 +149,10 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditStatus do
       character ->
         assign_character_status(socket, character)
     end
+  end
+
+  defp assign_max_fatigue(socket) do
+    assign(socket, :max_fatigue, Characters.get_character_maximum_fatigue())
   end
 
   defp send_form(params) do
