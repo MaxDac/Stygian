@@ -334,8 +334,10 @@ defmodule Stygian.Organisations do
     case {can_withdraw_salary?(character_id), can_character_work?(character)} do
       {false, _} ->
         {:error, "Non puoi ancora ritirare lo stipendio, devi aspettare un giorno."}
+
       {_, false} ->
         {:error, "Il personaggio è troppo stanco per lavorare."}
+
       _ ->
         perform_withdrawal(character)
     end
@@ -354,7 +356,10 @@ defmodule Stygian.Organisations do
 
     character_changeset =
       character
-      |> Characters.change_character(%{cigs: cigs + base_salary, fatigue: fatigue + @character_work_cost})
+      |> Characters.change_character(%{
+        cigs: cigs + base_salary,
+        fatigue: fatigue + @character_work_cost
+      })
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:job, job_changeset)
