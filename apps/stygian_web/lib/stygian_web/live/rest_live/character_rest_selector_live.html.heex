@@ -1,12 +1,4 @@
 <div>
-  <.h2>Attività durante il riposo</.h2>
-
-  <.p>
-    Se hai intenzione di fornire al tuo personaggio la possibilità di svolgere delle azioni, selezionale dalle
-    azioni disponibili. Ricorda che hai a disposizione al massimo 5 slot, ed ogni azione "occupa" una quantità
-    variabile di slot.
-  </.p>
-
   <.slots_resume state={get_resume_state(@rest_action_state, @max_allowed_slots)} />
 
   <.simple_form
@@ -16,20 +8,34 @@
     phx-change="validate"
     phx-submit="add"
   >
-    <div class="flex flex-row items-end w-full space-x-4">
+    <div class="flex flex-col w-full space-y-2">
       <.rest_action_selection
         field={@form[:rest_action_id]}
         label="Azioni durante il riposo"
         rest_actions={@options}
       />
 
+      <div class="w-full text-justify">
+        <%= @selected_action_description %>
+      </div>
+
       <.plus_button 
         type="submit" 
         phx-disable-with="..."
         title="Aggiungi"
+        class="w-full"
       />
     </div>
   </.simple_form>
+
+  <.button 
+    type="button" 
+    phx-click={JS.push("reset_choice", target: @myself)} 
+    phx-disable-with="..."
+    class="w-full mt-4"
+  >
+    Resetta scelte
+  </.button>
 
   <.button 
     type="button" 

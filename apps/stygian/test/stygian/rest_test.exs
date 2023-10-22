@@ -175,15 +175,15 @@ defmodule Stygian.RestTest do
     test "rest_character_complex/2 correctly updates the character with the three selected actions" do
       character =
         character_fixture_complete(%{
-          lost_sanity: 6,
+          lost_sanity: 16,
           lost_health: 21,
           research_points: 0,
           cigs: 100,
           rest_timer: nil
         })
 
-      action1 = rest_action_fixture(%{name: "action 1", slots: 1, health: 20, sanity: 0, research_points: 0})
-      action2 = rest_action_fixture(%{name: "action 2", slots: 1, health: 0, sanity: 20, research_points: 0})
+      action1 = rest_action_fixture(%{name: "action 1", slots: 1, health: 10, sanity: 0, research_points: 0})
+      action2 = rest_action_fixture(%{name: "action 2", slots: 1, health: 0, sanity: 10, research_points: 0})
       action3 = rest_action_fixture(%{name: "action 3", slots: 1, health: 0, sanity: 0, research_points: 3})
 
       assert {:ok, _changeset} =

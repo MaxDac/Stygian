@@ -70,14 +70,14 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsLive do
 
   defp get_health_percentage(%{health: health, lost_health: lost_health})
        when is_number(health) and is_number(lost_health) do
-    (health - lost_health) / health * 100
+    Float.ceil((health - lost_health) / health * 100, 0)
   end
 
   defp get_health_percentage(_), do: 0
 
   defp get_sanity_percentage(%{sanity: sanity, lost_sanity: lost_sanity})
        when is_number(sanity) and is_number(lost_sanity) do
-    (sanity - lost_sanity) / sanity * 100
+    Float.ceil((sanity - lost_sanity) / sanity * 100, 0)
   end
 
   defp get_sanity_percentage(_), do: 0
