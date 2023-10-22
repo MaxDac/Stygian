@@ -347,7 +347,8 @@ defmodule Stygian.Organisations do
   end
 
   defp perform_withdrawal(%{id: character_id, cigs: cigs, fatigue: fatigue} = character) do
-    %{organisation: %{base_salary: base_salary, work_fatigue: work_fatigue}} = get_character_organisation(character_id)
+    %{organisation: %{base_salary: base_salary, work_fatigue: work_fatigue}} =
+      get_character_organisation(character_id)
 
     job_changeset =
       get_character_organisation(character_id)
