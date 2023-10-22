@@ -869,7 +869,8 @@ OrganisationsHelpers.create_organisation(%{
   allo sforzo, e ricevere gratuitamente un addestramento base in medicina.
   """,
   image: "/images/organisations/st_andrew_hospital.webp",
-  base_salary: 10
+  base_salary: 12,
+  work_fatigue: 30
 })
 
 OrganisationsHelpers.create_organisation(%{
@@ -883,7 +884,8 @@ OrganisationsHelpers.create_organisation(%{
   sarà offerto un lavoro in logistica, o un addestramento gratuito al poligono di tiro.
   """,
   image: "/images/organisations/rochester_police_department.webp",
-  base_salary: 10
+  base_salary: 15,
+  work_fatigue: 40
 })
 
 OrganisationsHelpers.create_organisation(%{
@@ -896,7 +898,8 @@ OrganisationsHelpers.create_organisation(%{
   lavori nelle altre organizzazioni.
   """,
   image: "/images/organisations/rochester_town_hall.webp",
-  base_salary: 10
+  base_salary: 10,
+  work_fatigue: 25
 })
 
 {:ok, %{id: moonshine_id}} =

@@ -5,10 +5,11 @@
 </.return_link>
 
 <.table id="organisations" rows={@streams.organisations}>
-  <:col :let={{_, o}} label="Name"><%= o.name %></:col>
-  <:col :let={{_, o}} label="Name"><%= o.description %></:col>
-  <:col :let={{_, o}} label="Name"><%= o.base_salary %> $</:col>
-  <:col :let={{_, o}} label="Name">
+  <:col :let={{_, o}} label="Nome"><%= o.name %></:col>
+  <:col :let={{_, o}} label="Descrizione"><%= o.description %></:col>
+  <:col :let={{_, o}} label="Salario"><%= o.base_salary %> $</:col>
+  <:col :let={{_, o}} label="Fatica"><%= o.work_fatigue %></:col>
+  <:col :let={{_, o}} label="">
     <img alt={"#{o.name} logo"} src={o.image} />
   </:col>
   <:action :let={{_, o}}>

@@ -8,7 +8,7 @@ defmodule Stygian.OrganisationsTest do
 
     import Stygian.OrganisationsFixtures
 
-    @invalid_attrs %{name: nil, description: nil, image: nil, base_salary: nil}
+    @invalid_attrs %{name: nil, description: nil, image: nil, base_salary: nil, work_fatigue: nil}
 
     test "list_organisations/0 returns all organisations" do
       organisation = organisation_fixture()
@@ -41,7 +41,8 @@ defmodule Stygian.OrganisationsTest do
         name: "some name",
         description: "some description",
         image: "some image",
-        base_salary: 42
+        base_salary: 42,
+        work_fatigue: 40
       }
 
       assert {:ok, %Organisation{} = organisation} =
@@ -51,6 +52,7 @@ defmodule Stygian.OrganisationsTest do
       assert organisation.description == "some description"
       assert organisation.image == "some image"
       assert organisation.base_salary == 42
+      assert organisation.work_fatigue == 40
     end
 
     test "create_organisation/1 with invalid data returns error changeset" do
@@ -274,7 +276,7 @@ defmodule Stygian.OrganisationsTest do
     end
   end
 
-  describe "Character withdrawalrs" do
+  describe "Character withdrawals" do
     alias Stygian.Characters
     alias Stygian.Organisations.CharactersOrganisations
 
@@ -301,7 +303,7 @@ defmodule Stygian.OrganisationsTest do
 
     test "withdraw_salary/1 correctly updates the character cigs with the salary when the withdraw was performed more than 1 day ago" do
       %{id: character_id} = character_fixture_complete(%{cigs: 21, fatigue: 20})
-      %{id: organisation_id} = organisation_fixture(%{base_salary: 21})
+      %{id: organisation_id} = organisation_fixture(%{base_salary: 21, work_fatigue: 20})
 
       characters_organisations_fixture(%{
         character_id: character_id,
@@ -315,7 +317,7 @@ defmodule Stygian.OrganisationsTest do
       character_organisation = Organisations.get_character_organisation(character_id)
 
       assert 42 = character.cigs
-      assert 50 = character.fatigue
+      assert 40 = character.fatigue
 
       # Setting the limit time to 1 hour ago, so the test can prove that the
       # last date has been updated at least one hour ago.

@@ -14,7 +14,6 @@ defmodule Stygian.Organisations do
 
   @withdraw_time_limit_in_seconds 24 * 60 * 60
   @max_character_fatigue_to_withdraw 80
-  @character_work_cost 30
 
   @doc """
   Returns the list of organisations.
@@ -348,7 +347,7 @@ defmodule Stygian.Organisations do
   end
 
   defp perform_withdrawal(%{id: character_id, cigs: cigs, fatigue: fatigue} = character) do
-    %{organisation: %{base_salary: base_salary}} = get_character_organisation(character_id)
+    %{organisation: %{base_salary: base_salary, work_fatigue: work_fatigue}} = get_character_organisation(character_id)
 
     job_changeset =
       get_character_organisation(character_id)
@@ -358,7 +357,7 @@ defmodule Stygian.Organisations do
       character
       |> Characters.change_character(%{
         cigs: cigs + base_salary,
-        fatigue: fatigue + @character_work_cost
+        fatigue: fatigue + work_fatigue
       })
 
     Ecto.Multi.new()
