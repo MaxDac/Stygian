@@ -996,6 +996,24 @@ defmodule StygianWeb.CoreComponents do
   end
 
   @doc """
+  The default `p` component.
+  """
+  attr :class, :string,
+    required: false,
+    default: "",
+    doc: "the custom class to apply to the p tag"
+
+  slot :inner_block, doc: "the title to render"
+
+  def p(assigns) do
+    ~H"""
+    <p class={"font-typewriter #{@class}"}>
+      <%= render_slot(@inner_block) %>
+    </p>
+    """
+  end
+
+  @doc """
   The default `hr` component.
   """
   attr :class, :string,

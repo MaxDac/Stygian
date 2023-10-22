@@ -111,7 +111,6 @@ defmodule StygianWeb.Router do
 
     get "/redirect", CharacterController, :handle_create
     get "/redirect/:character_id", CharacterController, :handle_create
-    get "/rest", CharacterController, :handle_rest
   end
 
   scope "/character", StygianWeb.CharacterLive do
@@ -155,6 +154,15 @@ defmodule StygianWeb.Router do
       live "/inventory/:id/throw", InventoryLive, :delete
       live "/organisations/job/selection", OrganisationsJobSelectionLive, :index
       live "/organisations", OrganisationsJobLive, :index
+    end
+  end
+
+  scope "/rest", StygianWeb.RestLive do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :rest,
+      on_mount: [{StygianWeb.UserAuth, :ensure_authenticated_and_mount_character}] do
+      live "/", CharacterRestLive, :index
     end
   end
 
