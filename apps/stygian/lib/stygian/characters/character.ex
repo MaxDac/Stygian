@@ -129,8 +129,8 @@ defmodule Stygian.Characters.Character do
 
   def change_rest_stats_changeset(character, attrs) do
     character
-    |> cast(attrs, [:cigs, :lost_health, :lost_sanity, :research_points, :rest_timer])
-    |> validate_required([:cigs, :lost_health, :lost_sanity, :research_points, :rest_timer])
+    |> cast(attrs, [:cigs, :lost_health, :lost_sanity, :fatigue, :research_points, :rest_timer])
+    |> validate_required([:cigs, :lost_health, :lost_sanity, :fatigue, :research_points, :rest_timer])
   end
 
   @doc false

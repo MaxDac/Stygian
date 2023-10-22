@@ -214,7 +214,8 @@ defmodule Stygian.Rest do
            cigs: cigs,
            lost_health: lost_health,
            lost_sanity: lost_sanity,
-           research_points: research_points
+           research_points: research_points,
+           fatigue: fatigue
          } = _character
        ),
        do: %{
@@ -222,6 +223,7 @@ defmodule Stygian.Rest do
          lost_health: lost_health,
          lost_sanity: lost_sanity,
          research_points: research_points,
+         fatigue: fatigue,
          rest_timer: NaiveDateTime.utc_now()
        }
 
@@ -234,6 +236,7 @@ defmodule Stygian.Rest do
     attrs
     |> Map.update!(:lost_health, &max(&1 - @rest_health_recovery, 0))
     |> Map.update!(:lost_sanity, &max(&1 - @rest_sanity_recovery, 0))
+    |> Map.update!(:fatigue, fn _ -> 0 end)
   end
 
   defp apply_actions(attrs, actions) do
