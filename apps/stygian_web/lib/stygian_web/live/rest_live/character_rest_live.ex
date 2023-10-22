@@ -46,20 +46,23 @@ defmodule StygianWeb.RestLive.CharacterRestLive do
     |> handle_rest_result(socket)
   end
 
-  defp handle_rest_result({:ok, character}, socket), do:
-    socket
-    |> assign(:current_character, character)
-    |> put_flash(:info, "Hai riposato con successo.")
-    |> redirect(to: ~p"/")
+  defp handle_rest_result({:ok, character}, socket),
+    do:
+      socket
+      |> assign(:current_character, character)
+      |> put_flash(:info, "Hai riposato con successo.")
+      |> redirect(to: ~p"/")
 
-  defp handle_rest_result({:error, error}, socket) when is_binary(error), do:
-    socket
-    |> put_flash(:error, error)
+  defp handle_rest_result({:error, error}, socket) when is_binary(error),
+    do:
+      socket
+      |> put_flash(:error, error)
 
-  defp handle_rest_result({:error, _}, socket), do:
-    socket
-    |> put_flash(
-      :error,
-      "C'è stato un errore in fase di riposo, contatta un admin per maggiori informazioni."
-    )
+  defp handle_rest_result({:error, _}, socket),
+    do:
+      socket
+      |> put_flash(
+        :error,
+        "C'è stato un errore in fase di riposo, contatta un admin per maggiori informazioni."
+      )
 end

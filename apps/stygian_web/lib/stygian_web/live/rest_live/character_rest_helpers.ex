@@ -11,12 +11,12 @@ defmodule StygianWeb.RestLive.CharacterRestHelpers do
     |> Enum.map(& &1.slots)
     |> Enum.sum()
   end
-  
+
   @doc """
   Returns the total number of slots occupied by the selected actions.
   """
   def is_button_disables(socket, max_slots) do
-    get_total_slot_sum(socket) == max_slots 
+    get_total_slot_sum(socket) == max_slots
   end
 
   @doc """

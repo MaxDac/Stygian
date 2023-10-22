@@ -16,7 +16,7 @@ defmodule StygianWeb.CharacterLive.CharacterRestHelpersTest do
           id: 2,
           name: "Read",
           slots: 2
-        },
+        }
       ]
 
       assert get_resume_state(state, 5) == ["Rest", "Rest", "Read", "Read", nil]

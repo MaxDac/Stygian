@@ -26,6 +26,7 @@ defmodule StygianWeb.RestLive.CharacterRestComponents do
   A checkbox that represents an occupied slot.
   """
   attr :name, :string, required: true
+
   def slot_resume_item(assigns) do
     ~H"""
     <div class="flex items-center pl-3">

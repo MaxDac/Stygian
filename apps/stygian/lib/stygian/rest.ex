@@ -12,6 +12,7 @@ defmodule Stygian.Rest do
   alias Stygian.Rest.RestAction
 
   @rest_limit_hours 24
+  @rest_health_recovery 0
   @rest_sanity_recovery 5
   @rest_cost 5
 
@@ -132,49 +133,21 @@ defmodule Stygian.Rest do
   This operation restores some of the characters characteristics, and sets the new timer.
   It can be performed only once every 24 hours.
   """
-  @spec rest_character(character :: Character.t(), rest_cost :: non_neg_integer()) ::
+  @spec rest_character(character :: Character.t()) ::
           {:ok, Character.t()} | {:error, String.t()} | {:error, Changeset.t()}
-  def rest_character(character, rest_cost \\ @rest_cost) do
-    with {:ok, changeset} <- rest_character_changeset(character, rest_cost) do
-      Repo.update(changeset)
+  def rest_character(character) do
+    with {:ok, character} <- check_character_last_rest(character),
+         {:ok, character} <- check_character_cigs(character, @rest_cost) do
+      attrs =
+        character
+        |> get_empty_attrs()
+        |> apply_rest_cost(@rest_cost)
+        |> apply_simple_rest_effect()
+
+      character
+      |> Character.change_rest_stats(attrs)
+      |> Repo.update()
     end
-  end
-
-  def rest_character_changeset(%{cigs: cigs}, rest_cost) when cigs < rest_cost,
-    do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
-
-  def rest_character_changeset(character, rest_cost) do
-    limit =
-      NaiveDateTime.utc_now()
-      |> NaiveDateTime.add(@rest_limit_hours * -1, :hour)
-
-    case character.rest_timer do
-      nil ->
-        apply_rest_effect_changeset(character, rest_cost)
-
-      rest_timer ->
-        if NaiveDateTime.compare(rest_timer, limit) == :lt do
-          apply_rest_effect_changeset(character, rest_cost)
-        else
-          {:error, "Non puoi ancora far riposare il personaggio."}
-        end
-    end
-  end
-  
-  defp apply_rest_effect_changeset(%{cigs: cigs} = _character, rest_cost) when cigs < rest_cost do
-    {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
-  end
-
-  defp apply_rest_effect_changeset(%{lost_sanity: lost_sanity, cigs: cigs} = character, rest_cost) do
-    attrs = %{
-      lost_sanity: max(lost_sanity - @rest_sanity_recovery, 0),
-      rest_timer: NaiveDateTime.utc_now(),
-      cigs: cigs - rest_cost
-    }
-
-    {:ok, 
-     character
-     |> Character.changeset(attrs)}
   end
 
   @doc """
@@ -183,57 +156,103 @@ defmodule Stygian.Rest do
   @spec rest_character_complex(character :: Character.t(), actions :: list(RestAction.t())) ::
           {:ok, Character.t()} | {:error, String.t()} | {:error, Changeset.t()}
   def rest_character_complex(character, actions) do
-    with {:ok, rest_changeset} <- rest_character_changeset(character, @complex_rest_cost),
-         {:ok, actions} <- check_slots(actions),
-         {:ok, actions_changeset} <- apply_actions_changeset(character, actions) do
-      transaction = 
-        Ecto.Multi.new()
-        |> Ecto.Multi.update(:rest, rest_changeset)
+    with {:ok, character} <- check_character_last_rest(character),
+         {:ok, character} <- check_character_cigs(character, @complex_rest_cost),
+         {:ok, actions} <- check_slots(actions) do
+      attrs =
+        character
+        |> get_empty_attrs()
+        |> apply_rest_cost(@complex_rest_cost)
+        |> apply_simple_rest_effect()
+        |> apply_actions(actions)
 
-      {_, transaction} =
-        actions_changeset
-        |> Enum.reduce({0, transaction}, fn changeset, {count, transaction} ->
-          {count + 1, Ecto.Multi.update(transaction, String.to_atom("action#{count}"), changeset)}
-        end)
-
-      transaction
-      |> Repo.transaction()
+      character
+      |> Character.change_rest_stats(attrs)
+      |> Repo.update()
     end
   end
 
+  defp check_character_last_rest(%{rest_timer: rest_timer} = character) do
+    case rest_timer do
+      nil ->
+        {:ok, character}
+
+      rest_timer ->
+        limit =
+          NaiveDateTime.utc_now()
+          |> NaiveDateTime.add(@rest_limit_hours * -1, :hour)
+
+        if NaiveDateTime.compare(rest_timer, limit) == :lt do
+          {:ok, character}
+        else
+          {:error, "Non puoi ancora far riposare il personaggio."}
+        end
+    end
+  end
+
+  defp check_character_cigs(%{cigs: cigs} = character, cost) when cigs >= cost,
+    do: {:ok, character}
+
+  defp check_character_cigs(_, _),
+    do: {:error, "Non hai abbastanza sigarette per poter pagare l'albergo."}
+
   defp check_slots(actions) do
-    slots_count =
+    slots =
       actions
-      |> Enum.map(&(&1.slots))
+      |> Enum.map(& &1.slots)
       |> Enum.sum()
 
-    if slots_count > @max_allowed_slots do
+    if slots > @max_allowed_slots do
       {:error, "Non puoi aggiungere questa azione, non hai sufficienti slot a disposizione."}
     else
       {:ok, actions}
     end
   end
 
-  defp apply_actions_changeset(character, actions) do
-    {:ok,
-     actions
-     |> Enum.map(&apply_action_changeset(character, &1))
-     |> Enum.filter(&(&1 != nil))}
+  defp get_empty_attrs(
+         %{
+           cigs: cigs,
+           lost_health: lost_health,
+           lost_sanity: lost_sanity,
+           research_points: research_points
+         } = _character
+       ),
+       do: %{
+         cigs: cigs,
+         lost_health: lost_health,
+         lost_sanity: lost_sanity,
+         research_points: research_points,
+         rest_timer: NaiveDateTime.utc_now()
+       }
+
+  defp apply_rest_cost(attrs, rest_cost) do
+    attrs
+    |> Map.update!(:cigs, &(&1 - rest_cost))
   end
 
-  defp apply_action_changeset(character, action)
-
-  defp apply_action_changeset(character, %{research_points: research_points}) when research_points > 0 do
-    Character.change_research_points_changeset(character, %{research_points: research_points})
+  defp apply_simple_rest_effect(attrs) do
+    attrs
+    |> Map.update!(:lost_health, &max(&1 - @rest_health_recovery, 0))
+    |> Map.update!(:lost_sanity, &max(&1 - @rest_sanity_recovery, 0))
   end
 
-  defp apply_action_changeset(%{lost_health: lost_health} = character, %{health: health}) when health > 0 do
-    Character.change_health_and_sanity_changeset(character, %{lost_health: max(0, lost_health - health)})
+  defp apply_actions(attrs, actions) do
+    Enum.reduce(actions, attrs, fn action, attrs -> apply_action(attrs, action) end)
   end
 
-  defp apply_action_changeset(%{lost_sanity: lost_sanity} = character, %{sanity: sanity}) when sanity > 0 do
-    Character.change_health_and_sanity_changeset(character, %{lost_sanity: max(0, lost_sanity - sanity)})
+  defp apply_action(attrs, action)
+
+  defp apply_action(attrs, %{research_points: research_points}) when research_points > 0 do
+    Map.update!(attrs, :research_points, &(&1 + research_points))
   end
 
-  defp apply_action_changeset(_, _), do: nil
+  defp apply_action(attrs, %{health: health}) when health > 0 do
+    Map.update!(attrs, :lost_health, &max(&1 - health, 0))
+  end
+
+  defp apply_action(attrs, %{sanity: sanity}) when sanity > 0 do
+    Map.update!(attrs, :lost_sanity, &max(&1 - sanity, 0))
+  end
+
+  defp apply_action(attrs, _), do: attrs
 end

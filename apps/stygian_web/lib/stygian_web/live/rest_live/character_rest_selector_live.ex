@@ -12,8 +12,6 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
   import StygianWeb.RestLive.CharacterRestComponents
   import StygianWeb.RestLive.CharacterRestHelpers
 
-  @action_description_length 25
-
   @impl true
   def update(assigns, socket) do
     {:ok,
@@ -27,8 +25,12 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
   end
 
   @impl true
-  def handle_event("validate", %{"rest_action_form" => %{"rest_action_id" => rest_action_id} = params}, socket) do
-    socket = 
+  def handle_event(
+        "validate",
+        %{"rest_action_form" => %{"rest_action_id" => rest_action_id} = params},
+        socket
+      ) do
+    socket =
       case get_selected_action(socket, rest_action_id) do
         %{description: description} when not is_nil(description) ->
           assign_selected_action_description(socket, description)
@@ -42,7 +44,7 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
 
   @impl true
   def handle_event("add", %{"rest_action_form" => params}, socket) do
-    changeset = 
+    changeset =
       %RestActionForm{}
       |> RestActionForm.changeset(params)
 
@@ -83,21 +85,22 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
       rest_actions = Rest.list_rest_actions()
 
       {:ok,
-        %{
-          rest_actions: rest_actions,
-          options: Enum.map(rest_actions, &map_action_options/1)
-        }
-      }
+       %{
+         rest_actions: rest_actions,
+         options: Enum.map(rest_actions, &map_action_options/1)
+       }}
     end)
   end
 
-  defp map_action_options(%{
-    id: id,
-    name: name,
-    health: health,
-    sanity: sanity,
-    research_points: research_points
-  } = _action) do
+  defp map_action_options(
+         %{
+           id: id,
+           name: name,
+           health: health,
+           sanity: sanity,
+           research_points: research_points
+         } = _action
+       ) do
     health_description = "Salute: #{health}"
     sanity_description = "Sanità mentale: #{sanity}"
     research_points_description = "Punti Ricerca: #{research_points}"
@@ -110,15 +113,21 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
 
   defp assign_rest_action_state(socket, action_id \\ nil)
 
-  defp assign_rest_action_state(%{assigns: %{
-    rest_action_state: rest_action_state,
-    max_allowed_slots: max_allowed_slots
-  }} = socket, action_id) when not is_nil(action_id) do
+  defp assign_rest_action_state(
+         %{
+           assigns: %{
+             rest_action_state: rest_action_state,
+             max_allowed_slots: max_allowed_slots
+           }
+         } = socket,
+         action_id
+       )
+       when not is_nil(action_id) do
     selected_action = get_selected_action(socket, action_id)
 
-    slot_sum = 
+    slot_sum =
       rest_action_state
-      |> Enum.map(&(&1.slots))
+      |> Enum.map(& &1.slots)
       |> Enum.sum()
 
     case {selected_action, slot_sum} do
@@ -127,18 +136,21 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
 
       _ ->
         socket
-        |> send_notification("Non puoi aggiungere questa azione, non hai sufficienti slot a disposizione.")
+        |> send_notification(
+          "Non puoi aggiungere questa azione, non hai sufficienti slot a disposizione."
+        )
     end
   end
 
-  defp assign_rest_action_state(%{assigns: %{rest_action_state: rest_action_state}} = socket, nil) when is_non_empty_list(rest_action_state) do
+  defp assign_rest_action_state(%{assigns: %{rest_action_state: rest_action_state}} = socket, nil)
+       when is_non_empty_list(rest_action_state) do
     assign(socket, :rest_action_state, rest_action_state)
   end
-  
+
   defp assign_rest_action_state(socket, _) do
     assign(socket, :rest_action_state, [])
   end
-  
+
   defp reassign_rest_action_state(socket) do
     assign(socket, :rest_action_state, [])
   end
@@ -153,9 +165,14 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
     get_selected_action(socket, String.to_integer(action_id))
   end
 
-  defp get_selected_action(%{assigns: %{
-    rest_actions: %{ok?: true, result: result}
-  }}, action_id) do
+  defp get_selected_action(
+         %{
+           assigns: %{
+             rest_actions: %{ok?: true, result: result}
+           }
+         },
+         action_id
+       ) do
     Enum.find(result, &(&1.id == action_id))
   end
 
@@ -168,5 +185,5 @@ defmodule StygianWeb.RestLive.CharacterRestSelectorLive do
 
   defp send_complex_rest(actions) do
     send(self(), {:complex_rest, actions})
-  end 
+  end
 end

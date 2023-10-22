@@ -19,27 +19,22 @@
         <%= @selected_action_description %>
       </div>
 
-      <.plus_button 
-        type="submit" 
-        phx-disable-with="..."
-        title="Aggiungi"
-        class="w-full"
-      />
+      <.plus_button type="submit" phx-disable-with="..." title="Aggiungi" class="w-full" />
     </div>
   </.simple_form>
 
-  <.button 
-    type="button" 
-    phx-click={JS.push("reset_choice", target: @myself)} 
+  <.button
+    type="button"
+    phx-click={JS.push("reset_choice", target: @myself)}
     phx-disable-with="..."
     class="w-full mt-4"
   >
     Resetta scelte
   </.button>
 
-  <.button 
-    type="button" 
-    phx-click={JS.push("complex_rest", target: @myself)} 
+  <.button
+    type="button"
+    phx-click={JS.push("complex_rest", target: @myself)}
     phx-disable-with="..."
     class="w-full mt-4"
   >
