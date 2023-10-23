@@ -4,6 +4,7 @@ defmodule Stygian.Characters do
   """
 
   import Ecto.Query, warn: false
+  import Stygian
 
   alias Ecto.Changeset
 
@@ -811,7 +812,7 @@ defmodule Stygian.Characters do
   @spec assign_experience_points(character_id :: non_neg_integer(), attrs :: map()) ::
           {:ok, Character.t()} | {:error, Changeset.t()}
   def assign_experience_points(character_id, %{"experience" => experience}) do
-    experience = extract_number(experience)
+    experience = id_from_params(experience)
 
     case get_character(character_id) do
       nil ->
@@ -834,6 +835,27 @@ defmodule Stygian.Characters do
     end
   end
 
+  @doc """
+  Assigns research points to a character.
+  """
+  @spec assign_research_points(character_id :: non_neg_integer(), attrs :: map()) ::
+          {:ok, Character.t()} | {:error, Changeset.t()}
+  def assign_research_points(character_id, %{"research_points" => research_points}) do
+    research_points = id_from_params(research_points)
+
+    case get_character(character_id) do
+      nil ->
+        {:error, Changeset.add_error(%Changeset{}, :character_id, "Il personaggio non esiste.")}
+
+      character ->
+        character
+        |> Character.change_research_points_changeset(%{
+          "research_points" => research_points
+        })
+        |> Repo.update()
+    end
+  end
+
   @spec assign_character_status(character_id :: non_neg_integer(), params :: map()) ::
           {:ok, Character.t()} | {:error, Changeset.t()}
   def assign_character_status(character_id, %{
@@ -842,9 +864,9 @@ defmodule Stygian.Characters do
         "fatigue" => fatigue
       }) do
     {health, sanity, fatigue} = {
-      extract_number(health),
-      extract_number(sanity),
-      min(extract_number(fatigue), 100)
+      id_from_params(health),
+      id_from_params(sanity),
+      min(id_from_params(fatigue), 100)
     }
 
     case get_character(character_id) do
@@ -882,9 +904,6 @@ defmodule Stygian.Characters do
         |> Repo.update()
     end
   end
-
-  defp extract_number(exp) when is_binary(exp), do: String.to_integer(exp)
-  defp extract_number(exp), do: exp
 
   alias Stygian.Characters.CharacterEffect
 
