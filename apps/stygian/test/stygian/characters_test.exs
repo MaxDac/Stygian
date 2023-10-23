@@ -489,6 +489,17 @@ defmodule Stygian.CharactersTest do
              } = changeset
     end
 
+    test "assign_research_points/2 correctly assign experience points to the character" do
+      %{id: character_id} = character_fixture_complete(%{research_points: 0})
+
+      assert {:ok, _} =
+               Characters.assign_research_points(character_id, %{"research_points" => "3"})
+
+      character = Characters.get_character!(character_id)
+
+      assert 3 == character.research_points
+    end
+
     test "assign_character_status/2 correctly assign the right health and sanity loss to the character, along with its fatigue" do
       %{id: character_id} =
         character_fixture_complete(%{

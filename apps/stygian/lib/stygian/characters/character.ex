@@ -121,6 +121,12 @@ defmodule Stygian.Characters.Character do
     |> validate_required([:experience])
   end
 
+  def change_research_points_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:research_points])
+    |> validate_required([:research_points])
+  end
+
   def change_status_changeset(character, attrs) do
     character
     |> cast(attrs, [:lost_health, :lost_sanity, :last_cigs_effect, :fatigue])
