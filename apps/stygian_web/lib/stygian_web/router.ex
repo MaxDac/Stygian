@@ -214,6 +214,8 @@ defmodule StygianWeb.Router do
 
       live "/organisations/:id", OrganisationLive.Show, :show
       live "/organisations/:id/show/edit", OrganisationLive.Show, :edit
+
+      live "/chats", AdminLive.MapChatDashboardLive, :index
     end
   end
 end
