@@ -9,6 +9,7 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditLive do
   alias Stygian.Skills
 
   alias StygianWeb.AdminLive.CharacterSheetEditExp
+  alias StygianWeb.AdminLive.CharacterSheetEditResearch
   alias StygianWeb.AdminLive.CharacterSheetEditSkill
   alias StygianWeb.AdminLive.CharacterSheetEditStatus
 
@@ -39,6 +40,21 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditLive do
         {:noreply,
          socket
          |> put_flash(:error, "C'è stato un errore nell'assegnazione dell'esperienza.")}
+    end
+  end
+
+  @impl true
+  def handle_info({:update_research, %{"character_id" => character_id} = params}, socket) do
+    case Characters.assign_research_points(character_id, params) do
+      {:ok, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Punti ricerca assegnata con successo.")}
+
+      {:error, _changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "C'è stato un errore nell'assegnazione dei punti ricerca.")}
     end
   end
 
