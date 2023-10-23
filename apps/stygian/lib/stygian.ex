@@ -15,18 +15,23 @@ defmodule Stygian do
   @doc """
   Determines whether the string is empty or null.
   """
-  defguard is_not_null_nor_emtpy(string)
+  defguard is_not_null_nor_empty(string)
            when not is_nil(string) and is_binary(string) and string != ""
 
   @doc """
   Tries to extract the integer value from the string. Returns nil if the string is empty or null, or not a number.
   """
-  @spec id_from_params(String.t()) :: integer() | nil
-  def id_from_params(param) when is_not_null_nor_emtpy(param) do
+  @spec id_from_params(any()) :: number() | nil
+  def id_from_params(param)
+
+  def id_from_params(param) when is_not_null_nor_empty(param) do
     String.to_integer(param)
   rescue
-    _ -> nil
+    _ ->
+      nil
   end
+
+  def id_from_params(number) when is_number(number), do: number
 
   def id_from_params(_), do: nil
 end
