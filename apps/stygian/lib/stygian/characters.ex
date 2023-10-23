@@ -46,6 +46,8 @@ defmodule Stygian.Characters do
   @character_sanity_from_cig 3
 
   @character_maximum_fatigue 100
+  @fatigue_effect_for_dice_start 80
+  @fatigue_levels_steps 10
 
   @spec get_max_available_attribute_points(character :: Character.t()) :: non_neg_integer()
   def get_max_available_attribute_points(character)
@@ -523,14 +525,48 @@ defmodule Stygian.Characters do
   @doc """
   Returns the character skill value, modified by the existing effects on the character.
   """
+  @spec get_character_skill_effect_value(
+          character_id :: non_neg_integer(),
+          skill_id :: non_neg_integer()
+        ) ::
+          non_neg_integer()
   def get_character_skill_effect_value(character_id, skill_id) do
     %{value: value} =
       get_character_skill(character_id, skill_id)
 
+    value
+    |> get_character_skill_object_effects(character_id, skill_id)
+    |> get_character_skill_status_effects(character_id)
+    |> set_character_skill_minimum_effect()
+  end
+
+  defp get_character_skill_object_effects(original_value, character_id, skill_id) do
     list_active_character_skill_effects(character_id)
     |> Enum.filter(&(&1.skill_id == skill_id))
-    |> Enum.reduce(value, fn %{value: value}, acc -> acc + value end)
+    |> Enum.reduce(original_value, fn %{value: value}, acc -> acc + value end)
   end
+
+  defp get_character_skill_status_effects(original_value, character_id) do
+    case get_character(character_id) do
+      %{fatigue: fatigue} ->
+        get_character_skill_fatigue_effects(original_value, fatigue)
+
+      _ ->
+        original_value
+    end
+  end
+
+  defp get_character_skill_fatigue_effects(original_value, fatigue)
+       when fatigue < @fatigue_effect_for_dice_start,
+       do: original_value
+
+  defp get_character_skill_fatigue_effects(original_value, fatigue) do
+    penalty = 1 + div(fatigue - @fatigue_effect_for_dice_start, @fatigue_levels_steps)
+    original_value - penalty
+  end
+
+  defp set_character_skill_minimum_effect(value) when value < 2, do: 2
+  defp set_character_skill_minimum_effect(value), do: value
 
   @doc """
   Creates a character_skill.

@@ -292,7 +292,7 @@ defmodule Stygian.CharactersTest do
       assert nil == Characters.get_character_skill_by_skill_name(character, "some skill")
     end
 
-    test "get_character_skill_effect_value/2 returns the skill value for the character with the right effects" do
+    test "get_character_skill_effect_value/2 returns the skill value for the character with the right object effects" do
       %{id: character_id} = character_fixture()
       %{id: skill_id} = skill_fixture(%{name: "some skill"})
       %{id: object_id} = object_fixture(%{name: "some object"})
@@ -306,6 +306,38 @@ defmodule Stygian.CharactersTest do
       Characters.use_object(character_object_id)
 
       assert 5 == Characters.get_character_skill_effect_value(character_id, skill_id)
+    end
+
+    test "get_character_skill_effect_value/2 returns the skill value for the character without fatigue effects" do
+      %{id: character_id} = character_fixture(%{fatigue: 70})
+      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 4})
+
+      assert 4 == Characters.get_character_skill_effect_value(character_id, skill_id)
+    end
+
+    test "get_character_skill_effect_value/2 returns the skill value for the character with minimum fatigue effects" do
+      %{id: character_id} = character_fixture(%{fatigue: 80})
+      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 4})
+
+      assert 3 == Characters.get_character_skill_effect_value(character_id, skill_id)
+    end
+
+    test "get_character_skill_effect_value/2 returns the skill value for the character with right fatigue effects" do
+      %{id: character_id} = character_fixture(%{fatigue: 100})
+      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 3})
+
+      assert 2 == Characters.get_character_skill_effect_value(character_id, skill_id)
+    end
+
+    test "get_character_skill_effect_value/2 returns the minimum skill value for the character with right fatigue effects" do
+      %{id: character_id} = character_fixture(%{fatigue: 90})
+      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 4})
+
+      assert 2 == Characters.get_character_skill_effect_value(character_id, skill_id)
     end
 
     test "create_character_skill/1 with valid data creates a character_skill" do
