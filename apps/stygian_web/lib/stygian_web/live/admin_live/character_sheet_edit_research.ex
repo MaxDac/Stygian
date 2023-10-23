@@ -55,13 +55,17 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditResearch do
   end
 
   @impl true
-  def handle_event("validate", %{
-    "character_research_form" => %{"character_id" => character_id} = params
-  }, %{assigns: %{selected_character_research_id: research_character_id}} = socket) 
-      when is_not_null_nor_emtpy(character_id) and character_id != research_character_id  do
+  def handle_event(
+        "validate",
+        %{
+          "character_research_form" => %{"character_id" => character_id} = params
+        },
+        %{assigns: %{selected_character_research_id: research_character_id}} = socket
+      )
+      when is_not_null_nor_emtpy(character_id) and character_id != research_character_id do
     character_id = id_from_params(character_id)
 
-    socket = 
+    socket =
       case Characters.get_character!(character_id) do
         %{research_points: research_points} ->
           socket
@@ -102,8 +106,9 @@ defmodule StygianWeb.AdminLive.CharacterSheetEditResearch do
 
   # Changing it to string so that the equality between the cached value and the 
   # param from the form will be of the same type.
-  defp assign_selected_character_research_id(socket, character_id) when not is_binary(character_id), do:
-    assign_selected_character_research_id(socket, to_string(character_id))
+  defp assign_selected_character_research_id(socket, character_id)
+       when not is_binary(character_id),
+       do: assign_selected_character_research_id(socket, to_string(character_id))
 
   defp assign_selected_character_research_id(socket, character_id) do
     assign(socket, :selected_character_research_id, character_id)

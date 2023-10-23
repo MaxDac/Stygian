@@ -14,7 +14,7 @@ defmodule Stygian.Characters.CharacterResearchForm do
           research_points: non_neg_integer()
         }
 
-  embedded_schema do 
+  embedded_schema do
     field :character_id, :id
     field :research_points, :integer
   end

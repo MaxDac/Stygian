@@ -15,7 +15,8 @@ defmodule Stygian do
   @doc """
   Determines whether the string is empty or null.
   """
-  defguard is_not_null_nor_emtpy(string) when not is_nil(string) and is_binary(string) and string != ""
+  defguard is_not_null_nor_emtpy(string)
+           when not is_nil(string) and is_binary(string) and string != ""
 
   @doc """
   Tries to extract the integer value from the string. Returns nil if the string is empty or null, or not a number.
