@@ -10,7 +10,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsBarComponent do
   """
   attr :stat_name, :string, required: true
   attr :percentage, :float, required: true
-  attr :bar_color, :string, required: true
+  attr :bar_bg_color, :string, required: true
   attr :internal_text_color, :string, required: false, default: "zinc-100"
   attr :external_text_color, :string, required: false, default: "zinc-900"
 
@@ -22,7 +22,7 @@ defmodule StygianWeb.CharacterLive.CharacterSheetStatsBarComponent do
       </p>
 
       <div class="w-full h-6 bg-transparent rounded-full border border-zinc-700 flex flex-row">
-        <div class={"h-6 bg-#{@bar_color} rounded-full text-center"} style={"width: #{@percentage}%"}>
+        <div class={"h-6 rounded-full text-center #{@bar_bg_color}"} style={"width: #{@percentage}%"}>
           <span :if={@percentage >= 12.0} class={"text-#{@internal_text_color}"}>
             <%= @percentage %> %
           </span>
