@@ -236,13 +236,46 @@ defmodule Stygian.MapsTest do
       one_minute_ago = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :minute)
       now = NaiveDateTime.utc_now()
 
-      chat_fixture(%{character_id: character1.id, map_id: map1.id, updated_at: yesterday, inserted_at: yesterday})
-      chat_fixture(%{character_id: character2.id, map_id: map1.id, updated_at: one_hour_ago, inserted_at: one_hour_ago})
-      entry3 = chat_fixture(%{character_id: character2.id, map_id: map1.id, updated_at: ten_minute_ago, inserted_at: ten_minute_ago})
-      entry4 = chat_fixture(%{character_id: character1.id, map_id: map1.id, updated_at: one_minute_ago, inserted_at: one_minute_ago})
-      entry5 = chat_fixture(%{character_id: character2.id, map_id: map1.id, updated_at: now, inserted_at: now})
+      chat_fixture(%{
+        character_id: character1.id,
+        map_id: map1.id,
+        updated_at: yesterday,
+        inserted_at: yesterday
+      })
 
-      _entry_on_another_chat = chat_fixture(%{character_id: character1.id, map_id: map2.id, inserted_at: now})
+      chat_fixture(%{
+        character_id: character2.id,
+        map_id: map1.id,
+        updated_at: one_hour_ago,
+        inserted_at: one_hour_ago
+      })
+
+      entry3 =
+        chat_fixture(%{
+          character_id: character2.id,
+          map_id: map1.id,
+          updated_at: ten_minute_ago,
+          inserted_at: ten_minute_ago
+        })
+
+      entry4 =
+        chat_fixture(%{
+          character_id: character1.id,
+          map_id: map1.id,
+          updated_at: one_minute_ago,
+          inserted_at: one_minute_ago
+        })
+
+      entry5 =
+        chat_fixture(%{
+          character_id: character2.id,
+          map_id: map1.id,
+          updated_at: now,
+          inserted_at: now
+        })
+
+      _entry_on_another_chat =
+        chat_fixture(%{character_id: character1.id, map_id: map2.id, inserted_at: now})
 
       logs = Maps.list_map_chats_logs(%{map_id: map1.id, date_from: ten_minute_ago, date_to: now})
 

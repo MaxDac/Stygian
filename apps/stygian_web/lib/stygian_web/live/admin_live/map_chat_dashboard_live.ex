@@ -14,14 +14,14 @@ defmodule StygianWeb.AdminLive.MapChatDashboardLive do
 
   @impl true
   def mount(_, _, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> assign_chats()}
   end
 
   @impl true
   def handle_info({:filters, params}, socket) do
-    {:noreply, 
+    {:noreply,
      socket
      |> assign_chats(params)}
   end
@@ -33,7 +33,7 @@ defmodule StygianWeb.AdminLive.MapChatDashboardLive do
   end
 
   defp assign_chats(socket, filters) do
-    changeset = 
+    changeset =
       %MapChatsSelectionForm{}
       |> MapChatsSelectionForm.changeset(filters)
       |> IO.inspect(label: "changeset")

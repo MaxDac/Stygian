@@ -15,7 +15,7 @@ defmodule Stygian.Maps.MapChatsSelectionForm do
           date_to: NaiveDateTime.t()
         }
 
-  embedded_schema do 
+  embedded_schema do
     field :map_id, :id
     field :date_from, :naive_datetime
     field :date_to, :naive_datetime

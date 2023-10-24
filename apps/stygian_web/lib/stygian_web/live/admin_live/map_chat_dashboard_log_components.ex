@@ -2,7 +2,7 @@ defmodule StygianWeb.AdminLive.MapChatDashboardLogComponents do
   @moduledoc """
   This component will show the chat logs for the selected filters.
   """
-  
+
   use StygianWeb, :html
 
   @doc """

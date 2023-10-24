@@ -212,13 +212,13 @@ defmodule Stygian.Maps do
 
   @doc """
   Shows the logs of the map chats for the given filters.
-  """ 
+  """
   @spec list_map_chats_logs(filters :: MapChatsSelectionForm.t()) :: list(Chat.t())
   def list_map_chats_logs(%{
-    map_id: map_id,
-    date_from: date_from,
-    date_to: date_to
-  }) do
+        map_id: map_id,
+        date_from: date_from,
+        date_to: date_to
+      }) do
     Chat
     |> from()
     |> where([c], c.map_id == ^map_id and c.updated_at >= ^date_from and c.updated_at <= ^date_to)

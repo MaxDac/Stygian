@@ -2,7 +2,7 @@ defmodule StygianWeb.AdminLive.MapChatDashboardForm do
   @moduledoc """
   Form component to select the map and the time range to show the chat logs.
   """
-  
+
   use StygianWeb, :live_component
 
   alias Stygian.Maps
@@ -10,7 +10,7 @@ defmodule StygianWeb.AdminLive.MapChatDashboardForm do
 
   @impl true
   def update(assigns, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> assign(assigns)
      |> assign_maps()
@@ -29,23 +29,11 @@ defmodule StygianWeb.AdminLive.MapChatDashboardForm do
         phx-submit="submit"
       >
         <div class="w-full flex flex-row justify-between space-x-5">
-          <.map_selection 
-            field={@form[:map_id]} 
-            label="Mappa" 
-            maps={@maps}
-          />
+          <.map_selection field={@form[:map_id]} label="Mappa" maps={@maps} />
 
-          <.input 
-            field={@form[:date_from]} 
-            label="Da:" 
-            type="datetime-local"
-          />
+          <.input field={@form[:date_from]} label="Da:" type="datetime-local" />
 
-          <.input 
-            field={@form[:date_to]} 
-            label="A:" 
-            type="datetime-local"
-          />
+          <.input field={@form[:date_to]} label="A:" type="datetime-local" />
 
           <.button type="submit">
             Cerca
@@ -69,22 +57,21 @@ defmodule StygianWeb.AdminLive.MapChatDashboardForm do
 
   defp assign_maps(socket) do
     assign_async(socket, :maps, fn ->
-      {:ok, 
-        %{
-          maps: Maps.list_maps()
-        }
-      }
+      {:ok,
+       %{
+         maps: Maps.list_maps()
+       }}
     end)
   end
 
   defp assign_form(socket, attrs \\ nil)
 
   defp assign_form(socket, nil) do
-    form = 
+    form =
       %MapChatsSelectionForm{}
       |> MapChatsSelectionForm.changeset(%{
         date_from: DateTime.add(DateTime.utc_now(), -1, :hour),
-        date_to: DateTime.utc_now(),
+        date_to: DateTime.utc_now()
       })
       |> to_form()
 
@@ -93,7 +80,7 @@ defmodule StygianWeb.AdminLive.MapChatDashboardForm do
   end
 
   defp assign_form(socket, attrs) do
-    form = 
+    form =
       %MapChatsSelectionForm{}
       |> MapChatsSelectionForm.changeset(attrs)
       |> to_form()
