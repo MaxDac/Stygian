@@ -22,6 +22,7 @@ defmodule Stygian.Characters do
   alias Stygian.Objects.Effect
   alias Stygian.Objects.Object
 
+  alias Stygian.Skills
   alias Stygian.Skills.Skill
 
   @max_attribute_points 9
@@ -537,7 +538,7 @@ defmodule Stygian.Characters do
 
     value
     |> get_character_skill_object_effects(character_id, skill_id)
-    |> get_character_skill_status_effects(character_id)
+    |> get_character_skill_status_effects(character_id, skill_id)
     |> set_character_skill_minimum_effect()
   end
 
@@ -547,9 +548,10 @@ defmodule Stygian.Characters do
     |> Enum.reduce(original_value, fn %{value: value}, acc -> acc + value end)
   end
 
-  defp get_character_skill_status_effects(original_value, character_id) do
-    case get_character(character_id) do
-      %{fatigue: fatigue} ->
+  defp get_character_skill_status_effects(original_value, character_id, skill_id) do
+    case {get_character(character_id), Skills.is_skill_an_attribute?(skill_id)} do
+      # Only if the skill is an attribute, the fatigue effect will be applied.
+      {%{fatigue: fatigue}, true} ->
         get_character_skill_fatigue_effects(original_value, fatigue)
 
       _ ->
