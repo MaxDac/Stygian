@@ -11,6 +11,26 @@ defmodule Stygian.Skills do
   alias Stygian.Skills.SkillType
 
   @non_creational_skill_type_name "Non creational"
+  @attribute_skill_type_name "Attribute"
+
+  @doc """
+  Gets the name of the Attribute skill type.
+  """
+  @spec get_attribute_skill_type_name() :: String.t()
+  def get_attribute_skill_type_name, do: @attribute_skill_type_name
+
+  @doc """
+  Returns the item with the `is_attribute` field populated based on the skill type.
+  """
+  @spec add_is_attribute(Skill.t()) :: Skill.t()
+  def add_is_attribute(skill)
+
+  def add_is_attribute(%{skill_types: skill_types} = skill) when length(skill_types) > 0 do
+    skill
+    |> Map.put(:is_attribute, Enum.any?(skill_types, &(&1.name == @attribute_skill_type_name)))
+  end
+
+  def add_is_attribute(skill), do: skill
 
   @doc """
   Returns the list of skill_types.
@@ -122,7 +142,7 @@ defmodule Stygian.Skills do
   end
 
   @doc """
-  Like the previous function, returns the complete list of skills, but with 
+  Like the previous function, returns the complete list of skills, but with
   the skill_types preloaded.
 
   The skills will have the `is_attribute` flag populated
@@ -131,7 +151,7 @@ defmodule Stygian.Skills do
     Skill
     |> preload(:skill_types)
     |> Repo.all()
-    |> Enum.map(&Skill.add_is_attribute/1)
+    |> Enum.map(&add_is_attribute/1)
   end
 
   @doc """
@@ -157,6 +177,18 @@ defmodule Stygian.Skills do
     Skill
     |> preload(:skill_types)
     |> Repo.get!(id)
+  end
+
+  @doc """
+  Determines whether the skill is an attribute or not.
+  """
+  @spec is_skill_an_attribute?(skill_id :: non_neg_integer()) :: boolean()
+  def is_skill_an_attribute?(skill_id) do
+    SkillRelSkillType
+    |> from()
+    |> join(:inner, [srt], st in SkillType, on: srt.skill_type_id == st.id)
+    |> where([srt, st], srt.skill_id == ^skill_id and st.name == @attribute_skill_type_name)
+    |> Repo.exists?()
   end
 
   @doc """

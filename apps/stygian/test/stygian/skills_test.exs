@@ -129,7 +129,7 @@ defmodule Stygian.SkillsTest do
       skill =
         Skills.get_preloaded_skill!(skill_id)
 
-      skill = Skill.add_is_attribute(skill)
+      skill = Skills.add_is_attribute(skill)
       refute skill.is_attribute
     end
 
@@ -140,7 +140,7 @@ defmodule Stygian.SkillsTest do
       skill =
         Skills.get_preloaded_skill!(skill_id)
 
-      skill = Skill.add_is_attribute(skill)
+      skill = Skills.add_is_attribute(skill)
       refute skill.is_attribute
     end
 
@@ -154,13 +154,31 @@ defmodule Stygian.SkillsTest do
       skill =
         Skills.get_preloaded_skill!(skill_id)
 
-      skill = Skill.add_is_attribute(skill)
+      skill = Skills.add_is_attribute(skill)
       assert skill.is_attribute
     end
 
     test "get_skill!/1 returns the skill with given id" do
       skill = skill_fixture()
       assert Skills.get_skill!(skill.id) == skill
+    end
+
+    test "is_skill_an_attribute?/1 returns true when the skill type is an attribute" do
+      skill_type = skill_type_fixture(%{name: "Attribute"})
+      skill = skill_fixture()
+
+      assert {:ok, _} = Skills.add_skill_type_to_skill(skill, skill_type)
+
+      assert Skills.is_skill_an_attribute?(skill.id)
+    end
+
+    test "is_skill_an_attribute?/1 returns false when the skill type is not an attribute" do
+      skill_type = skill_type_fixture(%{name: "Skill"})
+      skill = skill_fixture()
+
+      assert {:ok, _} = Skills.add_skill_type_to_skill(skill, skill_type)
+
+      refute Skills.is_skill_an_attribute?(skill.id)
     end
 
     test "get_preloaded_skill!/1 returns the skill with given id with the skill types preloaded" do
