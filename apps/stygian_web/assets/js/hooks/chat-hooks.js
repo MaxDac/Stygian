@@ -16,7 +16,8 @@ export function addChatHooks(Hooks) {
     mounted() {
       this.el.focus()
       this.el.onkeydown = (e) => {
-        if (e.key === "Enter") {
+        // If the value is not greater than 200 the textarea can't dispatch the event
+        if (e.key === "Enter" && this.el.value.length >= 200) {
           // Dispatching the event, that will bubble up to the form
           const event = new Event("submit", { bubbles: true, cancelable: true })
           this.el.form.dispatchEvent(event)
