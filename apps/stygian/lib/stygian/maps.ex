@@ -5,14 +5,15 @@ defmodule Stygian.Maps do
 
   import Ecto.Query, warn: false
 
-  alias Stygian.Maps.MapChatsSelectionForm
   alias Ecto.Changeset
   alias Stygian.Repo
 
   alias Stygian.Characters
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
+
   alias Stygian.Maps.Map, as: LandMap
+  alias Stygian.Maps.MapChatsSelectionForm
   alias Stygian.Maps.PrivateMapCharacter
 
   @default_limit_in_hour 2

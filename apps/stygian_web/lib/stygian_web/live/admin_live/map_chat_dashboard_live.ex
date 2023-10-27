@@ -36,7 +36,6 @@ defmodule StygianWeb.AdminLive.MapChatDashboardLive do
     changeset =
       %MapChatsSelectionForm{}
       |> MapChatsSelectionForm.changeset(filters)
-      |> IO.inspect(label: "changeset")
 
     if changeset.valid? do
       stream(socket, :chats, Maps.list_map_chats_logs(changeset.changes))
