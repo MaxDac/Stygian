@@ -52,7 +52,9 @@ defmodule StygianWeb.AdminLive.MapChatDashboardForm do
   @impl true
   def handle_event("submit", %{"map_chats_selection_form" => params}, socket) do
     send_form(params)
-    {:noreply, assign_form(socket)}
+      
+    # There is no reason to reset the form in this case
+    {:noreply, assign_form(socket, params)}
   end
 
   defp assign_maps(socket) do
