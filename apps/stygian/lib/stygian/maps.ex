@@ -11,7 +11,9 @@ defmodule Stygian.Maps do
   alias Stygian.Characters
   alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
+
   alias Stygian.Maps.Map, as: LandMap
+  alias Stygian.Maps.MapChatsSelectionForm
   alias Stygian.Maps.PrivateMapCharacter
 
   @default_limit_in_hour 2
@@ -210,6 +212,23 @@ defmodule Stygian.Maps do
   end
 
   @doc """
+  Shows the logs of the map chats for the given filters.
+  """
+  @spec list_map_chats_logs(filters :: MapChatsSelectionForm.t()) :: list(Chat.t())
+  def list_map_chats_logs(%{
+        map_id: map_id,
+        date_from: date_from,
+        date_to: date_to
+      }) do
+    Chat
+    |> from()
+    |> where([c], c.map_id == ^map_id and c.updated_at >= ^date_from and c.updated_at <= ^date_to)
+    |> order_by([c], asc: c.updated_at)
+    |> preload(:character)
+    |> Repo.all()
+  end
+
+  @doc """
   Creates a chat.
 
   ## Examples
@@ -231,6 +250,15 @@ defmodule Stygian.Maps do
       {:ok, chat} -> {:ok, Repo.preload(chat, :character)}
       error -> error
     end
+  end
+
+  @doc """
+  Creates a chat allowing a custom `inserted_at` field 
+  """
+  def create_chat_test(attrs \\ %{}) do
+    %Chat{}
+    |> Chat.test_changeset(attrs)
+    |> Repo.insert()
   end
 
   @type chat_entry_request() :: %{

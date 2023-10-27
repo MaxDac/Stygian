@@ -29,18 +29,15 @@ defmodule Stygian.MapsFixtures do
   Generate a chat.
   """
   def chat_fixture(attrs \\ %{}) do
-    map = map_fixture()
-    character = CharactersFixtures.character_fixture()
-
     {:ok, chat} =
       attrs
+      |> CharactersFixtures.check_character()
+      |> check_map()
       |> Enum.into(%{
         text: "some text",
-        type: :text,
-        character_id: character.id,
-        map_id: map.id
+        type: :text
       })
-      |> Stygian.Maps.create_chat()
+      |> Stygian.Maps.create_chat_test()
 
     chat
   end
@@ -68,5 +65,15 @@ defmodule Stygian.MapsFixtures do
 
     {:ok, private_map_character} = Maps.create_private_map_character(attrs)
     private_map_character
+  end
+
+  @doc """
+  Checks whether the map exists in the attribute map or not. 
+  """
+  def check_map(%{map_id: _} = attrs), do: attrs
+
+  def check_map(attrs) do
+    %{id: map_id} = map_fixture()
+    Map.put(attrs, :map_id, map_id)
   end
 end

@@ -152,4 +152,52 @@ defmodule StygianWeb.EntitiesSelectors do
     </div>
     """
   end
+
+  @doc """
+  Exposes a list of maps.
+  To guarantee maximum performance, the list of maps must be provided in input as an assign.
+  """
+  attr :field, FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :label, :string, default: nil
+  attr :maps, :list, required: true
+
+  def map_selection(%{maps: %AsyncResult{}} = assigns) do
+    ~H"""
+    <.async_result :let={maps} assign={@maps}>
+      <:loading><.spinner /></:loading>
+      <:failed :let={_reason}>Errore nel caricare le locations.</:failed>
+
+      <.map_selection maps={maps} field={@field} label={@label} />
+    </.async_result>
+    """
+  end
+
+  def map_selection(%{maps: maps} = assigns) do
+    options =
+      maps
+      |> Enum.map(&{&1.name, &1.id})
+
+    assigns =
+      assigns
+      |> Map.put(:options, options)
+      |> Map.delete(:maps)
+
+    map_selection(assigns)
+  end
+
+  def map_selection(assigns) do
+    ~H"""
+    <div>
+      <.input
+        field={@field}
+        label={@label}
+        type="select"
+        prompt="Seleziona la location"
+        options={@options}
+      />
+    </div>
+    """
+  end
 end
