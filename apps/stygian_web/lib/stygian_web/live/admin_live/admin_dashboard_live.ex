@@ -25,6 +25,7 @@ defmodule StygianWeb.AdminLive.AdminDashboardLive do
       <.link class="text-xl font-typewriter" patch={~p"/admin/organisations"}>
         Edita Organizzazioni
       </.link>
+      <.link class="text-xl font-typewriter" patch={~p"/admin/chats"}>Chat logs</.link>
     </div>
     """
   end

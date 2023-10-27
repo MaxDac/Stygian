@@ -222,6 +222,69 @@ defmodule Stygian.MapsTest do
       chat = chat_fixture()
       assert %Ecto.Changeset{} = Maps.change_chat(chat)
     end
+
+    test "list_map_chats_logs/1 returns the right chat logs for the given filters" do
+      character1 = character_fixture(%{name: "Character 1"})
+      character2 = character_fixture(%{name: "Character 2"})
+
+      map1 = map_fixture(%{name: "Map 1"})
+      map2 = map_fixture(%{name: "Map 2"})
+
+      yesterday = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :day)
+      one_hour_ago = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :hour)
+      ten_minute_ago = NaiveDateTime.add(NaiveDateTime.utc_now(), -10, :minute)
+      one_minute_ago = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :minute)
+      now = NaiveDateTime.utc_now()
+
+      chat_fixture(%{
+        character_id: character1.id,
+        map_id: map1.id,
+        updated_at: yesterday,
+        inserted_at: yesterday
+      })
+
+      chat_fixture(%{
+        character_id: character2.id,
+        map_id: map1.id,
+        updated_at: one_hour_ago,
+        inserted_at: one_hour_ago
+      })
+
+      entry3 =
+        chat_fixture(%{
+          character_id: character2.id,
+          map_id: map1.id,
+          updated_at: ten_minute_ago,
+          inserted_at: ten_minute_ago
+        })
+
+      entry4 =
+        chat_fixture(%{
+          character_id: character1.id,
+          map_id: map1.id,
+          updated_at: one_minute_ago,
+          inserted_at: one_minute_ago
+        })
+
+      entry5 =
+        chat_fixture(%{
+          character_id: character2.id,
+          map_id: map1.id,
+          updated_at: now,
+          inserted_at: now
+        })
+
+      _entry_on_another_chat =
+        chat_fixture(%{character_id: character1.id, map_id: map2.id, inserted_at: now})
+
+      logs = Maps.list_map_chats_logs(%{map_id: map1.id, date_from: ten_minute_ago, date_to: now})
+
+      assert 3 == Enum.count(logs)
+
+      assert Enum.any?(logs, &(&1.id == entry3.id))
+      assert Enum.any?(logs, &(&1.id == entry4.id))
+      assert Enum.any?(logs, &(&1.id == entry5.id))
+    end
   end
 
   describe "Dice throw chat creation" do

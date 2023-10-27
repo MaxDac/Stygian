@@ -61,4 +61,16 @@ defmodule Stygian.Maps.Chat do
   end
 
   defp validate_chat_text_min_length(changeset, _), do: changeset
+
+  @doc false
+  def test_changeset(chat, attrs) do
+    chat
+    |> cast(attrs, [:text, :type, :character_id, :map_id, :inserted_at, :updated_at])
+    |> validate_chat_text_not_null()
+    |> validate_chat_text_max_length()
+    |> validate_chat_text_min_length(attrs)
+    |> foreign_key_constraint(:character_id)
+    |> foreign_key_constraint(:map_id)
+    |> validate_required([:type, :character_id, :map_id])
+  end
 end
