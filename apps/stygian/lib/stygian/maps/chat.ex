@@ -55,8 +55,8 @@ defmodule Stygian.Maps.Chat do
   defp validate_chat_text_min_length(changeset, %{"type" => :text}) do
     changeset
     |> validate_length(:text,
-      min: 200,
-      message: "La lunghezza minima della frase deve essere di 200 caratteri"
+      min: 150,
+      message: "La lunghezza minima della frase deve essere di 150 caratteri"
     )
   end
 
