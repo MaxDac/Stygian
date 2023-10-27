@@ -318,7 +318,10 @@ defmodule Stygian.CharactersTest do
 
     test "get_character_skill_effect_value/2 returns the skill value for the character with minimum fatigue effects" do
       %{id: character_id} = character_fixture(%{fatigue: 80})
-      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      skill_type = skill_type_fixture(%{name: "Attribute"})
+      %{id: skill_id} = skill = skill_fixture(%{name: "some skill"})
+      Skills.add_skill_type_to_skill(skill, skill_type)
+
       character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 4})
 
       assert 3 == Characters.get_character_skill_effect_value(character_id, skill_id)
@@ -326,7 +329,10 @@ defmodule Stygian.CharactersTest do
 
     test "get_character_skill_effect_value/2 returns the skill value for the character with right fatigue effects" do
       %{id: character_id} = character_fixture(%{fatigue: 100})
-      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      skill_type = skill_type_fixture(%{name: "Attribute"})
+      %{id: skill_id} = skill = skill_fixture(%{name: "some skill"})
+      Skills.add_skill_type_to_skill(skill, skill_type)
+
       character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 3})
 
       assert 2 == Characters.get_character_skill_effect_value(character_id, skill_id)
@@ -334,10 +340,24 @@ defmodule Stygian.CharactersTest do
 
     test "get_character_skill_effect_value/2 returns the minimum skill value for the character with right fatigue effects" do
       %{id: character_id} = character_fixture(%{fatigue: 90})
-      %{id: skill_id} = skill_fixture(%{name: "some skill"})
+      skill_type = skill_type_fixture(%{name: "Attribute"})
+      %{id: skill_id} = skill = skill_fixture(%{name: "some skill"})
+      Skills.add_skill_type_to_skill(skill, skill_type)
+
       character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 4})
 
       assert 2 == Characters.get_character_skill_effect_value(character_id, skill_id)
+    end
+
+    test "get_character_skill_effect_value/2 returns the skill value if it is not an attribute" do
+      %{id: character_id} = character_fixture(%{fatigue: 90})
+      skill_type = skill_type_fixture(%{name: "Skill"})
+      %{id: skill_id} = skill = skill_fixture(%{name: "some skill"})
+      Skills.add_skill_type_to_skill(skill, skill_type)
+
+      character_skill_fixture(%{character_id: character_id, skill_id: skill_id, value: 3})
+
+      assert 3 == Characters.get_character_skill_effect_value(character_id, skill_id)
     end
 
     test "create_character_skill/1 with valid data creates a character_skill" do

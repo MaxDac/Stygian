@@ -289,6 +289,7 @@ defmodule Stygian.MapsTest do
 
   describe "Dice throw chat creation" do
     alias Stygian.Maps
+    alias Stygian.Skills
 
     import Stygian.MapsFixtures
     import Stygian.SkillsFixtures
@@ -480,6 +481,13 @@ defmodule Stygian.MapsTest do
            character_skill_2: character_skill_2
          } do
       {:ok, character} = Characters.update_character(character, %{fatigue: 100})
+
+      # Adding the skill type
+      attribute_skill_type = skill_type_fixture(%{name: "Attribute"})
+      skill_skill_type = skill_type_fixture(%{name: "Skill"})
+
+      Skills.add_skill_type_to_skill(skill1, attribute_skill_type)
+      Skills.add_skill_type_to_skill(skill2, skill_skill_type)
 
       assert {:ok, chat} =
                Maps.create_dice_throw_chat_entry(
