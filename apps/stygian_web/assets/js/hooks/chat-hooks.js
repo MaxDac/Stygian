@@ -1,3 +1,5 @@
+import { pushNotification } from "../push-notifications.js"
+
 /**
  * Adds hooks to the chat screen to automatically scroll to the bottom of the chat.
  * @param {Hooks} Hooks LiveView Hooks 
@@ -5,10 +7,11 @@
 export function addChatHooks(Hooks) { 
   Hooks.ChatScreen = {
     mounted() {
-      this.el.scrollTop = this.el.scrollHeight
+      scrollElementToEnd(this.el)
     },
     updated() {
-      this.el.scrollTop = this.el.scrollHeight
+      scrollElementToEnd(this.el)
+      pushNotification("Nuovo messaggio nella chat")
     },
   }
 
@@ -17,10 +20,10 @@ export function addChatHooks(Hooks) {
       this.el.focus()
       this.el.onkeydown = (e) => {
         if (e.key === "Enter") {
-          console.log("The element", this.el)
-          console.log("The element value length", this.el.value.length)
           // If the value is not greater than 150 the textarea can't dispatch the event
-          if (this.el.value.length >= 150) {
+          if (hasInputSufficientLength(this.el.value) || 
+              isMasterPhrase(this.el.value) ||
+              isOffPhrase(this.el.value)) {
             // Dispatching the event, that will bubble up to the form
             const event = new Event("submit", { bubbles: true, cancelable: true })
             this.el.form.dispatchEvent(event)
@@ -38,4 +41,34 @@ export function addChatHooks(Hooks) {
       } 
     }
   }
+
+  /**
+    * Scrolls the element to the end of the scroll.
+    * @param {HTMLElement} element The element to scroll.
+    * @returns {void}
+    */
+  const scrollElementToEnd = (element) => element.scrollTop = element.scrollHeight
+
+  /**
+    * Checks if the input has a sufficient length to be sent.
+    * @param {string} value The value of the input.
+    * @returns {boolean} True if the input has a sufficient length, false otherwise.
+    */
+  const hasInputSufficientLength = (value) => value.length >= 150
+
+  /**
+    * Checks if the input is a master phrase. This will not automatically transform
+    * the phrase into a master phrase, but it will prevent the master being limited 
+    * in the phrases they will be able to send.
+    * @param {string} value The value of the input.
+    * @returns {boolean} True if the input is a master phrase, false otherwise.
+    */
+  const isMasterPhrase = (value) => value.slice(0, 4) === "*** "
+
+  /**
+    * Checks if the input is an off phrase.
+    * @param {string} value The value of the input.
+    * @returns {boolean} True if the input is an off phrase, false otherwise.
+    */
+  const isOffPhrase = (value) => value.slice(0, 2) === "+ "
 }

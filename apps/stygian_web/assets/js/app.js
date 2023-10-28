@@ -20,10 +20,11 @@ import "phoenix_html"
 import "flowbite/dist/flowbite.phoenix.js"
 import { rlyeianAnimations } from "./rlyeian-text.js"
 // Establish Phoenix Socket and LiveView configuration.
-import {Socket} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
-import {addChatHooks} from "./hooks/chat-hooks.js"
+import { Socket } from "phoenix"
+import { LiveSocket } from "phoenix_live_view"
+import { addChatHooks } from "./hooks/chat-hooks.js"
 import topbar from "../vendor/topbar"
+import { askNotificationPermission } from "./push-notifications.js"
 
 const Hooks = {}
 addChatHooks(Hooks)
@@ -37,6 +38,9 @@ window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
 window.addEventListener("phx:page-loading-start", _info => rlyeianAnimations())
+
+// Asking for notification permission
+askNotificationPermission()
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
