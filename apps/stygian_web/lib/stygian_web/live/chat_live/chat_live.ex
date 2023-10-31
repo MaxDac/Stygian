@@ -16,6 +16,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
   require Logger
 
   alias Stygian.Characters
+  alias Stygian.Dices
   alias Stygian.Maps
 
   alias StygianWeb.ChatLive.ChatCharacterResumeLive
@@ -287,7 +288,7 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
     dice_thrower = &:rand.uniform/1
 
-    case Maps.create_dice_throw_chat_entry(request, dice_thrower) do
+    case Dices.create_dice_throw_chat_entry(request, dice_thrower) do
       {:ok, chat} ->
         send_update(ChatControlLive, id: map.id)
 
