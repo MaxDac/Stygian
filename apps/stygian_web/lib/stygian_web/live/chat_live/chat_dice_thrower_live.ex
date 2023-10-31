@@ -5,6 +5,10 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
 
   use StygianWeb, :live_component
 
+  alias StygianWeb.Presence
+
+  embed_templates "dice_thrower_templates/*"
+
   alias Stygian.Characters.DiceThrower
 
   @impl true
@@ -12,47 +16,8 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign_mode()
      |> assign_form()}
-  end
-
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.h2>Tiro dei Dadi</.h2>
-
-      <div class="flex flex-col justify-evenly">
-        <.simple_form for={@form} phx-target={@myself} phx-submit="submit" class="space-y-3">
-          <.input
-            field={@form[:attribute_id]}
-            label="Attributo"
-            type="select"
-            options={to_options(@attributes)}
-          />
-
-          <.input field={@form[:skill_id]} label="Skill" type="select" options={to_options(@skills)} />
-
-          <.input
-            field={@form[:modifier]}
-            label="Modificatore"
-            type="select"
-            options={range_as_options(-3..3)}
-          />
-
-          <.input
-            field={@form[:difficulty]}
-            label="Difficoltà"
-            type="select"
-            options={range_as_options(10..30)}
-          />
-
-          <.button phx-disable-with="Sending..." class="w-full">
-            Tira
-          </.button>
-        </.simple_form>
-      </div>
-    </div>
-    """
   end
 
   @impl true
@@ -64,6 +29,14 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     else
       {:noreply, assign(socket, form: to_form(changeset))}
     end
+  end
+
+  @impl true
+  def handle_event("toggle_window", _, socket) do
+    {:noreply, 
+     socket
+     |> assign_online_characters()
+     |> toggle_mode()}
   end
 
   defp assign_form(socket) do
@@ -96,5 +69,26 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     send(self(), {:chat_dices, params})
 
     {:noreply, socket}
+  end
+
+  defp assign_mode(socket) do
+    assign(socket, :mode, :dices)
+  end
+
+  defp toggle_mode(%{assigns: %{mode: :dices}} = socket) do
+    assign(socket, :mode, :character)
+  end
+
+  defp toggle_mode(socket) do
+    assign(socket, :mode, :dices)
+  end
+
+  defp get_toggle_mode_label(mode)
+  defp get_toggle_mode_label(:dices), do: "Personaggio"
+  defp get_toggle_mode_label(:character), do: "Dadi"
+
+  defp assign_online_characters(socket) do
+    characters = Presence.list_users() |> IO.inspect(label: "characters")
+    assign(socket, :online_characters, characters)
   end
 end
