@@ -15,4 +15,11 @@
     attributes={@attributes}
     skills={@skills}
   />
+
+  <.chat_character_action
+    :if={@mode != :dices}
+    form={@character_form}
+    myself={@myself}
+    online_characters={@online_characters}
+  />
 </div>

@@ -17,7 +17,8 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
      socket
      |> assign(assigns)
      |> assign_mode()
-     |> assign_form()}
+     |> assign_form()
+     |> assign_character_form()}
   end
 
   @impl true
@@ -51,6 +52,20 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
       |> to_form()
 
     assign(socket, :form, form)
+  end
+
+  defp assign_character_form(socket, attrs \\ nil) do
+    attrs = if is_nil(attrs), do: %{
+      "character_id" => nil,
+      "action" => nil
+    }, else: attrs
+
+    form = 
+      attrs
+      |> to_form(as: :character_dice_throw)
+      |> IO.inspect(label: "character form")
+
+    assign(socket, :character_form, form)
   end
 
   defp to_options(list) do
@@ -87,8 +102,12 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   defp get_toggle_mode_label(:dices), do: "Personaggio"
   defp get_toggle_mode_label(:character), do: "Dadi"
 
-  defp assign_online_characters(socket) do
-    characters = Presence.list_users() |> IO.inspect(label: "characters")
+  defp assign_online_characters(%{assigns: %{map: %{name: map_name}}} = socket) do
+    characters =
+      Presence.list_users()
+      |> Map.get(map_name, [])
+      |> Enum.map(& &1.character)
+
     assign(socket, :online_characters, characters)
   end
 end

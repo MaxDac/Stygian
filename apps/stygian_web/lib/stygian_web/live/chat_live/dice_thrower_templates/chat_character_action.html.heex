@@ -1,26 +1,7 @@
 <div class="flex flex-col justify-evenly">
-  <.simple_form for={@character_form} phx-target={@myself} phx-submit="submit" class="space-y-3">
-    <.input
-      field={@form[:attribute_id]}
-      label="Attributo"
-      type="select"
-      options={to_options(@attributes)}
-    />
-
-    <.input field={@form[:skill_id]} label="Skill" type="select" options={to_options(@skills)} />
-
-    <.input
-      field={@form[:modifier]}
-      label="Modificatore"
-      type="select"
-      options={range_as_options(-3..3)}
-    />
-
-    <.input
-      field={@form[:difficulty]}
-      label="Difficoltà"
-      type="select"
-      options={range_as_options(10..30)}
+  <.simple_form for={@form} phx-target={@myself} phx-submit="submit" class="space-y-3">
+    <.character_selection
+      characters={@online_characters}
     />
 
     <.button phx-disable-with="Sending..." class="w-full">
