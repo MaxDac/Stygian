@@ -10,6 +10,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   embed_templates "dice_thrower_templates/*"
 
   alias Stygian.Characters.DiceThrower
+  alias Stygian.Dices.CharacterActionForm
 
   @impl true
   def update(assigns, socket) do
@@ -54,16 +55,11 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     assign(socket, :form, form)
   end
 
-  defp assign_character_form(socket, attrs \\ nil) do
-    attrs = if is_nil(attrs), do: %{
-      "character_id" => nil,
-      "action" => nil
-    }, else: attrs
-
-    form = 
-      attrs
-      |> to_form(as: :character_dice_throw)
-      |> IO.inspect(label: "character form")
+  defp assign_character_form(socket, attrs \\ %{}) do
+    form =
+      %CharacterActionForm{}
+      |> CharacterActionForm.changeset(attrs)
+      |> to_form()
 
     assign(socket, :character_form, form)
   end
@@ -102,11 +98,16 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   defp get_toggle_mode_label(:dices), do: "Personaggio"
   defp get_toggle_mode_label(:character), do: "Dadi"
 
-  defp assign_online_characters(%{assigns: %{map: %{name: map_name}}} = socket) do
+  defp assign_online_characters(%{assigns: %{
+    map: %{name: map_name},
+    current_character: %{id: current_character_id}
+  }} = socket) do
     characters =
       Presence.list_users()
       |> Map.get(map_name, [])
       |> Enum.map(& &1.character)
+      |> Enum.filter(& &1 != nil)
+      |> Enum.filter(& &1.id != current_character_id)
 
     assign(socket, :online_characters, characters)
   end
