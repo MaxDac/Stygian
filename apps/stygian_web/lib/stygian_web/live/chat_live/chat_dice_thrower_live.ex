@@ -35,7 +35,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
 
   @impl true
   def handle_event("toggle_window", _, socket) do
-    {:noreply, 
+    {:noreply,
      socket
      |> assign_online_characters()
      |> toggle_mode()}
@@ -98,16 +98,19 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   defp get_toggle_mode_label(:dices), do: "Personaggio"
   defp get_toggle_mode_label(:character), do: "Dadi"
 
-  defp assign_online_characters(%{assigns: %{
-    map: %{name: map_name},
-    current_character: %{id: current_character_id}
-  }} = socket) do
+  defp assign_online_characters(
+         %{
+           assigns: %{
+             map: %{name: map_name},
+             current_character: %{id: current_character_id}
+           }
+         } = socket
+       ) do
     characters =
       Presence.list_users()
       |> Map.get(map_name, [])
       |> Enum.map(& &1.character)
-      |> Enum.filter(& &1 != nil)
-      |> Enum.filter(& &1.id != current_character_id)
+      |> Enum.filter(&(&1 != nil && &1.id != current_character_id))
 
     assign(socket, :online_characters, characters)
   end

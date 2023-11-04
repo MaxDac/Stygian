@@ -1,8 +1,8 @@
 defmodule Stygian.DicesTest do
   use Stygian.DataCase
 
-  alias Stygian.Dices
   alias Stygian.Characters
+  alias Stygian.Dices
 
   describe "Dice throw chat creation" do
     alias Stygian.Skills

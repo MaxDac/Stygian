@@ -45,11 +45,11 @@ defmodule Stygian.ObjectsFixtures do
   @doc """
   Generate a effect.
   """
-  def effect_fixture(attrs \\ %{}) do
+  def effect_fixture(attrs \\ %{}, skill_name \\ "some_other_skill") do
     {:ok, effect} =
       attrs
       |> check_object()
-      |> check_skill()
+      |> check_skill(:skill_id, skill_name)
       |> Enum.into(%{
         value: 42
       })

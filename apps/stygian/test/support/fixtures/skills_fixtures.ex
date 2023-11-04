@@ -36,10 +36,14 @@ defmodule Stygian.SkillsFixtures do
     skill
   end
 
-  def check_skill(%{skill_id: _} = attrs), do: attrs
+  def check_skill(attrs, skill_key \\ :skill_id, skill_name \\ "some_skill") do
+    case Map.has_key?(attrs, skill_key) do
+      true ->
+        attrs
 
-  def check_skill(attrs) do
-    skill = skill_fixture()
-    Map.put(attrs, :skill_id, skill.id)
+      false ->
+        skill = skill_fixture(%{name: skill_name})
+        Map.put(attrs, skill_key, skill.id)
+    end
   end
 end

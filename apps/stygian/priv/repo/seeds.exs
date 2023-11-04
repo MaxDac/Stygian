@@ -12,6 +12,7 @@
 
 alias Stygian.Accounts
 alias Stygian.Characters
+alias Stygian.Combat
 alias Stygian.Maps
 alias Stygian.Objects
 alias Stygian.Organisations
@@ -174,6 +175,34 @@ defmodule RestActionsHelpers do
 
       rest_action ->
         Rest.update_rest_action(rest_action, attrs)
+    end
+  end
+end
+
+defmodule WeaponHelpers do
+  def create_weapon_type(%{name: name} = attrs) do
+    case Combat.get_weapon_type_by_name(name) do
+      nil ->
+        with {:ok, weapon_type} <- Combat.create_weapon_type(attrs) do
+          Combat.update_weapon_type(weapon_type, attrs)
+        end
+
+      weapon_type ->
+        Combat.update_weapon_type(weapon_type, attrs)
+    end
+  end
+end
+
+defmodule CombatActionsHelpers do
+  def create_combat_action(%{name: name} = attrs) do
+    case Combat.get_action_by_name(name) do
+      nil ->
+        with {:ok, combat_action} <- Combat.create_action(attrs) do
+          Combat.update_action(combat_action, attrs)
+        end
+
+      combat_action ->
+        Combat.update_action(combat_action, attrs)
     end
   end
 end
@@ -1011,4 +1040,50 @@ RestActionsHelpers.create_rest_action(%{
   health: 0,
   research_points: 3,
   slots: 3
+})
+
+{:ok, %{id: brawl_type_id}} =
+  WeaponHelpers.create_weapon_type(%{
+    name: "Mani nude",
+    description: """
+    Rappresenta l'abilità del corpo a corpo, della lotta e delle arti marziali.
+    """
+  })
+
+{:ok, %{id: melee_type_id}} =
+  WeaponHelpers.create_weapon_type(%{
+    name: "Arma bianche",
+    description: """
+    Rappresenta tutte le armi bianche, dalle lame elaborate ai più semplici bastoni o coltelli.
+    """
+  })
+
+{:ok, %{id: firearms_type_id}} =
+  WeaponHelpers.create_weapon_type(%{
+    name: "Armi da fuoco",
+    description: """
+    Rappresenta le armi da fuoco, dal fucile alla semplice pistola.
+    """
+  })
+
+{:ok, %{id: throw_type_id}} =
+  WeaponHelpers.create_weapon_type(%{
+    name: "Armi da lancio",
+    description: """
+    Rappresenta le armi da lancio, dai sassi alle granate.
+    """
+  })
+
+CombatActionsHelpers.create_combat_action(%{
+  name: "Presa",
+  description: """
+  Una presa, blocca l'avverario ma non produce danni alla salute.
+  """,
+  minimum_skill_value: 1,
+  does_damage: false,
+  weapon_type_id: brawl_type_id,
+  attack_attribute_id: fisico_id,
+  attack_skill_id: brawl_id,
+  defence_attribute_id: fisico_id,
+  defence_skill_id: brawl_id
 })

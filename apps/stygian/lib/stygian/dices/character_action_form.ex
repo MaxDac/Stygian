@@ -10,11 +10,11 @@ defmodule Stygian.Dices.CharacterActionForm do
   alias Stygian.Dices.CharacterActionForm
 
   @type t() :: %__MODULE__{
-    character_id: non_neg_integer(),
-    action: :melee | :brawl | :grip | :firearm | :throw
-  }
+          character_id: non_neg_integer(),
+          action: :melee | :brawl | :grip | :firearm | :throw
+        }
 
-  embedded_schema do 
+  embedded_schema do
     field :character_id, :id
     field :action, Ecto.Enum, values: [:melee, :brawl, :grip, :firearm, :throw]
   end
