@@ -10,6 +10,7 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
   embed_templates "dice_thrower_templates/*"
 
   alias Stygian.Characters.DiceThrower
+  alias Stygian.Combat
   alias Stygian.Dices.CharacterActionForm
 
   @impl true
@@ -18,7 +19,9 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
      socket
      |> assign(assigns)
      |> assign_mode()
+     |> assign_current_character()
      |> assign_form()
+     |> assign_combat_actions()
      |> assign_character_form()}
   end
 
@@ -30,6 +33,16 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
       insert_dice_chat(socket, params)
     else
       {:noreply, assign(socket, form: to_form(changeset))}
+    end
+  end
+  
+  def handle_event("action_submit", %{"character_action_form" => params}, socket) do
+    changeset = CharacterActionForm.changeset(%CharacterActionForm{}, params)
+    IO.inspect(changeset, label: "character changeset")
+    if changeset.valid? do
+      {:noreply, socket}
+    else
+      {:noreply, assign(socket, character_form: to_form(changeset))}
     end
   end
 
@@ -86,17 +99,9 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     assign(socket, :mode, :dices)
   end
 
-  defp toggle_mode(%{assigns: %{mode: :dices}} = socket) do
-    assign(socket, :mode, :character)
+  defp assign_current_character(%{assigns: %{current_character: %{id: current_character_id}}} = socket) do
+    assign(socket, :current_character_id, current_character_id)
   end
-
-  defp toggle_mode(socket) do
-    assign(socket, :mode, :dices)
-  end
-
-  defp get_toggle_mode_label(mode)
-  defp get_toggle_mode_label(:dices), do: "Personaggio"
-  defp get_toggle_mode_label(:character), do: "Dadi"
 
   defp assign_online_characters(
          %{
@@ -114,4 +119,21 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
 
     assign(socket, :online_characters, characters)
   end
+
+  defp assign_combat_actions(socket) do
+    actions = Combat.list_combat_actions()
+    assign(socket, :combat_actions, actions)
+  end
+
+  defp toggle_mode(%{assigns: %{mode: :dices}} = socket) do
+    assign(socket, :mode, :character)
+  end
+
+  defp toggle_mode(socket) do
+    assign(socket, :mode, :dices)
+  end
+
+  defp get_toggle_mode_label(mode)
+  defp get_toggle_mode_label(:dices), do: "Personaggio"
+  defp get_toggle_mode_label(:character), do: "Dadi"
 end

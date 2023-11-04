@@ -10,19 +10,21 @@ defmodule Stygian.Dices.CharacterActionForm do
   alias Stygian.Dices.CharacterActionForm
 
   @type t() :: %__MODULE__{
-          character_id: non_neg_integer(),
-          action: :melee | :brawl | :grip | :firearm | :throw
+          attacker_character_id: non_neg_integer(),
+          defending_character_id: non_neg_integer(),
+          combat_action_id: non_neg_integer()
         }
 
   embedded_schema do
-    field :character_id, :id
-    field :action, Ecto.Enum, values: [:melee, :brawl, :grip, :firearm, :throw]
+    field :attacker_character_id, :id
+    field :defending_character_id, :id
+    field :combat_action_id, :id
   end
 
   @doc false
   def changeset(%CharacterActionForm{} = character_action_form, attrs) do
     character_action_form
-    |> cast(attrs, [:character_id, :action])
-    |> validate_required([:character_id, :action])
+    |> cast(attrs, [:attacker_character_id, :defending_character_id, :combat_action_id])
+    |> validate_required([:attacker_character_id, :defending_character_id, :combat_action_id])
   end
 end
