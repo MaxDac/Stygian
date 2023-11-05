@@ -12,11 +12,20 @@ defmodule StygianWeb.ChatLive.ChatHelpers do
   import Phoenix.LiveView
 
   @doc """
-  Broadcasts the chat entry to the map channel.
+  Broadcasts the chat entry insertion to the map channel.
   """
-  @spec handle_chat_created(Socket.t(), Chat.t()) :: Socket.t()
+  @spec handle_chat_created(socket :: Socket.t(), chat :: Chat.t()) :: Socket.t()
   def handle_chat_created(%{assigns: %{map: %{id: map_id}}} = socket, chat_entry) do
     Endpoint.broadcast(get_broatcast_topic(map_id), ChatLive.get_event_chat_created(), chat_entry)
+    socket
+  end
+
+  @doc """
+  Broadcasts the chat entry deletion to the map channel.
+  """
+  @spec handle_chat_deleted(socket :: Socket.t(), chat :: Chat.t()) :: Socket.t()
+  def handle_chat_deleted(%{assigns: %{map: %{id: map_id}}} = socket, chat_entry) do
+    Endpoint.broadcast(get_broatcast_topic(map_id), ChatLive.get_event_chat_deleted(), chat_entry)
     socket
   end
 

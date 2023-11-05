@@ -722,7 +722,9 @@ defmodule Stygian.CharactersTest do
       %{id: object_id_2} = object_fixture(%{name: "object 2"})
 
       %{id: _} = effect_fixture(%{name: "effect 1", object_id: object_id_1})
-      %{id: effect_id_2} = effect_fixture(%{name: "effect 2", object_id: object_id_2})
+
+      %{id: effect_id_2} =
+        effect_fixture(%{name: "effect 2", object_id: object_id_2}, "another skills")
 
       before_limit =
         NaiveDateTime.utc_now()

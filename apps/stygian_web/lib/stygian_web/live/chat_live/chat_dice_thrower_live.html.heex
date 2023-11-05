@@ -1,0 +1,28 @@
+<div>
+  <.h2>Tiro dei Dadi</.h2>
+
+  <.button
+    phx-click="toggle_window"
+    phx-target={@myself}
+    class="py-5 bg-[url('')] bg-transparent border-transparent font-typewriter text-brand"
+  >
+    Mostra <%= get_toggle_mode_label(@mode) %>
+  </.button>
+
+  <.chat_dice_thrower
+    :if={@mode == :dices}
+    form={@form}
+    myself={@myself}
+    attributes={@attributes}
+    skills={@skills}
+  />
+
+  <.chat_character_action
+    :if={@mode != :dices}
+    form={@character_form}
+    myself={@myself}
+    current_character_id={@current_character_id}
+    online_characters={@online_characters}
+    combat_actions={@combat_actions}
+  />
+</div>

@@ -5,7 +5,7 @@
     phx-hook="ChatScreen"
   >
     <%= for chat <- @chat_entries do %>
-      <.chat_entry chat={chat} />
+      <.chat_entry chat={chat} current_character={@current_character} />
     <% end %>
   </div>
 

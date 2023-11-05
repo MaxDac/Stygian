@@ -5,6 +5,8 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
 
   use StygianWeb, :html
 
+  alias Stygian.Combat
+
   @doc """
   Creates the chat entry in the chat window.
   """
@@ -67,6 +69,62 @@ defmodule StygianWeb.ChatLive.ChatEntryLive do
         <.chat_character_line chat={@chat} />
         <div class="font-typewriter text-brand not-format">
           <%= raw(Earmark.as_html!(@chat.text)) %>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  def chat_entry(
+        %{
+          chat: %{
+            type: :confirm,
+            chat_action_id: chat_action_id
+          },
+          current_character: %{
+            id: current_character_id
+          }
+        } = assigns
+      ) do
+    case Combat.get_chat_action(chat_action_id) do
+      %{defender_id: defender_id} when defender_id == current_character_id ->
+        ~H"""
+        <div class="text-medium text-brand text-[1rem] flex justify-start space-x-5 mb-5">
+          <div class="w-full flex flex-row space-x-5 items-center">
+            <div class="font-typewriter text-brand not-format">
+              <%= raw(Earmark.as_html!(@chat.text)) %>
+            </div>
+            <.button phx-click={
+              JS.push("confirm_combat_action", value: %{chat_action_id: @chat.chat_action_id})
+            }>
+              Conferma
+            </.button>
+            <.button phx-click={
+              JS.push("cancel_combat_action", value: %{chat_action_id: @chat.chat_action_id})
+            }>
+              Rifiuta
+            </.button>
+          </div>
+        </div>
+        """
+
+      _ ->
+        ~H"""
+        <!-- hidden -->
+        """
+    end
+  end
+
+  def chat_entry(%{chat: %{type: :action_result}} = assigns) do
+    ~H"""
+    <div class="text-medium text-brand text-[1rem] flex justify-start space-x-5 mb-5">
+      <.chat_avatar chat={@chat} />
+      <div class="w-full">
+        <.chat_character_line chat={@chat} />
+        <div class="font-typewriter text-rose-300 not-format">
+          <u>
+            <%= raw(Earmark.as_html!(@chat.text)) %>
+          </u>
         </div>
       </div>
     </div>

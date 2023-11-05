@@ -5,54 +5,24 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
 
   use StygianWeb, :live_component
 
+  alias StygianWeb.Presence
+
+  embed_templates "dice_thrower_templates/*"
+
   alias Stygian.Characters.DiceThrower
+  alias Stygian.Combat
+  alias Stygian.Dices.CharacterActionForm
 
   @impl true
   def update(assigns, socket) do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_form()}
-  end
-
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.h2>Tiro dei Dadi</.h2>
-
-      <div class="flex flex-col justify-evenly">
-        <.simple_form for={@form} phx-target={@myself} phx-submit="submit" class="space-y-3">
-          <.input
-            field={@form[:attribute_id]}
-            label="Attributo"
-            type="select"
-            options={to_options(@attributes)}
-          />
-
-          <.input field={@form[:skill_id]} label="Skill" type="select" options={to_options(@skills)} />
-
-          <.input
-            field={@form[:modifier]}
-            label="Modificatore"
-            type="select"
-            options={range_as_options(-3..3)}
-          />
-
-          <.input
-            field={@form[:difficulty]}
-            label="Difficoltà"
-            type="select"
-            options={range_as_options(10..30)}
-          />
-
-          <.button phx-disable-with="Sending..." class="w-full">
-            Tira
-          </.button>
-        </.simple_form>
-      </div>
-    </div>
-    """
+     |> assign_mode()
+     |> assign_current_character()
+     |> assign_form()
+     |> assign_combat_actions()
+     |> assign_character_form()}
   end
 
   @impl true
@@ -64,6 +34,25 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     else
       {:noreply, assign(socket, form: to_form(changeset))}
     end
+  end
+
+  @impl true
+  def handle_event("action_submit", %{"character_action_form" => params}, socket) do
+    changeset = CharacterActionForm.changeset(%CharacterActionForm{}, params)
+
+    if changeset.valid? do
+      insert_character_action_chat(socket, changeset.changes)
+    else
+      {:noreply, assign(socket, character_form: to_form(changeset))}
+    end
+  end
+
+  @impl true
+  def handle_event("toggle_window", _, socket) do
+    {:noreply,
+     socket
+     |> assign_online_characters()
+     |> toggle_mode()}
   end
 
   defp assign_form(socket) do
@@ -78,6 +67,15 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
       |> to_form()
 
     assign(socket, :form, form)
+  end
+
+  defp assign_character_form(socket, attrs \\ %{}) do
+    form =
+      %CharacterActionForm{}
+      |> CharacterActionForm.changeset(attrs)
+      |> to_form()
+
+    assign(socket, :character_form, form)
   end
 
   defp to_options(list) do
@@ -97,4 +95,66 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
 
     {:noreply, socket}
   end
+
+  defp insert_character_action_chat(socket, %{
+         attacker_character_id: attacker_character_id,
+         defending_character_id: defending_character_id,
+         combat_action_id: combat_action_id
+       }) do
+    send(
+      self(),
+      {:chat_character_action,
+       %{
+         action_id: combat_action_id,
+         attacker_id: attacker_character_id,
+         defender_id: defending_character_id
+       }}
+    )
+
+    {:noreply, socket}
+  end
+
+  defp assign_mode(socket) do
+    assign(socket, :mode, :dices)
+  end
+
+  defp assign_current_character(
+         %{assigns: %{current_character: %{id: current_character_id}}} = socket
+       ) do
+    assign(socket, :current_character_id, current_character_id)
+  end
+
+  defp assign_online_characters(
+         %{
+           assigns: %{
+             map: %{name: map_name},
+             current_character: %{id: current_character_id}
+           }
+         } = socket
+       ) do
+    characters =
+      Presence.list_users()
+      |> Map.get(map_name, [])
+      |> Enum.map(& &1.character)
+      |> Enum.filter(&(&1 != nil && &1.id != current_character_id))
+
+    assign(socket, :online_characters, characters)
+  end
+
+  defp assign_combat_actions(socket) do
+    actions = Combat.list_combat_actions()
+    assign(socket, :combat_actions, actions)
+  end
+
+  defp toggle_mode(%{assigns: %{mode: :dices}} = socket) do
+    assign(socket, :mode, :character)
+  end
+
+  defp toggle_mode(socket) do
+    assign(socket, :mode, :dices)
+  end
+
+  defp get_toggle_mode_label(mode)
+  defp get_toggle_mode_label(:dices), do: "Personaggio"
+  defp get_toggle_mode_label(:character), do: "Dadi"
 end

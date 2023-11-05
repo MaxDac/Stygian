@@ -101,10 +101,14 @@ defmodule Stygian.CharactersFixtures do
   @doc """
   Checks whether the character exists in the attribute map or not. 
   """
-  def check_character(%{character_id: _} = attrs), do: attrs
+  def check_character(attrs, key \\ :character_id, name \\ "some_character_name") do
+    case Map.has_key?(attrs, key) do
+      true ->
+        attrs
 
-  def check_character(attrs) do
-    %{id: character_id} = character_fixture()
-    Map.put(attrs, :character_id, character_id)
+      false ->
+        %{id: character_id} = character_fixture(%{name: name})
+        Map.put(attrs, key, character_id)
+    end
   end
 end

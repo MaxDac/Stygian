@@ -371,6 +371,14 @@ defmodule Stygian.Characters do
   end
 
   @doc """
+  Changes the character health and sanity.
+  """
+  @spec change_character_status(character :: Character.t(), attrs :: map()) :: Changeset.t()
+  def change_character_status(%Character{} = character, attrs \\ %{}) do
+    Character.change_status_changeset(character, attrs)
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking the name and the avatar.
 
   ## Examples

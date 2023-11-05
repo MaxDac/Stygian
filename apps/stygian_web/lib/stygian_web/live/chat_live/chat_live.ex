@@ -16,6 +16,8 @@ defmodule StygianWeb.ChatLive.ChatLive do
   require Logger
 
   alias Stygian.Characters
+  alias Stygian.Combat
+  alias Stygian.Dices
   alias Stygian.Maps
 
   alias StygianWeb.ChatLive.ChatCharacterResumeLive
@@ -28,11 +30,17 @@ defmodule StygianWeb.ChatLive.ChatLive do
   import StygianWeb.ChatLive.ChatEntryLive
 
   @event_name_chat_created "chat_created"
+  @event_name_chat_deleted "chat_deleted"
 
   @doc """
   Returns the chat created event.
   """
   def get_event_chat_created, do: @event_name_chat_created
+
+  @doc """
+  Returns the chat deleted event.
+  """
+  def get_event_chat_deleted, do: @event_name_chat_deleted
 
   @impl true
   def mount(%{"map_id" => map_id}, _session, socket) do
@@ -61,6 +69,13 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
+  def handle_info(%{event: @event_name_chat_deleted, payload: chat_entry}, socket) do
+    {:noreply,
+     socket
+     |> assign_deleted_chat_entry(chat_entry)}
+  end
+
+  @impl true
   def handle_info({:chat_input_sent, _}, %{assigns: %{map: %{id: map_id}}} = socket) do
     send_update(ChatControlLive, id: map_id, textarea_id: new_textarea_id())
     {:noreply, socket}
@@ -84,6 +99,14 @@ defmodule StygianWeb.ChatLive.ChatLive do
     {:noreply,
      socket
      |> add_dice_chat(params)
+     |> assign_resetted_modal_state()}
+  end
+
+  @impl true
+  def handle_info({:chat_character_action, params}, socket) do
+    {:noreply,
+     socket
+     |> assign_character_action(params)
      |> assign_resetted_modal_state()}
   end
 
@@ -193,6 +216,48 @@ defmodule StygianWeb.ChatLive.ChatLive do
   end
 
   @impl true
+  def handle_event(
+        "confirm_combat_action",
+        %{"chat_action_id" => chat_action_id},
+        %{assigns: %{map: %{id: map_id}}} = socket
+      ) do
+    result = Combat.confirm_chat_action(chat_action_id, &:rand.uniform/1)
+    {:noreply, handle_action_confirm_result(socket, result, map_id)}
+  end
+
+  @impl true
+  def handle_event(
+        "cancel_combat_action",
+        %{"chat_action_id" => chat_action_id},
+        %{assigns: %{map: %{id: map_id}}} = socket
+      ) do
+    result = Combat.cancel_chat_action(chat_action_id)
+    {:noreply, handle_action_confirm_result(socket, result, map_id)}
+  end
+
+  defp handle_action_confirm_result(socket, result, map_id)
+
+  defp handle_action_confirm_result(
+         socket,
+         {:ok,
+          %{
+            added_chat: added_chat,
+            deleted_chat: deleted_chat
+          }},
+         map_id
+       ) do
+    send_update(ChatControlLive, id: map_id)
+    ChatHelpers.handle_chat_created(socket, added_chat)
+    ChatHelpers.handle_chat_deleted(socket, deleted_chat)
+  end
+
+  defp handle_action_confirm_result(socket, error, map_id) do
+    Logger.error("Error while cancelling chat action: #{inspect(error)}")
+    send_update(ChatControlLive, id: map_id)
+    put_flash(socket, :error, "C'è stato un errore nell'annullare l'azione di combattimento.")
+  end
+
+  @impl true
   def handle_params(%{"map_id" => map_id}, _, socket) do
     {:noreply,
      socket
@@ -207,6 +272,10 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
   defp assign_new_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do
     assign_chat_entries(socket, chat_entries ++ [chat_entry])
+  end
+
+  defp assign_deleted_chat_entry(%{assigns: %{chat_entries: chat_entries}} = socket, chat_entry) do
+    assign_chat_entries(socket, Enum.filter(chat_entries, &(&1.id != chat_entry.id)))
   end
 
   defp assign_chat_entries(socket, chats) do
@@ -287,12 +356,41 @@ defmodule StygianWeb.ChatLive.ChatLive do
 
     dice_thrower = &:rand.uniform/1
 
-    case Maps.create_dice_throw_chat_entry(request, dice_thrower) do
+    case Dices.create_dice_throw_chat_entry(request, dice_thrower) do
       {:ok, chat} ->
         send_update(ChatControlLive, id: map.id)
 
         socket
         |> ChatHelpers.handle_chat_created(chat)
+
+      error ->
+        Logger.error("Error while registering chat: #{inspect(error)}")
+
+        socket
+        |> put_flash(:error, "Errore durante l'inserimento del messaggio.")
+    end
+  end
+
+  defp assign_character_action(
+         %{
+           assigns: %{
+             map: %{
+               id: map_id
+             }
+           }
+         } = socket,
+         params
+       ) do
+    case Combat.create_action_for_chat(params, map_id) do
+      {:ok, %{chat: chat}} ->
+        send_update(ChatControlLive, id: map_id)
+
+        socket
+        |> ChatHelpers.handle_chat_created(chat)
+
+      {:error, error} when is_binary(error) ->
+        socket
+        |> put_flash(:error, error)
 
       error ->
         Logger.error("Error while registering chat: #{inspect(error)}")
