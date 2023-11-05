@@ -555,7 +555,7 @@ defmodule Stygian.Combat do
     attacker_character = Characters.get_character!(attacker_id)
 
     new_chat_attrs = %{
-      type: :action_result,
+      type: :off,
       text: "L'attacco di #{attacker_character.name} con #{weapon_type_name}, è stato rifiutato.",
       character_id: defender_id,
       map_id: chat_entry.map_id
