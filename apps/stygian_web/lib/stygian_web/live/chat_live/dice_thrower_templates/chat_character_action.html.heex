@@ -1,10 +1,6 @@
 <div class="flex flex-col justify-evenly">
   <.simple_form for={@form} phx-target={@myself} phx-submit="action_submit" class="space-y-3">
-    <.input
-      type="hidden"
-      field={@form[:attacker_character_id]}
-      value={@current_character_id}
-    />
+    <.input type="hidden" field={@form[:attacker_character_id]} value={@current_character_id} />
 
     <.character_selection
       label="Personaggio"

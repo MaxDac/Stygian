@@ -7,6 +7,14 @@ defmodule Stygian.Combat.WeaponType do
 
   import Ecto.Changeset
 
+  @type t() :: %__MODULE__{
+          id: integer(),
+          name: String.t(),
+          description: String.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   schema "weapon_types" do
     field :name, :string
     field :description, :string

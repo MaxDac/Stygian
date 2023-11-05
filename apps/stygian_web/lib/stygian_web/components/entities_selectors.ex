@@ -25,9 +25,9 @@ defmodule StygianWeb.EntitiesSelectors do
       <:loading><.spinner /></:loading>
       <:failed :let={_reason}>Errore nel caricare le entità.</:failed>
 
-      <.entity_selection 
-        entities={entities} 
-        field={@field} 
+      <.entity_selection
+        entities={entities}
+        field={@field}
         label={@label}
         empty_option={@empty_option}
       />
@@ -51,13 +51,7 @@ defmodule StygianWeb.EntitiesSelectors do
   def entity_selection(assigns) do
     ~H"""
     <div>
-      <.input
-        field={@field}
-        label={@label}
-        type="select"
-        prompt={@empty_option}
-        options={@options}
-      />
+      <.input field={@field} label={@label} type="select" prompt={@empty_option} options={@options} />
     </div>
     """
   end

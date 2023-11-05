@@ -35,10 +35,11 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
       {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
-  
+
   def handle_event("action_submit", %{"character_action_form" => params}, socket) do
     changeset = CharacterActionForm.changeset(%CharacterActionForm{}, params)
     IO.inspect(changeset, label: "character changeset")
+
     if changeset.valid? do
       {:noreply, socket}
     else
@@ -99,7 +100,9 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     assign(socket, :mode, :dices)
   end
 
-  defp assign_current_character(%{assigns: %{current_character: %{id: current_character_id}}} = socket) do
+  defp assign_current_character(
+         %{assigns: %{current_character: %{id: current_character_id}}} = socket
+       ) do
     assign(socket, :current_character_id, current_character_id)
   end
 

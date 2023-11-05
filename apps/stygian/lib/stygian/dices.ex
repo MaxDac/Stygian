@@ -9,6 +9,8 @@ defmodule Stygian.Dices do
   alias Stygian.Characters.CharacterSkill
   alias Stygian.Maps.Map, as: LandMap
 
+  @dice_faces 20
+
   @type chat_entry_request() :: %{
           character: Character.t(),
           map: LandMap.t(),
@@ -17,6 +19,12 @@ defmodule Stygian.Dices do
           modifier: integer(),
           difficulty: pos_integer()
         }
+
+  @doc """
+  Returns the number of faces of the dice.
+  """
+  @spec get_dice_faces() :: pos_integer()
+  def get_dice_faces, do: @dice_faces
 
   @doc """
   Creates a chat entry for a dice throw.
@@ -44,7 +52,7 @@ defmodule Stygian.Dices do
 
     chat_explanation = get_chat_explanation(request)
     base = attribute_value + skill_value + modifier
-    dice_result = dice_thrower.(20)
+    dice_result = dice_thrower.(@dice_faces)
 
     result = base + dice_result
 

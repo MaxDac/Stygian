@@ -5,25 +5,33 @@ defmodule Stygian.Maps.Chat do
   import Ecto.Changeset
 
   alias Stygian.Characters.Character
+  alias Stygian.Combat.ChatAction
   alias Stygian.Maps.Map
 
   @type t() :: %__MODULE__{
-          id: integer(),
+          id: non_neg_integer(),
           text: String.t(),
-          type: :text | :master | :dices | :failed_dices | :special | :off,
-          character_id: integer(),
+          type:
+            :text | :master | :dices | :failed_dices | :special | :confirm | :action_result | :off,
+          character_id: non_neg_integer(),
+          map_id: non_neg_integer(),
+          chat_action_id: non_neg_integer(),
           character: Character.t(),
-          map_id: integer(),
           map: Map.t(),
-          inserted_at: DateTime.t(),
-          updated_at: DateTime.t()
+          chat_action: ChatAction.t(),
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
         }
 
   schema "chats" do
     field :text, :string
-    field :type, Ecto.Enum, values: [:text, :master, :dices, :failed_dices, :special, :off]
+
+    field :type, Ecto.Enum,
+      values: [:text, :master, :dices, :failed_dices, :special, :confirm, :action_result, :off]
+
     belongs_to :character, Character
     belongs_to :map, Map
+    belongs_to :chat_action, ChatAction
 
     timestamps()
   end
@@ -38,6 +46,16 @@ defmodule Stygian.Maps.Chat do
     |> foreign_key_constraint(:character_id)
     |> foreign_key_constraint(:map_id)
     |> validate_required([:type, :character_id, :map_id])
+  end
+
+  @doc false
+  def chat_action_changeset(chat, attrs) do
+    chat
+    |> cast(attrs, [:text, :type, :character_id, :map_id, :chat_action_id])
+    |> validate_required([:type, :character_id, :map_id, :chat_action_id])
+    |> foreign_key_constraint(:character_id)
+    |> foreign_key_constraint(:map_id)
+    |> foreign_key_constraint(:chat_action_id)
   end
 
   defp validate_chat_text_not_null(changeset) do

@@ -11,10 +11,10 @@ defmodule Stygian.Combat.Action do
   alias Stygian.Skills.Skill
 
   @type t() :: %__MODULE__{
-          id: integer(),
+          id: non_neg_integer(),
           name: String.t(),
           description: String.t(),
-          minimum_skill_value: integer(),
+          minimum_skill_value: non_neg_integer(),
           does_damage: boolean(),
           weapon_type_id: non_neg_integer(),
           attack_attribute_id: non_neg_integer(),
@@ -26,8 +26,8 @@ defmodule Stygian.Combat.Action do
           attack_skill: Skill.t(),
           defence_attribute: Skill.t(),
           defence_skill: Skill.t(),
-          inserted_at: DateTime.t(),
-          updated_at: DateTime.t()
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
         }
 
   schema "combat_actions" do
