@@ -448,7 +448,11 @@ defmodule Stygian.Combat do
     chat_action = get_chat_action_preloaded(chat_action_id)
     %{map_id: map_id} = get_chat_entry_by_chat_action_id(chat_action_id)
     {attacker_result, defender_result} = get_dice_results(chat_action, dice_thrower)
-    health_damage = max(attacker_result - defender_result, 0)
+
+    health_damage =
+      if chat_action.action.does_damage,
+        do: max(attacker_result - defender_result, 0),
+        else: 0
 
     Ecto.Multi.new()
     |> update_chat_action_status(chat_action, %{

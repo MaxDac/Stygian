@@ -248,6 +248,7 @@ defmodule Stygian.CombatTest do
     import Stygian.MapsFixtures
     import Stygian.SkillsFixtures
 
+    alias Stygian.Characters
     alias Stygian.Maps
 
     test "create_action_for_chat/2 succesfully creates an action for the defender" do
@@ -388,7 +389,7 @@ defmodule Stygian.CombatTest do
     test "confirm_chat_action/1 correctly confirm the action for the character." do
       map = map_fixture()
       attacker = character_fixture(%{name: "attacker"})
-      defender = character_fixture(%{name: "defender"})
+      defender = character_fixture(%{name: "defender", health: 100, lost_health: 0})
 
       attack_attribute = skill_fixture(%{name: "attack_attribute"})
       attack_skill = skill_fixture(%{name: "attack_skill"})
@@ -415,6 +416,7 @@ defmodule Stygian.CombatTest do
 
       combat_action =
         action_fixture(%{
+          does_damage: true,
           weapon_type_id: weapon_type.id,
           attack_attribute_id: attack_attribute.id,
           attack_skill_id: attack_skill.id,
@@ -447,6 +449,79 @@ defmodule Stygian.CombatTest do
 
       assert chat_action.resolved
       assert chat_action.accepted
+
+      character = Characters.get_character!(defender.id)
+
+      assert 4 == character.lost_health
+    end
+
+    test "confirm_chat_action/1 correctly confirm the action for the character, but does not subtract health for non damaging action." do
+      map = map_fixture()
+      attacker = character_fixture(%{name: "attacker"})
+      defender = character_fixture(%{name: "defender", health: 100, lost_health: 0})
+
+      attack_attribute = skill_fixture(%{name: "attack_attribute"})
+      attack_skill = skill_fixture(%{name: "attack_skill"})
+      defence_attribute = skill_fixture(%{name: "defence_attribute"})
+      defence_skill = skill_fixture(%{name: "defence_skill"})
+
+      character_skill_fixture(%{
+        character_id: attacker.id,
+        skill_id: attack_attribute.id,
+        value: 4
+      })
+
+      character_skill_fixture(%{character_id: attacker.id, skill_id: attack_skill.id, value: 4})
+
+      character_skill_fixture(%{
+        character_id: defender.id,
+        skill_id: defence_attribute.id,
+        value: 2
+      })
+
+      character_skill_fixture(%{character_id: defender.id, skill_id: defence_skill.id, value: 2})
+
+      weapon_type = weapon_type_fixture()
+
+      combat_action =
+        action_fixture(%{
+          does_damage: false,
+          weapon_type_id: weapon_type.id,
+          attack_attribute_id: attack_attribute.id,
+          attack_skill_id: attack_skill.id,
+          defence_attribute_id: defence_attribute.id,
+          defence_skill_id: defence_skill.id,
+          minimum_skill_value: 2
+        })
+
+      request = %{
+        attacker_id: attacker.id,
+        defender_id: defender.id,
+        action_id: combat_action.id
+      }
+
+      assert {:ok,
+              %{
+                chat_action: chat_action
+              }} = Combat.create_action_for_chat(request, map.id)
+
+      random_dice_thrower_mock = fn _ -> 10 end
+
+      assert {:ok, _} = Combat.confirm_chat_action(chat_action.id, random_dice_thrower_mock)
+
+      assert [cancelled_chat] = Maps.list_map_chats(map.id)
+
+      assert "Attacca #{defender.name} con #{weapon_type.name}, che perde #{0} punti di salute." ==
+               cancelled_chat.text
+
+      chat_action = Combat.get_chat_action!(chat_action.id)
+
+      assert chat_action.resolved
+      assert chat_action.accepted
+
+      character = Characters.get_character!(defender.id)
+
+      assert 0 == character.lost_health
     end
   end
 end
