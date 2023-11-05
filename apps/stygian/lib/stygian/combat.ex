@@ -449,6 +449,8 @@ defmodule Stygian.Combat do
     %{map_id: map_id} = get_chat_entry_by_chat_action_id(chat_action_id)
     {attacker_result, defender_result} = get_dice_results(chat_action, dice_thrower)
 
+    succeeded? = attacker_result >= defender_result
+
     health_damage =
       if chat_action.action.does_damage,
         do: max(attacker_result - defender_result, 0),
@@ -461,7 +463,7 @@ defmodule Stygian.Combat do
     })
     |> remove_chat(chat_action_id)
     |> update_defender_health(chat_action.defender_id, health_damage)
-    |> add_result_chat(chat_action, map_id, health_damage)
+    |> add_result_chat(chat_action, map_id, health_damage, succeeded?)
     |> Repo.transaction()
   end
 
@@ -530,20 +532,33 @@ defmodule Stygian.Combat do
            }
          },
          map_id,
-         health_lost
+         health_lost,
+         succeeded?
        ) do
     defender_character = Characters.get_character!(defender_id)
 
+    chat_text_description = get_chat_text_description(defender_character.name, weapon_type_name)
+    chat_text_outcome = get_chat_text_outcome(health_lost, succeeded?)
+    chat_text = "#{chat_text_description} #{chat_text_outcome}"
+
     new_chat_attrs = %{
       type: :action_result,
-      text:
-        "Attacca #{defender_character.name} con #{weapon_type_name}, che perde #{health_lost} punti di salute.",
+      text: chat_text,
       character_id: attacker_id,
       map_id: map_id
     }
 
     Ecto.Multi.insert(multi, :added_chat, Chat.changeset(%Chat{}, new_chat_attrs))
   end
+
+  defp get_chat_text_outcome(_, false), do: "fallendo."
+  defp get_chat_text_outcome(0, _), do: "senza infliggere danni."
+
+  defp get_chat_text_outcome(health_lost, _),
+    do: "infliggendo #{health_lost} punti di salute di danno."
+
+  defp get_chat_text_description(defender_character_name, weapon_type_name),
+    do: "Attacca #{defender_character_name} con #{weapon_type_name},"
 
   defp add_cancel_action_chat(multi, %{
          id: chat_action_id,
