@@ -4,9 +4,10 @@ defmodule Stygian.Dices do
   """
 
   alias Stygian.Characters
-  alias Stygian.Maps
-
+  alias Stygian.Characters.Character
   alias Stygian.Characters.CharacterSkill
+  alias Stygian.Maps
+  alias Stygian.Maps.Chat
   alias Stygian.Maps.Map, as: LandMap
 
   @dice_faces 20
