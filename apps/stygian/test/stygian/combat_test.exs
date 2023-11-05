@@ -168,6 +168,15 @@ defmodule Stygian.CombatTest do
       assert Combat.get_chat_action!(chat_action.id) == chat_action
     end
 
+    test "get_chat_action/1 returns the chat_action with given id" do
+      chat_action = chat_action_fixture()
+      assert Combat.get_chat_action(chat_action.id) == chat_action
+    end
+
+    test "get_chat_action/1 returns nil if the chat_action does not exist" do
+      assert is_nil(Combat.get_chat_action(42))
+    end
+
     test "get_chat_action_preloaded/1" do
       chat_action = chat_action_fixture()
       chat_action = Combat.get_chat_action_preloaded(chat_action.id)

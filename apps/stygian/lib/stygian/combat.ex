@@ -247,6 +247,22 @@ defmodule Stygian.Combat do
   def get_chat_action!(id), do: Repo.get!(ChatAction, id)
 
   @doc """
+  Gets a single chat_action.
+
+  Returns nil if the chat_action does not exist.
+
+  ## Examples
+
+      iex> get_chat_action(123)
+      %ChatAction{}
+
+      iex> get_chat_action(456)
+      nil
+
+  """
+  def get_chat_action(id), do: Repo.get(ChatAction, id)
+
+  @doc """
   Gets the chat action with the foreign keys preloaded.
   """
   @spec get_chat_action_preloaded(non_neg_integer()) :: ChatAction.t()
@@ -397,7 +413,13 @@ defmodule Stygian.Combat do
   Invoked when the user cancels the chat action. This will simply invalidate the action.
   """
   @spec cancel_chat_action(chat_action_id :: non_neg_integer()) ::
-          {:ok, ChatAction.t()} | {:error, Ecto.Changeset.t()}
+          {:ok,
+           %{
+             deleted_chat: Chat.t(),
+             chat_action: ChatAction.t(),
+             added_chat: Chat.t()
+           }}
+          | {:error, Ecto.Changeset.t()}
   def cancel_chat_action(chat_action_id) do
     chat_action = get_chat_action_preloaded(chat_action_id)
 
@@ -417,7 +439,7 @@ defmodule Stygian.Combat do
   @spec confirm_chat_action(chat_action_id :: non_neg_integer(), dice_thrower :: function()) ::
           {:ok,
            %{
-             chat: Chat.t(),
+             deleted_chat: Chat.t(),
              character: Characters.Character.t(),
              added_chat: Chat.t()
            }}
@@ -550,7 +572,7 @@ defmodule Stygian.Combat do
         multi
 
       chat_entry ->
-        Ecto.Multi.delete(multi, :chat, chat_entry)
+        Ecto.Multi.delete(multi, :deleted_chat, chat_entry)
     end
   end
 

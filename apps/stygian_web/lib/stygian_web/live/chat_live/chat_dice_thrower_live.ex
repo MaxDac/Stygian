@@ -36,12 +36,12 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
     end
   end
 
+  @impl true
   def handle_event("action_submit", %{"character_action_form" => params}, socket) do
     changeset = CharacterActionForm.changeset(%CharacterActionForm{}, params)
-    IO.inspect(changeset, label: "character changeset")
 
     if changeset.valid? do
-      {:noreply, socket}
+      insert_character_action_chat(socket, changeset.changes)
     else
       {:noreply, assign(socket, character_form: to_form(changeset))}
     end
@@ -92,6 +92,24 @@ defmodule StygianWeb.ChatLive.ChatDiceThrowerLive do
       |> Map.new(fn {key, value} -> {String.to_atom(key), String.to_integer(value)} end)
 
     send(self(), {:chat_dices, params})
+
+    {:noreply, socket}
+  end
+
+  defp insert_character_action_chat(socket, %{
+         attacker_character_id: attacker_character_id,
+         defending_character_id: defending_character_id,
+         combat_action_id: combat_action_id
+       }) do
+    send(
+      self(),
+      {:chat_character_action,
+       %{
+         action_id: combat_action_id,
+         attacker_id: attacker_character_id,
+         defender_id: defending_character_id
+       }}
+    )
 
     {:noreply, socket}
   end
