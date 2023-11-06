@@ -200,6 +200,13 @@ defmodule StygianWeb.Router do
       live "/object_effects/:id/edit", EffectLive.Index, :edit
       live "/object_effects/:object_id", EffectLive.Index, :index
 
+      live "/weapons", WeaponLive.Index, :index
+      live "/weapons/new", WeaponLive.Index, :new
+      live "/weapons/:id/edit", WeaponLive.Index, :edit
+
+      live "/weapons/:id", WeaponLive.Show, :show
+      live "/weapons/:id/show/edit", WeaponLive.Show, :edit
+
       live "/inventories", AdminLive.InventoryAdminLive, :index
 
       live "/effects", AdminLive.EffectsListLive, :index
