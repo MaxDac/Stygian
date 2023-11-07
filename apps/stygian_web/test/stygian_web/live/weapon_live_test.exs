@@ -7,12 +7,34 @@ defmodule StygianWeb.WeaponLiveTest do
 
   import Phoenix.LiveViewTest
 
-  import Stygian.WeaponsFixtures
   import Stygian.AccountsFixtures
+  import Stygian.SkillsFixtures
+  import Stygian.WeaponsFixtures
 
-  @create_attrs %{name: "some name", description: "some description", image_url: "some image_url", required_skill_min_value: 42, damage_bonus: 42, cost: 42}
-  @update_attrs %{name: "some updated name", description: "some updated description", image_url: "some updated image_url", required_skill_min_value: 43, damage_bonus: 43, cost: 43}
-  @invalid_attrs %{name: nil, description: nil, image_url: nil, required_skill_min_value: nil, damage_bonus: nil, cost: nil}
+  @create_attrs %{
+    name: "some name",
+    description: "some description",
+    image_url: "some image_url",
+    required_skill_min_value: 42,
+    damage_bonus: 42,
+    cost: 42
+  }
+  @update_attrs %{
+    name: "some updated name",
+    description: "some updated description",
+    image_url: "some updated image_url",
+    required_skill_min_value: 43,
+    damage_bonus: 43,
+    cost: 43
+  }
+  @invalid_attrs %{
+    name: nil,
+    description: nil,
+    image_url: nil,
+    required_skill_min_value: nil,
+    damage_bonus: nil,
+    cost: nil
+  }
 
   defp create_weapon(_) do
     weapon = weapon_fixture()
@@ -38,6 +60,9 @@ defmodule StygianWeb.WeaponLiveTest do
     end
 
     test "saves new weapon", %{conn: conn, user: user} do
+      %{id: skill_id} = skill_fixture()
+      create_attrs = Map.put(@create_attrs, :required_skill_id, skill_id)
+
       {:ok, index_live, _html} =
         conn
         |> log_in_user(user)
@@ -53,7 +78,7 @@ defmodule StygianWeb.WeaponLiveTest do
              |> render_change() =~ "can&#39;t be blank"
 
       assert index_live
-             |> form("#weapon-form", weapon: @create_attrs)
+             |> form("#weapon-form", weapon: create_attrs)
              |> render_submit()
 
       assert_patch(index_live, ~p"/admin/weapons")

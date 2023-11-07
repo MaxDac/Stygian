@@ -1,5 +1,5 @@
 <.header>
-  Listing Weapons
+  Lista delle Armi
   <:actions>
     <.link patch={~p"/admin/weapons/new"}>
       <.button>New Weapon</.button>
@@ -12,29 +12,38 @@
   rows={@streams.weapons}
   row_click={fn {_id, weapon} -> JS.navigate(~p"/admin/weapons/#{weapon}") end}
 >
-  <:col :let={{_id, weapon}} label="Name"><%= weapon.name %></:col>
-  <:col :let={{_id, weapon}} label="Description"><%= weapon.description %></:col>
-  <:col :let={{_id, weapon}} label="Image url"><%= weapon.image_url %></:col>
-  <:col :let={{_id, weapon}} label="Required skill min value"><%= weapon.required_skill_min_value %></:col>
+  <:col :let={{_id, weapon}} label="Nome"><%= weapon.name %></:col>
+  <:col :let={{_id, weapon}} label="Descrizione"><%= weapon.description %></:col>
+  <:col :let={{_id, weapon}} label="Immagine">
+    <img
+      src={weapon.image_url}
+      alt={weapon.name}
+      class="max-w-[100px] max-h-[100px] w-auto h-auto"
+    />
+  </:col>
+  <:col :let={{_id, weapon}} label="Min value">
+    <%= weapon.required_skill_min_value %>
+  </:col>
   <:col :let={{_id, weapon}} label="Damage bonus"><%= weapon.damage_bonus %></:col>
   <:col :let={{_id, weapon}} label="Cost"><%= weapon.cost %></:col>
-  <:action :let={{_id, weapon}}>
-    <div class="sr-only">
-      <.link navigate={~p"/admin/weapons/#{weapon}"}>Show</.link>
-    </div>
-    <.link patch={~p"/admin/weapons/#{weapon}/edit"}>Edit</.link>
-  </:action>
   <:action :let={{id, weapon}}>
-    <.link
+    <.table_link_left navigate={~p"/admin/weapons/#{weapon}"}>Show</.table_link_left>
+    <.table_link patch={~p"/admin/weapons/#{weapon}/edit"}>Edit</.table_link>
+    <.table_link_right
       phx-click={JS.push("delete", value: %{id: weapon.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
       Delete
-    </.link>
+    </.table_link_right>
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="weapon-modal" show on_cancel={JS.patch(~p"/admin/weapons")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="weapon-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/weapons")}
+>
   <.live_component
     module={StygianWeb.WeaponLive.FormComponent}
     id={@weapon.id || :new}

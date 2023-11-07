@@ -1,6 +1,11 @@
 defmodule StygianWeb.WeaponLive.FormComponent do
+  @moduledoc """
+  The Weapon form component.
+  """
+
   use StygianWeb, :live_component
 
+  alias Stygian.Skills
   alias Stygian.Weapons
 
   @impl true
@@ -22,7 +27,16 @@ defmodule StygianWeb.WeaponLive.FormComponent do
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:description]} type="text" label="Description" />
         <.input field={@form[:image_url]} type="text" label="Image url" />
-        <.input field={@form[:required_skill_min_value]} type="number" label="Required skill min value" />
+        <.skill_selection
+          skills={@skills}
+          field={@form[:required_skill_id]}
+          label="Abilità o Attributo"
+        />
+        <.input
+          field={@form[:required_skill_min_value]}
+          type="number"
+          label="Required skill min value"
+        />
         <.input field={@form[:damage_bonus]} type="number" label="Damage bonus" />
         <.input field={@form[:cost]} type="number" label="Cost" />
         <:actions>
@@ -40,7 +54,8 @@ defmodule StygianWeb.WeaponLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_form(changeset)}
+     |> assign_form(changeset)
+     |> assign_skills()}
   end
 
   @impl true
@@ -89,6 +104,17 @@ defmodule StygianWeb.WeaponLive.FormComponent do
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, :form, to_form(changeset))
+  end
+
+  defp assign_skills(socket) do
+    assign_async(socket, :skills, fn ->
+      {:ok,
+       %{
+         skills:
+           Skills.list_preloaded_skills()
+           |> Enum.filter(&(not &1.is_attribute))
+       }}
+    end)
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})

@@ -17,6 +17,7 @@ defmodule StygianWeb.AdminLive.AdminDashboardLive do
 
     <div class="w-full flex flex-col space-y-5 items-center">
       <.link class="text-xl font-typewriter" patch={~p"/admin/objects"}>Oggetti</.link>
+      <.link class="text-xl font-typewriter" patch={~p"/admin/weapons"}>Armi</.link>
       <.link class="text-xl font-typewriter" patch={~p"/admin/object_effects"}>Effetti</.link>
       <.link class="text-xl font-typewriter" patch={~p"/admin/inventories"}>Inventari</.link>
       <.link class="text-xl font-typewriter" patch={~p"/admin/effects"}>Lista Effetti Attivi</.link>

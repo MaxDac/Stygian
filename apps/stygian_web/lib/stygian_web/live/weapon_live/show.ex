@@ -1,5 +1,9 @@
 defmodule StygianWeb.WeaponLive.Show do
-  use StygianWeb, :live_view
+  @moduledoc """
+  The Weapon show live view.
+  """
+
+  use StygianWeb, :container_live_view
 
   alias Stygian.Weapons
 

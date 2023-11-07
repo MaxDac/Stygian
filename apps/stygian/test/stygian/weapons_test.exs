@@ -6,9 +6,17 @@ defmodule Stygian.WeaponsTest do
   describe "weapons" do
     alias Stygian.Weapons.Weapon
 
+    import Stygian.SkillsFixtures
     import Stygian.WeaponsFixtures
 
-    @invalid_attrs %{name: nil, description: nil, image_url: nil, required_skill_min_value: nil, damage_bonus: nil, cost: nil}
+    @invalid_attrs %{
+      name: nil,
+      description: nil,
+      image_url: nil,
+      required_skill_min_value: nil,
+      damage_bonus: nil,
+      cost: nil
+    }
 
     test "list_weapons/0 returns all weapons" do
       weapon = weapon_fixture()
@@ -21,7 +29,17 @@ defmodule Stygian.WeaponsTest do
     end
 
     test "create_weapon/1 with valid data creates a weapon" do
-      valid_attrs = %{name: "some name", description: "some description", image_url: "some image_url", required_skill_min_value: 42, damage_bonus: 42, cost: 42}
+      %{id: skill_id} = skill_fixture()
+
+      valid_attrs = %{
+        name: "some name",
+        description: "some description",
+        image_url: "some image_url",
+        required_skill_min_value: 42,
+        damage_bonus: 42,
+        cost: 42,
+        required_skill_id: skill_id
+      }
 
       assert {:ok, %Weapon{} = weapon} = Weapons.create_weapon(valid_attrs)
       assert weapon.name == "some name"
@@ -38,7 +56,15 @@ defmodule Stygian.WeaponsTest do
 
     test "update_weapon/2 with valid data updates the weapon" do
       weapon = weapon_fixture()
-      update_attrs = %{name: "some updated name", description: "some updated description", image_url: "some updated image_url", required_skill_min_value: 43, damage_bonus: 43, cost: 43}
+
+      update_attrs = %{
+        name: "some updated name",
+        description: "some updated description",
+        image_url: "some updated image_url",
+        required_skill_min_value: 43,
+        damage_bonus: 43,
+        cost: 43
+      }
 
       assert {:ok, %Weapon{} = weapon} = Weapons.update_weapon(weapon, update_attrs)
       assert weapon.name == "some updated name"
