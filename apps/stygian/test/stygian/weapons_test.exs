@@ -92,4 +92,27 @@ defmodule Stygian.WeaponsTest do
       assert %Ecto.Changeset{} = Weapons.change_weapon(weapon)
     end
   end
+
+  describe "Character weapons" do
+    alias Stygian.Weapons
+
+    import Stygian.CharactersFixtures
+    import Stygian.WeaponsFixtures
+
+    test "get_character_weapons/1 returns an empty list when the character has no weapons" do
+      %{id: character_id} = character_fixture()
+
+      assert [] = Weapons.get_character_weapons(character_id)
+    end
+
+    test "get_character_weapons/1 returns all the weapons associated to the character" do
+      %{id: character_id} = character_fixture()
+      %{id: weapon_id} = weapon_fixture()
+      _ = character_weapon_fixture(%{character_id: character_id, weapon_id: weapon_id})
+
+      assert [weapon] = Weapons.get_character_weapons(character_id)
+
+      assert weapon_id == weapon.id
+    end
+  end
 end

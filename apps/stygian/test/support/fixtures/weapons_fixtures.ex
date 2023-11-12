@@ -5,6 +5,9 @@ defmodule Stygian.WeaponsFixtures do
   """
 
   import Stygian.SkillsFixtures
+  import Stygian.CharactersFixtures
+
+  alias Stygian.Weapons.CharacterWeapons
 
   @doc """
   Generate a weapon.
@@ -24,5 +27,29 @@ defmodule Stygian.WeaponsFixtures do
       |> Stygian.Weapons.create_weapon()
 
     weapon
+  end
+
+  @doc """
+  Generates a relation record between a character and a weapon.
+  """
+  def character_weapon_fixture(attrs \\ %{}) do
+    attrs =
+      attrs
+      |> check_character()
+      |> check_weapon()
+
+    {:ok, character_weapon} =
+      %CharacterWeapons{}
+      |> CharacterWeapons.changeset(attrs)
+      |> Stygian.Repo.insert()
+
+    character_weapon
+  end
+
+  def check_weapon(%{weapon_id: _} = attrs), do: attrs
+
+  def check_weapon(attrs) do
+    %{id: weapon_id} = weapon_fixture()
+    Map.put(attrs, :weapon_id, weapon_id)
   end
 end
