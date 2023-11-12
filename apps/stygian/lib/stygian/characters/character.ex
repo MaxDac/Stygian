@@ -151,7 +151,7 @@ defmodule Stygian.Characters.Character do
 
   def change_character_weapons_changeset(character, attrs) do
     character
-    |> cast(attrs, [:weapon_id])
+    |> cast(attrs, [])
     |> cast_assoc(:weapons, required: true)
   end
 

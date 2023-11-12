@@ -28,6 +28,15 @@ defmodule Stygian.WeaponsTest do
       assert Weapons.get_weapon!(weapon.id) == weapon
     end
 
+    test "get_weapon/1 returns the weapon with given id" do
+      weapon = weapon_fixture()
+      assert Weapons.get_weapon(weapon.id) == weapon
+    end
+
+    test "get_weapon/1 returns nil if the weapon does not exist" do
+      assert is_nil Weapons.get_weapon(42)
+    end
+
     test "create_weapon/1 with valid data creates a weapon" do
       %{id: skill_id} = skill_fixture()
 
@@ -94,6 +103,7 @@ defmodule Stygian.WeaponsTest do
   end
 
   describe "Character weapons" do
+    alias Stygian.Characters
     alias Stygian.Weapons
 
     import Stygian.CharactersFixtures
@@ -113,6 +123,30 @@ defmodule Stygian.WeaponsTest do
       assert [weapon] = Weapons.get_character_weapons(character_id)
 
       assert weapon_id == weapon.id
+    end
+
+    test "add_weapon_to_character/2 correctly adds an existing weapon to a character" do
+      %{id: character_id} = character_fixture()
+      %{id: weapon_id} = weapon_fixture()
+
+      assert {:ok, %Stygian.Characters.Character{}} = Weapons.add_weapon_to_character(character_id, weapon_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert [weapon] = character.weapons
+      assert weapon_id == weapon.id
+    end
+
+    test "remove_weapon_from_character/2 correctly removes the weapon from a character" do
+      %{id: character_id} = character_fixture()
+      %{id: weapon_id} = weapon_fixture()
+
+      Weapons.add_weapon_to_character(character_id, weapon_id)
+      assert {:ok, %Stygian.Characters.Character{}} = Weapons.remove_weapon_from_character(character_id, weapon_id)
+
+      character = Characters.get_character!(character_id)
+
+      assert [] = character.weapons
     end
   end
 end

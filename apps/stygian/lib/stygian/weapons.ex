@@ -4,6 +4,7 @@ defmodule Stygian.Weapons do
   """
 
   import Ecto.Query, warn: false
+
   alias Stygian.Repo
 
   alias Stygian.Weapons.Weapon
@@ -36,6 +37,12 @@ defmodule Stygian.Weapons do
   
   """
   def get_weapon!(id), do: Repo.get!(Weapon, id)
+
+  @doc """
+  Returns the weapon given the id, or nil if the weapon does not exist.
+  """
+  @spec get_weapon(id :: non_neg_integer()) :: Weapon.t() | nil
+  def get_weapon(id), do: Repo.get(Weapon, id)
 
   @doc """
   Creates a weapon.
@@ -102,6 +109,7 @@ defmodule Stygian.Weapons do
     Weapon.changeset(weapon, attrs)
   end
 
+  alias Stygian.Characters
   alias Stygian.Characters.Character
 
   @doc """
@@ -119,5 +127,52 @@ defmodule Stygian.Weapons do
     else
       []
     end
+  end
+
+  @doc """
+  Adds a weapon to a character.
+  """
+  @spec add_weapon_to_character(character_id :: non_neg_integer(), weapon_id :: non_neg_integer()) :: 
+    {:ok, Weapon.t()} | {:error, String.t()} | {:error, Ecto.Changeset.t()}
+  def add_weapon_to_character(character_id, weapon_id) do
+    case {get_character_with_weapons(character_id), get_weapon(weapon_id)} do
+      {nil, _} ->
+        {:error, "Il personaggio non esiste"}
+
+      {_, nil} ->
+        {:error, "L'arma non esiste"}
+
+      {character, weapon} ->
+        character
+        |> Character.change_character_weapons_changeset(%{weapons: [Map.from_struct(weapon) | character.weapons]})
+        |> Repo.update()
+    end
+  end
+
+  @doc """
+  Removes a weapon from a character, if it exist.
+  """
+  @spec remove_weapon_from_character(character_id :: non_neg_integer(), weapon_id :: non_neg_integer()) ::
+    {:ok, Character.t()} | {:error, String.t()} | {:error, Ecto.Changeset.t()}
+  def remove_weapon_from_character(character_id, weapon_id) do
+    case get_character_with_weapons(character_id) do
+      nil ->
+        {:error, "Il personaggio non esiste"}
+
+      %{weapons: weapons} = character ->
+        if Enum.any?(weapons, & &1.id == weapon_id) do
+          character
+          |> Character.change_character_weapons_changeset(%{weapons: List.delete(character.weapons, weapon_id)})
+          |> Repo.update()
+        else
+          {:error, "L'arma non appartiene al personaggio"}
+        end
+    end
+  end
+
+  defp get_character_with_weapons(character_id) do
+    Character
+    |> preload(:weapons)
+    |> Repo.get(character_id)
   end
 end
