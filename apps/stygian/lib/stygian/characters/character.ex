@@ -5,6 +5,7 @@ defmodule Stygian.Characters.Character do
   import Ecto.Changeset
 
   alias Stygian.Accounts.User
+  alias Stygian.Weapons.CharacterWeapons
   alias Stygian.Weapons.Weapon
 
   @type t() :: %__MODULE__{
@@ -62,7 +63,7 @@ defmodule Stygian.Characters.Character do
     field :research_points, :integer, default: 0
 
     belongs_to :user, User
-    many_to_many :weapons, Weapon, join_through: "characters_weapons"
+    many_to_many :weapons, Weapon, join_through: CharacterWeapons, on_replace: :delete
 
     timestamps()
   end
@@ -147,12 +148,6 @@ defmodule Stygian.Characters.Character do
       :research_points,
       :rest_timer
     ])
-  end
-
-  def change_character_weapons_changeset(character, attrs) do
-    character
-    |> cast(attrs, [])
-    |> cast_assoc(:weapons, required: true)
   end
 
   @doc false

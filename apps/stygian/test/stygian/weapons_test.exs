@@ -107,20 +107,21 @@ defmodule Stygian.WeaponsTest do
     alias Stygian.Weapons
 
     import Stygian.CharactersFixtures
+    import Stygian.SkillsFixtures
     import Stygian.WeaponsFixtures
 
-    test "get_character_weapons/1 returns an empty list when the character has no weapons" do
+    test "list_character_weapons/1 returns an empty list when the character has no weapons" do
       %{id: character_id} = character_fixture()
 
-      assert [] = Weapons.get_character_weapons(character_id)
+      assert [] = Weapons.list_character_weapons(character_id)
     end
 
-    test "get_character_weapons/1 returns all the weapons associated to the character" do
+    test "list_character_weapons/1 returns all the weapons associated to the character" do
       %{id: character_id} = character_fixture()
       %{id: weapon_id} = weapon_fixture()
       _ = character_weapon_fixture(%{character_id: character_id, weapon_id: weapon_id})
 
-      assert [weapon] = Weapons.get_character_weapons(character_id)
+      assert [weapon] = Weapons.list_character_weapons(character_id)
 
       assert weapon_id == weapon.id
     end
@@ -131,10 +132,12 @@ defmodule Stygian.WeaponsTest do
 
       assert {:ok, %Stygian.Characters.Character{}} = Weapons.add_weapon_to_character(character_id, weapon_id)
 
-      character = Characters.get_character!(character_id)
+      character = Characters.get_character!(character_id) |> Stygian.Repo.preload(:weapons)
 
       assert [weapon] = character.weapons
       assert weapon_id == weapon.id
+
+      assert not is_nil Weapons.get_weapon(weapon_id)
     end
 
     test "remove_weapon_from_character/2 correctly removes the weapon from a character" do
@@ -144,9 +147,41 @@ defmodule Stygian.WeaponsTest do
       Weapons.add_weapon_to_character(character_id, weapon_id)
       assert {:ok, %Stygian.Characters.Character{}} = Weapons.remove_weapon_from_character(character_id, weapon_id)
 
-      character = Characters.get_character!(character_id)
+      character = Characters.get_character!(character_id) |> Stygian.Repo.preload(:weapons)
 
       assert [] = character.weapons
+
+      assert not is_nil Weapons.get_weapon(weapon_id)
+    end
+
+    test "remove_weapon_from_character/2 does not remove a weapon when the character does not own it" do
+      %{id: character_id} = character_fixture()
+      %{id: weapon_id} = weapon_fixture()
+
+      assert {:error, "L'arma non appartiene al personaggio"} =
+        Weapons.remove_weapon_from_character(character_id, weapon_id)
+    end
+
+    test "remove_weapon_from_character/2 correctly removes only the weapon selected to be removed" do
+      %{id: character_id} = character_fixture()
+
+      %{id: skill_id} = skill_fixture(%{name: "second skill"})
+
+      %{id: weapon_id_1} = weapon_fixture()
+      %{id: weapon_id_2} = weapon_fixture(%{name: "second weapon", required_skill_id: skill_id})
+
+      Weapons.add_weapon_to_character(character_id, weapon_id_1)
+      Weapons.add_weapon_to_character(character_id, weapon_id_2)
+
+      assert {:ok, %Stygian.Characters.Character{}} = Weapons.remove_weapon_from_character(character_id, weapon_id_1)
+
+      character = Characters.get_character!(character_id) |> Stygian.Repo.preload(:weapons)
+
+      assert [weapon] = character.weapons
+      assert weapon_id_2 == weapon.id
+
+      assert not is_nil Weapons.get_weapon(weapon_id_1)
+      assert not is_nil Weapons.get_weapon(weapon_id_2)
     end
   end
 end

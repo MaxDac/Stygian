@@ -109,14 +109,13 @@ defmodule Stygian.Weapons do
     Weapon.changeset(weapon, attrs)
   end
 
-  alias Stygian.Characters
   alias Stygian.Characters.Character
 
   @doc """
   Lists all the weapons belonging to a character.
   """
-  @spec get_character_weapons(character_id :: non_neg_integer()) :: list(Weapon.t())
-  def get_character_weapons(character_id) do
+  @spec list_character_weapons(character_id :: non_neg_integer()) :: list(Weapon.t())
+  def list_character_weapons(character_id) do
     character =
       Character
       |> preload(:weapons)
@@ -144,7 +143,8 @@ defmodule Stygian.Weapons do
 
       {character, weapon} ->
         character
-        |> Character.change_character_weapons_changeset(%{weapons: [Map.from_struct(weapon) | character.weapons]})
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:weapons, [weapon | character.weapons])
         |> Repo.update()
     end
   end
@@ -162,7 +162,8 @@ defmodule Stygian.Weapons do
       %{weapons: weapons} = character ->
         if Enum.any?(weapons, & &1.id == weapon_id) do
           character
-          |> Character.change_character_weapons_changeset(%{weapons: List.delete(character.weapons, weapon_id)})
+          |> Ecto.Changeset.change()
+          |> Ecto.Changeset.put_assoc(:weapons, Enum.reject(weapons, & &1.id == weapon_id))
           |> Repo.update()
         else
           {:error, "L'arma non appartiene al personaggio"}

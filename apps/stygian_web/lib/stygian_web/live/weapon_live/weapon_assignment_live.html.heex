@@ -1,0 +1,26 @@
+<.h1>Assign weapons</.h1>
+
+<.simple_form
+  for={@form}
+  id="character_selection_form"
+  phx-submit="save"
+  phx-change="validate"
+>
+  <.character_selection
+    characters={@characters}
+    field={@form[:character_id]}
+    label="Personaggi disponibili"
+  />
+
+  <.button type="submit">
+    Filtra
+  </.button>
+
+  <.hr />
+
+  <.live_component
+    id="weapon_list"
+    module={WeaponAssignmentDetail}
+    character_id={@character_id}
+  />
+</.simple_form>
