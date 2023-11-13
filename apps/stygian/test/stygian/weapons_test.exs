@@ -37,6 +37,16 @@ defmodule Stygian.WeaponsTest do
       assert is_nil Weapons.get_weapon(42)
     end
 
+    test "get_weapon_by_name/1 returns the weapon with that name" do
+      weapon = weapon_fixture()
+      assert Weapons.get_weapon_by_name(weapon.name) == weapon
+    end
+
+    test "get_weapon_by_name/1 returns nil if no weapon with the name exists" do
+      weapon = weapon_fixture()
+      assert is_nil Weapons.get_weapon_by_name("#{weapon.name}_another")
+    end
+
     test "create_weapon/1 with valid data creates a weapon" do
       %{id: skill_id} = skill_fixture()
 

@@ -18,6 +18,7 @@ alias Stygian.Objects
 alias Stygian.Organisations
 alias Stygian.Rest
 alias Stygian.Skills
+alias Stygian.Weapons
 
 alias Stygian.Characters.CharacterSkill
 
@@ -203,6 +204,20 @@ defmodule CombatActionsHelpers do
 
       combat_action ->
         Combat.update_action(combat_action, attrs)
+    end
+  end
+end
+
+defmodule WeaponsHelpers do
+  def create_weapon(%{name: name} = attrs) do
+    case Weapons.get_weapon_by_name(name) do
+      nil ->
+        with {:ok, weapon} <- Weapons.create_weapon(attrs) do
+          Weapons.update_weapon(weapon, attrs)
+        end
+
+      weapon ->
+        Weapons.update_weapon(weapon, attrs)
     end
   end
 end
@@ -1086,4 +1101,16 @@ CombatActionsHelpers.create_combat_action(%{
   attack_skill_id: brawl_id,
   defence_attribute_id: fisico_id,
   defence_skill_id: brawl_id
+})
+
+WeaponsHelpers.create_weapon(%{
+  name: "Revolver",
+  description: """
+  Un semplice revolver a sei colpi.
+  """,
+  image_url: "/images/weapons/revolver.webp",
+  cost: 100,
+  damage_bonus: 2,
+  required_skill_min_value: 1,
+  required_skill_id: firearms_id
 })

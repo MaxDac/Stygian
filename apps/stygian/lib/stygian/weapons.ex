@@ -45,6 +45,12 @@ defmodule Stygian.Weapons do
   def get_weapon(id), do: Repo.get(Weapon, id)
 
   @doc """
+  Returns the weapon given the name, or nil if the weapon does not exist.
+  """
+  @spec get_weapon_by_name(name :: String.t()) :: Weapon.t() | nil
+  def get_weapon_by_name(name), do: Repo.get_by(Weapon, name: name)
+
+  @doc """
   Creates a weapon.
   
   ## Examples
