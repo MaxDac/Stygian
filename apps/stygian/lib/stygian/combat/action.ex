@@ -7,8 +7,8 @@ defmodule Stygian.Combat.Action do
 
   import Ecto.Changeset
 
-  alias Stygian.Weapons.WeaponType
   alias Stygian.Skills.Skill
+  alias Stygian.Weapons.WeaponType
 
   @type t() :: %__MODULE__{
           id: non_neg_integer(),

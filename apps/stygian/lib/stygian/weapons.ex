@@ -231,11 +231,9 @@ defmodule Stygian.Weapons do
       |> preload(:weapons)
       |> Repo.get(character_id)
 
-    if not is_nil(character) do
-      character.weapons
-    else
-      []
-    end
+    if is_nil(character),
+      do: [],
+      else: character.weapons
   end
 
   @doc """

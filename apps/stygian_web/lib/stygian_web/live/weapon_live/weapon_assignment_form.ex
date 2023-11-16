@@ -52,7 +52,6 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentForm do
     changeset =
       %WeaponAssignForm{}
       |> WeaponAssignForm.changeset(params)
-      |> IO.inspect(label: "Changeset")
 
     if changeset.valid? do
       {:noreply,
