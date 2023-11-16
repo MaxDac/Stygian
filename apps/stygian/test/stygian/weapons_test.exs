@@ -3,6 +3,64 @@ defmodule Stygian.WeaponsTest do
 
   alias Stygian.Weapons
 
+  describe "weapon_types" do
+    alias Stygian.Weapons.WeaponType
+
+    import Stygian.WeaponsFixtures
+
+    @invalid_attrs %{name: nil, description: nil}
+
+    test "list_weapon_types/0 returns all weapon_types" do
+      weapon_type = weapon_type_fixture()
+      assert Weapons.list_weapon_types() == [weapon_type]
+    end
+
+    test "get_weapon_type!/1 returns the weapon_type with given id" do
+      weapon_type = weapon_type_fixture()
+      assert Weapons.get_weapon_type!(weapon_type.id) == weapon_type
+    end
+
+    test "create_weapon_type/1 with valid data creates a weapon_type" do
+      valid_attrs = %{name: "some name", description: "some description"}
+
+      assert {:ok, %WeaponType{} = weapon_type} = Weapons.create_weapon_type(valid_attrs)
+      assert weapon_type.name == "some name"
+      assert weapon_type.description == "some description"
+    end
+
+    test "create_weapon_type/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Weapons.create_weapon_type(@invalid_attrs)
+    end
+
+    test "update_weapon_type/2 with valid data updates the weapon_type" do
+      weapon_type = weapon_type_fixture()
+      update_attrs = %{name: "some updated name", description: "some updated description"}
+
+      assert {:ok, %WeaponType{} = weapon_type} =
+               Weapons.update_weapon_type(weapon_type, update_attrs)
+
+      assert weapon_type.name == "some updated name"
+      assert weapon_type.description == "some updated description"
+    end
+
+    test "update_weapon_type/2 with invalid data returns error changeset" do
+      weapon_type = weapon_type_fixture()
+      assert {:error, %Ecto.Changeset{}} = Weapons.update_weapon_type(weapon_type, @invalid_attrs)
+      assert weapon_type == Weapons.get_weapon_type!(weapon_type.id)
+    end
+
+    test "delete_weapon_type/1 deletes the weapon_type" do
+      weapon_type = weapon_type_fixture()
+      assert {:ok, %WeaponType{}} = Weapons.delete_weapon_type(weapon_type)
+      assert_raise Ecto.NoResultsError, fn -> Weapons.get_weapon_type!(weapon_type.id) end
+    end
+
+    test "change_weapon_type/1 returns a weapon_type changeset" do
+      weapon_type = weapon_type_fixture()
+      assert %Ecto.Changeset{} = Weapons.change_weapon_type(weapon_type)
+    end
+  end
+
   describe "weapons" do
     alias Stygian.Weapons.Weapon
 
@@ -34,7 +92,7 @@ defmodule Stygian.WeaponsTest do
     end
 
     test "get_weapon/1 returns nil if the weapon does not exist" do
-      assert is_nil Weapons.get_weapon(42)
+      assert is_nil(Weapons.get_weapon(42))
     end
 
     test "get_weapon_by_name/1 returns the weapon with that name" do
@@ -44,11 +102,12 @@ defmodule Stygian.WeaponsTest do
 
     test "get_weapon_by_name/1 returns nil if no weapon with the name exists" do
       weapon = weapon_fixture()
-      assert is_nil Weapons.get_weapon_by_name("#{weapon.name}_another")
+      assert is_nil(Weapons.get_weapon_by_name("#{weapon.name}_another"))
     end
 
     test "create_weapon/1 with valid data creates a weapon" do
       %{id: skill_id} = skill_fixture()
+      %{id: weapon_type_id} = weapon_type_fixture()
 
       valid_attrs = %{
         name: "some name",
@@ -57,7 +116,8 @@ defmodule Stygian.WeaponsTest do
         required_skill_min_value: 42,
         damage_bonus: 42,
         cost: 42,
-        required_skill_id: skill_id
+        required_skill_id: skill_id,
+        weapon_type_id: weapon_type_id
       }
 
       assert {:ok, %Weapon{} = weapon} = Weapons.create_weapon(valid_attrs)
@@ -140,14 +200,15 @@ defmodule Stygian.WeaponsTest do
       %{id: character_id} = character_fixture()
       %{id: weapon_id} = weapon_fixture()
 
-      assert {:ok, %Stygian.Characters.Character{}} = Weapons.add_weapon_to_character(character_id, weapon_id)
+      assert {:ok, %Stygian.Characters.Character{}} =
+               Weapons.add_weapon_to_character(character_id, weapon_id)
 
       character = Characters.get_character!(character_id) |> Stygian.Repo.preload(:weapons)
 
       assert [weapon] = character.weapons
       assert weapon_id == weapon.id
 
-      assert not is_nil Weapons.get_weapon(weapon_id)
+      assert not is_nil(Weapons.get_weapon(weapon_id))
     end
 
     test "remove_weapon_from_character/2 correctly removes the weapon from a character" do
@@ -155,13 +216,15 @@ defmodule Stygian.WeaponsTest do
       %{id: weapon_id} = weapon_fixture()
 
       Weapons.add_weapon_to_character(character_id, weapon_id)
-      assert {:ok, %Stygian.Characters.Character{}} = Weapons.remove_weapon_from_character(character_id, weapon_id)
+
+      assert {:ok, %Stygian.Characters.Character{}} =
+               Weapons.remove_weapon_from_character(character_id, weapon_id)
 
       character = Characters.get_character!(character_id) |> Stygian.Repo.preload(:weapons)
 
       assert [] = character.weapons
 
-      assert not is_nil Weapons.get_weapon(weapon_id)
+      assert not is_nil(Weapons.get_weapon(weapon_id))
     end
 
     test "remove_weapon_from_character/2 does not remove a weapon when the character does not own it" do
@@ -169,7 +232,7 @@ defmodule Stygian.WeaponsTest do
       %{id: weapon_id} = weapon_fixture()
 
       assert {:error, "L'arma non appartiene al personaggio"} =
-        Weapons.remove_weapon_from_character(character_id, weapon_id)
+               Weapons.remove_weapon_from_character(character_id, weapon_id)
     end
 
     test "remove_weapon_from_character/2 correctly removes only the weapon selected to be removed" do
@@ -183,15 +246,16 @@ defmodule Stygian.WeaponsTest do
       Weapons.add_weapon_to_character(character_id, weapon_id_1)
       Weapons.add_weapon_to_character(character_id, weapon_id_2)
 
-      assert {:ok, %Stygian.Characters.Character{}} = Weapons.remove_weapon_from_character(character_id, weapon_id_1)
+      assert {:ok, %Stygian.Characters.Character{}} =
+               Weapons.remove_weapon_from_character(character_id, weapon_id_1)
 
       character = Characters.get_character!(character_id) |> Stygian.Repo.preload(:weapons)
 
       assert [weapon] = character.weapons
       assert weapon_id_2 == weapon.id
 
-      assert not is_nil Weapons.get_weapon(weapon_id_1)
-      assert not is_nil Weapons.get_weapon(weapon_id_2)
+      assert not is_nil(Weapons.get_weapon(weapon_id_1))
+      assert not is_nil(Weapons.get_weapon(weapon_id_2))
     end
   end
 end

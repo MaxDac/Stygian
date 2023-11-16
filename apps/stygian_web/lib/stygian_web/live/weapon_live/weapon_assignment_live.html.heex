@@ -1,11 +1,6 @@
 <.h1>Assign weapons</.h1>
 
-<.simple_form
-  for={@form}
-  id="character_selection_form"
-  phx-submit="filter"
-  phx-change="validate"
->
+<.simple_form for={@form} id="character_selection_form" phx-submit="filter" phx-change="validate">
   <.character_selection
     characters={@characters}
     field={@form[:character_id]}

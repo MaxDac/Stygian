@@ -161,6 +161,26 @@ defmodule StygianWeb.EntitiesSelectors do
   end
 
   @doc """
+  Exposes a list of weapon types.
+  """
+  attr :field, FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :label, :string, default: nil
+  attr :weapon_types, :list, required: true
+
+  def weapon_type_selection(assigns) do
+    ~H"""
+    <.entity_selection
+      field={@field}
+      label={@label}
+      empty_option="Seleziona il tipo di arma"
+      entities={@weapon_types}
+    />
+    """
+  end
+
+  @doc """
   Exposes a list of weapons.
   """
   attr :field, FormField,

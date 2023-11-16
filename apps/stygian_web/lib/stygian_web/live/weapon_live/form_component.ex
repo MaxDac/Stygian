@@ -27,18 +27,29 @@ defmodule StygianWeb.WeaponLive.FormComponent do
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:description]} type="text" label="Description" />
         <.input field={@form[:image_url]} type="text" label="Image url" />
+
         <.skill_selection
           skills={@skills}
           field={@form[:required_skill_id]}
           label="Abilità o Attributo"
         />
+
+        <.weapon_type_selection
+          weapon_types={@weapon_types}
+          field={@form[:weapon_type_id]}
+          label="Tipo di arma"
+        />
+
         <.input
           field={@form[:required_skill_min_value]}
           type="number"
           label="Required skill min value"
         />
+
         <.input field={@form[:damage_bonus]} type="number" label="Damage bonus" />
+
         <.input field={@form[:cost]} type="number" label="Cost" />
+
         <:actions>
           <.button phx-disable-with="Saving...">Save Weapon</.button>
         </:actions>
@@ -55,7 +66,8 @@ defmodule StygianWeb.WeaponLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign_form(changeset)
-     |> assign_skills()}
+     |> assign_skills()
+     |> assign_weapon_types()}
   end
 
   @impl true
@@ -113,6 +125,15 @@ defmodule StygianWeb.WeaponLive.FormComponent do
          skills:
            Skills.list_preloaded_skills()
            |> Enum.filter(&(not &1.is_attribute))
+       }}
+    end)
+  end
+
+  defp assign_weapon_types(socket) do
+    assign_async(socket, :weapon_types, fn ->
+      {:ok,
+       %{
+         weapon_types: Weapons.list_weapon_types()
        }}
     end)
   end

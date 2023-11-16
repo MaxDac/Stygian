@@ -2,7 +2,7 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentForm do
   @moduledoc """
   Allows addition of association records between characters and weapons.
   """
-  
+
   use StygianWeb, :live_component
 
   alias Stygian.Weapons
@@ -10,7 +10,7 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentForm do
 
   @impl true
   def update(assigns, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> assign(assigns)
      |> assign_form()
@@ -22,7 +22,7 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentForm do
     ~H"""
     <div>
       <.h1>Assegna un'arma al personaggio</.h1>
-      
+
       <.simple_form
         id="weapon_assignment_form"
         for={@form}
@@ -30,17 +30,9 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentForm do
         phx-change="validate"
         phx-submit="add_weapon"
       >
-        <.input 
-          type="hidden"
-          field={@form[:character_id]}
-          value={@character_id}
-        />
+        <.input type="hidden" field={@form[:character_id]} value={@character_id} />
 
-        <.weapon_selection
-          label="Arma"
-          weapons={@weapons}
-          field={@form[:weapon_id]}
-        />
+        <.weapon_selection label="Arma" weapons={@weapons} field={@form[:weapon_id]} />
 
         <.button type="submit">
           Aggiungi
@@ -63,7 +55,7 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentForm do
       |> IO.inspect(label: "Changeset")
 
     if changeset.valid? do
-      {:noreply, 
+      {:noreply,
        socket
        |> assign_weapon_to_character(changeset)}
     else
@@ -81,17 +73,26 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentForm do
   end
 
   defp assign_weapons(socket) do
-    assign_async(socket, :weapons, fn -> {
-      :ok, %{
-        weapons: Weapons.list_weapons()
+    assign_async(socket, :weapons, fn ->
+      {
+        :ok,
+        %{
+          weapons: Weapons.list_weapons()
+        }
       }
-    } end)
+    end)
   end
 
-  defp assign_weapon_to_character(socket, %{changes: %{
-    character_id: character_id,
-    weapon_id: weapon_id
-  }, valid?: true} = _changeset) do
+  defp assign_weapon_to_character(
+         socket,
+         %{
+           changes: %{
+             character_id: character_id,
+             weapon_id: weapon_id
+           },
+           valid?: true
+         } = _changeset
+       ) do
     case Weapons.add_weapon_to_character(character_id, weapon_id) do
       {:ok, _} ->
         socket

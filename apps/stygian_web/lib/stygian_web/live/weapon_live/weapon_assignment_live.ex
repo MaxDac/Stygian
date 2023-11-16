@@ -2,7 +2,7 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentLive do
   @moduledoc """
   This live view allows to assign or remove a weapon from a character.
   """
-  
+
   use StygianWeb, :container_live_view
 
   alias Stygian.Characters
@@ -14,7 +14,7 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentLive do
 
   @impl true
   def mount(_, _, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> reset_assigns()
      |> assign_characters()}
@@ -32,7 +32,7 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentLive do
       |> CharacterSelectionForm.changeset(params)
 
     if changeset.valid? do
-      {:noreply, 
+      {:noreply,
        socket
        |> assign_form(params)
        |> assign_character(changeset.changes.character_id)
@@ -44,25 +44,29 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentLive do
 
   @impl true
   def handle_event("add_weapon", %{"character_id" => _}, socket) do
-    {:noreply, 
+    {:noreply,
      socket
      |> assign_modal_state(:show)}
   end
 
   @impl true
-  def handle_event("remove_weapon", %{
-    "character_id" => character_id,
-    "weapon_id" => weapon_id
-  }, socket) do
+  def handle_event(
+        "remove_weapon",
+        %{
+          "character_id" => character_id,
+          "weapon_id" => weapon_id
+        },
+        socket
+      ) do
     case Weapons.remove_weapon_from_character(character_id, weapon_id) do
       {:ok, _} ->
-        {:noreply, 
+        {:noreply,
          socket
          |> put_flash(:info, "Arma rimossa con successo")
          |> reset_assigns()}
 
       {:error, _} ->
-        {:noreply, 
+        {:noreply,
          socket
          |> put_flash(:error, "Errore durante la rimozione dell'arma")}
     end

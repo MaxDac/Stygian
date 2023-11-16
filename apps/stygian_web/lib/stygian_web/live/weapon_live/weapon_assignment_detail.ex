@@ -2,14 +2,14 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentDetail do
   @moduledoc """
   This component allows to assign or remove a weapon from a character.
   """
-  
+
   use StygianWeb, :live_component
 
   alias Stygian.Weapons
 
   @impl true
   def update(assigns, socket) do
-    {:ok, 
+    {:ok,
      socket
      |> assign(assigns)
      |> assign_character_weapons(assigns.character_id)}
@@ -19,8 +19,8 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentDetail do
   def render(assigns) do
     ~H"""
     <div>
-      <div class="flex flex-row justify-end mb-5" :if={not is_nil(@character_id)}>
-        <.button 
+      <div :if={not is_nil(@character_id)} class="flex flex-row justify-end mb-5">
+        <.button
           type="button"
           phx-click={JS.push("add_weapon", value: %{character_id: @character_id})}
         >
@@ -34,13 +34,18 @@ defmodule StygianWeb.WeaponLive.WeaponAssignmentDetail do
         <:col :let={{_, o}} label="Costo"><%= o.cost %></:col>
         <:action :let={{_, o}}>
           <.table_link_standalone
-            phx-click={JS.push("remove_weapon", value: %{
-              weapon_id: o.id,
-              character_id: @character_id
-            }) |> hide("##{o.id}")}
+            phx-click={
+              JS.push("remove_weapon",
+                value: %{
+                  weapon_id: o.id,
+                  character_id: @character_id
+                }
+              )
+              |> hide("##{o.id}")
+            }
             data-confirm="Sei sicuro di voler togliere quest'arma al personaggio?"
           >
-            Rimuovi arma 
+            Rimuovi arma
           </.table_link_standalone>
         </:action>
       </.table>

@@ -182,14 +182,14 @@ end
 
 defmodule WeaponHelpers do
   def create_weapon_type(%{name: name} = attrs) do
-    case Combat.get_weapon_type_by_name(name) do
+    case Weapons.get_weapon_type_by_name(name) do
       nil ->
         with {:ok, weapon_type} <- Combat.create_weapon_type(attrs) do
-          Combat.update_weapon_type(weapon_type, attrs)
+          Weapons.update_weapon_type(weapon_type, attrs)
         end
 
       weapon_type ->
-        Combat.update_weapon_type(weapon_type, attrs)
+        Weapons.update_weapon_type(weapon_type, attrs)
     end
   end
 end

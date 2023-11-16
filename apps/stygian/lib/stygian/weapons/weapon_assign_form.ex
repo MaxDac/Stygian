@@ -14,7 +14,7 @@ defmodule Stygian.Weapons.WeaponAssignForm do
           weapon_id: non_neg_integer()
         }
 
-  embedded_schema do 
+  embedded_schema do
     field :character_id, :id
     field :weapon_id, :id
   end

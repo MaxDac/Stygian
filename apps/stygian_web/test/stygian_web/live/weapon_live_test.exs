@@ -61,7 +61,12 @@ defmodule StygianWeb.WeaponLiveTest do
 
     test "saves new weapon", %{conn: conn, user: user} do
       %{id: skill_id} = skill_fixture()
-      create_attrs = Map.put(@create_attrs, :required_skill_id, skill_id)
+      %{id: weapon_type_id} = weapon_type_fixture()
+
+      create_attrs =
+        @create_attrs
+        |> Map.put(:required_skill_id, skill_id)
+        |> Map.put(:weapon_type_id, weapon_type_id)
 
       {:ok, index_live, _html} =
         conn
