@@ -8,6 +8,7 @@ defmodule Stygian.CombatTest do
 
     import Stygian.CombatFixtures
     import Stygian.SkillsFixtures
+    import Stygian.WeaponsFixtures
 
     @invalid_attrs %{name: nil, description: nil, minimum_skill_value: nil}
 
@@ -93,9 +94,10 @@ defmodule Stygian.CombatTest do
   end
 
   describe "weapon_types" do
-    alias Stygian.Combat.WeaponType
+    alias Stygian.Weapons.WeaponType
 
     import Stygian.CombatFixtures
+    import Stygian.WeaponsFixtures
 
     @invalid_attrs %{name: nil, description: nil}
 
@@ -247,6 +249,7 @@ defmodule Stygian.CombatTest do
     import Stygian.CombatFixtures
     import Stygian.MapsFixtures
     import Stygian.SkillsFixtures
+    import Stygian.WeaponsFixtures
 
     alias Stygian.Characters
     alias Stygian.Maps

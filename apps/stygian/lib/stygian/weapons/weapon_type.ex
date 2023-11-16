@@ -1,4 +1,4 @@
-defmodule Stygian.Combat.WeaponType do
+defmodule Stygian.Weapons.WeaponType do
   @moduledoc """
   The weapon type schema. 
   """

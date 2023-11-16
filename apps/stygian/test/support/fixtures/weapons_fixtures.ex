@@ -10,12 +10,28 @@ defmodule Stygian.WeaponsFixtures do
   alias Stygian.Weapons.CharacterWeapons
 
   @doc """
+  Generate a weapon_type.
+  """
+  def weapon_type_fixture(attrs \\ %{}) do
+    {:ok, weapon_type} =
+      attrs
+      |> Enum.into(%{
+        name: "some name",
+        description: "some description"
+      })
+      |> Stygian.Weapons.create_weapon_type()
+
+    weapon_type
+  end
+
+  @doc """
   Generate a weapon.
   """
   def weapon_fixture(attrs \\ %{}) do
     {:ok, weapon} =
       attrs
       |> check_skill(:required_skill_id)
+      |> check_weapon_type()
       |> Enum.into(%{
         name: "some name",
         description: "some description",
@@ -51,5 +67,12 @@ defmodule Stygian.WeaponsFixtures do
   def check_weapon(attrs) do
     %{id: weapon_id} = weapon_fixture()
     Map.put(attrs, :weapon_id, weapon_id)
+  end
+
+  def check_weapon_type(%{weapon_type_id: _} = attrs), do: attrs
+
+  def check_weapon_type(attrs) do
+    weapon_type = weapon_type_fixture()
+    Map.put(attrs, :weapon_type_id, weapon_type.id)
   end
 end

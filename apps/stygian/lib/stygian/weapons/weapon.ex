@@ -7,6 +7,7 @@ defmodule Stygian.Weapons.Weapon do
 
   import Ecto.Changeset
 
+  alias Stygian.Weapons.WeaponType
   alias Stygian.Skills.Skill
 
   @type t() :: %__MODULE__{
@@ -18,7 +19,9 @@ defmodule Stygian.Weapons.Weapon do
           damage_bonus: non_neg_integer(),
           required_skill_min_value: non_neg_integer(),
           required_skill_id: non_neg_integer(),
+          weapon_type_id: non_neg_integer(),
           required_skill: Skill.t(),
+          weapon_type: WeaponType.t(),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -32,6 +35,7 @@ defmodule Stygian.Weapons.Weapon do
     field :required_skill_min_value, :integer
 
     belongs_to :required_skill, Skill
+    belongs_to :weapon_type, WeaponType
 
     timestamps()
   end
@@ -46,7 +50,8 @@ defmodule Stygian.Weapons.Weapon do
       :required_skill_min_value,
       :damage_bonus,
       :cost,
-      :required_skill_id
+      :required_skill_id,
+      :weapon_type_id
     ])
     |> validate_required([
       :name,
@@ -55,8 +60,10 @@ defmodule Stygian.Weapons.Weapon do
       :required_skill_min_value,
       :damage_bonus,
       :cost,
-      :required_skill_id
+      :required_skill_id,
+      :weapon_type_id
     ])
     |> foreign_key_constraint(:required_skill_id, name: :weapons_required_skill_id_fkey)
+    |> foreign_key_constraint(:weapon_type_id, name: :weapons_weapon_type_id_fkey)
   end
 end
