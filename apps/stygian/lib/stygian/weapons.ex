@@ -142,10 +142,11 @@ defmodule Stygian.Weapons do
       ** (Ecto.NoResultsError)
 
   """
-  def get_weapon!(id), do: 
-    Weapon
-    |> preload(:weapon_type)
-    |> Repo.get!(id)
+  def get_weapon!(id),
+    do:
+      Weapon
+      |> preload(:weapon_type)
+      |> Repo.get!(id)
 
   @doc """
   Returns the weapon given the id, or nil if the weapon does not exist.
