@@ -180,16 +180,28 @@ defmodule RestActionsHelpers do
   end
 end
 
-defmodule WeaponHelpers do
+defmodule WeaponsHelpers do
   def create_weapon_type(%{name: name} = attrs) do
     case Weapons.get_weapon_type_by_name(name) do
       nil ->
-        with {:ok, weapon_type} <- Combat.create_weapon_type(attrs) do
+        with {:ok, weapon_type} <- Weapons.create_weapon_type(attrs) do
           Weapons.update_weapon_type(weapon_type, attrs)
         end
 
       weapon_type ->
         Weapons.update_weapon_type(weapon_type, attrs)
+    end
+  end
+
+  def create_weapon(%{name: name} = attrs) do
+    case Weapons.get_weapon_by_name(name) do
+      nil ->
+        with {:ok, weapon} <- Weapons.create_weapon(attrs) do
+          Weapons.update_weapon(weapon, attrs)
+        end
+
+      weapon ->
+        Weapons.update_weapon(weapon, attrs)
     end
   end
 end
@@ -204,20 +216,6 @@ defmodule CombatActionsHelpers do
 
       combat_action ->
         Combat.update_action(combat_action, attrs)
-    end
-  end
-end
-
-defmodule WeaponsHelpers do
-  def create_weapon(%{name: name} = attrs) do
-    case Weapons.get_weapon_by_name(name) do
-      nil ->
-        with {:ok, weapon} <- Weapons.create_weapon(attrs) do
-          Weapons.update_weapon(weapon, attrs)
-        end
-
-      weapon ->
-        Weapons.update_weapon(weapon, attrs)
     end
   end
 end
@@ -1058,7 +1056,7 @@ RestActionsHelpers.create_rest_action(%{
 })
 
 {:ok, %{id: brawl_type_id}} =
-  WeaponHelpers.create_weapon_type(%{
+  WeaponsHelpers.create_weapon_type(%{
     name: "Mani nude",
     description: """
     Rappresenta l'abilità del corpo a corpo, della lotta e delle arti marziali.
@@ -1066,7 +1064,7 @@ RestActionsHelpers.create_rest_action(%{
   })
 
 {:ok, %{id: melee_type_id}} =
-  WeaponHelpers.create_weapon_type(%{
+  WeaponsHelpers.create_weapon_type(%{
     name: "Arma bianche",
     description: """
     Rappresenta tutte le armi bianche, dalle lame elaborate ai più semplici bastoni o coltelli.
@@ -1074,7 +1072,7 @@ RestActionsHelpers.create_rest_action(%{
   })
 
 {:ok, %{id: firearms_type_id}} =
-  WeaponHelpers.create_weapon_type(%{
+  WeaponsHelpers.create_weapon_type(%{
     name: "Armi da fuoco",
     description: """
     Rappresenta le armi da fuoco, dal fucile alla semplice pistola.
@@ -1082,7 +1080,7 @@ RestActionsHelpers.create_rest_action(%{
   })
 
 {:ok, %{id: throw_type_id}} =
-  WeaponHelpers.create_weapon_type(%{
+  WeaponsHelpers.create_weapon_type(%{
     name: "Armi da lancio",
     description: """
     Rappresenta le armi da lancio, dai sassi alle granate.

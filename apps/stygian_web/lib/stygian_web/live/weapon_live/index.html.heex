@@ -24,8 +24,9 @@
   <:col :let={{_id, weapon}} label="Min value">
     <%= weapon.required_skill_min_value %>
   </:col>
-  <:col :let={{_id, weapon}} label="Damage bonus"><%= weapon.damage_bonus %></:col>
-  <:col :let={{_id, weapon}} label="Cost"><%= weapon.cost %></:col>
+  <:col :let={{_id, weapon}} label="Danno"><%= weapon.damage_bonus %></:col>
+  <:col :let={{_id, weapon}} label="Costo"><%= weapon.cost %></:col>
+  <:col :let={{_id, weapon}} label="Tipo"><%= weapon.weapon_type.name %></:col>
   <:action :let={{id, weapon}}>
     <.table_link_left navigate={~p"/admin/weapons/#{weapon}"}>Show</.table_link_left>
     <.table_link patch={~p"/admin/weapons/#{weapon}/edit"}>Edit</.table_link>

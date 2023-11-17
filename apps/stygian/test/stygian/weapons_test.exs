@@ -76,14 +76,25 @@ defmodule Stygian.WeaponsTest do
       cost: nil
     }
 
+    defp remove_weapon_type_association(weapon), do:
+      Map.delete(weapon, :weapon_type)
+
     test "list_weapons/0 returns all weapons" do
-      weapon = weapon_fixture()
-      assert Weapons.list_weapons() == [weapon]
+      weapon_type = weapon_type_fixture()
+      weapon = weapon_fixture(%{weapon_type_id: weapon_type.id})
+      assert [created_weapon] = Weapons.list_weapons()
+      assert created_weapon.id == weapon.id
+      refute is_nil created_weapon.weapon_type
+      assert weapon_type.name == created_weapon.weapon_type.name
     end
 
     test "get_weapon!/1 returns the weapon with given id" do
       weapon = weapon_fixture()
-      assert Weapons.get_weapon!(weapon.id) == weapon
+      assert weapon.id
+             |> Weapons.get_weapon!()
+             |> remove_weapon_type_association() == remove_weapon_type_association(weapon)
+
+      assert not is_nil(weapon.weapon_type)
     end
 
     test "get_weapon/1 returns the weapon with given id" do
@@ -157,7 +168,9 @@ defmodule Stygian.WeaponsTest do
     test "update_weapon/2 with invalid data returns error changeset" do
       weapon = weapon_fixture()
       assert {:error, %Ecto.Changeset{}} = Weapons.update_weapon(weapon, @invalid_attrs)
-      assert weapon == Weapons.get_weapon!(weapon.id)
+      assert remove_weapon_type_association(weapon) == weapon.id 
+                                                       |> Weapons.get_weapon!()
+                                                       |> remove_weapon_type_association()
     end
 
     test "delete_weapon/1 deletes the weapon" do

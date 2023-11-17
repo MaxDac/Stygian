@@ -21,6 +21,7 @@
   <:item title="Required skill min value"><%= @weapon.required_skill_min_value %></:item>
   <:item title="Damage bonus"><%= @weapon.damage_bonus %></:item>
   <:item title="Cost"><%= @weapon.cost %></:item>
+  <:item title="Type"><%= @weapon.weapon_type.name %></:item>
 </.list>
 
 <.return_link navigate={~p"/admin/weapons"}>
