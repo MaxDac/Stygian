@@ -8,6 +8,7 @@ defmodule Stygian.CombatTest do
 
     import Stygian.CombatFixtures
     import Stygian.SkillsFixtures
+    import Stygian.WeaponsFixtures
 
     @invalid_attrs %{name: nil, description: nil, minimum_skill_value: nil}
 
@@ -89,64 +90,6 @@ defmodule Stygian.CombatTest do
     test "change_action/1 returns a action changeset" do
       action = action_fixture()
       assert %Ecto.Changeset{} = Combat.change_action(action)
-    end
-  end
-
-  describe "weapon_types" do
-    alias Stygian.Combat.WeaponType
-
-    import Stygian.CombatFixtures
-
-    @invalid_attrs %{name: nil, description: nil}
-
-    test "list_weapon_types/0 returns all weapon_types" do
-      weapon_type = weapon_type_fixture()
-      assert Combat.list_weapon_types() == [weapon_type]
-    end
-
-    test "get_weapon_type!/1 returns the weapon_type with given id" do
-      weapon_type = weapon_type_fixture()
-      assert Combat.get_weapon_type!(weapon_type.id) == weapon_type
-    end
-
-    test "create_weapon_type/1 with valid data creates a weapon_type" do
-      valid_attrs = %{name: "some name", description: "some description"}
-
-      assert {:ok, %WeaponType{} = weapon_type} = Combat.create_weapon_type(valid_attrs)
-      assert weapon_type.name == "some name"
-      assert weapon_type.description == "some description"
-    end
-
-    test "create_weapon_type/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Combat.create_weapon_type(@invalid_attrs)
-    end
-
-    test "update_weapon_type/2 with valid data updates the weapon_type" do
-      weapon_type = weapon_type_fixture()
-      update_attrs = %{name: "some updated name", description: "some updated description"}
-
-      assert {:ok, %WeaponType{} = weapon_type} =
-               Combat.update_weapon_type(weapon_type, update_attrs)
-
-      assert weapon_type.name == "some updated name"
-      assert weapon_type.description == "some updated description"
-    end
-
-    test "update_weapon_type/2 with invalid data returns error changeset" do
-      weapon_type = weapon_type_fixture()
-      assert {:error, %Ecto.Changeset{}} = Combat.update_weapon_type(weapon_type, @invalid_attrs)
-      assert weapon_type == Combat.get_weapon_type!(weapon_type.id)
-    end
-
-    test "delete_weapon_type/1 deletes the weapon_type" do
-      weapon_type = weapon_type_fixture()
-      assert {:ok, %WeaponType{}} = Combat.delete_weapon_type(weapon_type)
-      assert_raise Ecto.NoResultsError, fn -> Combat.get_weapon_type!(weapon_type.id) end
-    end
-
-    test "change_weapon_type/1 returns a weapon_type changeset" do
-      weapon_type = weapon_type_fixture()
-      assert %Ecto.Changeset{} = Combat.change_weapon_type(weapon_type)
     end
   end
 
@@ -247,6 +190,7 @@ defmodule Stygian.CombatTest do
     import Stygian.CombatFixtures
     import Stygian.MapsFixtures
     import Stygian.SkillsFixtures
+    import Stygian.WeaponsFixtures
 
     alias Stygian.Characters
     alias Stygian.Maps

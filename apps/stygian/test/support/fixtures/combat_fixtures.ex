@@ -6,21 +6,7 @@ defmodule Stygian.CombatFixtures do
 
   import Stygian.CharactersFixtures
   import Stygian.SkillsFixtures
-
-  @doc """
-  Generate a weapon_type.
-  """
-  def weapon_type_fixture(attrs \\ %{}) do
-    {:ok, weapon_type} =
-      attrs
-      |> Enum.into(%{
-        name: "some name",
-        description: "some description"
-      })
-      |> Stygian.Combat.create_weapon_type()
-
-    weapon_type
-  end
+  import Stygian.WeaponsFixtures
 
   @doc """
   Generate a action.
@@ -59,13 +45,6 @@ defmodule Stygian.CombatFixtures do
       |> Stygian.Combat.create_chat_action()
 
     chat_action
-  end
-
-  def check_weapon_type(%{weapon_type_id: _} = attrs), do: attrs
-
-  def check_weapon_type(attrs) do
-    weapon_type = weapon_type_fixture()
-    Map.put(attrs, :weapon_type_id, weapon_type.id)
   end
 
   def check_action(%{action_id: _} = attrs), do: attrs

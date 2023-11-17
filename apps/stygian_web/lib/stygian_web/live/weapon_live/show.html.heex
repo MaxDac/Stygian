@@ -1,0 +1,45 @@
+<.header>
+  Weapon <%= @weapon.id %>
+  <:subtitle>This is a weapon record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/admin/weapons/#{@weapon}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit weapon</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @weapon.name %></:item>
+  <:item title="Description"><%= @weapon.description %></:item>
+  <:item title="Image url">
+    <img
+      src={@weapon.image_url}
+      alt={@weapon.name}
+      class="max-w-[200px] max-h-[200px] w-auto h-auto"
+    />
+  </:item>
+  <:item title="Required skill min value"><%= @weapon.required_skill_min_value %></:item>
+  <:item title="Damage bonus"><%= @weapon.damage_bonus %></:item>
+  <:item title="Cost"><%= @weapon.cost %></:item>
+  <:item title="Type"><%= @weapon.weapon_type.name %></:item>
+</.list>
+
+<.return_link navigate={~p"/admin/weapons"}>
+  Back to weapons
+</.return_link>
+
+<.modal
+  :if={@live_action == :edit}
+  id="weapon-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/weapons/#{@weapon}")}
+>
+  <.live_component
+    module={StygianWeb.WeaponLive.FormComponent}
+    id={@weapon.id}
+    title={@page_title}
+    action={@live_action}
+    weapon={@weapon}
+    patch={~p"/admin/weapons/#{@weapon}"}
+  />
+</.modal>

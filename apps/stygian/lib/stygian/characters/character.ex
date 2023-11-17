@@ -5,6 +5,8 @@ defmodule Stygian.Characters.Character do
   import Ecto.Changeset
 
   alias Stygian.Accounts.User
+  alias Stygian.Weapons.CharacterWeapons
+  alias Stygian.Weapons.Weapon
 
   @type t() :: %__MODULE__{
           admin_notes: String.t(),
@@ -31,6 +33,7 @@ defmodule Stygian.Characters.Character do
           research_points: integer(),
           user_id: integer(),
           user: User.t(),
+          weapons: list(Weapon.t()),
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -60,6 +63,7 @@ defmodule Stygian.Characters.Character do
     field :research_points, :integer, default: 0
 
     belongs_to :user, User
+    many_to_many :weapons, Weapon, join_through: CharacterWeapons, on_replace: :delete
 
     timestamps()
   end
