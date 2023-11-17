@@ -37,7 +37,8 @@ defmodule StygianWeb.WeaponLive.Index do
   end
 
   @impl true
-  def handle_info({StygianWeb.WeaponLive.FormComponent, {:saved, weapon}}, socket) do
+  def handle_info({StygianWeb.WeaponLive.FormComponent, {:saved, %{id: created_weapon_id}}}, socket) do
+    weapon = Weapons.get_weapon!(created_weapon_id)
     {:noreply, stream_insert(socket, :weapons, weapon)}
   end
 

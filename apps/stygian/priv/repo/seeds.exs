@@ -1110,5 +1110,6 @@ WeaponsHelpers.create_weapon(%{
   cost: 100,
   damage_bonus: 2,
   required_skill_min_value: 1,
-  required_skill_id: firearms_id
+  required_skill_id: firearms_id,
+  weapon_type_id: firearms_type_id
 })
