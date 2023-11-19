@@ -28,6 +28,8 @@ erl_crash.dump
 
 **/.idea/
 
-**/.DS_Store
+**/.DS_Store/
 
-.elixir_ls
+**/.elixir_ls/
+
+**/.elixir-tools/
