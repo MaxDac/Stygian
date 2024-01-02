@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.16.0-erlang-26.2.1-debian-bookworm-20230612-slim as builder
+FROM hexpm/elixir:1.16.0-erlang-26.2.1-debian-bookworm-20231009-slim as builder
 
 # Setting the SMTP password
 ARG MAIL_PASS  
@@ -60,7 +60,7 @@ RUN mix release
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
-FROM debian:bookworm-20230919-slim
+FROM debian:bookworm-20231009-slim
 
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
