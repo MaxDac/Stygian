@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.16.0-erlang-26.2.1-debian-bookworm-20231009-slim as builder
+FROM hexpm/elixir:1.15.7-erlang-26.2.1-debian-bookworm-20231009-slim as builder
 
 # Setting the SMTP password
 ARG MAIL_PASS  

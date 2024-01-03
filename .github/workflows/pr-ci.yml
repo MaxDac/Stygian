@@ -32,7 +32,7 @@ jobs:
       # and running the workflow steps.
       matrix:
         otp: ['26.2.1']
-        elixir: ['1.16.0']
+        elixir: ['1.15.7']
 
     steps:
       # Step: Check out the code. This step must be run first because the composable actions are contained in the repo.
@@ -72,7 +72,7 @@ jobs:
       # and running the workflow steps.
       matrix:
         otp: ['26.2.1']
-        elixir: ['1.16.0']
+        elixir: ['1.15.7']
 
     steps:
       # Step: Check out the code. This step must be run first because the composable actions are contained in the repo.
